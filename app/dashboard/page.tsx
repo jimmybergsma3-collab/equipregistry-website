@@ -77,15 +77,13 @@ export default async function DashboardPage({
 
             <tbody>
               {filtered.map((m) => {
-                const ui = getStatusUI(m.status);
+                const ui = getStatusUI(m.status) as {
+  label: string;
+  tone?: "green" | "orange" | "red" | "gray";
+  color?: "green" | "orange" | "red" | "gray";
+};
 
-                // Belangrijk: sommige van jouw getStatusUI versies geven "tone",
-                // andere geven "color". We vangen beide op.
-                const tone = (ui.tone ?? ui.color ?? "gray") as
-                  | "green"
-                  | "orange"
-                  | "red"
-                  | "gray";
+const tone = ui.tone ?? ui.color ?? "gray";
 
                 return (
                   <tr key={m.id} className="border-b last:border-b-0">
