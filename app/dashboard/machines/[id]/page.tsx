@@ -108,14 +108,13 @@ export default async function MachineDetailPage({
     );
   }
 
-  const ui = getStatusUI(machine.status);
+const ui = getStatusUI(machine.status) as {
+  label: string;
+  tone?: "green" | "orange" | "red" | "gray";
+  color?: "green" | "orange" | "red" | "gray";
+};
 
-  // ✅ sommige versies geven `tone`, andere `color` terug
-  const tone = (ui.tone ?? ui.color ?? "gray") as
-    | "green"
-    | "orange"
-    | "red"
-    | "gray";
+const tone = ui.tone ?? ui.color ?? "gray";
 
   return (
     <div className="p-6">
