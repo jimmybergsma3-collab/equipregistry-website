@@ -44,7 +44,10 @@ export default async function PublicPassportPage({ params }: PageProps) {
           </div>
 
           <div style={styles.qrBlock}>
-            <PassportQRCode registryId={passport.registryId} />
+            <PassportQRCode
+  registryId={passport.registryId}
+  origin={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}
+/>
             <span style={styles.qrCaption}>Scan to verify</span>
           </div>
         </header>
