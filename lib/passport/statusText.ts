@@ -1,6 +1,10 @@
 // lib/passport/statusText.ts
 
-import { RegistryStatus } from './passportTypes';
+export type RegistryStatus =
+  | "REGISTERED_VERIFIED"
+  | "HISTORY_UNKNOWN"
+  | "NOT_REGISTERED"
+  | "STOLEN";
 
 export const STATUS_TEXT: Record<
   RegistryStatus,
