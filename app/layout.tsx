@@ -23,9 +23,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className="h-full">
+    <html lang="nl" className="h-full bg-white">
+      <head>
+        {/* Cloudflare Web Analytics */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token":"cb5840a0fd194e25ae1c422f07066afb"}'
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-white text-slate-900 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-[100svh] bg-white text-slate-900 antialiased`}
       >
         {children}
       </body>
