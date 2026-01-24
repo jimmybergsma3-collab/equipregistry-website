@@ -1,14 +1,17 @@
 import Link from "next/link";
+import AuthoritiesClient from "./authorities/AuthoritiesClient";
+import ReportSightingClient from "./report/ReportSightingClient";
 
 interface PageProps {
   searchParams: Promise<{
-    type?: string;
-    registryId?: string;
-  }>;
+  type?: string;
+  registryId?: string;
+  caseId?: string;
+}>;
 }
 
 export default async function ActionPage({ searchParams }: PageProps) {
-  const { type, registryId } = await searchParams;
+  const { type, registryId, caseId } = await searchParams;
 
   const nextTarget = registryId
     ? `/dashboard/passport/${encodeURIComponent(registryId)}`
@@ -141,11 +144,52 @@ export default async function ActionPage({ searchParams }: PageProps) {
             </ul>
           </div>
 
-          <div style={styles.actions}>
-            <Link href={`/login?next=${encodeURIComponent(nextTarget)}`} style={styles.primaryButton}>
-              Login to submit report
-            </Link>
+          <ReportSightingClient registryId={registryId} />
 
+<div style={styles.actions}>
+  <Link href="/" style={styles.secondaryButton}>
+    Back to search
+  </Link>
+</div>
+        </div>
+      </main>
+    );
+  }
+
+   /* ---------- AUTHORITIES ---------- */
+  if (type === "authorities") {
+    const resolvedCaseId = caseId ?? "ER-CASE-2026-00123";
+
+    return (
+      <main style={styles.page}>
+        <div style={styles.card}>
+          <h1 style={styles.title}>Contact authorities</h1>
+
+          <p style={styles.text}>
+            Demo flow: shows a recommended authority contact route for a stolen equipment alert.
+            You may optionally share your approximate location (demo only).
+          </p>
+
+          {registryId && (
+            <p style={styles.registryId}>
+              Registry ID: <strong>{registryId}</strong>
+            </p>
+          )}
+
+          <p style={styles.registryId}>
+            Case ID: <strong>{resolvedCaseId}</strong>
+          </p>
+
+          <AuthoritiesClient registryId={registryId} caseId={resolvedCaseId} />
+
+          <div style={styles.warning}>
+            <strong>Important</strong>
+            <p style={{ marginTop: 6 }}>
+              If there is immediate danger, call emergency services. Do not intervene or confront any party.
+            </p>
+          </div>
+
+          <div style={styles.actions}>
             <Link href="/" style={styles.secondaryButton}>
               Back to search
             </Link>

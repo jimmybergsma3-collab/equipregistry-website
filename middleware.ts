@@ -4,17 +4,11 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/dashboard")) {
-    const token = req.cookies.get("er_session")?.value;
+  // Only apply to dashboard routes
+  if (!pathname.startsWith("/dashboard")) return NextResponse.next();
 
-    if (!token) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/login";
-      url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
-    }
-  }
-
+  // In demo mode: DO NOT block access.
+  // Role cookie is only used for UI (menu/default landing), not for security.
   return NextResponse.next();
 }
 

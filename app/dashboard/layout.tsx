@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 export default function DashboardLayout({
   children,
@@ -24,24 +25,7 @@ export default function DashboardLayout({
             </div>
           </Link>
 
-          <nav className="flex items-center gap-4 text-sm">
-            <Link
-              href="/dashboard"
-              className="text-slate-700 hover:text-slate-900"
-            >
-              Machines
-            </Link>
-
-            {/* Logout via POST (voorkomt 404 in /dashboard) */}
-            <form action="/logout" method="post">
-              <button
-                type="submit"
-                className="text-slate-700 hover:text-slate-900"
-              >
-                Logout
-              </button>
-            </form>
-          </nav>
+          <DashboardNav />
         </div>
       </header>
 
