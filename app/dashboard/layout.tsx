@@ -9,17 +9,15 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* ===== Responsive Dashboard Header ===== */}
-      <header className="sticky top-0 z-50 border-b bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          {/* Logo (mobile safe) */}
-          <Link href="/" className="flex items-center gap-3 min-w-0">
+      <header className="border-b bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-3">
             <img
               src="/equipregistry_logo.png"
               alt="EquipRegistry"
-              className="h-9 w-auto max-w-[140px] shrink-0"
+              className="h-10 w-auto"
             />
-            <div className="hidden sm:block">
+            <div>
               <div className="text-sm font-semibold text-slate-900">
                 EquipRegistry
               </div>
@@ -27,32 +25,11 @@ export default function DashboardLayout({
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:block">
-            <DashboardNav />
-          </div>
-
-          {/* Mobile fallback */}
-          <div className="md:hidden">
-            <Link
-              href="/dashboard"
-              className="rounded-lg border px-3 py-2 text-sm"
-            >
-              Menu
-            </Link>
-          </div>
-        </div>
-
-        {/* Mobile dashboard nav (scrollable tabs) */}
-        <div className="md:hidden border-t bg-white">
-          <div className="mx-auto max-w-6xl px-4 py-2 overflow-x-auto">
-            <DashboardNav />
-          </div>
+          <DashboardNav />
         </div>
       </header>
 
-      {/* ===== Page content ===== */}
-      <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
     </div>
   );
 }

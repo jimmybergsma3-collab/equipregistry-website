@@ -1,63 +1,33 @@
+// components/SiteHeader.tsx
 import Link from "next/link";
 
-export function SiteHeader({
-  variant = "public",
-}: {
-  variant?: "public" | "dashboard";
-}) {
+export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        {/* Logo (klein op mobiel) */}
+    <header className="sticky top-0 z-50 border-b bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-3">
+        {/* Logo + naam (altijd zichtbaar) */}
         <Link href="/" className="flex items-center gap-3 min-w-0">
           <img
-            src="/logo.png"
+            src="/equipregistry_logo.png"
             alt="EquipRegistry"
-            className="h-9 w-auto max-w-[140px] shrink-0"
+            className="h-9 w-auto shrink-0"
+            onError={(e) => {
+              // als image niet laadt: verberg img zodat tekst netjes staat
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
           />
-          <span className="hidden sm:block font-semibold truncate">
-            EquipRegistry
-          </span>
+          <span className="font-semibold text-slate-900 truncate">EquipRegistry</span>
         </Link>
 
-        {/* Desktop menu */}
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          {variant === "public" ? (
-            <>
-              <Link href="/#how" className="hover:underline">
-                How it works
-              </Link>
-              <Link href="/login" className="hover:underline">
-                Login
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/dashboard" className="hover:underline">
-                Overview
-              </Link>
-              <Link href="/dashboard/insurance" className="hover:underline">
-                Machines
-              </Link>
-              <Link href="/dashboard/insurance/alerts" className="hover:underline">
-                Alerts
-              </Link>
-              <Link href="/dashboard/owner" className="hover:underline">
-                Owner portal →
-              </Link>
-            </>
-          )}
-        </nav>
-
-        {/* Mobile: 1 knop (geen chaos) */}
-        <div className="md:hidden">
-          <Link
-            href={variant === "public" ? "/login" : "/dashboard"}
-            className="rounded-lg border px-3 py-2 text-sm"
-          >
-            {variant === "public" ? "Login" : "Dashboard"}
+        {/* Rechts: altijd zichtbaar (ook mobiel) */}
+        <nav className="flex items-center gap-4 text-sm font-medium">
+          <a href="/#how" className="hover:text-blue-700">
+            How it works
+          </a>
+          <Link href="/login?next=/" className="hover:text-blue-700">
+            Login
           </Link>
-        </div>
+        </nav>
       </div>
     </header>
   );
