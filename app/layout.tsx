@@ -17,6 +17,11 @@ export const metadata = {
   description: "Verify equipment history worldwide"
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
