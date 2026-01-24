@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/getSession";
-import { SiteHeader } from "@/components/SiteHeader";
 
 /* ================= TYPES ================= */
 
