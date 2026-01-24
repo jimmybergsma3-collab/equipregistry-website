@@ -1,16 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="nl" className="h-full">
-      <body className="min-h-screen bg-white text-slate-900 antialiased">
-        {children}
-      </body>
-    </html>
-  );
-}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,14 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "EquipRegistry – Global Equipment Verification",
-  description: "Verify equipment history worldwide"
-};
-
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
+export const metadata: Metadata = {
+  title: "EquipRegistry",
+  description: "EquipRegistry demo",
 };
 
 export default function RootLayout({
@@ -38,11 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="nl" className="h-full">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-white text-slate-900 antialiased`}
+      >
         {children}
       </body>
     </html>
   );
 }
-
