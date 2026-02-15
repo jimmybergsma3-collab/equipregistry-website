@@ -51,6 +51,9 @@ export default async function PassportPage({
   const serialMasked = "—";
   const machineType = "—";
 
+  // Public passport: financing is hidden
+  const financingPublic = "Hidden";
+
   return (
     <>
       <div style={styles.backRow}>
@@ -96,10 +99,10 @@ export default async function PassportPage({
               value={`${machine.brand} ${machine.model}`}
             />
             <Row label="Machine Type" value={machineType} />
-            <Row
-              label="Year of Manufacture"
-              value={machine.year ?? "-"}
-            />
+            <Row label="Year of Manufacture" value={machine.year ?? "-"} />
+
+            {/* Financing is intentionally hidden on public passport */}
+            <Row label="Financing" value={financingPublic} />
           </div>
 
           {/* Right column – Status */}

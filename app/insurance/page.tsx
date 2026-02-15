@@ -15,6 +15,19 @@ function Badge({ tone, children }: { tone: "green" | "orange" | "red" | "gray"; 
   return <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${cls}`}>{children}</span>;
 }
 
+function financeLabel(s?: string) {
+  switch (s) {
+    case "FINANCED":
+      return "Financed";
+    case "LEASED":
+      return "Leased";
+    case "OWNED":
+      return "Owned";
+    default:
+      return "Unknown";
+  }
+}
+
 export default async function InsuranceDashboardPage() {
   // DEMO data (later: pull from DB / API)
   const kpis = [
@@ -25,9 +38,9 @@ export default async function InsuranceDashboardPage() {
   ];
 
   const recent = [
-    { time: "Today 14:18", serial: "ER-STOL-777", event: "Sighting reported", location: "Valencia, ES", risk: "High" },
-    { time: "Today 09:02", serial: "ER-HIS-404", event: "Verification requested", location: "—", risk: "Medium" },
-    { time: "Yesterday 17:41", serial: "ER-REG-001", event: "Validated", location: "—", risk: "Low" },
+    { time: "Today 14:18", serial: "ER-STOL-777", event: "Sighting reported", location: "Valencia, ES", risk: "High", financeStatus: "LEASED" },
+    { time: "Today 09:02", serial: "ER-HIS-404", event: "Verification requested", location: "—", risk: "Medium", financeStatus: "UNKNOWN" },
+    { time: "Yesterday 17:41", serial: "ER-REG-001", event: "Validated", location: "—", risk: "Low", financeStatus: "FINANCED" },
   ];
 
   return (
@@ -94,6 +107,7 @@ export default async function InsuranceDashboardPage() {
                     <th className="py-2 pr-4">Event</th>
                     <th className="py-2 pr-4">Location</th>
                     <th className="py-2 pr-4">Risk</th>
+                    <th className="py-2 pr-4">Financing</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,7 +122,16 @@ export default async function InsuranceDashboardPage() {
                       <td className="py-3 pr-4">{r.event}</td>
                       <td className="py-3 pr-4">{r.location}</td>
                       <td className="py-3 pr-4">
-                        {r.risk === "High" ? <Badge tone="red">High</Badge> : r.risk === "Medium" ? <Badge tone="orange">Medium</Badge> : <Badge tone="green">Low</Badge>}
+                        {r.risk === "High"
+                          ? <Badge tone="red">High</Badge>
+                          : r.risk === "Medium"
+                          ? <Badge tone="orange">Medium</Badge>
+                          : <Badge tone="green">Low</Badge>}
+                      </td>
+                      <td className="py-3 pr-4">
+                        <Badge tone={r.financeStatus === "FINANCED" ? "green" : r.financeStatus === "LEASED" ? "orange" : "gray"}>
+                          {financeLabel(r.financeStatus)}
+                        </Badge>
                       </td>
                     </tr>
                   ))}
@@ -147,48 +170,48 @@ export default async function InsuranceDashboardPage() {
           </div>
         </div>
 
-{/* Insurance & Commercial insights */}
-<div className="grid md:grid-cols-2 gap-6 mt-10">
-  {/* Insurance Risk Insight */}
-  <div className="bg-white border rounded-2xl p-6">
-    <div className="flex items-center gap-2 mb-3">
-      <span>🛡️</span>
-      <h3 className="font-bold text-lg">Insurance Risk Insight</h3>
-    </div>
+        {/* Insurance & Commercial insights */}
+        <div className="grid md:grid-cols-2 gap-6 mt-10">
+          {/* Insurance Risk Insight */}
+          <div className="bg-white border rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <span>🛡️</span>
+              <h3 className="font-bold text-lg">Insurance Risk Insight</h3>
+            </div>
 
-    <p className="text-sm text-slate-700 mb-3">
-      Machines with "History Unknown" status show a 3–5× higher fraud and theft probability.
-    </p>
+            <p className="text-sm text-slate-700 mb-3">
+              Machines with "History Unknown" status show a 3–5× higher fraud and theft probability.
+            </p>
 
-    <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
-      <li>24% flagged before underwriting</li>
-      <li>Lower claim volatility</li>
-      <li>Earlier risk detection</li>
-    </ul>
-  </div>
+            <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+              <li>24% flagged before underwriting</li>
+              <li>Lower claim volatility</li>
+              <li>Earlier risk detection</li>
+            </ul>
+          </div>
 
-  {/* Commercial Value Insight */}
-  <div className="bg-white border rounded-2xl p-6">
-    <div className="flex items-center gap-2 mb-3">
-      <span>💼</span>
-      <h3 className="font-bold text-lg">Commercial Value Insight</h3>
-    </div>
+          {/* Commercial Value Insight */}
+          <div className="bg-white border rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <span>💼</span>
+              <h3 className="font-bold text-lg">Commercial Value Insight</h3>
+            </div>
 
-    <p className="text-sm text-slate-700 mb-3">
-      Registry validation creates a new trust layer for the global equipment market.
-    </p>
+            <p className="text-sm text-slate-700 mb-3">
+              Registry validation creates a new trust layer for the global equipment market.
+            </p>
 
-    <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
-      <li><strong>Low-cost registry passport</strong> – One-time registration creates a permanent digital equipment passport.</li>
-      <li><strong>Light annual validation fee</strong> – Small recurring fee to keep the passport active and insurance-ready.</li>
-      <li><strong>Embedded in insurance workflows</strong> – Annual validation aligns naturally with policy renewal cycles.</li>
-    </ul>
+            <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+              <li><strong>Low-cost registry passport</strong> – One-time registration creates a permanent digital equipment passport.</li>
+              <li><strong>Light annual validation fee</strong> – Small recurring fee to keep the passport active and insurance-ready.</li>
+              <li><strong>Embedded in insurance workflows</strong> – Annual validation aligns naturally with policy renewal cycles.</li>
+            </ul>
 
-    <p className="text-sm text-slate-600 mt-3">
-      Typical annual validation costs are negligible compared to insurance premiums or asset value.
-    </p>
-  </div>
-</div>
+            <p className="text-sm text-slate-600 mt-3">
+              Typical annual validation costs are negligible compared to insurance premiums or asset value.
+            </p>
+          </div>
+        </div>
 
         {/* Footer note */}
         <div className="mt-8 text-xs text-slate-500">

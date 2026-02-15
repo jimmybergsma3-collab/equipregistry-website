@@ -19,6 +19,52 @@ function daysSince(dateISO: string) {
   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
 }
 
+function financeLabel(s?: string) {
+  switch (s) {
+    case "FINANCED":
+      return "Financed";
+    case "LEASED":
+      return "Leased";
+    case "OWNED":
+      return "Owned";
+    default:
+      return "Unknown";
+  }
+}
+
+function fraudSignals(machine: InsuranceMachine) {
+  const signals: string[] = [];
+  let tone: "red" | "orange" | "gray" = "gray";
+  let note = "No elevated fraud indicators based on finance + registry status.";
+
+  const fin = machine.financeStatus;
+  const st = machine.status;
+
+  if (st === "STOLEN" && (fin === "FINANCED" || fin === "LEASED")) {
+    tone = "red";
+    signals.push("Stolen asset with active financing/lease exposure.");
+    signals.push("Potential double financing or fraudulent collateral risk.");
+    note = "High priority: lender/lessor may have an active claim on this asset.";
+  } else if (st === "HISTORY_UNKNOWN" && fin === "FINANCED") {
+    tone = "orange";
+    signals.push("History Unknown combined with active financing.");
+    signals.push("Increased probability of fraud or disputed provenance.");
+    note = "Flag for underwriting: request proof of legal origin and lien checks.";
+  } else if (st === "NOT_REGISTERED" && fin === "FINANCED") {
+    tone = "orange";
+    signals.push("Financed asset not found in registry.");
+    signals.push("Potential unregistered collateral / documentation gap.");
+    note = "Consider requiring registration before policy issuance/renewal.";
+  } else if (fin === "UNKNOWN") {
+    signals.push("Financing status unknown (data gap).");
+    note = "Recommend collecting finance/lease information for better risk scoring.";
+  } else if (fin === "LEASED" && st === "VERIFIED") {
+    signals.push("Leased asset: verify lessor/contract alignment (demo rule).");
+  }
+
+  return { tone, signals, note };
+}
+
 const STORAGE_KEY = "er_insurance_machines_v1";
 
 export default function InsuranceMachinesTable() {
@@ -184,7 +230,7 @@ export default function InsuranceMachinesTable() {
 
       {/* Table */}
       <div className="w-full overflow-x-auto">
-        <table className="w-full min-w-[980px] text-left text-sm">
+        <table className="w-full min-w-[1120px] text-left text-sm">
           <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
             <tr>
               <Th onClick={() => toggleSort("serial")} active={sortKey === "serial"} dir={sortDir}>
@@ -198,9 +244,11 @@ export default function InsuranceMachinesTable() {
               </Th>
               <th className="px-4 py-3">Owner</th>
               <th className="px-4 py-3">Policy</th>
+              <th className="px-4 py-3">Financing</th>
               <Th onClick={() => toggleSort("status")} active={sortKey === "status"} dir={sortDir}>
                 Status
               </Th>
+              <th className="px-4 py-3">Fraud risk</th>
               <Th
                 onClick={() => toggleSort("lastVerifiedAt")}
                 active={sortKey === "lastVerifiedAt"}
@@ -224,7 +272,7 @@ export default function InsuranceMachinesTable() {
 
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-slate-600">
+                <td colSpan={10} className="px-4 py-10 text-center text-slate-600">
                   No machines match your filters.
                 </td>
               </tr>
@@ -248,6 +296,9 @@ function Row({
   const ageDays = daysSince(m.lastVerifiedAt);
   const ageLabel = ageDays <= 1 ? "today" : `${ageDays} days ago`;
 
+  const fraud = fraudSignals(m);
+  const riskLabel = fraud.tone === "red" ? "High" : fraud.tone === "orange" ? "Medium" : "Low";
+
   return (
     <tr className="hover:bg-slate-50">
       <td className="px-4 py-4 font-mono text-xs text-slate-900">{m.serial}</td>
@@ -258,15 +309,38 @@ function Row({
       <td className="px-4 py-4 text-slate-900">{m.country}</td>
       <td className="px-4 py-4 text-slate-900">{m.owner}</td>
       <td className="px-4 py-4 font-mono text-xs text-slate-900">{m.policyNo}</td>
+
+      <td className="px-4 py-4">
+        <div className="text-slate-900">{financeLabel(m.financeStatus)}</div>
+        <div className="text-xs text-slate-600">{m.financeProvider || "—"}</div>
+      </td>
+
       <td className="px-4 py-4">
         <StatusBadge status={m.status} />
       </td>
+
+      <td className="px-4 py-4">
+        <div
+          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${
+            fraud.tone === "red"
+              ? "border-red-200 bg-red-50 text-red-700"
+              : fraud.tone === "orange"
+              ? "border-amber-200 bg-amber-50 text-amber-700"
+              : "border-slate-200 bg-slate-50 text-slate-700"
+          }`}
+        >
+          {riskLabel}
+        </div>
+        <div className="mt-1 text-xs text-slate-600">{fraud.signals[0] || "—"}</div>
+      </td>
+
       <td className="px-4 py-4">
         <div className="text-slate-900">{m.lastVerifiedAt}</div>
         <div className={`text-xs ${ageDays > 180 ? "text-amber-700" : "text-slate-600"}`}>
           {ageLabel}
         </div>
       </td>
+
       <td className="px-4 py-4 text-right">
         <div className="inline-flex gap-2">
           <Link
