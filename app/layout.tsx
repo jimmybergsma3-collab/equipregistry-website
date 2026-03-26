@@ -23,9 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className="h-full bg-white">
+    <html suppressHydrationWarning className="h-full bg-white">
       <head>
-        {/* Cloudflare Web Analytics */}
         <script
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"

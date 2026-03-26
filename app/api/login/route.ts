@@ -1,24 +1,61 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
-  const form = await req.formData();
-  const email = String(form.get("email") || "").trim().toLowerCase();
-  const password = String(form.get("password") || "");
-  const next = String(form.get("next") || "/dashboard");
+  try {
+    const body = await req.json();
 
-  const user = await prisma.user.findUnique({ where: { email } });
+    const email = String(body.email || "").trim().toLowerCase();
+    const password = String(body.password || "");
 
-  // DEMO: plain password (later vervangen door hashing)
-  if (!user || user.password !== password) {
-    return NextResponse.redirect(new URL(`/login?error=1&next=${encodeURIComponent(next)}`, req.url));
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Vul e-mail en wachtwoord in." },
+        { status: 400 }
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Ongeldige gegevens." },
+        { status: 401 }
+      );
+    }
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+
+    if (!valid) {
+      return NextResponse.json(
+        { error: "Ongeldige gegevens." },
+        { status: 401 }
+      );
+    }
+
+    const res = NextResponse.json({
+      success: true,
+      role: user.role,
+    });
+
+    res.cookies.set("er_session", user.id, {
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return res;
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+
+    return NextResponse.json(
+      { error: "Serverfout." },
+      { status: 500 }
+    );
   }
-
-  const res = NextResponse.redirect(new URL(next, req.url));
-  res.cookies.set("er_session", String(user.id), {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-  });
-  return res;
 }

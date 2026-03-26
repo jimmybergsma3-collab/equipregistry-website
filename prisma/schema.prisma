@@ -8,24 +8,98 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum ApplicantType {
+  private
+  sme
+  insurer_partner
+  bank_partner
+  dealer_partner
+  rental_partner
+}
+
+enum RegistrationRequestStatus {
+  draft
+  incomplete
+  ready_for_submission
+  payment_required
+  submitted
+  under_review
+  approved
+  rejected
+  more_info_required
+  passport_issued
+}
+
+enum UserRole {
+  user
+  admin
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  role      String    @default("owner")
-  createdAt DateTime  @default(now())
-  machines  Machine[]
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  companyName  String?
+  vatNumber    String?
+  role         UserRole @default(user)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  machines             Machine[]
+  registrationRequests RegistrationRequest[]
 }
 
 model Machine {
-  id            Int      @id @default(autoincrement())
-  registryId    String   @unique
-  brand         String
-  model         String
-  year          Int
-  status        String
-  lastValidated String?
-  ownerId       Int
-  createdAt     DateTime @default(now())
-  owner         User     @relation(fields: [ownerId], references: [id])
+  id           String  @id @default(cuid())
+  registryId   String  @unique
+  serialNumber String
+  brand        String?
+  model        String?
+  year         String?
+  category     String?
+  status       String?
+  ownerId      String
+  owner        User    @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RegistrationRequest {
+  id        String @id @default(cuid())
+  reference String @unique
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  assetName    String
+  category     String
+  subcategory  String
+  brand        String
+  model        String
+  serialNumber String
+  year         String?
+  country      String?
+
+  ownerName  String
+  ownerEmail String
+
+  applicantType    ApplicantType
+  requestStatus    RegistrationRequestStatus
+  paymentCompleted Boolean                   @default(false)
+
+  declarationAccepted Boolean
+
+  dynamicFields     Json
+  documents         Json
+  completenessScore Int  @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RegistrySequence {
+  id        String   @id @default("registry-sequence")
+  nextValue Int      @default(1)
+  updatedAt DateTime @updatedAt
 }

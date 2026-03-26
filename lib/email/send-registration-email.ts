@@ -1,0 +1,125 @@
+// lib/email/send-registration-email.ts
+
+import { sendEmail } from "@/lib/email/mailer";
+import {
+  buildApprovedEmail,
+  buildDraftSavedEmail,
+  buildPartnerSubmittedEmail,
+  buildPaymentConfirmedEmail,
+  buildPaymentRequiredEmail,
+  buildPassportIssuedEmail,
+  buildUnderReviewEmail,
+} from "@/lib/email/templates/registration";
+import { MANUAL_PAYMENT_DETAILS } from "@/lib/registry/payment";
+
+export async function sendDraftSavedEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildDraftSavedEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendPaymentRequiredEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildPaymentRequiredEmail({
+    ...params,
+    iban: MANUAL_PAYMENT_DETAILS.iban,
+    accountHolder: MANUAL_PAYMENT_DETAILS.accountHolder,
+    bic: MANUAL_PAYMENT_DETAILS.bic,
+    feeText: MANUAL_PAYMENT_DETAILS.registrationFeeText,
+  });
+
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendPartnerSubmittedEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildPartnerSubmittedEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendPaymentConfirmedEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildPaymentConfirmedEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendUnderReviewEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildUnderReviewEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendApprovedEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildApprovedEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendPassportIssuedEmail(params: {
+  to: string;
+  ownerName: string;
+  passportNumber: string;
+  assetName: string;
+}) {
+  const email = buildPassportIssuedEmail(params);
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
