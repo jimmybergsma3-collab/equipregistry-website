@@ -66,6 +66,74 @@ function getActionClasses(style: ActionStyle) {
   }
 }
 
+function getSupportedAssets(lang: Lang) {
+  switch (lang) {
+    case "es":
+      return {
+        title: "Activos compatibles",
+        items: [
+          "Vehículos (coches, camiones y clásicos)",
+          "Equipos y maquinaria",
+          "Bicicletas y movilidad ligera",
+        ],
+      };
+    case "de":
+      return {
+        title: "Unterstützte Assets",
+        items: [
+          "Fahrzeuge (Autos, Lkw und Klassiker)",
+          "Maschinen und Geräte",
+          "Fahrräder und leichte Mobilität",
+        ],
+      };
+    case "nl":
+      return {
+        title: "Ondersteunde assets",
+        items: [
+          "Voertuigen (auto’s, trucks en classics)",
+          "Machines en equipment",
+          "Fietsen en lichte mobiliteit",
+        ],
+      };
+    case "fr":
+      return {
+        title: "Actifs pris en charge",
+        items: [
+          "Véhicules (voitures, camions et classiques)",
+          "Équipements et machines",
+          "Vélos et mobilité légère",
+        ],
+      };
+    case "it":
+      return {
+        title: "Asset supportati",
+        items: [
+          "Veicoli (auto, camion e classiche)",
+          "Attrezzature e macchinari",
+          "Biciclette e micromobilità",
+        ],
+      };
+    case "pt":
+      return {
+        title: "Ativos suportados",
+        items: [
+          "Veículos (carros, camiões e clássicos)",
+          "Equipamentos e maquinaria",
+          "Bicicletas e mobilidade leve",
+        ],
+      };
+    default:
+      return {
+        title: "Supported assets",
+        items: [
+          "Vehicles (cars, trucks and classic vehicles)",
+          "Equipment and machinery",
+          "Bikes and light mobility",
+        ],
+      };
+  }
+}
+
 function getStatus(serial: string, lang: Lang): Status {
   const s = serial.trim().toUpperCase();
   const t = getDictionary(lang).statuses;
@@ -124,12 +192,12 @@ function getStatus(serial: string, lang: Lang): Status {
         },
         {
           label: t.historyUnknown.actionRequestVerification,
-          href: `/${lang}/action?type=verify&registryId=${encodeURIComponent(s)}`,
+          href: `/${lang}/register`,
           style: "primary",
         },
         {
           label: t.historyUnknown.actionRegisterDocuments,
-          href: `/${lang}/action?type=register&registryId=${encodeURIComponent(s)}`,
+          href: `/${lang}/register`,
           style: "secondary",
         },
       ],
@@ -167,20 +235,13 @@ function getStatus(serial: string, lang: Lang): Status {
       ],
       actions: [
         {
-          label: t.stolen.actionReportSighting,
-          href: `/${lang}/action?type=report&registryId=${encodeURIComponent(s)}`,
-          style: "primary",
-        },
-        {
           label: t.stolen.actionContactAuthorities,
-          href: `/${lang}/action?type=authorities&registryId=${encodeURIComponent(
-            s
-          )}&caseId=ER-CASE-2026-00123`,
+          href: `/${lang}/contact-authorities?registryId=${encodeURIComponent(s)}&caseId=ER-CASE-2026-00123`,
           style: "danger",
         },
         {
           label: t.stolen.actionVerifyCaseId,
-          href: `/${lang}/action?type=verify&registryId=${encodeURIComponent(s)}`,
+          href: `/${lang}/register`,
           style: "secondary",
         },
       ],
@@ -195,7 +256,7 @@ function getStatus(serial: string, lang: Lang): Status {
     actions: [
       {
         label: t.notRegistered.actionRegister,
-        href: `/${lang}/action?type=register`,
+        href: `/${lang}/register`,
         style: "primary",
       },
     ],
@@ -210,6 +271,7 @@ export default async function Home({ params, searchParams }: Props) {
   }
 
   const t = getDictionary(lang);
+  const supportedAssets = getSupportedAssets(lang);
   const query = searchParams ? await searchParams : undefined;
   const serial = query?.serial?.trim() || "";
   const normalizedSerial = serial ? serial.toUpperCase() : "";
@@ -243,7 +305,11 @@ export default async function Home({ params, searchParams }: Props) {
             </div>
           )}
 
-          <form method="GET" action={`/${lang}`} className="flex flex-col sm:flex-row gap-3">
+          <form
+            method="GET"
+            action={`/${lang}`}
+            className="flex flex-col sm:flex-row gap-3"
+          >
             <input
               name="serial"
               defaultValue={normalizedSerial}
@@ -254,6 +320,17 @@ export default async function Home({ params, searchParams }: Props) {
               {t.hero.search}
             </button>
           </form>
+
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-left">
+            <p className="text-sm font-semibold text-slate-800 mb-2">
+              {supportedAssets.title}
+            </p>
+            <ul className="text-sm text-slate-600 space-y-1">
+              {supportedAssets.items.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
 
           <div className="mt-3 text-sm text-slate-500">
             {t.hero.demoSerials}
@@ -289,7 +366,9 @@ export default async function Home({ params, searchParams }: Props) {
               )}
 
               {status.warning && (
-                <p className="text-red-700 font-semibold mb-4">{status.warning}</p>
+                <p className="text-red-700 font-semibold mb-4">
+                  {status.warning}
+                </p>
               )}
 
               <div className="bg-white border rounded-lg p-4 mb-4">

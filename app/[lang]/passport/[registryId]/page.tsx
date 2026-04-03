@@ -11,6 +11,16 @@ type Props = {
   }>;
 };
 
+function maskSerial(serial: string | null) {
+  if (!serial) return "Not available";
+
+  if (serial.length <= 6) {
+    return `${serial.slice(0, 2)}***`;
+  }
+
+  return `${serial.slice(0, 4)}*****${serial.slice(-2)}`;
+}
+
 export default async function PassportPage({ params }: Props) {
   const { lang, registryId } = await params;
 
@@ -21,7 +31,18 @@ export default async function PassportPage({ params }: Props) {
   const request = await prisma.registrationRequest.findFirst({
     where: {
       reference: registryId,
-      requestStatus: "passport_issued",
+    },
+    select: {
+      reference: true,
+      requestStatus: true,
+      assetName: true,
+      category: true,
+      subcategory: true,
+      brand: true,
+      model: true,
+      serialNumber: true,
+      year: true,
+      country: true,
     },
   });
 
@@ -44,35 +65,69 @@ export default async function PassportPage({ params }: Props) {
               {request.reference}
             </h1>
 
+            <p className="mt-3 text-sm text-zinc-600">
+              Public passport view — limited asset data visible without login.
+            </p>
+
+            <div className="mt-4 inline-flex rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700">
+              Status: {request.requestStatus}
+            </div>
+
             <div className="mt-8 grid gap-5 sm:grid-cols-2">
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Asset Name</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.assetName}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.assetName || "Not available"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Category</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.category}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.category || "Not available"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Subcategory</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.subcategory}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.subcategory || "Not available"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Brand</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.brand}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.brand || "Not available"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Model</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.model}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.model || "Not available"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Year</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.year || "Not available"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Country</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {request.country || "Not available"}
+                </p>
               </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">Serial Number</p>
-                <p className="mt-1 text-sm font-medium text-zinc-900">{request.serialNumber}</p>
+                <p className="mt-1 text-sm font-medium text-zinc-900">
+                  {maskSerial(request.serialNumber)}
+                </p>
               </div>
             </div>
           </section>

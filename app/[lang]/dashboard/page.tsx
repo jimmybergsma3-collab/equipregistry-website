@@ -4,6 +4,7 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import { getSession } from "@/lib/auth/getSession";
 import { isValidLang } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 type Props = {
   params: Promise<{
@@ -11,13 +12,14 @@ type Props = {
   }>;
 };
 
-export default async function DashboardPage({ params }: Props) {
+export default async function RegisterPage({ params }: Props) {
   const { lang } = await params;
 
   if (!isValidLang(lang)) {
     notFound();
   }
 
+  const dict = getDictionary(lang);
   const session = await getSession();
 
   if (!session.isAuthenticated) {
@@ -35,18 +37,18 @@ export default async function DashboardPage({ params }: Props) {
         </p>
 
         <div className="rounded-2xl border p-6 bg-white">
-  <p className="font-medium">Rol: {session.user.role}</p>
-  <p className="text-sm text-slate-500 mt-2 mb-6">
-    Dit is nu je eerste echte beveiligde pagina.
-  </p>
+          <p className="font-medium">Rol: {session.user.role}</p>
+          <p className="text-sm text-slate-500 mt-2 mb-6">
+            Dit is nu je eerste echte beveiligde pagina.
+          </p>
 
-  <Link
-    href={`/${lang}/dashboard/registrations`}
-    className="inline-flex rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white hover:bg-blue-800"
-  >
-    Bekijk registraties
-  </Link>
-</div>
+          <Link
+            href={`/${lang}/dashboard/registrations`}
+            className="inline-flex rounded-lg bg-blue-700 px-4 py-3 font-semibold text-white hover:bg-blue-800"
+          >
+            Bekijk registraties
+          </Link>
+        </div>
       </main>
 
       <SiteFooter lang={lang} />

@@ -53,9 +53,6 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
-    return NextResponse.json(
-      { error: "Serverfout." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Serverfout." }, { status: 500 });
   }
 }

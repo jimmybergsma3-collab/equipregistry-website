@@ -1,7 +1,10 @@
 type Props = {
-  searchParams: {
+  params: Promise<{
+    lang: string;
+  }>;
+  searchParams: Promise<{
     serial?: string;
-  };
+  }>;
 };
 
 function getStatus(serial: string) {
@@ -43,15 +46,16 @@ function getStatus(serial: string) {
   return {
     label: "Not Registered",
     color: "gray",
-    message:
-      "This serial number is not registered in EquipRegistry.",
+    message: "This serial number is not registered in EquipRegistry.",
     why:
       "Unregistered equipment lacks a verified ownership record, increasing legal and insurance uncertainty.",
   };
 }
 
-export default function ResultPage({ searchParams }: Props) {
-  const serial = searchParams.serial || "";
+export default async function ResultPage({ params, searchParams }: Props) {
+  const { lang } = await params;
+  const { serial = "" } = await searchParams;
+
   const status = getStatus(serial);
 
   return (
@@ -75,9 +79,7 @@ export default function ResultPage({ searchParams }: Props) {
             : "border-slate-400 bg-slate-100"
         }`}
       >
-        <h2 className="text-xl font-semibold mb-2">
-          {status.label}
-        </h2>
+        <h2 className="text-xl font-semibold mb-2">{status.label}</h2>
         <p className="text-slate-700">{status.message}</p>
       </div>
 
@@ -88,7 +90,7 @@ export default function ResultPage({ searchParams }: Props) {
 
       <div className="mt-8">
         <a
-          href="/"
+          href={`/${lang}`}
           className="text-equipBlue font-medium hover:underline"
         >
           ← Back to search

@@ -84,8 +84,7 @@ export default function InsuranceMachinesTable() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as InsuranceMachine[];
-        if (Array.isArray(parsed) && parsed.length) setMachines(parsed);
+const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArray(parsed) && parsed.length) setMachines(parsed);
       }
     } catch {
       // ignore

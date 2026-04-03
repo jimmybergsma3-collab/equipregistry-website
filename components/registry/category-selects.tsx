@@ -5,8 +5,10 @@ import {
   REGISTRY_CATEGORIES,
   getSubcategoriesByCategory,
 } from "@/lib/registry/categories";
+import type { Lang } from "@/lib/i18n/config";
 
 type Props = {
+  lang: Lang;
   category: string;
   subcategory: string;
   onCategoryChange: (value: string) => void;
@@ -15,7 +17,69 @@ type Props = {
   subcategoryError?: string;
 };
 
+const TEXT: Record<
+  Lang,
+  {
+    category: string;
+    subcategory: string;
+    selectCategory: string;
+    selectSubcategory: string;
+    chooseCategoryFirst: string;
+  }
+> = {
+  en: {
+    category: "Category",
+    subcategory: "Subcategory",
+    selectCategory: "Select a category",
+    selectSubcategory: "Select a subcategory",
+    chooseCategoryFirst: "Choose category first",
+  },
+  es: {
+    category: "Categoría",
+    subcategory: "Subcategoría",
+    selectCategory: "Seleccione una categoría",
+    selectSubcategory: "Seleccione una subcategoría",
+    chooseCategoryFirst: "Primero elija una categoría",
+  },
+  de: {
+    category: "Kategorie",
+    subcategory: "Unterkategorie",
+    selectCategory: "Kategorie auswählen",
+    selectSubcategory: "Unterkategorie auswählen",
+    chooseCategoryFirst: "Zuerst Kategorie wählen",
+  },
+  fr: {
+    category: "Catégorie",
+    subcategory: "Sous-catégorie",
+    selectCategory: "Sélectionnez une catégorie",
+    selectSubcategory: "Sélectionnez une sous-catégorie",
+    chooseCategoryFirst: "Choisissez d’abord une catégorie",
+  },
+  it: {
+    category: "Categoria",
+    subcategory: "Sottocategoria",
+    selectCategory: "Seleziona una categoria",
+    selectSubcategory: "Seleziona una sottocategoria",
+    chooseCategoryFirst: "Scegli prima una categoria",
+  },
+  nl: {
+    category: "Categorie",
+    subcategory: "Subcategorie",
+    selectCategory: "Selecteer een categorie",
+    selectSubcategory: "Selecteer een subcategorie",
+    chooseCategoryFirst: "Kies eerst een categorie",
+  },
+  pt: {
+    category: "Categoria",
+    subcategory: "Subcategoria",
+    selectCategory: "Selecione uma categoria",
+    selectSubcategory: "Selecione uma subcategoria",
+    chooseCategoryFirst: "Escolha primeiro uma categoria",
+  },
+};
+
 export default function CategorySelects({
+  lang,
   category,
   subcategory,
   onCategoryChange,
@@ -23,6 +87,8 @@ export default function CategorySelects({
   categoryError,
   subcategoryError,
 }: Props) {
+  const text = TEXT[lang];
+
   const subcategories = useMemo(
     () => getSubcategoriesByCategory(category),
     [category]
@@ -45,7 +111,7 @@ export default function CategorySelects({
           htmlFor="category"
           className="mb-2 block text-sm font-medium text-zinc-900"
         >
-          Category <span className="text-red-600">*</span>
+          {text.category} <span className="text-red-600">*</span>
         </label>
 
         <select
@@ -60,7 +126,7 @@ export default function CategorySelects({
               : "border-zinc-300 focus:border-zinc-900",
           ].join(" ")}
         >
-          <option value="">Select a category</option>
+          <option value="">{text.selectCategory}</option>
           {REGISTRY_CATEGORIES.map((item) => (
             <option key={item.value} value={item.value}>
               {item.label}
@@ -78,7 +144,7 @@ export default function CategorySelects({
           htmlFor="subcategory"
           className="mb-2 block text-sm font-medium text-zinc-900"
         >
-          Subcategory <span className="text-red-600">*</span>
+          {text.subcategory} <span className="text-red-600">*</span>
         </label>
 
         <select
@@ -95,7 +161,7 @@ export default function CategorySelects({
           ].join(" ")}
         >
           <option value="">
-            {category ? "Select a subcategory" : "Choose category first"}
+            {category ? text.selectSubcategory : text.chooseCategoryFirst}
           </option>
 
           {subcategories.map((item) => (

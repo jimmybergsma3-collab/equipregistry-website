@@ -22,8 +22,7 @@ function getDataFilePath() {
 export async function getMachines(): Promise<MachineRecord[]> {
   const filePath = getDataFilePath();
   const raw = await readFile(filePath, "utf-8");
-  const parsed = JSON.parse(raw) as MachineRecord[];
-
+const parsed = safeParse<MachineRecord[]>(raw) ?? [];
   if (!Array.isArray(parsed)) return [];
   return parsed;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { safeParse } from "@/lib/utils/safeParse";
 import { useEffect, useMemo, useState } from "react";
 import { MOCK_MACHINES, type InsuranceMachine } from "@/lib/insurance/mockMachines";
 
@@ -97,8 +98,7 @@ export default function InsuranceOverviewPage() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as InsuranceMachine[];
-        if (Array.isArray(parsed) && parsed.length) setMachines(parsed);
+const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArray(parsed) && parsed.length) setMachines(parsed);
       }
     } catch {
       // ignore

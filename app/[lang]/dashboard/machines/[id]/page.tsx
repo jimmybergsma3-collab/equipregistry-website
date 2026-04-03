@@ -25,14 +25,8 @@ export default async function MachineDetailPage({ params }: Props) {
     redirect(`/${lang}/login`);
   }
 
-  const machineId = Number(id);
-
-  if (isNaN(machineId)) {
-    notFound();
-  }
-
   const machine = await prisma.machine.findUnique({
-    where: { id: machineId },
+    where: { id },
   });
 
   if (!machine || machine.ownerId !== session.user.id) {

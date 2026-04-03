@@ -14,6 +14,7 @@ type Status =
 type Role = 'guest' | 'owner' | 'insurer' | 'admin';
 
 interface PassportActionsProps {
+  lang: string;
   registryId: string;
   status: Status;
   mode?: 'public' | 'private';
@@ -38,6 +39,7 @@ function getAccentStyle(status: Status): React.CSSProperties {
 /* ---------- Component ---------- */
 
 export default function PassportActions({
+  lang,
   registryId,
   status,
   mode = 'public',
@@ -48,8 +50,6 @@ export default function PassportActions({
   const isOwner = role === 'owner';
   const isInsurer = role === 'insurer';
   const isAdmin = role === 'admin';
-
-  /* ---- Role-aware labels ---- */
 
   const verificationTitle =
     isAdmin
@@ -68,12 +68,11 @@ export default function PassportActions({
       <h3 style={styles.title}>Available actions</h3>
 
       <div style={styles.grid}>
-        {/* ---------------- PUBLIC ---------------- */}
         {mode === 'public' && (
           <>
             {status === 'NOT_REGISTERED' && (
               <ActionCard
-                href={`/action?type=register&registryId=${registryId}`}
+                href={`/${lang}/action?type=register&registryId=${encodeURIComponent(registryId)}&lang=${lang}`}
                 title="Register this machine"
                 text="Start the official registration process."
                 accentStyle={accentStyle}
@@ -83,7 +82,7 @@ export default function PassportActions({
             {(status === 'HISTORY_UNKNOWN' ||
               status === 'REGISTERED_VERIFIED') && (
               <ActionCard
-                href={`/action?type=verify&registryId=${registryId}`}
+                href={`/${lang}/action?type=verify&registryId=${encodeURIComponent(registryId)}&lang=${lang}`}
                 title="Request verification"
                 text="Request validation of ownership or origin."
                 accentStyle={accentStyle}
@@ -92,7 +91,7 @@ export default function PassportActions({
 
             {status === 'STOLEN' && (
               <ActionCard
-                href={`/action?type=report&registryId=${registryId}`}
+                href={`/${lang}/action?type=report&registryId=${encodeURIComponent(registryId)}&lang=${lang}`}
                 title="Report a sighting"
                 text="Report stolen or suspicious equipment."
                 accentStyle={accentStyle}
@@ -100,50 +99,45 @@ export default function PassportActions({
             )}
 
             <ActionCard
-              href={`/action?type=passport&registryId=${registryId}`}
-              title="About this passport"
-              text="Learn how registry passports work."
+              href={`/${lang}/passport/${encodeURIComponent(registryId)}`}
+              title="View public passport"
+              text="Open the public passport view."
               accentStyle={accentStyle}
             />
           </>
         )}
 
-        {/* ---------------- PRIVATE ---------------- */}
         {mode === 'private' && role !== 'guest' && (
           <>
-            {/* View passport */}
             <ActionCard
-              href={`/dashboard/passport/${registryId}`}
+              href={`/${lang}/dashboard/passport/${encodeURIComponent(registryId)}`}
               title="View full passport"
               text="Access the complete internal record."
               accentStyle={accentStyle}
             />
 
-            {/* Verify */}
             {(status === 'HISTORY_UNKNOWN' ||
               status === 'REGISTERED_VERIFIED') && (
               <ActionCard
-                href={`/action?type=verify&registryId=${registryId}`}
+                href={`/${lang}/action?type=verify&registryId=${encodeURIComponent(registryId)}&lang=${lang}`}
                 title={verificationTitle}
                 text="Initiate a validation process."
                 accentStyle={accentStyle}
               />
             )}
 
-            {/* Register (owner only) */}
             {isOwner && status === 'NOT_REGISTERED' && (
               <ActionCard
-                href={`/action?type=register&registryId=${registryId}`}
+                href={`/${lang}/action?type=register&registryId=${encodeURIComponent(registryId)}&lang=${lang}`}
                 title="Register this machine"
                 text="Create a registry record for this machine."
                 accentStyle={accentStyle}
               />
             )}
 
-            {/* Download / Export */}
             {(isOwner || isAdmin) && (
               <ActionCard
-                href={`/action?type=passport&registryId=${registryId}`}
+                href={`/${lang}/dashboard/passport/${encodeURIComponent(registryId)}`}
                 title={downloadTitle}
                 text="Download or print the official document."
                 accentStyle={accentStyle}
