@@ -41,524 +41,694 @@ const ACTION_TEXT: Record<
     report: {
       title: string;
       intro: string;
-      registryId: string;
-      important: string;
-      importantText: string;
-      nextTitle: string;
-      next: string[];
+      whyTitle: string;
+      why: string[];
+      login: string;
       back: string;
     };
     authorities: {
       title: string;
       intro: string;
-      registryId: string;
-      caseId: string;
-      important: string;
-      importantText: string;
+      emergencyTitle: string;
+      emergencyText: string;
+      login: string;
       back: string;
     };
     fallback: {
       title: string;
-      intro: string;
+      text: string;
       back: string;
     };
   }
 > = {
   en: {
     verify: {
-      title: "Request verification",
-      intro:
-        "Verification confirms the legal origin and ownership history of registered equipment. This reduces fraud, insurance risk and compliance uncertainty.",
+      title: "Verify registration",
+      intro: "Check the current EquipRegistry status of this asset.",
       registryId: "Registry ID",
       nextTitle: "What happens next",
       steps: [
-        "Login as the equipment owner or authorized party",
-        "Submit ownership and origin documentation",
-        "A validation partner reviews the case",
-        "The registry status is updated upon approval",
+        "Review the current registration status.",
+        "Check whether more details become available after login.",
+        "Use the information to decide your next step.",
       ],
       login: "Login to continue",
-      back: "Back to search",
+      back: "Back",
     },
     register: {
-      title: "Register equipment",
-      intro:
-        "Equipment registration creates an official EquipRegistry passport. This establishes a verified reference for ownership, documentation and insurance validation.",
+      title: "Register asset",
+      intro: "Create a registration request for this asset.",
       whoTitle: "Who can register",
       who: [
-        "Equipment owners",
-        "Authorized dealers or manufacturers",
-        "Insurance or leasing partners (with mandate)",
+        "Private owners",
+        "Companies",
+        "Insurers",
+        "Partners",
       ],
-      includesTitle: "Registration includes",
+      includesTitle: "What this includes",
       includes: [
-        "Unique registry ID",
-        "Digital equipment passport",
-        "Proof-of-origin validation",
-        "Insurance-ready status reference",
+        "Basic asset identification",
+        "Ownership details",
+        "Supporting documents",
       ],
-      login: "Login to start registration",
-      back: "Back to search",
+      login: "Login to continue",
+      back: "Back",
     },
     report: {
-      title: "Report a sighting",
-      intro:
-        "If you believe you have identified equipment that is reported as stolen or suspicious, you can submit a sighting report to EquipRegistry.",
-      registryId: "Registry ID",
-      important: "Important",
-      importantText:
-        "Do not attempt to intervene, recover or confront any party. Reporting a sighting helps authorities and insurers take appropriate action.",
-      nextTitle: "What happens after reporting",
-      next: [
-        "Your report is logged securely",
-        "Relevant insurers or authorities are notified",
-        "No personal details are disclosed publicly",
-        "You may be contacted for clarification if needed",
+      title: "Report sighting",
+      intro: "Submit a sighting related to this asset.",
+      whyTitle: "Why this matters",
+      why: [
+        "A sighting may help recover a stolen asset.",
+        "Authorities and relevant parties can use this information.",
       ],
-      back: "Back to search",
+      login: "Login to continue",
+      back: "Back",
     },
     authorities: {
       title: "Contact authorities",
       intro:
-        "Demo flow: shows a recommended authority contact route for a stolen equipment alert. You may optionally share your approximate location (demo only).",
-      registryId: "Registry ID",
-      caseId: "Case ID",
-      important: "Important",
-      importantText:
-        "If there is immediate danger, call emergency services. Do not intervene or confront any party.",
-      back: "Back to search",
+        "If this asset may be stolen or suspicious, contact the appropriate authorities first.",
+      emergencyTitle: "Emergency",
+      emergencyText:
+        "If there is immediate danger or a crime in progress, call the local emergency number immediately.",
+      login: "Login to continue",
+      back: "Back",
     },
     fallback: {
-      title: "EquipRegistry action",
-      intro:
-        "This action requires additional context. Please start from a serial lookup or registry passport.",
-      back: "Back to search",
+      title: "Action not available",
+      text: "This action is currently not available.",
+      back: "Back",
     },
   },
+
   es: {
     verify: {
-      title: "Solicitar verificación",
-      intro:
-        "La verificación confirma el origen legal y el historial de propiedad del equipo registrado. Esto reduce el fraude, el riesgo de seguros y la incertidumbre de cumplimiento.",
+      title: "Verificar registro",
+      intro: "Consulta el estado actual de este activo en EquipRegistry.",
       registryId: "ID de registro",
       nextTitle: "Qué ocurre después",
       steps: [
-        "Inicie sesión como propietario del equipo o parte autorizada",
-        "Envíe la documentación de propiedad y origen",
-        "Un socio de validación revisa el caso",
-        "El estado del registro se actualiza tras la aprobación",
+        "Revisa el estado actual del registro.",
+        "Comprueba si hay más detalles disponibles después de iniciar sesión.",
+        "Usa la información para decidir el siguiente paso.",
       ],
       login: "Iniciar sesión para continuar",
-      back: "Volver a la búsqueda",
+      back: "Volver",
     },
     register: {
-      title: "Registrar equipo",
-      intro:
-        "El registro de equipos crea un pasaporte oficial de EquipRegistry. Esto establece una referencia verificada para propiedad, documentación y validación de seguros.",
+      title: "Registrar activo",
+      intro: "Crea una solicitud de registro para este activo.",
       whoTitle: "Quién puede registrar",
       who: [
-        "Propietarios del equipo",
-        "Distribuidores o fabricantes autorizados",
-        "Socios aseguradores o de leasing (con mandato)",
+        "Propietarios particulares",
+        "Empresas",
+        "Aseguradoras",
+        "Socios",
       ],
-      includesTitle: "El registro incluye",
+      includesTitle: "Qué incluye",
       includes: [
-        "ID de registro único",
-        "Pasaporte digital del equipo",
-        "Validación del origen",
-        "Referencia de estado preparada para seguros",
+        "Identificación básica del activo",
+        "Datos de propiedad",
+        "Documentos de respaldo",
       ],
-      login: "Iniciar sesión para empezar el registro",
-      back: "Volver a la búsqueda",
+      login: "Iniciar sesión para continuar",
+      back: "Volver",
     },
     report: {
       title: "Reportar avistamiento",
-      intro:
-        "Si cree haber identificado un equipo reportado como robado o sospechoso, puede enviar un reporte de avistamiento a EquipRegistry.",
-      registryId: "ID de registro",
-      important: "Importante",
-      importantText:
-        "No intente intervenir, recuperar ni confrontar a ninguna parte. Reportar un avistamiento ayuda a las autoridades y aseguradoras a actuar adecuadamente.",
-      nextTitle: "Qué ocurre después del reporte",
-      next: [
-        "Su reporte se registra de forma segura",
-        "Se notifica a aseguradoras o autoridades relevantes",
-        "No se divulgan públicamente datos personales",
-        "Podrían contactarle para aclaraciones si es necesario",
+      intro: "Envía un aviso relacionado con este activo.",
+      whyTitle: "Por qué es importante",
+      why: [
+        "Un avistamiento puede ayudar a recuperar un activo robado.",
+        "Las autoridades y las partes relevantes pueden usar esta información.",
       ],
-      back: "Volver a la búsqueda",
+      login: "Iniciar sesión para continuar",
+      back: "Volver",
     },
     authorities: {
-      title: "Contactar autoridades",
+      title: "Contactar a las autoridades",
       intro:
-        "Flujo demo: muestra una ruta recomendada de contacto con autoridades para una alerta de equipo robado. Opcionalmente puede compartir su ubicación aproximada (solo demo).",
-      registryId: "ID de registro",
-      caseId: "ID del caso",
-      important: "Importante",
-      importantText:
-        "Si existe peligro inmediato, llame a los servicios de emergencia. No intervenga ni confronte a ninguna parte.",
-      back: "Volver a la búsqueda",
+        "Si este activo puede ser robado o sospechoso, contacta primero con las autoridades competentes.",
+      emergencyTitle: "Emergencia",
+      emergencyText:
+        "Si existe un peligro inmediato o un delito en curso, llama de inmediato al número local de emergencias.",
+      login: "Iniciar sesión para continuar",
+      back: "Volver",
     },
     fallback: {
-      title: "Acción de EquipRegistry",
-      intro:
-        "Esta acción requiere contexto adicional. Comience desde una búsqueda por número de serie o pasaporte de registro.",
-      back: "Volver a la búsqueda",
+      title: "Acción no disponible",
+      text: "Esta acción no está disponible en este momento.",
+      back: "Volver",
     },
   },
+
   de: {
     verify: {
-      title: "Verifizierung anfordern",
-      intro:
-        "Die Verifizierung bestätigt den legalen Ursprung und die Eigentumshistorie registrierter Geräte. Dies reduziert Betrug, Versicherungsrisiken und Compliance-Unsicherheit.",
+      title: "Registrierung prüfen",
+      intro: "Prüfen Sie den aktuellen EquipRegistry-Status dieses Objekts.",
       registryId: "Register-ID",
-      nextTitle: "Was passiert als Nächstes",
+      nextTitle: "Wie es weitergeht",
       steps: [
-        "Melden Sie sich als Eigentümer oder berechtigte Partei an",
-        "Reichen Sie Eigentums- und Herkunftsnachweise ein",
-        "Ein Validierungspartner prüft den Fall",
-        "Der Registerstatus wird nach Genehmigung aktualisiert",
+        "Prüfen Sie den aktuellen Registrierungsstatus.",
+        "Prüfen Sie, ob nach dem Login weitere Details verfügbar sind.",
+        "Nutzen Sie die Informationen für den nächsten Schritt.",
       ],
       login: "Anmelden, um fortzufahren",
-      back: "Zurück zur Suche",
+      back: "Zurück",
     },
     register: {
-      title: "Gerät registrieren",
-      intro:
-        "Die Geräte-Registrierung erstellt einen offiziellen EquipRegistry-Pass. Dadurch entsteht eine verifizierte Referenz für Eigentum, Unterlagen und Versicherungsvalidierung.",
-      whoTitle: "Wer kann registrieren",
+      title: "Objekt registrieren",
+      intro: "Erstellen Sie eine Registrierungsanfrage für dieses Objekt.",
+      whoTitle: "Wer registrieren kann",
       who: [
-        "Geräteeigentümer",
-        "Autorisierte Händler oder Hersteller",
-        "Versicherungs- oder Leasingpartner (mit Mandat)",
+        "Private Eigentümer",
+        "Unternehmen",
+        "Versicherer",
+        "Partner",
       ],
-      includesTitle: "Die Registrierung umfasst",
+      includesTitle: "Was enthalten ist",
       includes: [
-        "Eindeutige Register-ID",
-        "Digitalen Gerätepass",
-        "Herkunftsvalidierung",
-        "Versicherungsfähige Statusreferenz",
+        "Grundlegende Identifikation des Objekts",
+        "Eigentumsangaben",
+        "Nachweisdokumente",
       ],
-      login: "Anmelden, um die Registrierung zu starten",
-      back: "Zurück zur Suche",
+      login: "Anmelden, um fortzufahren",
+      back: "Zurück",
     },
     report: {
       title: "Sichtung melden",
-      intro:
-        "Wenn Sie glauben, ein als gestohlen oder verdächtig gemeldetes Gerät identifiziert zu haben, können Sie eine Sichtungsmeldung an EquipRegistry senden.",
-      registryId: "Register-ID",
-      important: "Wichtig",
-      importantText:
-        "Versuchen Sie nicht einzugreifen, etwas zurückzuholen oder jemanden zu konfrontieren. Eine Sichtungsmeldung hilft Behörden und Versicherern beim Handeln.",
-      nextTitle: "Was nach der Meldung passiert",
-      next: [
-        "Ihre Meldung wird sicher protokolliert",
-        "Relevante Versicherer oder Behörden werden benachrichtigt",
-        "Keine persönlichen Daten werden öffentlich gemacht",
-        "Bei Bedarf können Sie für Rückfragen kontaktiert werden",
+      intro: "Übermitteln Sie eine Sichtung zu diesem Objekt.",
+      whyTitle: "Warum das wichtig ist",
+      why: [
+        "Eine Sichtung kann helfen, ein gestohlenes Objekt wiederzufinden.",
+        "Behörden und relevante Parteien können diese Informationen nutzen.",
       ],
-      back: "Zurück zur Suche",
+      login: "Anmelden, um fortzufahren",
+      back: "Zurück",
     },
     authorities: {
       title: "Behörden kontaktieren",
       intro:
-        "Demo-Ablauf: zeigt einen empfohlenen Kontaktweg zu Behörden bei einem Alarm wegen gestohlener Geräte. Optional können Sie Ihren ungefähren Standort teilen (nur Demo).",
-      registryId: "Register-ID",
-      caseId: "Fall-ID",
-      important: "Wichtig",
-      importantText:
-        "Bei unmittelbarer Gefahr rufen Sie den Notruf. Greifen Sie nicht ein und konfrontieren Sie niemanden.",
-      back: "Zurück zur Suche",
+        "Wenn dieses Objekt gestohlen oder verdächtig sein könnte, kontaktieren Sie zuerst die zuständigen Behörden.",
+      emergencyTitle: "Notfall",
+      emergencyText:
+        "Wenn unmittelbare Gefahr besteht oder eine Straftat im Gange ist, rufen Sie sofort die örtliche Notrufnummer an.",
+      login: "Anmelden, um fortzufahren",
+      back: "Zurück",
     },
     fallback: {
-      title: "EquipRegistry-Aktion",
-      intro:
-        "Diese Aktion benötigt zusätzlichen Kontext. Bitte starten Sie über eine Seriennummernsuche oder einen Registerpass.",
-      back: "Zurück zur Suche",
+      title: "Aktion nicht verfügbar",
+      text: "Diese Aktion ist derzeit nicht verfügbar.",
+      back: "Zurück",
     },
   },
+
   fr: {
     verify: {
-      title: "Demander une vérification",
-      intro:
-        "La vérification confirme l’origine légale et l’historique de propriété des équipements enregistrés. Cela réduit la fraude, le risque d’assurance et l’incertitude de conformité.",
-      registryId: "ID de registre",
-      nextTitle: "Ce qui se passe ensuite",
+      title: "Vérifier l’enregistrement",
+      intro: "Consultez le statut actuel de cet actif dans EquipRegistry.",
+      registryId: "ID d’enregistrement",
+      nextTitle: "Étapes suivantes",
       steps: [
-        "Connectez-vous en tant que propriétaire ou partie autorisée",
-        "Soumettez les documents de propriété et d’origine",
-        "Un partenaire de validation examine le dossier",
-        "Le statut du registre est mis à jour après approbation",
+        "Vérifiez le statut actuel de l’enregistrement.",
+        "Vérifiez si plus de détails sont disponibles après connexion.",
+        "Utilisez ces informations pour décider de la suite.",
       ],
       login: "Se connecter pour continuer",
-      back: "Retour à la recherche",
+      back: "Retour",
     },
     register: {
-      title: "Enregistrer un équipement",
-      intro:
-        "L’enregistrement d’un équipement crée un passeport officiel EquipRegistry. Cela établit une référence vérifiée pour la propriété, les documents et la validation d’assurance.",
+      title: "Enregistrer l’actif",
+      intro: "Créez une demande d’enregistrement pour cet actif.",
       whoTitle: "Qui peut enregistrer",
       who: [
-        "Les propriétaires d’équipement",
-        "Les concessionnaires ou fabricants autorisés",
-        "Les partenaires assureurs ou leasing (avec mandat)",
+        "Propriétaires privés",
+        "Entreprises",
+        "Assureurs",
+        "Partenaires",
       ],
-      includesTitle: "L’enregistrement comprend",
+      includesTitle: "Ce qui est inclus",
       includes: [
-        "Un identifiant de registre unique",
-        "Un passeport numérique d’équipement",
-        "Une validation de provenance",
-        "Une référence de statut prête pour l’assurance",
+        "Identification de base de l’actif",
+        "Détails de propriété",
+        "Documents justificatifs",
       ],
-      login: "Se connecter pour commencer l’enregistrement",
-      back: "Retour à la recherche",
+      login: "Se connecter pour continuer",
+      back: "Retour",
     },
     report: {
-      title: "Signaler un repérage",
-      intro:
-        "Si vous pensez avoir identifié un équipement signalé comme volé ou suspect, vous pouvez envoyer un signalement à EquipRegistry.",
-      registryId: "ID de registre",
-      important: "Important",
-      importantText:
-        "N’essayez pas d’intervenir, de récupérer ou de confronter une partie. Un signalement aide les autorités et les assureurs à agir correctement.",
-      nextTitle: "Ce qui se passe après le signalement",
-      next: [
-        "Votre signalement est enregistré de manière sécurisée",
-        "Les assureurs ou autorités concernés sont informés",
-        "Aucune donnée personnelle n’est rendue publique",
-        "Vous pourrez être contacté pour des précisions si nécessaire",
+      title: "Signaler une observation",
+      intro: "Soumettez une observation liée à cet actif.",
+      whyTitle: "Pourquoi c’est important",
+      why: [
+        "Une observation peut aider à récupérer un actif volé.",
+        "Les autorités et les parties concernées peuvent utiliser ces informations.",
       ],
-      back: "Retour à la recherche",
+      login: "Se connecter pour continuer",
+      back: "Retour",
     },
     authorities: {
       title: "Contacter les autorités",
       intro:
-        "Flux démo : affiche un itinéraire recommandé de contact avec les autorités pour une alerte d’équipement volé. Vous pouvez éventuellement partager votre position approximative (démo uniquement).",
-      registryId: "ID de registre",
-      caseId: "ID du dossier",
-      important: "Important",
-      importantText:
-        "En cas de danger immédiat, appelez les secours. N’intervenez pas et ne confrontez personne.",
-      back: "Retour à la recherche",
+        "Si cet actif semble volé ou suspect, contactez d’abord les autorités compétentes.",
+      emergencyTitle: "Urgence",
+      emergencyText:
+        "En cas de danger immédiat ou de crime en cours, appelez immédiatement le numéro d’urgence local.",
+      login: "Se connecter pour continuer",
+      back: "Retour",
     },
     fallback: {
-      title: "Action EquipRegistry",
-      intro:
-        "Cette action nécessite un contexte supplémentaire. Veuillez commencer depuis une recherche de numéro de série ou un passeport de registre.",
-      back: "Retour à la recherche",
+      title: "Action non disponible",
+      text: "Cette action n’est actuellement pas disponible.",
+      back: "Retour",
     },
   },
+
   it: {
     verify: {
-      title: "Richiedi verifica",
-      intro:
-        "La verifica conferma l’origine legale e la cronologia di proprietà delle attrezzature registrate. Questo riduce frodi, rischi assicurativi e incertezza di conformità.",
+      title: "Verifica registrazione",
+      intro: "Controlla lo stato attuale di questo bene in EquipRegistry.",
       registryId: "ID registro",
       nextTitle: "Cosa succede dopo",
       steps: [
-        "Accedi come proprietario o parte autorizzata",
-        "Invia la documentazione di proprietà e origine",
-        "Un partner di validazione esamina il caso",
-        "Lo stato del registro viene aggiornato dopo l’approvazione",
+        "Controlla lo stato attuale della registrazione.",
+        "Verifica se sono disponibili ulteriori dettagli dopo l’accesso.",
+        "Usa le informazioni per decidere il passo successivo.",
       ],
       login: "Accedi per continuare",
-      back: "Torna alla ricerca",
+      back: "Indietro",
     },
     register: {
-      title: "Registra attrezzatura",
-      intro:
-        "La registrazione dell’attrezzatura crea un passaporto ufficiale EquipRegistry. Questo stabilisce un riferimento verificato per proprietà, documentazione e validazione assicurativa.",
+      title: "Registra bene",
+      intro: "Crea una richiesta di registrazione per questo bene.",
       whoTitle: "Chi può registrare",
       who: [
-        "Proprietari dell’attrezzatura",
-        "Rivenditori o produttori autorizzati",
-        "Partner assicurativi o leasing (con mandato)",
+        "Proprietari privati",
+        "Aziende",
+        "Assicuratori",
+        "Partner",
       ],
-      includesTitle: "La registrazione include",
+      includesTitle: "Cosa include",
       includes: [
-        "ID registro univoco",
-        "Passaporto digitale dell’attrezzatura",
-        "Validazione della provenienza",
-        "Riferimento di stato pronto per assicurazioni",
+        "Identificazione base del bene",
+        "Dettagli di proprietà",
+        "Documenti di supporto",
       ],
-      login: "Accedi per iniziare la registrazione",
-      back: "Torna alla ricerca",
+      login: "Accedi per continuare",
+      back: "Indietro",
     },
     report: {
-      title: "Segnala un avvistamento",
-      intro:
-        "Se ritieni di aver identificato un’attrezzatura segnalata come rubata o sospetta, puoi inviare una segnalazione a EquipRegistry.",
-      registryId: "ID registro",
-      important: "Importante",
-      importantText:
-        "Non tentare di intervenire, recuperare o confrontare nessuna parte. Segnalare un avvistamento aiuta autorità e assicuratori ad agire.",
-      nextTitle: "Cosa succede dopo la segnalazione",
-      next: [
-        "La tua segnalazione viene registrata in modo sicuro",
-        "Vengono informati assicuratori o autorità competenti",
-        "Nessun dato personale viene divulgato pubblicamente",
-        "Potresti essere contattato per chiarimenti se necessario",
+      title: "Segnala avvistamento",
+      intro: "Invia un avvistamento relativo a questo bene.",
+      whyTitle: "Perché è importante",
+      why: [
+        "Un avvistamento può aiutare a recuperare un bene rubato.",
+        "Le autorità e le parti competenti possono usare queste informazioni.",
       ],
-      back: "Torna alla ricerca",
+      login: "Accedi per continuare",
+      back: "Indietro",
     },
     authorities: {
       title: "Contatta le autorità",
       intro:
-        "Flusso demo: mostra un percorso consigliato di contatto con le autorità per un allarme di attrezzatura rubata. Puoi facoltativamente condividere la tua posizione approssimativa (solo demo).",
-      registryId: "ID registro",
-      caseId: "ID caso",
-      important: "Importante",
-      importantText:
-        "Se c’è pericolo immediato, chiama i servizi di emergenza. Non intervenire e non affrontare nessuno.",
-      back: "Torna alla ricerca",
+        "Se questo bene potrebbe essere rubato o sospetto, contatta prima le autorità competenti.",
+      emergencyTitle: "Emergenza",
+      emergencyText:
+        "Se c’è un pericolo immediato o un reato in corso, chiama subito il numero locale di emergenza.",
+      login: "Accedi per continuare",
+      back: "Indietro",
     },
     fallback: {
-      title: "Azione EquipRegistry",
-      intro:
-        "Questa azione richiede un contesto aggiuntivo. Inizia da una ricerca per numero di serie o da un passaporto di registro.",
-      back: "Torna alla ricerca",
+      title: "Azione non disponibile",
+      text: "Questa azione non è attualmente disponibile.",
+      back: "Indietro",
     },
   },
+
   nl: {
     verify: {
-      title: "Verificatie aanvragen",
-      intro:
-        "Verificatie bevestigt de legale herkomst en eigendomsgeschiedenis van geregistreerd equipment. Dit verlaagt fraude, verzekeringsrisico en compliance-onzekerheid.",
-      registryId: "Registry ID",
+      title: "Registratie verifiëren",
+      intro: "Controleer de huidige EquipRegistry-status van dit object.",
+      registryId: "Registratie-ID",
       nextTitle: "Wat gebeurt hierna",
       steps: [
-        "Log in als eigenaar van het equipment of als bevoegde partij",
-        "Dien eigendoms- en herkomstdocumentatie in",
-        "Een validatiepartner beoordeelt de case",
-        "De registratiestatus wordt bijgewerkt na goedkeuring",
+        "Bekijk de huidige registratiestatus.",
+        "Controleer of er na het inloggen meer details beschikbaar zijn.",
+        "Gebruik de informatie om je volgende stap te bepalen.",
       ],
-      login: "Inloggen om verder te gaan",
-      back: "Terug naar zoeken",
+      login: "Inloggen om door te gaan",
+      back: "Terug",
     },
     register: {
-      title: "Equipment registreren",
-      intro:
-        "Registratie van equipment creëert een officieel EquipRegistry-paspoort. Dit vormt een geverifieerde referentie voor eigendom, documentatie en verzekeringsvalidatie.",
+      title: "Object registreren",
+      intro: "Maak een registratieaanvraag voor dit object.",
       whoTitle: "Wie kan registreren",
       who: [
-        "Eigenaren van equipment",
-        "Geautoriseerde dealers of fabrikanten",
-        "Verzekerings- of leasepartners (met mandaat)",
+        "Particuliere eigenaren",
+        "Bedrijven",
+        "Verzekeraars",
+        "Partners",
       ],
-      includesTitle: "Registratie omvat",
+      includesTitle: "Wat dit omvat",
       includes: [
-        "Unieke registry ID",
-        "Digitaal equipmentpaspoort",
-        "Validatie van herkomst",
-        "Insurance-ready statusreferentie",
+        "Basisidentificatie van het object",
+        "Eigendomsgegevens",
+        "Ondersteunende documenten",
       ],
-      login: "Inloggen om registratie te starten",
-      back: "Terug naar zoeken",
+      login: "Inloggen om door te gaan",
+      back: "Terug",
     },
     report: {
       title: "Waarneming melden",
-      intro:
-        "Als je denkt dat je equipment hebt geïdentificeerd dat als gestolen of verdacht is gemeld, kun je een waarnemingsmelding indienen bij EquipRegistry.",
-      registryId: "Registry ID",
-      important: "Belangrijk",
-      importantText:
-        "Probeer niet in te grijpen, iets terug te halen of iemand te confronteren. Een melding helpt autoriteiten en verzekeraars om passend te handelen.",
-      nextTitle: "Wat gebeurt na de melding",
-      next: [
-        "Je melding wordt veilig vastgelegd",
-        "Relevante verzekeraars of autoriteiten worden geïnformeerd",
-        "Er worden geen persoonlijke gegevens openbaar gemaakt",
-        "Je kunt worden benaderd voor verduidelijking indien nodig",
+      intro: "Dien een melding in over dit object.",
+      whyTitle: "Waarom dit belangrijk is",
+      why: [
+        "Een waarneming kan helpen bij het terugvinden van een gestolen object.",
+        "Autoriteiten en relevante partijen kunnen deze informatie gebruiken.",
       ],
-      back: "Terug naar zoeken",
+      login: "Inloggen om door te gaan",
+      back: "Terug",
     },
     authorities: {
       title: "Autoriteiten contacteren",
       intro:
-        "Demo-flow: toont een aanbevolen route om autoriteiten te contacteren bij een alarm voor gestolen equipment. Je kunt optioneel je geschatte locatie delen (alleen demo).",
-      registryId: "Registry ID",
-      caseId: "Case ID",
-      important: "Belangrijk",
-      importantText:
-        "Bel bij direct gevaar de hulpdiensten. Grijp niet in en confronteer niemand.",
-      back: "Terug naar zoeken",
+        "Als dit object mogelijk gestolen of verdacht is, neem dan eerst contact op met de bevoegde autoriteiten.",
+      emergencyTitle: "Noodgeval",
+      emergencyText:
+        "Als er direct gevaar is of een misdrijf aan de gang is, bel dan onmiddellijk het lokale alarmnummer.",
+      login: "Inloggen om door te gaan",
+      back: "Terug",
     },
     fallback: {
-      title: "EquipRegistry actie",
-      intro:
-        "Deze actie vereist extra context. Begin vanaf een zoekopdracht op serienummer of registry-paspoort.",
-      back: "Terug naar zoeken",
+      title: "Actie niet beschikbaar",
+      text: "Deze actie is momenteel niet beschikbaar.",
+      back: "Terug",
     },
   },
+
   pt: {
     verify: {
-      title: "Solicitar verificação",
-      intro:
-        "A verificação confirma a origem legal e o histórico de propriedade do equipamento registado. Isto reduz fraude, risco de seguro e incerteza de conformidade.",
+      title: "Verificar registo",
+      intro: "Consulte o estado atual deste ativo no EquipRegistry.",
       registryId: "ID de registo",
       nextTitle: "O que acontece a seguir",
       steps: [
-        "Inicie sessão como proprietário do equipamento ou parte autorizada",
-        "Submeta a documentação de propriedade e origem",
-        "Um parceiro de validação analisa o caso",
-        "O estado do registo é atualizado após aprovação",
+        "Verifique o estado atual do registo.",
+        "Confirme se há mais detalhes disponíveis após iniciar sessão.",
+        "Use a informação para decidir o próximo passo.",
       ],
       login: "Iniciar sessão para continuar",
-      back: "Voltar à pesquisa",
+      back: "Voltar",
     },
     register: {
-      title: "Registar equipamento",
-      intro:
-        "O registo de equipamento cria um passaporte oficial EquipRegistry. Isto estabelece uma referência verificada para propriedade, documentação e validação de seguros.",
+      title: "Registar ativo",
+      intro: "Crie um pedido de registo para este ativo.",
       whoTitle: "Quem pode registar",
       who: [
-        "Proprietários do equipamento",
-        "Revendedores ou fabricantes autorizados",
-        "Parceiros de seguros ou leasing (com mandato)",
+        "Proprietários particulares",
+        "Empresas",
+        "Seguradoras",
+        "Parceiros",
       ],
-      includesTitle: "O registo inclui",
+      includesTitle: "O que isto inclui",
       includes: [
-        "ID de registo único",
-        "Passaporte digital do equipamento",
-        "Validação de proveniência",
-        "Referência de estado preparada para seguros",
+        "Identificação básica do ativo",
+        "Dados de propriedade",
+        "Documentos de suporte",
       ],
-      login: "Iniciar sessão para começar o registo",
-      back: "Voltar à pesquisa",
+      login: "Iniciar sessão para continuar",
+      back: "Voltar",
     },
     report: {
       title: "Reportar avistamento",
-      intro:
-        "Se acredita ter identificado equipamento reportado como roubado ou suspeito, pode submeter um relatório de avistamento ao EquipRegistry.",
-      registryId: "ID de registo",
-      important: "Importante",
-      importantText:
-        "Não tente intervir, recuperar ou confrontar qualquer parte. Reportar um avistamento ajuda autoridades e seguradoras a agir adequadamente.",
-      nextTitle: "O que acontece após o relatório",
-      next: [
-        "O seu relatório é registado de forma segura",
-        "As seguradoras ou autoridades relevantes são notificadas",
-        "Nenhum dado pessoal é divulgado publicamente",
-        "Poderá ser contactado para esclarecimentos se necessário",
+      intro: "Submeta um avistamento relacionado com este ativo.",
+      whyTitle: "Porque isto é importante",
+      why: [
+        "Um avistamento pode ajudar a recuperar um ativo roubado.",
+        "As autoridades e as partes relevantes podem usar esta informação.",
       ],
-      back: "Voltar à pesquisa",
+      login: "Iniciar sessão para continuar",
+      back: "Voltar",
     },
     authorities: {
       title: "Contactar autoridades",
       intro:
-        "Fluxo demo: mostra uma rota recomendada de contacto com autoridades para um alerta de equipamento roubado. Pode opcionalmente partilhar a sua localização aproximada (apenas demo).",
-      registryId: "ID de registo",
-      caseId: "ID do caso",
-      important: "Importante",
-      importantText:
-        "Se existir perigo imediato, ligue para os serviços de emergência. Não intervenha nem confronte ninguém.",
-      back: "Voltar à pesquisa",
+        "Se este ativo puder ser roubado ou suspeito, contacte primeiro as autoridades competentes.",
+      emergencyTitle: "Emergência",
+      emergencyText:
+        "Se existir perigo imediato ou um crime em curso, ligue imediatamente para o número local de emergência.",
+      login: "Iniciar sessão para continuar",
+      back: "Voltar",
     },
     fallback: {
-      title: "Ação EquipRegistry",
+      title: "Ação indisponível",
+      text: "Esta ação não está disponível neste momento.",
+      back: "Voltar",
+    },
+  },
+
+  ru: {
+    verify: {
+      title: "Проверить регистрацию",
+      intro: "Проверьте текущий статус этого объекта в EquipRegistry.",
+      registryId: "ID реестра",
+      nextTitle: "Что дальше",
+      steps: [
+        "Проверьте текущий статус регистрации.",
+        "Посмотрите, появятся ли дополнительные сведения после входа.",
+        "Используйте информацию, чтобы определить следующий шаг.",
+      ],
+      login: "Войти, чтобы продолжить",
+      back: "Назад",
+    },
+    register: {
+      title: "Зарегистрировать объект",
+      intro: "Создайте заявку на регистрацию этого объекта.",
+      whoTitle: "Кто может зарегистрировать",
+      who: [
+        "Частные владельцы",
+        "Компании",
+        "Страховые компании",
+        "Партнёры",
+      ],
+      includesTitle: "Что входит",
+      includes: [
+        "Базовая идентификация объекта",
+        "Данные о владельце",
+        "Подтверждающие документы",
+      ],
+      login: "Войти, чтобы продолжить",
+      back: "Назад",
+    },
+    report: {
+      title: "Сообщить о замеченном объекте",
+      intro: "Отправьте сообщение о замеченном объекте.",
+      whyTitle: "Почему это важно",
+      why: [
+        "Сообщение может помочь вернуть украденный объект.",
+        "Эту информацию могут использовать власти и заинтересованные стороны.",
+      ],
+      login: "Войти, чтобы продолжить",
+      back: "Назад",
+    },
+    authorities: {
+      title: "Связаться с властями",
       intro:
-        "Esta ação requer contexto adicional. Comece a partir de uma pesquisa por número de série ou passaporte de registo.",
-      back: "Voltar à pesquisa",
+        "Если этот объект может быть украденным или подозрительным, сначала свяжитесь с компетентными органами.",
+      emergencyTitle: "Экстренная ситуация",
+      emergencyText:
+        "Если существует непосредственная опасность или совершается преступление, немедленно позвоните по местному номеру экстренной помощи.",
+      login: "Войти, чтобы продолжить",
+      back: "Назад",
+    },
+    fallback: {
+      title: "Действие недоступно",
+      text: "Это действие в данный момент недоступно.",
+      back: "Назад",
+    },
+  },
+
+  zh: {
+    verify: {
+      title: "验证注册",
+      intro: "查看该资产在 EquipRegistry 中的当前状态。",
+      registryId: "注册 ID",
+      nextTitle: "接下来会发生什么",
+      steps: [
+        "查看当前注册状态。",
+        "检查登录后是否可查看更多详细信息。",
+        "根据这些信息决定下一步操作。",
+      ],
+      login: "登录以继续",
+      back: "返回",
+    },
+    register: {
+      title: "注册资产",
+      intro: "为该资产创建注册申请。",
+      whoTitle: "谁可以注册",
+      who: [
+        "私人所有者",
+        "公司",
+        "保险公司",
+        "合作伙伴",
+      ],
+      includesTitle: "包含内容",
+      includes: [
+        "资产基本识别信息",
+        "所有权信息",
+        "证明文件",
+      ],
+      login: "登录以继续",
+      back: "返回",
+    },
+    report: {
+      title: "报告目击信息",
+      intro: "提交与该资产相关的目击信息。",
+      whyTitle: "为什么这很重要",
+      why: [
+        "目击信息可能有助于找回被盗资产。",
+        "有关部门和相关方可以使用这些信息。",
+      ],
+      login: "登录以继续",
+      back: "返回",
+    },
+    authorities: {
+      title: "联系有关部门",
+      intro:
+        "如果该资产可能被盗或存在可疑情况，请先联系相关主管部门。",
+      emergencyTitle: "紧急情况",
+      emergencyText:
+        "如果存在直接危险或正在发生犯罪行为，请立即拨打当地紧急电话。",
+      login: "登录以继续",
+      back: "返回",
+    },
+    fallback: {
+      title: "操作不可用",
+      text: "此操作当前不可用。",
+      back: "返回",
+    },
+  },
+
+  hi: {
+    verify: {
+      title: "पंजीकरण सत्यापित करें",
+      intro: "इस संपत्ति की वर्तमान EquipRegistry स्थिति देखें।",
+      registryId: "रजिस्ट्री आईडी",
+      nextTitle: "आगे क्या होगा",
+      steps: [
+        "वर्तमान पंजीकरण स्थिति देखें।",
+        "जांचें कि लॉगिन के बाद अधिक विवरण उपलब्ध हैं या नहीं।",
+        "अगला कदम तय करने के लिए जानकारी का उपयोग करें।",
+      ],
+      login: "जारी रखने के लिए लॉगिन करें",
+      back: "वापस",
+    },
+    register: {
+      title: "संपत्ति पंजीकृत करें",
+      intro: "इस संपत्ति के लिए पंजीकरण अनुरोध बनाएं।",
+      whoTitle: "कौन पंजीकरण कर सकता है",
+      who: [
+        "निजी मालिक",
+        "कंपनियाँ",
+        "बीमाकर्ता",
+        "साझेदार",
+      ],
+      includesTitle: "इसमें क्या शामिल है",
+      includes: [
+        "संपत्ति की मूल पहचान",
+        "स्वामित्व विवरण",
+        "समर्थन दस्तावेज़",
+      ],
+      login: "जारी रखने के लिए लॉगिन करें",
+      back: "वापस",
+    },
+    report: {
+      title: "देखे जाने की रिपोर्ट करें",
+      intro: "इस संपत्ति से संबंधित देखे जाने की सूचना भेजें।",
+      whyTitle: "यह क्यों महत्वपूर्ण है",
+      why: [
+        "देखे जाने की सूचना चोरी हुई संपत्ति को वापस पाने में मदद कर सकती है।",
+        "अधिकारी और संबंधित पक्ष इस जानकारी का उपयोग कर सकते हैं।",
+      ],
+      login: "जारी रखने के लिए लॉगिन करें",
+      back: "वापस",
+    },
+    authorities: {
+      title: "अधिकारियों से संपर्क करें",
+      intro:
+        "यदि यह संपत्ति चोरी की गई या संदिग्ध हो सकती है, तो पहले संबंधित अधिकारियों से संपर्क करें।",
+      emergencyTitle: "आपातकाल",
+      emergencyText:
+        "यदि तत्काल खतरा हो या अपराध चल रहा हो, तो तुरंत स्थानीय आपातकालीन नंबर पर कॉल करें।",
+      login: "जारी रखने के लिए लॉगिन करें",
+      back: "वापस",
+    },
+    fallback: {
+      title: "कार्रवाई उपलब्ध नहीं है",
+      text: "यह कार्रवाई इस समय उपलब्ध नहीं है।",
+      back: "वापस",
+    },
+  },
+
+  ar: {
+    verify: {
+      title: "التحقق من التسجيل",
+      intro: "تحقق من الحالة الحالية لهذا الأصل في EquipRegistry.",
+      registryId: "معرّف السجل",
+      nextTitle: "ماذا يحدث بعد ذلك",
+      steps: [
+        "راجع حالة التسجيل الحالية.",
+        "تحقق مما إذا كانت هناك تفاصيل إضافية متاحة بعد تسجيل الدخول.",
+        "استخدم المعلومات لتحديد الخطوة التالية.",
+      ],
+      login: "تسجيل الدخول للمتابعة",
+      back: "رجوع",
+    },
+    register: {
+      title: "تسجيل الأصل",
+      intro: "أنشئ طلب تسجيل لهذا الأصل.",
+      whoTitle: "من يمكنه التسجيل",
+      who: [
+        "المالكون الأفراد",
+        "الشركات",
+        "شركات التأمين",
+        "الشركاء",
+      ],
+      includesTitle: "ما الذي يشمله ذلك",
+      includes: [
+        "التعريف الأساسي بالأصل",
+        "تفاصيل الملكية",
+        "المستندات الداعمة",
+      ],
+      login: "تسجيل الدخول للمتابعة",
+      back: "رجوع",
+    },
+    report: {
+      title: "الإبلاغ عن مشاهدة",
+      intro: "أرسل بلاغًا عن مشاهدة مرتبطة بهذا الأصل.",
+      whyTitle: "لماذا هذا مهم",
+      why: [
+        "قد تساعد المشاهدة في استعادة أصل مسروق.",
+        "يمكن للسلطات والأطراف المعنية استخدام هذه المعلومات.",
+      ],
+      login: "تسجيل الدخول للمتابعة",
+      back: "رجوع",
+    },
+    authorities: {
+      title: "الاتصال بالسلطات",
+      intro:
+        "إذا كان هذا الأصل قد يكون مسروقًا أو مشبوهًا، فاتصل أولاً بالسلطات المختصة.",
+      emergencyTitle: "حالة طارئة",
+      emergencyText:
+        "إذا كان هناك خطر فوري أو جريمة جارية، فاتصل فورًا برقم الطوارئ المحلي.",
+      login: "تسجيل الدخول للمتابعة",
+      back: "رجوع",
+    },
+    fallback: {
+      title: "الإجراء غير متاح",
+      text: "هذا الإجراء غير متاح حاليًا.",
+      back: "رجوع",
     },
   },
 };
