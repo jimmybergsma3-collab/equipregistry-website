@@ -39,13 +39,14 @@ const ACTION_TEXT: Record<
       back: string;
     };
     report: {
-      title: string;
-      intro: string;
-      whyTitle: string;
-      why: string[];
-      login: string;
-      back: string;
-    };
+  title: string;
+  intro: string;
+  registryId: string;
+  whyTitle: string;
+  why: string[];
+  login: string;
+  back: string;
+};
     authorities: {
       title: string;
       intro: string;
