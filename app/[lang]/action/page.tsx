@@ -95,16 +95,17 @@ const ACTION_TEXT: Record<
       back: "Back",
     },
     report: {
-      title: "Report sighting",
-      intro: "Submit a sighting related to this asset.",
-      whyTitle: "Why this matters",
-      why: [
-        "A sighting may help recover a stolen asset.",
-        "Authorities and relevant parties can use this information.",
-      ],
-      login: "Login to continue",
-      back: "Back",
-    },
+  title: "Report sighting",
+  intro: "Submit a sighting related to this asset.",
+  registryId: "Registry ID",
+  whyTitle: "Why this matters",
+  why: [
+    "A sighting may help recover a stolen asset.",
+    "Authorities and relevant parties can use this information.",
+  ],
+  login: "Login to continue",
+  back: "Back",
+},
     authorities: {
       title: "Contact authorities",
       intro:
@@ -156,16 +157,17 @@ const ACTION_TEXT: Record<
       back: "Volver",
     },
     report: {
-      title: "Reportar avistamiento",
-      intro: "Envía un aviso relacionado con este activo.",
-      whyTitle: "Por qué es importante",
-      why: [
-        "Un avistamiento puede ayudar a recuperar un activo robado.",
-        "Las autoridades y las partes relevantes pueden usar esta información.",
-      ],
-      login: "Iniciar sesión para continuar",
-      back: "Volver",
-    },
+  title: "Reportar avistamiento",
+  intro: "Envía un aviso relacionado con este activo.",
+  registryId: "ID de registro",
+  whyTitle: "Por qué es importante",
+  why: [
+    "Un avistamiento puede ayudar a recuperar un activo robado.",
+    "Las autoridades y las partes relevantes pueden usar esta información.",
+  ],
+  login: "Iniciar sesión para continuar",
+  back: "Volver",
+},
     authorities: {
       title: "Contactar a las autoridades",
       intro:
@@ -217,16 +219,17 @@ const ACTION_TEXT: Record<
       back: "Zurück",
     },
     report: {
-      title: "Sichtung melden",
-      intro: "Übermitteln Sie eine Sichtung zu diesem Objekt.",
-      whyTitle: "Warum das wichtig ist",
-      why: [
-        "Eine Sichtung kann helfen, ein gestohlenes Objekt wiederzufinden.",
-        "Behörden und relevante Parteien können diese Informationen nutzen.",
-      ],
-      login: "Anmelden, um fortzufahren",
-      back: "Zurück",
-    },
+  title: "Sichtung melden",
+  intro: "Übermitteln Sie eine Sichtung zu diesem Objekt.",
+  registryId: "Register-ID",
+  whyTitle: "Warum das wichtig ist",
+  why: [
+    "Eine Sichtung kann helfen, ein gestohlenes Objekt wiederzufinden.",
+    "Behörden und relevante Parteien können diese Informationen nutzen.",
+  ],
+  login: "Anmelden, um fortzufahren",
+  back: "Zurück",
+},
     authorities: {
       title: "Behörden kontaktieren",
       intro:
@@ -278,16 +281,17 @@ const ACTION_TEXT: Record<
       back: "Retour",
     },
     report: {
-      title: "Signaler une observation",
-      intro: "Soumettez une observation liée à cet actif.",
-      whyTitle: "Pourquoi c’est important",
-      why: [
-        "Une observation peut aider à récupérer un actif volé.",
-        "Les autorités et les parties concernées peuvent utiliser ces informations.",
-      ],
-      login: "Se connecter pour continuer",
-      back: "Retour",
-    },
+  title: "Signaler une observation",
+  intro: "Soumettez une observation liée à cet actif.",
+  registryId: "ID d’enregistrement",
+  whyTitle: "Pourquoi c’est important",
+  why: [
+    "Une observation peut aider à récupérer un actif volé.",
+    "Les autorités et les parties concernées peuvent utiliser ces informations.",
+  ],
+  login: "Se connecter pour continuer",
+  back: "Retour",
+},
     authorities: {
       title: "Contacter les autorités",
       intro:
@@ -339,16 +343,17 @@ const ACTION_TEXT: Record<
       back: "Indietro",
     },
     report: {
-      title: "Segnala avvistamento",
-      intro: "Invia un avvistamento relativo a questo bene.",
-      whyTitle: "Perché è importante",
-      why: [
-        "Un avvistamento può aiutare a recuperare un bene rubato.",
-        "Le autorità e le parti competenti possono usare queste informazioni.",
-      ],
-      login: "Accedi per continuare",
-      back: "Indietro",
-    },
+  title: "Segnala avvistamento",
+  intro: "Invia un avvistamento relativo a questo bene.",
+  registryId: "ID registro",
+  whyTitle: "Perché è importante",
+  why: [
+    "Un avvistamento può aiutare a recuperare un bene rubato.",
+    "Le autorità e le parti competenti possono usare queste informazioni.",
+  ],
+  login: "Accedi per continuare",
+  back: "Indietro",
+},
     authorities: {
       title: "Contatta le autorità",
       intro:
@@ -400,16 +405,17 @@ const ACTION_TEXT: Record<
       back: "Terug",
     },
     report: {
-      title: "Waarneming melden",
-      intro: "Dien een melding in over dit object.",
-      whyTitle: "Waarom dit belangrijk is",
-      why: [
-        "Een waarneming kan helpen bij het terugvinden van een gestolen object.",
-        "Autoriteiten en relevante partijen kunnen deze informatie gebruiken.",
-      ],
-      login: "Inloggen om door te gaan",
-      back: "Terug",
-    },
+  title: "Waarneming melden",
+  intro: "Dien een melding in over dit object.",
+  registryId: "Registratie-ID",
+  whyTitle: "Waarom dit belangrijk is",
+  why: [
+    "Een waarneming kan helpen bij het terugvinden van een gestolen object.",
+    "Autoriteiten en relevante partijen kunnen deze informatie gebruiken.",
+  ],
+  login: "Inloggen om door te gaan",
+  back: "Terug",
+},
     authorities: {
       title: "Autoriteiten contacteren",
       intro:
@@ -461,16 +467,17 @@ const ACTION_TEXT: Record<
       back: "Voltar",
     },
     report: {
-      title: "Reportar avistamento",
-      intro: "Submeta um avistamento relacionado com este ativo.",
-      whyTitle: "Porque isto é importante",
-      why: [
-        "Um avistamento pode ajudar a recuperar um ativo roubado.",
-        "As autoridades e as partes relevantes podem usar esta informação.",
-      ],
-      login: "Iniciar sessão para continuar",
-      back: "Voltar",
-    },
+  title: "Reportar avistamento",
+  intro: "Submeta um avistamento relacionado com este ativo.",
+  registryId: "ID de registo",
+  whyTitle: "Porque isto é importante",
+  why: [
+    "Um avistamento pode ajudar a recuperar um ativo roubado.",
+    "As autoridades e as partes relevantes podem usar esta informação.",
+  ],
+  login: "Iniciar sessão para continuar",
+  back: "Voltar",
+},
     authorities: {
       title: "Contactar autoridades",
       intro:
@@ -522,16 +529,17 @@ const ACTION_TEXT: Record<
       back: "Назад",
     },
     report: {
-      title: "Сообщить о замеченном объекте",
-      intro: "Отправьте сообщение о замеченном объекте.",
-      whyTitle: "Почему это важно",
-      why: [
-        "Сообщение может помочь вернуть украденный объект.",
-        "Эту информацию могут использовать власти и заинтересованные стороны.",
-      ],
-      login: "Войти, чтобы продолжить",
-      back: "Назад",
-    },
+  title: "Сообщить о замеченном объекте",
+  intro: "Отправьте сообщение о замеченном объекте.",
+  registryId: "ID реестра",
+  whyTitle: "Почему это важно",
+  why: [
+    "Сообщение может помочь вернуть украденный объект.",
+    "Эту информацию могут использовать власти и заинтересованные стороны.",
+  ],
+  login: "Войти, чтобы продолжить",
+  back: "Назад",
+},
     authorities: {
       title: "Связаться с властями",
       intro:
@@ -583,16 +591,17 @@ const ACTION_TEXT: Record<
       back: "返回",
     },
     report: {
-      title: "报告目击信息",
-      intro: "提交与该资产相关的目击信息。",
-      whyTitle: "为什么这很重要",
-      why: [
-        "目击信息可能有助于找回被盗资产。",
-        "有关部门和相关方可以使用这些信息。",
-      ],
-      login: "登录以继续",
-      back: "返回",
-    },
+  title: "报告目击信息",
+  intro: "提交与该资产相关的目击信息。",
+  registryId: "注册 ID",
+  whyTitle: "为什么这很重要",
+  why: [
+    "目击信息可能有助于找回被盗资产。",
+    "有关部门和相关方可以使用这些信息。",
+  ],
+  login: "登录以继续",
+  back: "返回",
+},
     authorities: {
       title: "联系有关部门",
       intro:
@@ -644,16 +653,17 @@ const ACTION_TEXT: Record<
       back: "वापस",
     },
     report: {
-      title: "देखे जाने की रिपोर्ट करें",
-      intro: "इस संपत्ति से संबंधित देखे जाने की सूचना भेजें।",
-      whyTitle: "यह क्यों महत्वपूर्ण है",
-      why: [
-        "देखे जाने की सूचना चोरी हुई संपत्ति को वापस पाने में मदद कर सकती है।",
-        "अधिकारी और संबंधित पक्ष इस जानकारी का उपयोग कर सकते हैं।",
-      ],
-      login: "जारी रखने के लिए लॉगिन करें",
-      back: "वापस",
-    },
+  title: "देखे जाने की रिपोर्ट करें",
+  intro: "इस संपत्ति से संबंधित देखे जाने की सूचना भेजें।",
+  registryId: "रजिस्ट्री आईडी",
+  whyTitle: "यह क्यों महत्वपूर्ण है",
+  why: [
+    "देखे जाने की सूचना चोरी हुई संपत्ति को वापस पाने में मदद कर सकती है।",
+    "अधिकारी और संबंधित पक्ष इस जानकारी का उपयोग कर सकते हैं।",
+  ],
+  login: "जारी रखने के लिए लॉगिन करें",
+  back: "वापस",
+},
     authorities: {
       title: "अधिकारियों से संपर्क करें",
       intro:
@@ -705,16 +715,17 @@ const ACTION_TEXT: Record<
       back: "رجوع",
     },
     report: {
-      title: "الإبلاغ عن مشاهدة",
-      intro: "أرسل بلاغًا عن مشاهدة مرتبطة بهذا الأصل.",
-      whyTitle: "لماذا هذا مهم",
-      why: [
-        "قد تساعد المشاهدة في استعادة أصل مسروق.",
-        "يمكن للسلطات والأطراف المعنية استخدام هذه المعلومات.",
-      ],
-      login: "تسجيل الدخول للمتابعة",
-      back: "رجوع",
-    },
+  title: "الإبلاغ عن مشاهدة",
+  intro: "أرسل بلاغًا عن مشاهدة مرتبطة بهذا الأصل.",
+  registryId: "معرّف السجل",
+  whyTitle: "لماذا هذا مهم",
+  why: [
+    "قد تساعد المشاهدة في استعادة أصل مسروق.",
+    "يمكن للسلطات والأطراف المعنية استخدام هذه المعلومات.",
+  ],
+  login: "تسجيل الدخول للمتابعة",
+  back: "رجوع",
+},
     authorities: {
       title: "الاتصال بالسلطات",
       intro:
