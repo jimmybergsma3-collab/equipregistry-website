@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import AuthoritiesClient from "@/app/[lang]/action/authorities/AuthoritiesClient";
-import ReportSightingClient from "@/app/[lang]/action/report/ReportSightingClient";
+import type { CSSProperties } from "react";
+import AuthoritiesClient from "./authorities/AuthoritiesClient";
+import ReportSightingClient from "./ReportSightingClient";
 import LoginRequiredButton from "@/components/auth/login-required-button";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 
@@ -16,52 +17,57 @@ interface PageProps {
   }>;
 }
 
-const ACTION_TEXT: Record<
-  Lang,
-  {
-    verify: {
-      title: string;
-      intro: string;
-      registryId: string;
-      nextTitle: string;
-      steps: string[];
-      login: string;
-      back: string;
-    };
-    register: {
-      title: string;
-      intro: string;
-      whoTitle: string;
-      who: string[];
-      includesTitle: string;
-      includes: string[];
-      login: string;
-      back: string;
-    };
-    report: {
-  title: string;
-  intro: string;
-  registryId: string;
-  whyTitle: string;
-  why: string[];
-  login: string;
-  back: string;
+type ActionText = {
+  verify: {
+    title: string;
+    intro: string;
+    registryId: string;
+    nextTitle: string;
+    steps: string[];
+    login: string;
+    back: string;
+  };
+  register: {
+    title: string;
+    intro: string;
+    whoTitle: string;
+    who: string[];
+    includesTitle: string;
+    includes: string[];
+    login: string;
+    back: string;
+  };
+  report: {
+    title: string;
+    intro: string;
+    registryId: string;
+    whyTitle: string;
+    why: string[];
+    important: string;
+    importantText: string;
+    nextTitle: string;
+    next: string[];
+    back: string;
+  };
+  authorities: {
+    title: string;
+    intro: string;
+    registryId: string;
+    caseId: string;
+    emergencyTitle: string;
+    emergencyText: string;
+    important: string;
+    importantText: string;
+    back: string;
+  };
+  fallback: {
+    title: string;
+    text: string;
+    back: string;
+  };
 };
-    authorities: {
-      title: string;
-      intro: string;
-      emergencyTitle: string;
-      emergencyText: string;
-      login: string;
-      back: string;
-    };
-    fallback: {
-      title: string;
-      text: string;
-      back: string;
-    };
-  }
-> = {
+
+const ACTION_TEXT: Partial<Record<Lang, ActionText>> = {
   en: {
     verify: {
       title: "Verify registration",
@@ -80,12 +86,7 @@ const ACTION_TEXT: Record<
       title: "Register asset",
       intro: "Create a registration request for this asset.",
       whoTitle: "Who can register",
-      who: [
-        "Private owners",
-        "Companies",
-        "Insurers",
-        "Partners",
-      ],
+      who: ["Private owners", "Companies", "Insurers", "Partners"],
       includesTitle: "What this includes",
       includes: [
         "Basic asset identification",
@@ -96,25 +97,37 @@ const ACTION_TEXT: Record<
       back: "Back",
     },
     report: {
-  title: "Report sighting",
-  intro: "Submit a sighting related to this asset.",
-  registryId: "Registry ID",
-  whyTitle: "Why this matters",
-  why: [
-    "A sighting may help recover a stolen asset.",
-    "Authorities and relevant parties can use this information.",
-  ],
-  login: "Login to continue",
-  back: "Back",
-},
+      title: "Report sighting",
+      intro: "Submit a sighting related to this asset.",
+      registryId: "Registry ID",
+      whyTitle: "Why this matters",
+      why: [
+        "A sighting may help recover a stolen asset.",
+        "Authorities and relevant parties can use this information.",
+      ],
+      important: "Important",
+      importantText:
+        "Only submit information that is accurate and relevant. In urgent situations, contact the authorities first.",
+      nextTitle: "What happens next",
+      next: [
+        "Submit the available details about the sighting.",
+        "EquipRegistry can pass the information to relevant parties where applicable.",
+        "Keep any photo, location, or time details ready if requested later.",
+      ],
+      back: "Back",
+    },
     authorities: {
       title: "Contact authorities",
       intro:
         "If this asset may be stolen or suspicious, contact the appropriate authorities first.",
+      registryId: "Registry ID",
+      caseId: "Case ID",
       emergencyTitle: "Emergency",
       emergencyText:
         "If there is immediate danger or a crime in progress, call the local emergency number immediately.",
-      login: "Login to continue",
+      important: "Important",
+      importantText:
+        "EquipRegistry does not replace law enforcement. Always contact official authorities first in urgent or criminal situations.",
       back: "Back",
     },
     fallback: {
@@ -158,25 +171,37 @@ const ACTION_TEXT: Record<
       back: "Volver",
     },
     report: {
-  title: "Reportar avistamiento",
-  intro: "Envía un aviso relacionado con este activo.",
-  registryId: "ID de registro",
-  whyTitle: "Por qué es importante",
-  why: [
-    "Un avistamiento puede ayudar a recuperar un activo robado.",
-    "Las autoridades y las partes relevantes pueden usar esta información.",
-  ],
-  login: "Iniciar sesión para continuar",
-  back: "Volver",
-},
+      title: "Reportar avistamiento",
+      intro: "Envía un aviso relacionado con este activo.",
+      registryId: "ID de registro",
+      whyTitle: "Por qué es importante",
+      why: [
+        "Un avistamiento puede ayudar a recuperar un activo robado.",
+        "Las autoridades y las partes relevantes pueden usar esta información.",
+      ],
+      important: "Importante",
+      importantText:
+        "Envía únicamente información precisa y relevante. En situaciones urgentes, contacta primero con las autoridades.",
+      nextTitle: "Qué ocurre después",
+      next: [
+        "Envía los detalles disponibles sobre el avistamiento.",
+        "EquipRegistry puede compartir la información con las partes relevantes cuando corresponda.",
+        "Guarda fotos, ubicación y hora por si se solicitan más tarde.",
+      ],
+      back: "Volver",
+    },
     authorities: {
       title: "Contactar a las autoridades",
       intro:
         "Si este activo puede ser robado o sospechoso, contacta primero con las autoridades competentes.",
+      registryId: "ID de registro",
+      caseId: "ID del caso",
       emergencyTitle: "Emergencia",
       emergencyText:
         "Si existe un peligro inmediato o un delito en curso, llama de inmediato al número local de emergencias.",
-      login: "Iniciar sesión para continuar",
+      important: "Importante",
+      importantText:
+        "EquipRegistry no sustituye a las fuerzas del orden. En situaciones urgentes o delictivas, contacta siempre primero con las autoridades oficiales.",
       back: "Volver",
     },
     fallback: {
@@ -220,25 +245,37 @@ const ACTION_TEXT: Record<
       back: "Zurück",
     },
     report: {
-  title: "Sichtung melden",
-  intro: "Übermitteln Sie eine Sichtung zu diesem Objekt.",
-  registryId: "Register-ID",
-  whyTitle: "Warum das wichtig ist",
-  why: [
-    "Eine Sichtung kann helfen, ein gestohlenes Objekt wiederzufinden.",
-    "Behörden und relevante Parteien können diese Informationen nutzen.",
-  ],
-  login: "Anmelden, um fortzufahren",
-  back: "Zurück",
-},
+      title: "Sichtung melden",
+      intro: "Übermitteln Sie eine Sichtung zu diesem Objekt.",
+      registryId: "Register-ID",
+      whyTitle: "Warum das wichtig ist",
+      why: [
+        "Eine Sichtung kann helfen, ein gestohlenes Objekt wiederzufinden.",
+        "Behörden und relevante Parteien können diese Informationen nutzen.",
+      ],
+      important: "Wichtig",
+      importantText:
+        "Übermitteln Sie nur genaue und relevante Informationen. In dringenden Situationen wenden Sie sich zuerst an die Behörden.",
+      nextTitle: "Wie es weitergeht",
+      next: [
+        "Übermitteln Sie die verfügbaren Details zur Sichtung.",
+        "EquipRegistry kann die Informationen gegebenenfalls an relevante Stellen weitergeben.",
+        "Halten Sie Fotos, Standort und Uhrzeit bereit, falls diese später angefordert werden.",
+      ],
+      back: "Zurück",
+    },
     authorities: {
       title: "Behörden kontaktieren",
       intro:
         "Wenn dieses Objekt gestohlen oder verdächtig sein könnte, kontaktieren Sie zuerst die zuständigen Behörden.",
+      registryId: "Register-ID",
+      caseId: "Fall-ID",
       emergencyTitle: "Notfall",
       emergencyText:
         "Wenn unmittelbare Gefahr besteht oder eine Straftat im Gange ist, rufen Sie sofort die örtliche Notrufnummer an.",
-      login: "Anmelden, um fortzufahren",
+      important: "Wichtig",
+      importantText:
+        "EquipRegistry ersetzt keine Strafverfolgungsbehörde. In dringenden oder strafrechtlichen Situationen wenden Sie sich immer zuerst an die offiziellen Behörden.",
       back: "Zurück",
     },
     fallback: {
@@ -282,25 +319,37 @@ const ACTION_TEXT: Record<
       back: "Retour",
     },
     report: {
-  title: "Signaler une observation",
-  intro: "Soumettez une observation liée à cet actif.",
-  registryId: "ID d’enregistrement",
-  whyTitle: "Pourquoi c’est important",
-  why: [
-    "Une observation peut aider à récupérer un actif volé.",
-    "Les autorités et les parties concernées peuvent utiliser ces informations.",
-  ],
-  login: "Se connecter pour continuer",
-  back: "Retour",
-},
+      title: "Signaler une observation",
+      intro: "Soumettez une observation liée à cet actif.",
+      registryId: "ID d’enregistrement",
+      whyTitle: "Pourquoi c’est important",
+      why: [
+        "Une observation peut aider à récupérer un actif volé.",
+        "Les autorités et les parties concernées peuvent utiliser ces informations.",
+      ],
+      important: "Important",
+      importantText:
+        "Soumettez uniquement des informations exactes et pertinentes. En cas d’urgence, contactez d’abord les autorités.",
+      nextTitle: "Étapes suivantes",
+      next: [
+        "Soumettez les détails disponibles concernant l’observation.",
+        "EquipRegistry peut transmettre les informations aux parties concernées lorsque cela s’applique.",
+        "Conservez les photos, le lieu et l’heure si ces éléments sont demandés ultérieurement.",
+      ],
+      back: "Retour",
+    },
     authorities: {
       title: "Contacter les autorités",
       intro:
         "Si cet actif semble volé ou suspect, contactez d’abord les autorités compétentes.",
+      registryId: "ID d’enregistrement",
+      caseId: "ID du dossier",
       emergencyTitle: "Urgence",
       emergencyText:
         "En cas de danger immédiat ou de crime en cours, appelez immédiatement le numéro d’urgence local.",
-      login: "Se connecter pour continuer",
+      important: "Important",
+      importantText:
+        "EquipRegistry ne remplace pas les forces de l’ordre. En cas de situation urgente ou criminelle, contactez toujours d’abord les autorités officielles.",
       back: "Retour",
     },
     fallback: {
@@ -328,12 +377,7 @@ const ACTION_TEXT: Record<
       title: "Registra bene",
       intro: "Crea una richiesta di registrazione per questo bene.",
       whoTitle: "Chi può registrare",
-      who: [
-        "Proprietari privati",
-        "Aziende",
-        "Assicuratori",
-        "Partner",
-      ],
+      who: ["Proprietari privati", "Aziende", "Assicuratori", "Partner"],
       includesTitle: "Cosa include",
       includes: [
         "Identificazione base del bene",
@@ -344,25 +388,37 @@ const ACTION_TEXT: Record<
       back: "Indietro",
     },
     report: {
-  title: "Segnala avvistamento",
-  intro: "Invia un avvistamento relativo a questo bene.",
-  registryId: "ID registro",
-  whyTitle: "Perché è importante",
-  why: [
-    "Un avvistamento può aiutare a recuperare un bene rubato.",
-    "Le autorità e le parti competenti possono usare queste informazioni.",
-  ],
-  login: "Accedi per continuare",
-  back: "Indietro",
-},
+      title: "Segnala avvistamento",
+      intro: "Invia un avvistamento relativo a questo bene.",
+      registryId: "ID registro",
+      whyTitle: "Perché è importante",
+      why: [
+        "Un avvistamento può aiutare a recuperare un bene rubato.",
+        "Le autorità e le parti competenti possono usare queste informazioni.",
+      ],
+      important: "Importante",
+      importantText:
+        "Invia solo informazioni accurate e pertinenti. In situazioni urgenti, contatta prima le autorità.",
+      nextTitle: "Cosa succede dopo",
+      next: [
+        "Invia i dettagli disponibili sull’avvistamento.",
+        "EquipRegistry può condividere le informazioni con le parti rilevanti quando applicabile.",
+        "Tieni pronte foto, posizione e orario nel caso vengano richiesti successivamente.",
+      ],
+      back: "Indietro",
+    },
     authorities: {
       title: "Contatta le autorità",
       intro:
         "Se questo bene potrebbe essere rubato o sospetto, contatta prima le autorità competenti.",
+      registryId: "ID registro",
+      caseId: "ID caso",
       emergencyTitle: "Emergenza",
       emergencyText:
         "Se c’è un pericolo immediato o un reato in corso, chiama subito il numero locale di emergenza.",
-      login: "Accedi per continuare",
+      important: "Importante",
+      importantText:
+        "EquipRegistry non sostituisce le forze dell’ordine. In situazioni urgenti o criminali, contatta sempre prima le autorità ufficiali.",
       back: "Indietro",
     },
     fallback: {
@@ -406,25 +462,37 @@ const ACTION_TEXT: Record<
       back: "Terug",
     },
     report: {
-  title: "Waarneming melden",
-  intro: "Dien een melding in over dit object.",
-  registryId: "Registratie-ID",
-  whyTitle: "Waarom dit belangrijk is",
-  why: [
-    "Een waarneming kan helpen bij het terugvinden van een gestolen object.",
-    "Autoriteiten en relevante partijen kunnen deze informatie gebruiken.",
-  ],
-  login: "Inloggen om door te gaan",
-  back: "Terug",
-},
+      title: "Waarneming melden",
+      intro: "Dien een melding in over dit object.",
+      registryId: "Registratie-ID",
+      whyTitle: "Waarom dit belangrijk is",
+      why: [
+        "Een waarneming kan helpen bij het terugvinden van een gestolen object.",
+        "Autoriteiten en relevante partijen kunnen deze informatie gebruiken.",
+      ],
+      important: "Belangrijk",
+      importantText:
+        "Dien alleen juiste en relevante informatie in. Neem in urgente situaties eerst contact op met de autoriteiten.",
+      nextTitle: "Wat gebeurt hierna",
+      next: [
+        "Dien de beschikbare details van de waarneming in.",
+        "EquipRegistry kan de informatie waar relevant doorgeven aan betrokken partijen.",
+        "Bewaar foto’s, locatie en tijdstip voor het geval die later nodig zijn.",
+      ],
+      back: "Terug",
+    },
     authorities: {
       title: "Autoriteiten contacteren",
       intro:
         "Als dit object mogelijk gestolen of verdacht is, neem dan eerst contact op met de bevoegde autoriteiten.",
+      registryId: "Registratie-ID",
+      caseId: "Zaak-ID",
       emergencyTitle: "Noodgeval",
       emergencyText:
         "Als er direct gevaar is of een misdrijf aan de gang is, bel dan onmiddellijk het lokale alarmnummer.",
-      login: "Inloggen om door te gaan",
+      important: "Belangrijk",
+      importantText:
+        "EquipRegistry vervangt de politie of andere opsporingsdiensten niet. Neem in urgente of strafrechtelijke situaties altijd eerst contact op met de officiële autoriteiten.",
       back: "Terug",
     },
     fallback: {
@@ -468,25 +536,37 @@ const ACTION_TEXT: Record<
       back: "Voltar",
     },
     report: {
-  title: "Reportar avistamento",
-  intro: "Submeta um avistamento relacionado com este ativo.",
-  registryId: "ID de registo",
-  whyTitle: "Porque isto é importante",
-  why: [
-    "Um avistamento pode ajudar a recuperar um ativo roubado.",
-    "As autoridades e as partes relevantes podem usar esta informação.",
-  ],
-  login: "Iniciar sessão para continuar",
-  back: "Voltar",
-},
+      title: "Reportar avistamento",
+      intro: "Submeta um avistamento relacionado com este ativo.",
+      registryId: "ID de registo",
+      whyTitle: "Porque isto é importante",
+      why: [
+        "Um avistamento pode ajudar a recuperar um ativo roubado.",
+        "As autoridades e as partes relevantes podem usar esta informação.",
+      ],
+      important: "Importante",
+      importantText:
+        "Submeta apenas informações precisas e relevantes. Em situações urgentes, contacte primeiro as autoridades.",
+      nextTitle: "O que acontece a seguir",
+      next: [
+        "Submeta os detalhes disponíveis sobre o avistamento.",
+        "A EquipRegistry pode partilhar a informação com as partes relevantes quando aplicável.",
+        "Guarde fotos, localização e hora caso sejam solicitadas mais tarde.",
+      ],
+      back: "Voltar",
+    },
     authorities: {
       title: "Contactar autoridades",
       intro:
         "Se este ativo puder ser roubado ou suspeito, contacte primeiro as autoridades competentes.",
+      registryId: "ID de registo",
+      caseId: "ID do caso",
       emergencyTitle: "Emergência",
       emergencyText:
         "Se existir perigo imediato ou um crime em curso, ligue imediatamente para o número local de emergência.",
-      login: "Iniciar sessão para continuar",
+      important: "Importante",
+      importantText:
+        "A EquipRegistry não substitui as autoridades policiais. Em situações urgentes ou criminais, contacte sempre primeiro as autoridades oficiais.",
       back: "Voltar",
     },
     fallback: {
@@ -495,255 +575,9 @@ const ACTION_TEXT: Record<
       back: "Voltar",
     },
   },
-
-  ru: {
-    verify: {
-      title: "Проверить регистрацию",
-      intro: "Проверьте текущий статус этого объекта в EquipRegistry.",
-      registryId: "ID реестра",
-      nextTitle: "Что дальше",
-      steps: [
-        "Проверьте текущий статус регистрации.",
-        "Посмотрите, появятся ли дополнительные сведения после входа.",
-        "Используйте информацию, чтобы определить следующий шаг.",
-      ],
-      login: "Войти, чтобы продолжить",
-      back: "Назад",
-    },
-    register: {
-      title: "Зарегистрировать объект",
-      intro: "Создайте заявку на регистрацию этого объекта.",
-      whoTitle: "Кто может зарегистрировать",
-      who: [
-        "Частные владельцы",
-        "Компании",
-        "Страховые компании",
-        "Партнёры",
-      ],
-      includesTitle: "Что входит",
-      includes: [
-        "Базовая идентификация объекта",
-        "Данные о владельце",
-        "Подтверждающие документы",
-      ],
-      login: "Войти, чтобы продолжить",
-      back: "Назад",
-    },
-    report: {
-  title: "Сообщить о замеченном объекте",
-  intro: "Отправьте сообщение о замеченном объекте.",
-  registryId: "ID реестра",
-  whyTitle: "Почему это важно",
-  why: [
-    "Сообщение может помочь вернуть украденный объект.",
-    "Эту информацию могут использовать власти и заинтересованные стороны.",
-  ],
-  login: "Войти, чтобы продолжить",
-  back: "Назад",
-},
-    authorities: {
-      title: "Связаться с властями",
-      intro:
-        "Если этот объект может быть украденным или подозрительным, сначала свяжитесь с компетентными органами.",
-      emergencyTitle: "Экстренная ситуация",
-      emergencyText:
-        "Если существует непосредственная опасность или совершается преступление, немедленно позвоните по местному номеру экстренной помощи.",
-      login: "Войти, чтобы продолжить",
-      back: "Назад",
-    },
-    fallback: {
-      title: "Действие недоступно",
-      text: "Это действие в данный момент недоступно.",
-      back: "Назад",
-    },
-  },
-
-  zh: {
-    verify: {
-      title: "验证注册",
-      intro: "查看该资产在 EquipRegistry 中的当前状态。",
-      registryId: "注册 ID",
-      nextTitle: "接下来会发生什么",
-      steps: [
-        "查看当前注册状态。",
-        "检查登录后是否可查看更多详细信息。",
-        "根据这些信息决定下一步操作。",
-      ],
-      login: "登录以继续",
-      back: "返回",
-    },
-    register: {
-      title: "注册资产",
-      intro: "为该资产创建注册申请。",
-      whoTitle: "谁可以注册",
-      who: [
-        "私人所有者",
-        "公司",
-        "保险公司",
-        "合作伙伴",
-      ],
-      includesTitle: "包含内容",
-      includes: [
-        "资产基本识别信息",
-        "所有权信息",
-        "证明文件",
-      ],
-      login: "登录以继续",
-      back: "返回",
-    },
-    report: {
-  title: "报告目击信息",
-  intro: "提交与该资产相关的目击信息。",
-  registryId: "注册 ID",
-  whyTitle: "为什么这很重要",
-  why: [
-    "目击信息可能有助于找回被盗资产。",
-    "有关部门和相关方可以使用这些信息。",
-  ],
-  login: "登录以继续",
-  back: "返回",
-},
-    authorities: {
-      title: "联系有关部门",
-      intro:
-        "如果该资产可能被盗或存在可疑情况，请先联系相关主管部门。",
-      emergencyTitle: "紧急情况",
-      emergencyText:
-        "如果存在直接危险或正在发生犯罪行为，请立即拨打当地紧急电话。",
-      login: "登录以继续",
-      back: "返回",
-    },
-    fallback: {
-      title: "操作不可用",
-      text: "此操作当前不可用。",
-      back: "返回",
-    },
-  },
-
-  hi: {
-    verify: {
-      title: "पंजीकरण सत्यापित करें",
-      intro: "इस संपत्ति की वर्तमान EquipRegistry स्थिति देखें।",
-      registryId: "रजिस्ट्री आईडी",
-      nextTitle: "आगे क्या होगा",
-      steps: [
-        "वर्तमान पंजीकरण स्थिति देखें।",
-        "जांचें कि लॉगिन के बाद अधिक विवरण उपलब्ध हैं या नहीं।",
-        "अगला कदम तय करने के लिए जानकारी का उपयोग करें।",
-      ],
-      login: "जारी रखने के लिए लॉगिन करें",
-      back: "वापस",
-    },
-    register: {
-      title: "संपत्ति पंजीकृत करें",
-      intro: "इस संपत्ति के लिए पंजीकरण अनुरोध बनाएं।",
-      whoTitle: "कौन पंजीकरण कर सकता है",
-      who: [
-        "निजी मालिक",
-        "कंपनियाँ",
-        "बीमाकर्ता",
-        "साझेदार",
-      ],
-      includesTitle: "इसमें क्या शामिल है",
-      includes: [
-        "संपत्ति की मूल पहचान",
-        "स्वामित्व विवरण",
-        "समर्थन दस्तावेज़",
-      ],
-      login: "जारी रखने के लिए लॉगिन करें",
-      back: "वापस",
-    },
-    report: {
-  title: "देखे जाने की रिपोर्ट करें",
-  intro: "इस संपत्ति से संबंधित देखे जाने की सूचना भेजें।",
-  registryId: "रजिस्ट्री आईडी",
-  whyTitle: "यह क्यों महत्वपूर्ण है",
-  why: [
-    "देखे जाने की सूचना चोरी हुई संपत्ति को वापस पाने में मदद कर सकती है।",
-    "अधिकारी और संबंधित पक्ष इस जानकारी का उपयोग कर सकते हैं।",
-  ],
-  login: "जारी रखने के लिए लॉगिन करें",
-  back: "वापस",
-},
-    authorities: {
-      title: "अधिकारियों से संपर्क करें",
-      intro:
-        "यदि यह संपत्ति चोरी की गई या संदिग्ध हो सकती है, तो पहले संबंधित अधिकारियों से संपर्क करें।",
-      emergencyTitle: "आपातकाल",
-      emergencyText:
-        "यदि तत्काल खतरा हो या अपराध चल रहा हो, तो तुरंत स्थानीय आपातकालीन नंबर पर कॉल करें।",
-      login: "जारी रखने के लिए लॉगिन करें",
-      back: "वापस",
-    },
-    fallback: {
-      title: "कार्रवाई उपलब्ध नहीं है",
-      text: "यह कार्रवाई इस समय उपलब्ध नहीं है।",
-      back: "वापस",
-    },
-  },
-
-  ar: {
-    verify: {
-      title: "التحقق من التسجيل",
-      intro: "تحقق من الحالة الحالية لهذا الأصل في EquipRegistry.",
-      registryId: "معرّف السجل",
-      nextTitle: "ماذا يحدث بعد ذلك",
-      steps: [
-        "راجع حالة التسجيل الحالية.",
-        "تحقق مما إذا كانت هناك تفاصيل إضافية متاحة بعد تسجيل الدخول.",
-        "استخدم المعلومات لتحديد الخطوة التالية.",
-      ],
-      login: "تسجيل الدخول للمتابعة",
-      back: "رجوع",
-    },
-    register: {
-      title: "تسجيل الأصل",
-      intro: "أنشئ طلب تسجيل لهذا الأصل.",
-      whoTitle: "من يمكنه التسجيل",
-      who: [
-        "المالكون الأفراد",
-        "الشركات",
-        "شركات التأمين",
-        "الشركاء",
-      ],
-      includesTitle: "ما الذي يشمله ذلك",
-      includes: [
-        "التعريف الأساسي بالأصل",
-        "تفاصيل الملكية",
-        "المستندات الداعمة",
-      ],
-      login: "تسجيل الدخول للمتابعة",
-      back: "رجوع",
-    },
-    report: {
-  title: "الإبلاغ عن مشاهدة",
-  intro: "أرسل بلاغًا عن مشاهدة مرتبطة بهذا الأصل.",
-  registryId: "معرّف السجل",
-  whyTitle: "لماذا هذا مهم",
-  why: [
-    "قد تساعد المشاهدة في استعادة أصل مسروق.",
-    "يمكن للسلطات والأطراف المعنية استخدام هذه المعلومات.",
-  ],
-  login: "تسجيل الدخول للمتابعة",
-  back: "رجوع",
-},
-    authorities: {
-      title: "الاتصال بالسلطات",
-      intro:
-        "إذا كان هذا الأصل قد يكون مسروقًا أو مشبوهًا، فاتصل أولاً بالسلطات المختصة.",
-      emergencyTitle: "حالة طارئة",
-      emergencyText:
-        "إذا كان هناك خطر فوري أو جريمة جارية، فاتصل فورًا برقم الطوارئ المحلي.",
-      login: "تسجيل الدخول للمتابعة",
-      back: "رجوع",
-    },
-    fallback: {
-      title: "الإجراء غير متاح",
-      text: "هذا الإجراء غير متاح حاليًا.",
-      back: "رجوع",
-    },
-  },
 };
+
+const EN_FALLBACK = ACTION_TEXT.en!;
 
 export default async function ActionPage({ params, searchParams }: PageProps) {
   const { lang } = await params;
@@ -754,7 +588,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
   }
 
   const safeLang = lang as Lang;
-  const t = ACTION_TEXT[safeLang];
+  const t = ACTION_TEXT[safeLang] ?? EN_FALLBACK;
 
   const nextTarget = registryId
     ? `/${safeLang}/passport/${encodeURIComponent(registryId)}`
@@ -770,11 +604,11 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
 
           <p style={styles.text}>{t.verify.intro}</p>
 
-          {registryId && (
+          {registryId ? (
             <p style={styles.registryId}>
               {t.verify.registryId}: <strong>{registryId}</strong>
             </p>
-          )}
+          ) : null}
 
           <div style={styles.section}>
             <h3 style={styles.sectionTitle}>{t.verify.nextTitle}</h3>
@@ -853,15 +687,24 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
 
           <p style={styles.text}>{t.report.intro}</p>
 
-          {registryId && (
+          {registryId ? (
             <p style={styles.registryId}>
               {t.report.registryId}: <strong>{registryId}</strong>
             </p>
-          )}
+          ) : null}
 
           <div style={styles.warning}>
             <strong>{t.report.important}</strong>
             <p style={{ marginTop: 6 }}>{t.report.importantText}</p>
+          </div>
+
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>{t.report.whyTitle}</h3>
+            <ul style={styles.list}>
+              {t.report.why.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
 
           <div style={styles.section}>
@@ -873,7 +716,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
             </ul>
           </div>
 
-          <ReportSightingClient lang={safeLang} />
+          <ReportSightingClient lang={safeLang} registryId={registryId} />
 
           <div style={styles.actions}>
             <Link href={backToSearchHref} style={styles.secondaryButton}>
@@ -895,17 +738,26 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
 
           <p style={styles.text}>{t.authorities.intro}</p>
 
-          {registryId && (
+          {registryId ? (
             <p style={styles.registryId}>
               {t.authorities.registryId}: <strong>{registryId}</strong>
             </p>
-          )}
+          ) : null}
 
           <p style={styles.registryId}>
             {t.authorities.caseId}: <strong>{resolvedCaseId}</strong>
           </p>
 
-          <AuthoritiesClient registryId={registryId} caseId={resolvedCaseId} />
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>{t.authorities.emergencyTitle}</h3>
+            <p style={styles.text}>{t.authorities.emergencyText}</p>
+          </div>
+
+          <AuthoritiesClient
+  lang={safeLang}
+  registryId={registryId}
+  caseId={resolvedCaseId}
+/>
 
           <div style={styles.warning}>
             <strong>{t.authorities.important}</strong>
@@ -927,7 +779,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
       <div style={styles.card}>
         <h1 style={styles.title}>{t.fallback.title}</h1>
 
-        <p style={styles.text}>{t.fallback.intro}</p>
+        <p style={styles.text}>{t.fallback.text}</p>
 
         <Link href={backToSearchHref} style={styles.primaryButton}>
           {t.fallback.back}
@@ -937,7 +789,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
   );
 }
 
-const styles: Record<string, React.CSSProperties> = {
+const styles: Record<string, CSSProperties> = {
   page: {
     minHeight: "100vh",
     display: "flex",
