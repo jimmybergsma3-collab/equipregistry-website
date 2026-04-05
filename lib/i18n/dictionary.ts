@@ -59,6 +59,14 @@ type Dictionary = {
       introText: string;
       note: string;
     };
+    disclaimer: {
+      title: string;
+      intro: string;
+      liability: string;
+      data: string;
+      future: string;
+      contact: string;
+    };
   };
   hero: {
     title: string;
@@ -269,6 +277,19 @@ const en: Dictionary = {
         "This page can later hold your contact form, business email addresses, regional contact details and partnership requests.",
       note:
         "For now, we are creating the structure first so the frontend already feels like a real product.",
+    },
+    disclaimer: {
+      title: "Disclaimer",
+      intro:
+        "EquipRegistry provides a digital registry infrastructure for vehicles, equipment, trailers and other eligible assets.",
+      liability:
+        "EquipRegistry does not guarantee the accuracy, completeness or legal validity of submitted, displayed or imported data. Use of the platform is at your own risk.",
+      data:
+        "Data may be provided by users, partners, insurers, authorities, financial institutions and future integrated systems.",
+      future:
+        "Future integrations may include insurers, law enforcement, cross-border workflows, ownership transfer flows, payment systems and validation layers.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spain. Y8875740P. info@equipregistry.com",
     },
   },
   hero: {
@@ -500,6 +521,19 @@ const es: Dictionary = {
         "Esta página podrá incluir más adelante su formulario de contacto, correos empresariales, datos regionales y solicitudes de colaboración.",
       note:
         "Por ahora, estamos creando primero la estructura para que el frontend ya se sienta como un producto real.",
+    },
+    disclaimer: {
+      title: "Aviso legal",
+      intro:
+        "EquipRegistry proporciona una infraestructura digital de registro para vehículos, equipos, remolques y otros activos elegibles.",
+      liability:
+        "EquipRegistry no garantiza la exactitud, integridad o validez legal de los datos enviados, mostrados o importados. El uso de la plataforma es bajo su propia responsabilidad.",
+      data:
+        "Los datos pueden ser aportados por usuarios, socios, aseguradoras, autoridades, entidades financieras y futuros sistemas integrados.",
+      future:
+        "Las futuras integraciones podrán incluir aseguradoras, autoridades, flujos transfronterizos, transferencias de propiedad, sistemas de pago y capas de validación.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, España. Y8875740P. info@equipregistry.com",
     },
   },
   hero: {
@@ -734,6 +768,19 @@ const de: Dictionary = {
       note:
         "Im Moment erstellen wir zuerst die Struktur, damit sich das Frontend bereits wie ein echtes Produkt anfühlt.",
     },
+    disclaimer: {
+      title: "Haftungsausschluss",
+      intro:
+        "EquipRegistry stellt eine digitale Registerinfrastruktur für Fahrzeuge, Geräte, Anhänger und andere zulässige Vermögenswerte bereit.",
+      liability:
+        "EquipRegistry übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder rechtliche Gültigkeit eingereichter, angezeigter oder importierter Daten. Die Nutzung erfolgt auf eigenes Risiko.",
+      data:
+        "Daten können von Nutzern, Partnern, Versicherern, Behörden, Finanzinstituten und künftigen integrierten Systemen bereitgestellt werden.",
+      future:
+        "Künftige Integrationen können Versicherer, Behörden, grenzüberschreitende Abläufe, Eigentumsübertragungen, Zahlungssysteme und zusätzliche Validierungsebenen umfassen.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spanien. Y8875740P. info@equipregistry.com",
+    },
   },
   hero: {
     title: "Jedes Fahrzeug oder Gerät weltweit prüfen",
@@ -965,6 +1012,19 @@ const fr: Dictionary = {
         "Cette page pourra plus tard contenir votre formulaire de contact, vos e-mails professionnels, vos coordonnées régionales et vos demandes de partenariat.",
       note:
         "Pour l’instant, nous construisons d’abord la structure afin que le frontend donne déjà l’impression d’un vrai produit.",
+    },
+    disclaimer: {
+      title: "Avertissement",
+      intro:
+        "EquipRegistry fournit une infrastructure numérique de registre pour les véhicules, équipements, remorques et autres actifs éligibles.",
+      liability:
+        "EquipRegistry ne garantit pas l’exactitude, l’exhaustivité ou la validité juridique des données soumises, affichées ou importées. L’utilisation de la plateforme se fait aux risques de l’utilisateur.",
+      data:
+        "Les données peuvent être fournies par des utilisateurs, partenaires, assureurs, autorités, institutions financières et futurs systèmes intégrés.",
+      future:
+        "Les futures intégrations pourront inclure des assureurs, autorités, flux transfrontaliers, transferts de propriété, systèmes de paiement et couches de validation.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Espagne. Y8875740P. info@equipregistry.com",
     },
   },
   hero: {
@@ -1199,6 +1259,19 @@ const it: Dictionary = {
       note:
         "Per ora, stiamo creando prima la struttura così che il frontend sembri già un prodotto reale.",
     },
+    disclaimer: {
+      title: "Disclaimer",
+      intro:
+        "EquipRegistry fornisce un’infrastruttura digitale di registro per veicoli, attrezzature, rimorchi e altri asset idonei.",
+      liability:
+        "EquipRegistry non garantisce l’accuratezza, la completezza o la validità legale dei dati inviati, mostrati o importati. L’uso della piattaforma avviene a proprio rischio.",
+      data:
+        "I dati possono essere forniti da utenti, partner, assicuratori, autorità, istituzioni finanziarie e futuri sistemi integrati.",
+      future:
+        "Le future integrazioni potranno includere assicuratori, autorità, flussi transfrontalieri, trasferimenti di proprietà, sistemi di pagamento e livelli di validazione.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spagna. Y8875740P. info@equipregistry.com",
+    },
   },
   hero: {
     title: "Verifica qualsiasi veicolo o attrezzatura in tutto il mondo",
@@ -1432,6 +1505,19 @@ const nl: Dictionary = {
       note:
         "Voor nu bouwen we eerst de structuur zodat de frontend al aanvoelt als een echt product.",
     },
+    disclaimer: {
+      title: "Disclaimer",
+      intro:
+        "EquipRegistry biedt een digitale registerinfrastructuur voor voertuigen, equipment, trailers en andere toegestane assets.",
+      liability:
+        "EquipRegistry garandeert niet de juistheid, volledigheid of juridische geldigheid van aangeleverde, getoonde of geïmporteerde gegevens. Gebruik van het platform is volledig op eigen risico.",
+      data:
+        "Gegevens kunnen afkomstig zijn van gebruikers, partners, verzekeraars, autoriteiten, financiële instellingen en toekomstige geïntegreerde systemen.",
+      future:
+        "Toekomstige integraties kunnen verzekeraars, autoriteiten, grensoverschrijdende flows, eigendomsoverdracht, betaalsystemen en extra validatielagen omvatten.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spanje. Y8875740P. info@equipregistry.com",
+    },
   },
   hero: {
     title: "Verifieer elk voertuig of stuk equipment wereldwijd",
@@ -1664,6 +1750,19 @@ const pt: Dictionary = {
       note:
         "Por agora, estamos a criar primeiro a estrutura para que o frontend já pareça um produto real.",
     },
+    disclaimer: {
+      title: "Isenção de responsabilidade",
+      intro:
+        "A EquipRegistry fornece uma infraestrutura digital de registo para veículos, equipamentos, reboques e outros ativos elegíveis.",
+      liability:
+        "A EquipRegistry não garante a exatidão, integridade ou validade legal dos dados enviados, exibidos ou importados. A utilização da plataforma é por conta e risco do utilizador.",
+      data:
+        "Os dados podem ser fornecidos por utilizadores, parceiros, seguradoras, autoridades, instituições financeiras e futuros sistemas integrados.",
+      future:
+        "As futuras integrações poderão incluir seguradoras, autoridades, fluxos transfronteiriços, transferências de propriedade, sistemas de pagamento e camadas de validação.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Espanha. Y8875740P. info@equipregistry.com",
+    },
   },
   hero: {
     title: "Verifique qualquer veículo ou equipamento em todo o mundo",
@@ -1713,7 +1812,7 @@ const pt: Dictionary = {
       "EquipRegistry — Infraestrutura digital de confiança para ativos",
     privacy: "Política de privacidade",
     terms: "Termos e condições",
-    disclaimer: "Declaração",
+    disclaimer: "Isenção de responsabilidade",
   },
   statuses: {
     registeredVerified: {
@@ -1826,12 +1925,10 @@ const pt: Dictionary = {
 const ru: Dictionary = {
   ...en,
   nav: {
-    ...en.nav,
     howItWorks: "Как это работает",
     login: "Войти",
   },
   menu: {
-    ...en.menu,
     home: "Главная",
     verifyAsset: "Проверить актив",
     registerAsset: "Зарегистрировать актив",
@@ -1840,14 +1937,38 @@ const ru: Dictionary = {
     contact: "Контакт",
   },
   common: {
-    ...en.common,
     goToHomepageSearch: "Перейти к поиску на главной странице",
     publicVerification: "Публичная проверка",
     whySightingsMatter: "Почему сообщения о наблюдении важны",
     contactEquipRegistry: "Связаться с EquipRegistry",
   },
+  pages: {
+    ...en.pages,
+    contact: {
+      title: "Контакт",
+      subtitle:
+        "Свяжитесь с нами по вопросам партнёрства, страховых сценариев, пилотных проектов или стратегического сотрудничества.",
+      introTitle: "Связаться с EquipRegistry",
+      introText:
+        "Позже на этой странице могут быть размещены контактная форма, рабочие адреса электронной почты, региональные контакты и запросы на партнёрство.",
+      note:
+        "Сейчас мы сначала создаём структуру, чтобы фронтенд уже выглядел как настоящий продукт.",
+    },
+    disclaimer: {
+      title: "Отказ от ответственности",
+      intro:
+        "EquipRegistry предоставляет цифровую инфраструктуру реестра для транспортных средств, оборудования, прицепов и других допустимых активов.",
+      liability:
+        "EquipRegistry не гарантирует точность, полноту или юридическую действительность отправленных, отображаемых или импортированных данных. Использование платформы осуществляется на ваш собственный риск.",
+      data:
+        "Данные могут предоставляться пользователями, партнёрами, страховщиками, органами власти, финансовыми учреждениями и будущими интегрированными системами.",
+      future:
+        "Будущие интеграции могут включать страховые компании, правоохранительные органы, трансграничные процессы, передачу собственности, платёжные системы и уровни валидации.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spain. Y8875740P. info@equipregistry.com",
+    },
+  },
   hero: {
-    ...en.hero,
     title: "Проверяйте любые транспортные средства и оборудование по всему миру",
     subtitle:
       "Проверяйте право собственности, историю и уровень риска по VIN, серийному номеру или ID реестра.",
@@ -1859,11 +1980,9 @@ const ru: Dictionary = {
     goToDashboard: "Перейти в панель",
   },
   result: {
-    ...en.result,
     whyThisMatters: "Почему это важно",
   },
   footer: {
-    ...en.footer,
     copyright:
       "EquipRegistry — цифровая инфраструктура доверия для активов",
     privacy: "Политика конфиденциальности",
@@ -1871,9 +1990,7 @@ const ru: Dictionary = {
     disclaimer: "Отказ от ответственности",
   },
   statuses: {
-    ...en.statuses,
     registeredVerified: {
-      ...en.statuses.registeredVerified,
       label: "Зарегистрировано и подтверждено",
       message:
         "Этот актив зарегистрирован в EquipRegistry, и его законное происхождение подтверждено.",
@@ -1885,7 +2002,6 @@ const ru: Dictionary = {
       actionViewPassport: "Открыть паспорт",
     },
     historyUnknown: {
-      ...en.statuses.historyUnknown,
       label: "История неизвестна",
       message:
         "Этот актив существует в реестре, но его полную историю владения не удалось подтвердить.",
@@ -1898,7 +2014,6 @@ const ru: Dictionary = {
       actionRegisterDocuments: "Зарегистрировать документы",
     },
     stolen: {
-      ...en.statuses.stolen,
       label: "Украденный актив – Красный флаг",
       message:
         "Этот актив официально заявлен как украденный и активно внесён в чёрный список EquipRegistry.",
@@ -1916,7 +2031,6 @@ const ru: Dictionary = {
       actionVerifyCaseId: "Проверить ID дела",
     },
     notRegistered: {
-      ...en.statuses.notRegistered,
       label: "Не зарегистрировано",
       message: "Этот идентификатор не зарегистрирован в EquipRegistry.",
       why:
@@ -1924,15 +2038,16 @@ const ru: Dictionary = {
       actionRegister: "Зарегистрировать этот актив",
     },
     metadataValues: {
-      ...en.statuses.metadataValues,
       active: "Активно",
       full: "Полный",
+      lastValidation2025: "2025",
       limitedPassport: "Ограниченный паспорт",
       medium: "Средний",
       blacklisted: "В чёрном списке",
       high: "Высокий",
       insurancePartner: "Страховой партнёр",
       euCrossBorderAlert: "ЕС / Трансграничное предупреждение",
+      reportDate: "2025-03-12",
     },
   },
   dashboard: {
@@ -1985,12 +2100,10 @@ const ru: Dictionary = {
 const zh: Dictionary = {
   ...en,
   nav: {
-    ...en.nav,
     howItWorks: "运作方式",
     login: "登录",
   },
   menu: {
-    ...en.menu,
     home: "首页",
     verifyAsset: "验证资产",
     registerAsset: "注册资产",
@@ -1999,14 +2112,38 @@ const zh: Dictionary = {
     contact: "联系",
   },
   common: {
-    ...en.common,
     goToHomepageSearch: "前往首页搜索",
     publicVerification: "公开验证",
     whySightingsMatter: "为什么发现报告很重要",
     contactEquipRegistry: "联系 EquipRegistry",
   },
+  pages: {
+    ...en.pages,
+    contact: {
+      title: "联系",
+      subtitle:
+        "如需洽谈合作、保险使用场景、试点项目或战略合作，请与我们联系。",
+      introTitle: "联系 EquipRegistry",
+      introText:
+        "此页面之后可放置联系表单、商务邮箱、区域联系方式和合作申请。",
+      note:
+        "目前我们先把结构搭好，让前端看起来已经像一个真正的产品。",
+    },
+    disclaimer: {
+      title: "免责声明",
+      intro:
+        "EquipRegistry 为车辆、设备、拖车及其他符合条件的资产提供数字注册基础设施。",
+      liability:
+        "EquipRegistry 不保证提交、展示或导入数据的准确性、完整性或法律有效性。用户使用本平台须自行承担风险。",
+      data:
+        "数据可能由用户、合作伙伴、保险公司、主管机构、金融机构及未来集成系统提供。",
+      future:
+        "未来可能集成保险机构、执法部门、跨境流程、所有权转移、支付系统和验证层。",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spain. Y8875740P. info@equipregistry.com",
+    },
+  },
   hero: {
-    ...en.hero,
     title: "在全球范围验证任何车辆或设备",
     subtitle:
       "通过 VIN、序列号或注册 ID 检查所有权、历史记录和风险状态。",
@@ -2018,20 +2155,16 @@ const zh: Dictionary = {
     goToDashboard: "前往仪表板",
   },
   result: {
-    ...en.result,
     whyThisMatters: "这为什么重要",
   },
   footer: {
-    ...en.footer,
     copyright: "EquipRegistry — 资产数字信任基础设施",
     privacy: "隐私政策",
     terms: "条款与条件",
     disclaimer: "免责声明",
   },
   statuses: {
-    ...en.statuses,
     registeredVerified: {
-      ...en.statuses.registeredVerified,
       label: "已注册并已验证",
       message:
         "该资产已在 EquipRegistry 中注册，其合法来源已被验证。",
@@ -2043,7 +2176,6 @@ const zh: Dictionary = {
       actionViewPassport: "查看护照",
     },
     historyUnknown: {
-      ...en.statuses.historyUnknown,
       label: "历史未知",
       message:
         "该资产存在于注册系统中，但其完整所有权历史无法被验证。",
@@ -2056,7 +2188,6 @@ const zh: Dictionary = {
       actionRegisterDocuments: "登记文件",
     },
     stolen: {
-      ...en.statuses.stolen,
       label: "被盗资产 – 红色警报",
       message:
         "该资产已被正式报告为被盗，并已在 EquipRegistry 中被主动列入黑名单。",
@@ -2074,7 +2205,6 @@ const zh: Dictionary = {
       actionVerifyCaseId: "验证案件编号",
     },
     notRegistered: {
-      ...en.statuses.notRegistered,
       label: "未注册",
       message: "该标识符未在 EquipRegistry 中注册。",
       why:
@@ -2082,15 +2212,16 @@ const zh: Dictionary = {
       actionRegister: "注册此资产",
     },
     metadataValues: {
-      ...en.statuses.metadataValues,
       active: "有效",
       full: "完整",
+      lastValidation2025: "2025",
       limitedPassport: "有限护照",
       medium: "中等",
       blacklisted: "已列入黑名单",
       high: "高",
       insurancePartner: "保险合作伙伴",
       euCrossBorderAlert: "欧盟 / 跨境警报",
+      reportDate: "2025-03-12",
     },
   },
   dashboard: {
@@ -2142,12 +2273,10 @@ const zh: Dictionary = {
 const hi: Dictionary = {
   ...en,
   nav: {
-    ...en.nav,
     howItWorks: "यह कैसे काम करता है",
     login: "लॉगिन",
   },
   menu: {
-    ...en.menu,
     home: "होम",
     verifyAsset: "एसेट सत्यापित करें",
     registerAsset: "एसेट पंजीकृत करें",
@@ -2156,14 +2285,38 @@ const hi: Dictionary = {
     contact: "संपर्क",
   },
   common: {
-    ...en.common,
     goToHomepageSearch: "होमपेज खोज पर जाएँ",
     publicVerification: "सार्वजनिक सत्यापन",
     whySightingsMatter: "देखे जाने की रिपोर्ट क्यों महत्वपूर्ण है",
     contactEquipRegistry: "EquipRegistry से संपर्क करें",
   },
+  pages: {
+    ...en.pages,
+    contact: {
+      title: "संपर्क",
+      subtitle:
+        "भागीदारी, बीमा उपयोग मामलों, पायलट चर्चाओं या रणनीतिक सहयोग के लिए संपर्क करें।",
+      introTitle: "EquipRegistry से संपर्क करें",
+      introText:
+        "इस पेज पर बाद में आपका संपर्क फ़ॉर्म, बिज़नेस ईमेल, क्षेत्रीय संपर्क विवरण और पार्टनरशिप अनुरोध रखे जा सकते हैं।",
+      note:
+        "फ़िलहाल हम पहले संरचना बना रहे हैं ताकि फ्रंटएंड पहले से ही एक असली प्रोडक्ट जैसा लगे।",
+    },
+    disclaimer: {
+      title: "अस्वीकरण",
+      intro:
+        "EquipRegistry वाहनों, उपकरणों, ट्रेलरों और अन्य पात्र एसेट्स के लिए डिजिटल रजिस्ट्री इन्फ्रास्ट्रक्चर प्रदान करता है।",
+      liability:
+        "EquipRegistry जमा किए गए, दिखाए गए या आयात किए गए डेटा की सटीकता, पूर्णता या कानूनी वैधता की गारंटी नहीं देता। प्लेटफ़ॉर्म का उपयोग आपके अपने जोखिम पर है।",
+      data:
+        "डेटा उपयोगकर्ताओं, भागीदारों, बीमाकर्ताओं, प्राधिकरणों, वित्तीय संस्थानों और भविष्य की एकीकृत प्रणालियों द्वारा प्रदान किया जा सकता है।",
+      future:
+        "भविष्य के एकीकरणों में बीमाकर्ता, कानून प्रवर्तन, सीमा-पार वर्कफ़्लो, स्वामित्व हस्तांतरण, भुगतान सिस्टम और वैलिडेशन लेयर शामिल हो सकती हैं।",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spain. Y8875740P. info@equipregistry.com",
+    },
+  },
   hero: {
-    ...en.hero,
     title: "दुनिया भर में किसी भी वाहन या उपकरण को सत्यापित करें",
     subtitle:
       "VIN, सीरियल नंबर या रजिस्ट्री आईडी का उपयोग करके स्वामित्व, इतिहास और जोखिम स्थिति जाँचें।",
@@ -2175,11 +2328,9 @@ const hi: Dictionary = {
     goToDashboard: "डैशबोर्ड पर जाएँ",
   },
   result: {
-    ...en.result,
     whyThisMatters: "यह क्यों महत्वपूर्ण है",
   },
   footer: {
-    ...en.footer,
     copyright:
       "EquipRegistry — एसेट्स के लिए डिजिटल ट्रस्ट इंफ्रास्ट्रक्चर",
     privacy: "गोपनीयता नीति",
@@ -2187,9 +2338,7 @@ const hi: Dictionary = {
     disclaimer: "अस्वीकरण",
   },
   statuses: {
-    ...en.statuses,
     registeredVerified: {
-      ...en.statuses.registeredVerified,
       label: "पंजीकृत और सत्यापित",
       message:
         "यह एसेट EquipRegistry में पंजीकृत है और इसकी कानूनी उत्पत्ति सत्यापित की गई है।",
@@ -2201,7 +2350,6 @@ const hi: Dictionary = {
       actionViewPassport: "पासपोर्ट देखें",
     },
     historyUnknown: {
-      ...en.statuses.historyUnknown,
       label: "इतिहास अज्ञात",
       message:
         "यह एसेट रजिस्ट्री में मौजूद है, लेकिन इसका पूरा स्वामित्व इतिहास सत्यापित नहीं किया जा सका।",
@@ -2214,7 +2362,6 @@ const hi: Dictionary = {
       actionRegisterDocuments: "दस्तावेज़ पंजीकृत करें",
     },
     stolen: {
-      ...en.statuses.stolen,
       label: "चोरी किया गया एसेट – रेड फ्लैग",
       message:
         "इस एसेट को आधिकारिक रूप से चोरी की रिपोर्ट में दर्ज किया गया है और इसे EquipRegistry में सक्रिय रूप से ब्लैकलिस्ट किया गया है।",
@@ -2232,7 +2379,6 @@ const hi: Dictionary = {
       actionVerifyCaseId: "केस आईडी सत्यापित करें",
     },
     notRegistered: {
-      ...en.statuses.notRegistered,
       label: "पंजीकृत नहीं",
       message: "यह पहचानकर्ता EquipRegistry में पंजीकृत नहीं है।",
       why:
@@ -2240,15 +2386,16 @@ const hi: Dictionary = {
       actionRegister: "इस एसेट को पंजीकृत करें",
     },
     metadataValues: {
-      ...en.statuses.metadataValues,
       active: "सक्रिय",
       full: "पूर्ण",
+      lastValidation2025: "2025",
       limitedPassport: "सीमित पासपोर्ट",
       medium: "मध्यम",
       blacklisted: "ब्लैकलिस्टेड",
       high: "उच्च",
       insurancePartner: "बीमा भागीदार",
       euCrossBorderAlert: "EU / सीमा-पार चेतावनी",
+      reportDate: "2025-03-12",
     },
   },
   dashboard: {
@@ -2300,12 +2447,10 @@ const hi: Dictionary = {
 const ar: Dictionary = {
   ...en,
   nav: {
-    ...en.nav,
     howItWorks: "كيف يعمل",
     login: "تسجيل الدخول",
   },
   menu: {
-    ...en.menu,
     home: "الرئيسية",
     verifyAsset: "التحقق من الأصل",
     registerAsset: "تسجيل الأصل",
@@ -2314,14 +2459,38 @@ const ar: Dictionary = {
     contact: "اتصال",
   },
   common: {
-    ...en.common,
     goToHomepageSearch: "الانتقال إلى بحث الصفحة الرئيسية",
     publicVerification: "تحقق عام",
     whySightingsMatter: "لماذا تعتبر المشاهدات مهمة",
     contactEquipRegistry: "الاتصال بـ EquipRegistry",
   },
+  pages: {
+    ...en.pages,
+    contact: {
+      title: "اتصال",
+      subtitle:
+        "تواصل معنا بخصوص الشراكات أو حالات الاستخدام التأمينية أو المشاريع التجريبية أو التعاون الاستراتيجي.",
+      introTitle: "الاتصال بـ EquipRegistry",
+      introText:
+        "يمكن أن تحتوي هذه الصفحة لاحقًا على نموذج الاتصال وعناوين البريد الإلكتروني الخاصة بالأعمال وبيانات الاتصال الإقليمية وطلبات الشراكة.",
+      note:
+        "في الوقت الحالي نقوم أولاً ببناء الهيكل حتى يبدو الواجهة الأمامية بالفعل كمنتج حقيقي.",
+    },
+    disclaimer: {
+      title: "إخلاء المسؤولية",
+      intro:
+        "توفر EquipRegistry بنية تحتية رقمية للتسجيل للمركبات والمعدات والمقطورات وغيرها من الأصول المؤهلة.",
+      liability:
+        "لا تضمن EquipRegistry دقة أو اكتمال أو الصلاحية القانونية للبيانات المقدمة أو المعروضة أو المستوردة. استخدام المنصة يكون على مسؤوليتك الخاصة.",
+      data:
+        "قد يتم توفير البيانات من قبل المستخدمين والشركاء وشركات التأمين والسلطات والمؤسسات المالية والأنظمة المتكاملة مستقبلًا.",
+      future:
+        "قد تشمل التكاملات المستقبلية شركات التأمين وجهات إنفاذ القانون والعمليات العابرة للحدود ونقل الملكية وأنظمة الدفع وطبقات التحقق.",
+      contact:
+        "EquipRegistry — Jimmy Bergsma, Calle Murcia 111, 03420 Castalla, Alicante, Spain. Y8875740P. info@equipregistry.com",
+    },
+  },
   hero: {
-    ...en.hero,
     title: "تحقق من أي مركبة أو معدات في جميع أنحاء العالم",
     subtitle:
       "تحقق من الملكية والسجل وحالة المخاطر باستخدام رقم VIN أو الرقم التسلسلي أو معرف السجل.",
@@ -2333,11 +2502,9 @@ const ar: Dictionary = {
     goToDashboard: "الانتقال إلى لوحة التحكم",
   },
   result: {
-    ...en.result,
     whyThisMatters: "لماذا هذا مهم",
   },
   footer: {
-    ...en.footer,
     copyright:
       "EquipRegistry — بنية تحتية رقمية للثقة الخاصة بالأصول",
     privacy: "سياسة الخصوصية",
@@ -2345,9 +2512,7 @@ const ar: Dictionary = {
     disclaimer: "إخلاء المسؤولية",
   },
   statuses: {
-    ...en.statuses,
     registeredVerified: {
-      ...en.statuses.registeredVerified,
       label: "مسجل ومتحقق منه",
       message:
         "هذا الأصل مسجل في EquipRegistry وتم التحقق من مصدره القانوني.",
@@ -2359,7 +2524,6 @@ const ar: Dictionary = {
       actionViewPassport: "عرض الجواز",
     },
     historyUnknown: {
-      ...en.statuses.historyUnknown,
       label: "السجل غير معروف",
       message:
         "هذا الأصل موجود في السجل، ولكن لم يتم التحقق من سجل الملكية الكامل الخاص به.",
@@ -2372,7 +2536,6 @@ const ar: Dictionary = {
       actionRegisterDocuments: "تسجيل المستندات",
     },
     stolen: {
-      ...en.statuses.stolen,
       label: "أصل مسروق – تحذير أحمر",
       message:
         "تم الإبلاغ رسميًا عن هذا الأصل على أنه مسروق وهو مدرج بنشاط في القائمة السوداء داخل EquipRegistry.",
@@ -2390,7 +2553,6 @@ const ar: Dictionary = {
       actionVerifyCaseId: "التحقق من رقم القضية",
     },
     notRegistered: {
-      ...en.statuses.notRegistered,
       label: "غير مسجل",
       message: "هذا المعرّف غير مسجل في EquipRegistry.",
       why:
@@ -2398,15 +2560,16 @@ const ar: Dictionary = {
       actionRegister: "تسجيل هذا الأصل",
     },
     metadataValues: {
-      ...en.statuses.metadataValues,
       active: "نشط",
       full: "كامل",
+      lastValidation2025: "2025",
       limitedPassport: "جواز محدود",
       medium: "متوسط",
       blacklisted: "مدرج في القائمة السوداء",
       high: "مرتفع",
       insurancePartner: "شريك تأمين",
       euCrossBorderAlert: "الاتحاد الأوروبي / تنبيه عبر الحدود",
+      reportDate: "2025-03-12",
     },
   },
   dashboard: {

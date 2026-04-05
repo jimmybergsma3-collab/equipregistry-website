@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import AnalyticsLoader from "@/components/analytics-loader";
+import CookieBanner from "@/components/cookie-banner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "EquipRegistry",
-  description: "EquipRegistry demo",
+  description: "Global asset verification and registry platform.",
 };
 
 export default function RootLayout({
@@ -24,17 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning className="h-full bg-white">
-      <head>
-        <script
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token":"cb5840a0fd194e25ae1c422f07066afb"}'
-        />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-[100svh] bg-white text-slate-900 antialiased`}
       >
         {children}
+        <AnalyticsLoader />
+        <CookieBanner />
       </body>
     </html>
   );

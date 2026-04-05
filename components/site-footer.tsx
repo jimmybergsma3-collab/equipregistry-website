@@ -1,5 +1,7 @@
+import Link from "next/link";
 import type { Lang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getLangDir } from "@/lib/i18n/config";
 
 type Props = {
   lang: Lang;
@@ -7,24 +9,39 @@ type Props = {
 
 export default function SiteFooter({ lang }: Props) {
   const t = getDictionary(lang);
+  const dir = getLangDir(lang);
 
   return (
-    <footer className="py-12 text-sm text-slate-500 border-t bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div suppressHydrationWarning>
+    <footer
+      dir={dir}
+      className="border-t border-slate-200 bg-slate-50 py-12 text-sm text-slate-600"
+    >
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 md:flex-row md:items-center md:justify-between">
+        <div className="text-center md:text-left" suppressHydrationWarning>
           © {new Date().getFullYear()} {t.footer.copyright}
         </div>
 
-        <div className="flex gap-6 flex-wrap justify-center">
-          <a href={`/${lang}/privacy`} className="hover:text-blue-800">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <Link
+            href={`/${lang}/privacy`}
+            className="transition hover:text-blue-800"
+          >
             {t.footer.privacy}
-          </a>
-          <a href={`/${lang}/terms`} className="hover:text-blue-800">
+          </Link>
+
+          <Link
+            href={`/${lang}/terms`}
+            className="transition hover:text-blue-800"
+          >
             {t.footer.terms}
-          </a>
-          <a href={`/${lang}/disclaimer`} className="hover:text-blue-800">
+          </Link>
+
+          <Link
+            href={`/${lang}/disclaimer`}
+            className="transition hover:text-blue-800"
+          >
             {t.footer.disclaimer}
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
