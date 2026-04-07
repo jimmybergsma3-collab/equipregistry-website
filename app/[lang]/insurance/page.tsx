@@ -74,8 +74,9 @@ export default async function InsuranceDashboardPage() {
             <Link href="/?serial=ER-STOL-777" className="px-3 py-2 rounded-lg border bg-white text-sm font-semibold hover:bg-slate-50">
               Test stolen flow
             </Link>
-<Link href={`/${lang}/action?type=authorities&registryId=ER-STOL-777&caseId=ER-CASE-2026-00123`}>              Authorities demo
-            </Link>
+<Link href="/en/action?type=authorities&registryId=ER-STOL-777&caseId=ER-CASE-2026-00123">
+  Authorities demo
+</Link>
           </div>
         </div>
 

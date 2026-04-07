@@ -328,9 +328,9 @@ function RegistrationDetailsCard({
       <div className="grid gap-5 sm:grid-cols-2">
         <DetailItem label={texts.labels.passportNumber} value={request.reference} />
         <DetailItem
-          label={texts.labels.applicantType}
-          value={getApplicantTypeLabel(request.applicantType)}
-        />
+  label={texts.labels.applicantType}
+  value={request.applicantType}
+/>
         <DetailItem label={texts.labels.assetName} value={request.assetName} />
         <DetailItem label={texts.labels.category} value={request.category} />
         <DetailItem label={texts.labels.subcategory} value={request.subcategory} />
@@ -440,7 +440,7 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
               </h1>
 
               <div className="mt-4">
-                <RequestStatusBadge status={request.requestStatus} />
+                <RequestStatusBadge status={request.requestStatus} lang={lang} />
               </div>
             </div>
 
@@ -523,7 +523,7 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
             </h1>
 
             <div className="mt-4">
-              <RequestStatusBadge status={ownRequest.requestStatus} />
+              <RequestStatusBadge status={ownRequest.requestStatus} lang={lang} />
             </div>
           </div>
 

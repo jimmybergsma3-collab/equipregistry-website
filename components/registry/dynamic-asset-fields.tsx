@@ -19,31 +19,55 @@ const TEXT: Record<
 > = {
   en: {
     title: "Category-specific details",
-    subtitle: "Additional fields are shown based on the selected asset category.",
+    subtitle:
+      "Additional fields are shown based on the selected asset category.",
   },
   es: {
     title: "Detalles específicos de la categoría",
-    subtitle: "Se muestran campos adicionales según la categoría de activo seleccionada.",
+    subtitle:
+      "Se muestran campos adicionales según la categoría de activo seleccionada.",
   },
   de: {
     title: "Kategoriespezifische Angaben",
-    subtitle: "Zusätzliche Felder werden je nach gewählter Asset-Kategorie angezeigt.",
+    subtitle:
+      "Zusätzliche Felder werden je nach gewählter Asset-Kategorie angezeigt.",
   },
   fr: {
     title: "Détails spécifiques à la catégorie",
-    subtitle: "Des champs supplémentaires s’affichent selon la catégorie d’actif sélectionnée.",
+    subtitle:
+      "Des champs supplémentaires s’affichent selon la catégorie d’actif sélectionnée.",
   },
   it: {
     title: "Dettagli specifici della categoria",
-    subtitle: "Vengono mostrati campi aggiuntivi in base alla categoria di asset selezionata.",
+    subtitle:
+      "Vengono mostrati campi aggiuntivi in base alla categoria di asset selezionata.",
   },
   nl: {
     title: "Categorie-specifieke details",
-    subtitle: "Aanvullende velden worden getoond op basis van de gekozen assetcategorie.",
+    subtitle:
+      "Aanvullende velden worden getoond op basis van de gekozen assetcategorie.",
   },
   pt: {
     title: "Detalhes específicos da categoria",
-    subtitle: "São apresentados campos adicionais com base na categoria de ativo selecionada.",
+    subtitle:
+      "São apresentados campos adicionais com base na categoria de ativo selecionada.",
+  },
+  ru: {
+    title: "Детали по категории",
+    subtitle:
+      "Дополнительные поля отображаются в зависимости от выбранной категории актива.",
+  },
+  zh: {
+    title: "类别专属详细信息",
+    subtitle: "将根据所选资产类别显示附加字段。",
+  },
+  hi: {
+    title: "श्रेणी-विशिष्ट विवरण",
+    subtitle: "चुनी गई एसेट श्रेणी के आधार पर अतिरिक्त फ़ील्ड दिखाई जाती हैं।",
+  },
+  ar: {
+    title: "تفاصيل خاصة بالفئة",
+    subtitle: "يتم عرض حقول إضافية بناءً على فئة الأصل المحددة.",
   },
 };
 
@@ -63,12 +87,8 @@ export default function DynamicAssetFields({
   return (
     <section className="rounded-2xl border border-zinc-200 bg-white p-6">
       <div className="mb-5">
-        <h3 className="text-lg font-semibold text-zinc-900">
-          {text.title}
-        </h3>
-        <p className="mt-1 text-sm text-zinc-600">
-          {text.subtitle}
-        </p>
+        <h3 className="text-lg font-semibold text-zinc-900">{text.title}</h3>
+        <p className="mt-1 text-sm text-zinc-600">{text.subtitle}</p>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

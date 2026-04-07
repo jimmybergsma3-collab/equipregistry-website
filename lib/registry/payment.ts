@@ -1,16 +1,16 @@
 // lib/registry/payment.ts
 
 import { ApplicantType } from "@/lib/registry/workflow";
-import { Language } from "@/lib/i18n/config";
+import type { Lang } from "@/lib/i18n/config";
 
-type LocalizedText = Record<Language, string>;
+type LocalizedText = Partial<Record<Lang, string>> & { en: string };
 
 function getLocalizedText(
   text: LocalizedText,
   lang: string
 ): string {
   if (lang in text) {
-    return text[lang as Language];
+    return text[lang as Lang] ?? text.en;
   }
 
   return text.en;

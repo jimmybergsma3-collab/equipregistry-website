@@ -36,9 +36,15 @@ export async function POST(req: Request) {
       );
     }
 
+    const redirectTo =
+      user.role === "admin"
+        ? "/dashboard/admin"
+        : "/dashboard/registrations";
+
     const res = NextResponse.json({
       success: true,
       role: user.role,
+      redirectTo,
     });
 
     res.cookies.set("er_session", user.id, {

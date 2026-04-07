@@ -20,54 +20,81 @@ type Dictionary = {
     contactEquipRegistry: string;
   };
   pages: {
-    verify: {
+  verify: {
+    title: string;
+    subtitle: string;
+    introTitle: string;
+    introText: string;
+  };
+  register: {
+    title: string;
+    subtitle: string;
+    vehicleTitle: string;
+    vehicleText: string;
+    equipmentTitle: string;
+    equipmentText: string;
+    trailerTitle: string;
+    trailerText: string;
+  };
+  reportSighting: {
+    title: string;
+    subtitle: string;
+    introTitle: string;
+    introText: string;
+  };
+  partners: {
+    title: string;
+    subtitle: string;
+    insurersTitle: string;
+    insurersText: string;
+    rentalTitle: string;
+    rentalText: string;
+    financeTitle: string;
+    financeText: string;
+    terminalsTitle: string;
+    terminalsText: string;
+  };
+  contact: {
+    title: string;
+    subtitle: string;
+    generalTitle: string;
+    generalText: string;
+    businessTitle: string;
+    businessText: string;
+    supportTitle: string;
+    supportText: string;
+    emailLabel: string;
+    formTitle: string;
+    formIntro: string;
+    typeLabel: string;
+    typeGeneral: string;
+    typeBusiness: string;
+    typeSupport: string;
+    namePlaceholder: string;
+    emailPlaceholder: string;
+    subjectPlaceholder: string;
+    messagePlaceholder: string;
+    sendButton: string;
+    sendingButton: string;
+    successMessage: string;
+    errorMessage: string;
+  };
+  disclaimer: {
+    title: string;
+    intro: string;
+    liability: string;
+    data: string;
+    future: string;
+    contact: string;
+  };
+  dashboard: {
+    registrations: {
+      eyebrow: string;
       title: string;
-      subtitle: string;
-      introTitle: string;
-      introText: string;
-    };
-    register: {
-      title: string;
-      subtitle: string;
-      vehicleTitle: string;
-      vehicleText: string;
-      equipmentTitle: string;
-      equipmentText: string;
-      trailerTitle: string;
-      trailerText: string;
-    };
-    reportSighting: {
-      title: string;
-      subtitle: string;
-      introTitle: string;
-      introText: string;
-    };
-    partners: {
-      title: string;
-      subtitle: string;
-      insurersTitle: string;
-      insurersText: string;
-      rentalTitle: string;
-      rentalText: string;
-      financeTitle: string;
-      financeText: string;
-    };
-    contact: {
-      title: string;
-      subtitle: string;
-      introTitle: string;
-      introText: string;
-      note: string;
-    };
-    disclaimer: {
-      title: string;
-      intro: string;
-      liability: string;
-      data: string;
-      future: string;
-      contact: string;
+      newRegistration: string;
     };
   };
+};
   hero: {
     title: string;
     subtitle: string;
@@ -161,7 +188,18 @@ type Dictionary = {
     };
   };
   dashboard: {
-    registrationDetail: {
+  requestStatuses: {
+    draft: string;
+    incomplete: string;
+    submitted: string;
+    underReview: string;
+    moreInfoRequired: string;
+    approved: string;
+    rejected: string;
+    passportIssued: string;
+    unknown: string;
+  };
+  registrationDetail: {
       backToAdminRegistrations: string;
       backToRegistrations: string;
       adminPaymentConfirmationTitle: string;
@@ -224,6 +262,13 @@ const en: Dictionary = {
     contactEquipRegistry: "Contact EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Registration requests",
+    newRegistration: "New registration",
+  },
+},
     verify: {
       title: "Verify Asset",
       subtitle:
@@ -257,27 +302,50 @@ const en: Dictionary = {
     partners: {
       title: "For Insurers / Partners",
       subtitle:
-        "EquipRegistry is designed to support insurers, rental companies, banks and other trusted ecosystem partners.",
-      insurersTitle: "Insurers",
+        "EquipRegistry is designed as a trust layer for insurers, rental companies, financial institutions and logistics terminals.",
+      insurersTitle: "Insurance companies",
       insurersText:
-        "Support underwriting, recovery, validation cycles and fraud prevention.",
+        "Improve underwriting, reduce fraud and accelerate recovery. EquipRegistry enables real-time validation of ownership, asset history and risk status. Detect stolen assets instantly and prevent claims on fraudulent equipment.",
       rentalTitle: "Rental companies",
       rentalText:
-        "Improve fleet visibility, proof of ownership and cross-border trust.",
-      financeTitle: "Financial institutions",
+        "Gain full visibility over your fleet across borders. Prevent fraud, verify customers and protect your assets against theft, duplicate registrations and illegal resale.",
+      financeTitle: "Banks & financial institutions",
       financeText:
-        "Reduce fraud risk and improve trust around financed movable assets.",
+        "Prevent double financing and asset fraud. EquipRegistry allows lenders to verify if an asset is already financed, registered or flagged. Reduce risk in asset-based lending and leasing structures.",
+      terminalsTitle: "Ports & logistics terminals",
+      terminalsText:
+        "Verify incoming and outgoing equipment in real-time. Detect stolen or flagged assets before they enter or leave your terminal. Support customs, inspections and cross-border compliance.",
     },
     contact: {
-      title: "Contact",
-      subtitle:
-        "Get in touch regarding partnerships, insurance use cases, pilot discussions or strategic collaboration.",
-      introTitle: "Contact EquipRegistry",
-      introText:
-        "This page can later hold your contact form, business email addresses, regional contact details and partnership requests.",
-      note:
-        "For now, we are creating the structure first so the frontend already feels like a real product.",
-    },
+  title: "Contact",
+  subtitle:
+    "Get in touch regarding partnerships, insurance use cases, pilot discussions or strategic collaboration.",
+  generalTitle: "General inquiries",
+  generalText:
+    "For general questions about EquipRegistry, the platform, public verification or how the registry works.",
+  businessTitle: "Business & partnerships",
+  businessText:
+    "For insurers, rental companies, banks, terminals and organisations interested in collaboration, pilot projects or integration.",
+  supportTitle: "Support",
+  supportText:
+    "For help related to registrations, registry passports, submitted data or platform-related questions.",
+  emailLabel: "Email",
+  formTitle: "Contact form",
+  formIntro:
+    "Choose the right contact type so your message goes directly to the correct EquipRegistry inbox.",
+  typeLabel: "Contact type",
+  typeGeneral: "General inquiry",
+  typeBusiness: "Business / Partnerships",
+  typeSupport: "Support",
+  namePlaceholder: "Your name",
+  emailPlaceholder: "Your email",
+  subjectPlaceholder: "Subject",
+  messagePlaceholder: "Your message",
+  sendButton: "Send message",
+  sendingButton: "Sending...",
+successMessage: "Your message has been sent successfully.",
+errorMessage: "Something went wrong while sending your message.",
+},
     disclaimer: {
       title: "Disclaimer",
       intro:
@@ -403,6 +471,17 @@ const en: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Draft",
+  incomplete: "Incomplete",
+  submitted: "Submitted",
+  underReview: "Under review",
+  moreInfoRequired: "More information required",
+  approved: "Approved",
+  rejected: "Rejected",
+  passportIssued: "Passport available",
+  unknown: "Unknown",
+},
     registrationDetail: {
       backToAdminRegistrations: "Back to admin registrations",
       backToRegistrations: "Back to registrations",
@@ -468,6 +547,13 @@ const es: Dictionary = {
     contactEquipRegistry: "Contactar con EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Solicitudes de registro",
+    newRegistration: "Nuevo registro",
+  },
+},
     verify: {
       title: "Verificar activo",
       subtitle:
@@ -501,27 +587,50 @@ const es: Dictionary = {
     partners: {
       title: "Para aseguradoras / socios",
       subtitle:
-        "EquipRegistry está diseñado para apoyar a aseguradoras, empresas de alquiler, bancos y otros socios de confianza del ecosistema.",
+        "EquipRegistry está diseñado como una capa de confianza para aseguradoras, empresas de alquiler, entidades financieras y terminales logísticos.",
       insurersTitle: "Aseguradoras",
       insurersText:
-        "Apoyo a suscripción, recuperación, ciclos de validación y prevención de fraude.",
+        "Mejore la suscripción, reduzca el fraude y acelere la recuperación. EquipRegistry permite validar en tiempo real la propiedad, el historial y el estado de riesgo. Detecte activos robados al instante y evite reclamaciones sobre equipos fraudulentos.",
       rentalTitle: "Empresas de alquiler",
       rentalText:
-        "Mejorar visibilidad de flota, prueba de propiedad y confianza transfronteriza.",
-      financeTitle: "Entidades financieras",
+        "Obtenga visibilidad total de su flota a nivel internacional. Prevenga fraude, verifique clientes y proteja sus activos contra robo, registros duplicados y reventa ilegal.",
+      financeTitle: "Bancos e instituciones financieras",
       financeText:
-        "Reducir riesgo de fraude y mejorar la confianza en activos muebles financiados.",
+        "Evite la doble financiación y el fraude de activos. EquipRegistry permite verificar si un activo ya está financiado, registrado o señalado. Reduzca el riesgo en estructuras de leasing y financiación basada en activos.",
+      terminalsTitle: "Puertos y terminales logísticos",
+      terminalsText:
+        "Verifique equipos entrantes y salientes en tiempo real. Detecte activos robados o marcados antes de que entren o salgan de su terminal. Apoye aduanas, inspecciones y cumplimiento transfronterizo.",
     },
-    contact: {
-      title: "Contacto",
-      subtitle:
-        "Póngase en contacto para colaboraciones, casos de uso con aseguradoras, pilotos o cooperación estratégica.",
-      introTitle: "Contactar con EquipRegistry",
-      introText:
-        "Esta página podrá incluir más adelante su formulario de contacto, correos empresariales, datos regionales y solicitudes de colaboración.",
-      note:
-        "Por ahora, estamos creando primero la estructura para que el frontend ya se sienta como un producto real.",
-    },
+   contact: {
+  title: "Contacto",
+  subtitle:
+    "Póngase en contacto para colaboraciones, casos de uso con aseguradoras, pilotos o cooperación estratégica.",
+  generalTitle: "Consultas generales",
+  generalText:
+    "Para preguntas generales sobre EquipRegistry, la plataforma, la verificación pública o cómo funciona el registro.",
+  businessTitle: "Empresas y colaboraciones",
+  businessText:
+    "Para aseguradoras, empresas de alquiler, bancos, terminales y organizaciones interesadas en colaboración, proyectos piloto o integración.",
+  supportTitle: "Soporte",
+  supportText:
+    "Para ayuda relacionada con registros, pasaportes del registro, datos enviados o cuestiones de la plataforma.",
+  emailLabel: "Correo electrónico",
+  formTitle: "Formulario de contacto",
+  formIntro:
+    "Elija el tipo de contacto correcto para que su mensaje llegue directamente al buzón adecuado de EquipRegistry.",
+  typeLabel: "Tipo de contacto",
+  typeGeneral: "Consulta general",
+  typeBusiness: "Empresas / Colaboraciones",
+  typeSupport: "Soporte",
+  namePlaceholder: "Su nombre",
+  emailPlaceholder: "Su correo electrónico",
+  subjectPlaceholder: "Asunto",
+  messagePlaceholder: "Su mensaje",
+  sendButton: "Enviar mensaje",
+  sendingButton: "Enviando...",
+successMessage: "Su mensaje se ha enviado correctamente.",
+errorMessage: "Se ha producido un error al enviar su mensaje.",
+},
     disclaimer: {
       title: "Aviso legal",
       intro:
@@ -648,6 +757,17 @@ const es: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Borrador",
+  incomplete: "Incompleto",
+  submitted: "Enviado",
+  underReview: "En revisión",
+  moreInfoRequired: "Se requiere más información",
+  approved: "Aprobado",
+  rejected: "Rechazado",
+  passportIssued: "Pasaporte disponible",
+  unknown: "Desconocido",
+},
     registrationDetail: {
       backToAdminRegistrations: "Volver a registros de administración",
       backToRegistrations: "Volver a registros",
@@ -714,6 +834,13 @@ const de: Dictionary = {
     contactEquipRegistry: "EquipRegistry kontaktieren",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Registrierungsanfragen",
+    newRegistration: "Neue Registrierung",
+  },
+},
     verify: {
       title: "Asset prüfen",
       subtitle:
@@ -747,27 +874,50 @@ const de: Dictionary = {
     partners: {
       title: "Für Versicherer / Partner",
       subtitle:
-        "EquipRegistry wurde entwickelt, um Versicherer, Vermieter, Banken und andere vertrauenswürdige Ökosystempartner zu unterstützen.",
-      insurersTitle: "Versicherer",
+        "EquipRegistry wurde als Vertrauensebene für Versicherer, Vermieter, Finanzinstitute und Logistikterminals entwickelt.",
+      insurersTitle: "Versicherungsunternehmen",
       insurersText:
-        "Unterstützung für Underwriting, Rückgewinnung, Validierungszyklen und Betrugsprävention.",
+        "Verbessern Sie das Underwriting, reduzieren Sie Betrug und beschleunigen Sie die Wiederbeschaffung. EquipRegistry ermöglicht die Echtzeitvalidierung von Eigentum, Asset-Historie und Risikostatus. Erkennen Sie gestohlene Assets sofort und verhindern Sie Schäden bei betrügerischem Equipment.",
       rentalTitle: "Vermietunternehmen",
       rentalText:
-        "Verbesserung von Flottenübersicht, Eigentumsnachweis und grenzüberschreitendem Vertrauen.",
-      financeTitle: "Finanzinstitute",
+        "Erhalten Sie volle Transparenz über Ihre Flotte über Ländergrenzen hinweg. Verhindern Sie Betrug, prüfen Sie Kunden und schützen Sie Ihre Assets vor Diebstahl, Doppelregistrierungen und illegalem Weiterverkauf.",
+      financeTitle: "Banken & Finanzinstitute",
       financeText:
-        "Betrugsrisiken senken und Vertrauen bei finanzierten beweglichen Vermögenswerten stärken.",
+        "Verhindern Sie Doppelfinanzierung und Asset-Betrug. EquipRegistry ermöglicht es Kreditgebern zu prüfen, ob ein Asset bereits finanziert, registriert oder markiert ist. Reduzieren Sie Risiken in Leasing- und assetbasierten Finanzierungsstrukturen.",
+      terminalsTitle: "Häfen & Logistikterminals",
+      terminalsText:
+        "Verifizieren Sie ein- und ausgehendes Equipment in Echtzeit. Erkennen Sie gestohlene oder markierte Assets, bevor sie Ihr Terminal betreten oder verlassen. Unterstützen Sie Zoll, Inspektionen und grenzüberschreitende Compliance.",
     },
     contact: {
-      title: "Kontakt",
-      subtitle:
-        "Kontaktieren Sie uns zu Partnerschaften, Versicherungsanwendungen, Pilotprojekten oder strategischer Zusammenarbeit.",
-      introTitle: "EquipRegistry kontaktieren",
-      introText:
-        "Diese Seite kann später Ihr Kontaktformular, geschäftliche E-Mail-Adressen, regionale Kontaktdaten und Partnerschaftsanfragen enthalten.",
-      note:
-        "Im Moment erstellen wir zuerst die Struktur, damit sich das Frontend bereits wie ein echtes Produkt anfühlt.",
-    },
+  title: "Kontakt",
+  subtitle:
+    "Kontaktieren Sie uns zu Partnerschaften, Versicherungsanwendungen, Pilotprojekten oder strategischer Zusammenarbeit.",
+  generalTitle: "Allgemeine Anfragen",
+  generalText:
+    "Für allgemeine Fragen zu EquipRegistry, der Plattform, der öffentlichen Verifizierung oder zur Funktionsweise des Registers.",
+  businessTitle: "Business & Partnerschaften",
+  businessText:
+    "Für Versicherer, Vermietunternehmen, Banken, Terminals und andere Organisationen mit Interesse an Zusammenarbeit, Pilotprojekten oder Integration.",
+  supportTitle: "Support",
+  supportText:
+    "Für Hilfe zu Registrierungen, Registerpässen, eingereichten Daten oder plattformbezogenen Fragen.",
+  emailLabel: "E-Mail",
+  formTitle: "Kontaktformular",
+  formIntro:
+    "Wählen Sie den richtigen Kontakttyp, damit Ihre Nachricht direkt im richtigen EquipRegistry-Postfach landet.",
+  typeLabel: "Kontakttyp",
+  typeGeneral: "Allgemeine Anfrage",
+  typeBusiness: "Business / Partnerschaften",
+  typeSupport: "Support",
+  namePlaceholder: "Ihr Name",
+  emailPlaceholder: "Ihre E-Mail",
+  subjectPlaceholder: "Betreff",
+  messagePlaceholder: "Ihre Nachricht",
+  sendButton: "Nachricht senden",
+  sendingButton: "Wird gesendet...",
+successMessage: "Ihre Nachricht wurde erfolgreich gesendet.",
+errorMessage: "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten.",
+},
     disclaimer: {
       title: "Haftungsausschluss",
       intro:
@@ -894,6 +1044,17 @@ const de: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Entwurf",
+  incomplete: "Unvollständig",
+  submitted: "Eingereicht",
+  underReview: "In Prüfung",
+  moreInfoRequired: "Weitere Informationen erforderlich",
+  approved: "Genehmigt",
+  rejected: "Abgelehnt",
+  passportIssued: "Pass verfügbar",
+  unknown: "Unbekannt",
+},
     registrationDetail: {
       backToAdminRegistrations: "Zurück zu Admin-Registrierungen",
       backToRegistrations: "Zurück zu Registrierungen",
@@ -959,6 +1120,13 @@ const fr: Dictionary = {
     contactEquipRegistry: "Contacter EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Demandes d’enregistrement",
+    newRegistration: "Nouvel enregistrement",
+  },
+},
     verify: {
       title: "Vérifier l’actif",
       subtitle:
@@ -992,27 +1160,50 @@ const fr: Dictionary = {
     partners: {
       title: "Pour assureurs / partenaires",
       subtitle:
-        "EquipRegistry est conçu pour soutenir les assureurs, loueurs, banques et autres partenaires de confiance de l’écosystème.",
-      insurersTitle: "Assureurs",
+        "EquipRegistry est conçu comme une couche de confiance pour les assureurs, les sociétés de location, les institutions financières et les terminaux logistiques.",
+      insurersTitle: "Compagnies d’assurance",
       insurersText:
-        "Soutien à la souscription, au recouvrement, aux cycles de validation et à la prévention de la fraude.",
+        "Améliorez la souscription, réduisez la fraude et accélérez la récupération. EquipRegistry permet une validation en temps réel de la propriété, de l’historique de l’actif et du niveau de risque. Détectez immédiatement les actifs volés et évitez les sinistres liés à des équipements frauduleux.",
       rentalTitle: "Sociétés de location",
       rentalText:
-        "Améliorer la visibilité des flottes, la preuve de propriété et la confiance transfrontalière.",
-      financeTitle: "Institutions financières",
+        "Obtenez une visibilité complète de votre flotte au-delà des frontières. Prévenez la fraude, vérifiez les clients et protégez vos actifs contre le vol, les doubles enregistrements et la revente illégale.",
+      financeTitle: "Banques et institutions financières",
       financeText:
-        "Réduire le risque de fraude et renforcer la confiance autour des actifs mobiliers financés.",
+        "Prévenez le double financement et la fraude liée aux actifs. EquipRegistry permet aux prêteurs de vérifier si un actif est déjà financé, enregistré ou signalé. Réduisez les risques dans les structures de leasing et de financement adossé à des actifs.",
+      terminalsTitle: "Ports et terminaux logistiques",
+      terminalsText:
+        "Vérifiez les équipements entrants et sortants en temps réel. Détectez les actifs volés ou signalés avant qu’ils n’entrent ou ne quittent votre terminal. Soutenez les douanes, les inspections et la conformité transfrontalière.",
     },
     contact: {
-      title: "Contact",
-      subtitle:
-        "Prenez contact pour des partenariats, des cas d’usage assurance, des pilotes ou une collaboration stratégique.",
-      introTitle: "Contacter EquipRegistry",
-      introText:
-        "Cette page pourra plus tard contenir votre formulaire de contact, vos e-mails professionnels, vos coordonnées régionales et vos demandes de partenariat.",
-      note:
-        "Pour l’instant, nous construisons d’abord la structure afin que le frontend donne déjà l’impression d’un vrai produit.",
-    },
+  title: "Contact",
+  subtitle:
+    "Prenez contact pour des partenariats, des cas d’usage assurance, des pilotes ou une collaboration stratégique.",
+  generalTitle: "Demandes générales",
+  generalText:
+    "Pour toute question générale sur EquipRegistry, la plateforme, la vérification publique ou le fonctionnement du registre.",
+  businessTitle: "Business & partenariats",
+  businessText:
+    "Pour les assureurs, sociétés de location, banques, terminaux et autres organisations intéressées par une collaboration, un projet pilote ou une intégration.",
+  supportTitle: "Support",
+  supportText:
+    "Pour obtenir de l’aide concernant les enregistrements, les passeports du registre, les données soumises ou les questions liées à la plateforme.",
+  emailLabel: "E-mail",
+  formTitle: "Formulaire de contact",
+  formIntro:
+    "Choisissez le bon type de contact afin que votre message soit envoyé directement à la bonne boîte EquipRegistry.",
+  typeLabel: "Type de contact",
+  typeGeneral: "Demande générale",
+  typeBusiness: "Business / partenariats",
+  typeSupport: "Support",
+  namePlaceholder: "Votre nom",
+  emailPlaceholder: "Votre e-mail",
+  subjectPlaceholder: "Objet",
+  messagePlaceholder: "Votre message",
+  sendButton: "Envoyer le message",
+  sendingButton: "Envoi en cours...",
+successMessage: "Votre message a été envoyé avec succès.",
+errorMessage: "Une erreur s’est produite lors de l’envoi de votre message.",
+},
     disclaimer: {
       title: "Avertissement",
       intro:
@@ -1139,6 +1330,17 @@ const fr: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Brouillon",
+  incomplete: "Incomplet",
+  submitted: "Soumis",
+  underReview: "En cours de traitement",
+  moreInfoRequired: "Informations supplémentaires requises",
+  approved: "Approuvé",
+  rejected: "Rejeté",
+  passportIssued: "Passeport disponible",
+  unknown: "Inconnu",
+},
     registrationDetail: {
       backToAdminRegistrations: "Retour aux enregistrements admin",
       backToRegistrations: "Retour aux enregistrements",
@@ -1205,6 +1407,13 @@ const it: Dictionary = {
     contactEquipRegistry: "Contatta EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Richieste di registrazione",
+    newRegistration: "Nuova registrazione",
+  },
+},
     verify: {
       title: "Verifica asset",
       subtitle:
@@ -1238,27 +1447,50 @@ const it: Dictionary = {
     partners: {
       title: "Per assicuratori / partner",
       subtitle:
-        "EquipRegistry è progettato per supportare assicuratori, società di noleggio, banche e altri partner fidati dell’ecosistema.",
-      insurersTitle: "Assicuratori",
+        "EquipRegistry è progettato come un livello di fiducia per assicuratori, società di noleggio, istituzioni finanziarie e terminal logistici.",
+      insurersTitle: "Compagnie assicurative",
       insurersText:
-        "Supporto per underwriting, recupero, cicli di validazione e prevenzione frodi.",
+        "Migliora l’underwriting, riduci le frodi e accelera il recupero. EquipRegistry consente la validazione in tempo reale di proprietà, storico dell’asset e stato di rischio. Rileva immediatamente gli asset rubati e previeni sinistri su attrezzature fraudolente.",
       rentalTitle: "Società di noleggio",
       rentalText:
-        "Migliorare visibilità flotta, prova di proprietà e fiducia transfrontaliera.",
-      financeTitle: "Istituzioni finanziarie",
+        "Ottieni piena visibilità della tua flotta oltre i confini. Previeni frodi, verifica i clienti e proteggi i tuoi asset da furti, registrazioni duplicate e rivendita illegale.",
+      financeTitle: "Banche e istituzioni finanziarie",
       financeText:
-        "Ridurre il rischio di frode e migliorare la fiducia sugli asset mobili finanziati.",
+        "Previeni doppio finanziamento e frode sugli asset. EquipRegistry consente ai finanziatori di verificare se un asset è già finanziato, registrato o segnalato. Riduci il rischio nelle strutture di leasing e finanziamento basato su asset.",
+      terminalsTitle: "Porti e terminal logistici",
+      terminalsText:
+        "Verifica attrezzature in entrata e in uscita in tempo reale. Rileva asset rubati o segnalati prima che entrino o escano dal terminal. Supporta dogane, ispezioni e conformità transfrontaliera.",
     },
     contact: {
-      title: "Contatto",
-      subtitle:
-        "Contattaci per partnership, casi d’uso assicurativi, progetti pilota o collaborazione strategica.",
-      introTitle: "Contatta EquipRegistry",
-      introText:
-        "Questa pagina potrà in seguito contenere il tuo modulo di contatto, email aziendali, dettagli regionali e richieste di partnership.",
-      note:
-        "Per ora, stiamo creando prima la struttura così che il frontend sembri già un prodotto reale.",
-    },
+  title: "Contatto",
+  subtitle:
+    "Contattaci per partnership, casi d’uso assicurativi, progetti pilota o collaborazione strategica.",
+  generalTitle: "Richieste generali",
+  generalText:
+    "Per domande generali su EquipRegistry, sulla piattaforma, sulla verifica pubblica o su come funziona il registro.",
+  businessTitle: "Business e partnership",
+  businessText:
+    "Per assicuratori, società di noleggio, banche, terminali e altre organizzazioni interessate a collaborazione, progetti pilota o integrazione.",
+  supportTitle: "Supporto",
+  supportText:
+    "Per assistenza relativa a registrazioni, passaporti di registro, dati inviati o domande relative alla piattaforma.",
+  emailLabel: "Email",
+  formTitle: "Modulo di contatto",
+  formIntro:
+    "Scegli il tipo di contatto corretto in modo che il tuo messaggio arrivi direttamente alla casella giusta di EquipRegistry.",
+  typeLabel: "Tipo di contatto",
+  typeGeneral: "Richiesta generale",
+  typeBusiness: "Business / Partnership",
+  typeSupport: "Supporto",
+  namePlaceholder: "Il tuo nome",
+  emailPlaceholder: "La tua email",
+  subjectPlaceholder: "Oggetto",
+  messagePlaceholder: "Il tuo messaggio",
+  sendButton: "Invia messaggio",
+  sendingButton: "Invio in corso...",
+successMessage: "Il tuo messaggio è stato inviato correttamente.",
+errorMessage: "Si è verificato un errore durante l’invio del messaggio.",
+},
     disclaimer: {
       title: "Disclaimer",
       intro:
@@ -1385,6 +1617,17 @@ const it: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Bozza",
+  incomplete: "Incompleto",
+  submitted: "Inviato",
+  underReview: "In revisione",
+  moreInfoRequired: "Sono necessarie più informazioni",
+  approved: "Approvato",
+  rejected: "Rifiutato",
+  passportIssued: "Passaporto disponibile",
+  unknown: "Sconosciuto",
+},
     registrationDetail: {
       backToAdminRegistrations: "Torna alle registrazioni admin",
       backToRegistrations: "Torna alle registrazioni",
@@ -1451,6 +1694,13 @@ const nl: Dictionary = {
     contactEquipRegistry: "Neem contact op met EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Registratieaanvragen",
+    newRegistration: "Nieuwe registratie",
+  },
+},
     verify: {
       title: "Asset verifiëren",
       subtitle:
@@ -1484,27 +1734,50 @@ const nl: Dictionary = {
     partners: {
       title: "Voor verzekeraars / partners",
       subtitle:
-        "EquipRegistry is ontworpen om verzekeraars, verhuurbedrijven, banken en andere vertrouwde ecosysteempartners te ondersteunen.",
-      insurersTitle: "Verzekeraars",
+        "EquipRegistry is ontwikkeld als vertrouwenslaag voor verzekeraars, verhuurbedrijven, financiële instellingen en logistieke terminals.",
+      insurersTitle: "Verzekeringsmaatschappijen",
       insurersText:
-        "Ondersteuning voor underwriting, recovery, validatiecycli en fraudepreventie.",
+        "Verbeter underwriting, verminder fraude en versnel recovery. EquipRegistry maakt realtime validatie mogelijk van eigendom, assethistorie en risicostatus. Detecteer gestolen assets direct en voorkom claims op frauduleus equipment.",
       rentalTitle: "Verhuurbedrijven",
       rentalText:
-        "Verbeter vlootzichtbaarheid, eigendomsbewijs en grensoverschrijdend vertrouwen.",
-      financeTitle: "Financiële instellingen",
+        "Krijg volledige zichtbaarheid over je vloot over grenzen heen. Voorkom fraude, verifieer klanten en bescherm je assets tegen diefstal, dubbele registraties en illegale doorverkoop.",
+      financeTitle: "Banken & financiële instellingen",
       financeText:
-        "Verlaag frauderisico en verbeter vertrouwen rond gefinancierde roerende assets.",
+        "Voorkom dubbele financiering en assetfraude. EquipRegistry laat financiers controleren of een asset al gefinancierd, geregistreerd of gemarkeerd is. Verlaag risico in lease- en asset based finance-structuren.",
+      terminalsTitle: "Havens & logistieke terminals",
+      terminalsText:
+        "Verifieer inkomend en uitgaand equipment in realtime. Detecteer gestolen of gemarkeerde assets voordat ze je terminal binnenkomen of verlaten. Ondersteun douane, inspecties en grensoverschrijdende compliance.",
     },
     contact: {
-      title: "Contact",
-      subtitle:
-        "Neem contact op over partnerships, use cases voor verzekeraars, pilots of strategische samenwerking.",
-      introTitle: "Neem contact op met EquipRegistry",
-      introText:
-        "Deze pagina kan later je contactformulier, zakelijke e-mailadressen, regionale contactgegevens en partneraanvragen bevatten.",
-      note:
-        "Voor nu bouwen we eerst de structuur zodat de frontend al aanvoelt als een echt product.",
-    },
+  title: "Contact",
+  subtitle:
+    "Neem contact op over partnerships, use cases voor verzekeraars, pilots of strategische samenwerking.",
+  generalTitle: "Algemene vragen",
+  generalText:
+    "Voor algemene vragen over EquipRegistry, het platform, publieke verificatie of hoe het register werkt.",
+  businessTitle: "Zakelijk & partnerships",
+  businessText:
+    "Voor verzekeraars, verhuurbedrijven, banken, terminals en andere organisaties die interesse hebben in samenwerking, pilotprojecten of integratie.",
+  supportTitle: "Support",
+  supportText:
+    "Voor hulp met registraties, registry-paspoorten, aangeleverde gegevens of vragen over het platform.",
+  emailLabel: "E-mail",
+  formTitle: "Contactformulier",
+  formIntro:
+    "Kies het juiste contacttype zodat je bericht direct in de juiste EquipRegistry inbox terechtkomt.",
+  typeLabel: "Type contact",
+  typeGeneral: "Algemene vraag",
+  typeBusiness: "Zakelijk / Partnerships",
+  typeSupport: "Support",
+  namePlaceholder: "Jouw naam",
+  emailPlaceholder: "Jouw e-mailadres",
+  subjectPlaceholder: "Onderwerp",
+  messagePlaceholder: "Jouw bericht",
+  sendButton: "Bericht verzenden",
+  sendingButton: "Verzenden...",
+successMessage: "Je bericht is succesvol verzonden.",
+errorMessage: "Er ging iets mis bij het verzenden van je bericht.",
+},
     disclaimer: {
       title: "Disclaimer",
       intro:
@@ -1631,6 +1904,17 @@ const nl: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Concept",
+  incomplete: "Onvolledig",
+  submitted: "Ingediend",
+  underReview: "In behandeling",
+  moreInfoRequired: "Meer informatie nodig",
+  approved: "Goedgekeurd",
+  rejected: "Afgewezen",
+  passportIssued: "Paspoort beschikbaar",
+  unknown: "Onbekend",
+},
     registrationDetail: {
       backToAdminRegistrations: "Terug naar admin registraties",
       backToRegistrations: "Terug naar registraties",
@@ -1696,6 +1980,13 @@ const pt: Dictionary = {
     contactEquipRegistry: "Contactar EquipRegistry",
   },
   pages: {
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Pedidos de registo",
+    newRegistration: "Novo registo",
+  },
+},
     verify: {
       title: "Verificar ativo",
       subtitle:
@@ -1729,27 +2020,50 @@ const pt: Dictionary = {
     partners: {
       title: "Para seguradoras / parceiros",
       subtitle:
-        "EquipRegistry foi concebido para apoiar seguradoras, empresas de aluguer, bancos e outros parceiros fiáveis do ecossistema.",
+        "EquipRegistry foi concebido como uma camada de confiança para seguradoras, empresas de aluguer, instituições financeiras e terminais logísticos.",
       insurersTitle: "Seguradoras",
       insurersText:
-        "Apoio a subscrição, recuperação, ciclos de validação e prevenção de fraude.",
+        "Melhore a subscrição, reduza a fraude e acelere a recuperação. A EquipRegistry permite validação em tempo real da titularidade, histórico do ativo e estado de risco. Detete ativos roubados instantaneamente e evite sinistros sobre equipamento fraudulento.",
       rentalTitle: "Empresas de aluguer",
       rentalText:
-        "Melhorar visibilidade da frota, prova de propriedade e confiança transfronteiriça.",
-      financeTitle: "Instituições financeiras",
+        "Obtenha visibilidade total sobre a sua frota além-fronteiras. Previna fraude, verifique clientes e proteja os seus ativos contra roubo, registos duplicados e revenda ilegal.",
+      financeTitle: "Bancos e instituições financeiras",
       financeText:
-        "Reduzir o risco de fraude e melhorar a confiança em ativos móveis financiados.",
+        "Previna duplo financiamento e fraude de ativos. A EquipRegistry permite aos financiadores verificar se um ativo já está financiado, registado ou sinalizado. Reduza o risco em estruturas de leasing e financiamento baseado em ativos.",
+      terminalsTitle: "Portos e terminais logísticos",
+      terminalsText:
+        "Verifique equipamento de entrada e saída em tempo real. Detete ativos roubados ou sinalizados antes de entrarem ou saírem do seu terminal. Apoie alfândegas, inspeções e conformidade transfronteiriça.",
     },
-    contact: {
-      title: "Contacto",
-      subtitle:
-        "Entre em contacto sobre parcerias, casos de uso com seguradoras, pilotos ou colaboração estratégica.",
-      introTitle: "Contactar EquipRegistry",
-      introText:
-        "Esta página poderá mais tarde incluir o seu formulário de contacto, endereços de email empresariais, detalhes regionais e pedidos de parceria.",
-      note:
-        "Por agora, estamos a criar primeiro a estrutura para que o frontend já pareça um produto real.",
-    },
+   contact: {
+  title: "Contacto",
+  subtitle:
+    "Entre em contacto sobre parcerias, casos de uso com seguradoras, pilotos ou colaboração estratégica.",
+  generalTitle: "Questões gerais",
+  generalText:
+    "Para perguntas gerais sobre a EquipRegistry, a plataforma, a verificação pública ou o funcionamento do registo.",
+  businessTitle: "Negócios e parcerias",
+  businessText:
+    "Para seguradoras, empresas de aluguer, bancos, terminais e outras organizações interessadas em colaboração, projetos piloto ou integração.",
+  supportTitle: "Suporte",
+  supportText:
+    "Para ajuda relacionada com registos, passaportes de registo, dados enviados ou questões relacionadas com a plataforma.",
+  emailLabel: "Email",
+  formTitle: "Formulário de contacto",
+  formIntro:
+    "Escolha o tipo de contacto correto para que a sua mensagem seja enviada diretamente para a caixa certa da EquipRegistry.",
+  typeLabel: "Tipo de contacto",
+  typeGeneral: "Questão geral",
+  typeBusiness: "Negócios / Parcerias",
+  typeSupport: "Suporte",
+  namePlaceholder: "O seu nome",
+  emailPlaceholder: "O seu email",
+  subjectPlaceholder: "Assunto",
+  messagePlaceholder: "A sua mensagem",
+  sendButton: "Enviar mensagem",
+  sendingButton: "A enviar...",
+successMessage: "A sua mensagem foi enviada com sucesso.",
+errorMessage: "Ocorreu um erro ao enviar a sua mensagem.",
+},
     disclaimer: {
       title: "Isenção de responsabilidade",
       intro:
@@ -1876,6 +2190,17 @@ const pt: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+  draft: "Rascunho",
+  incomplete: "Incompleto",
+  submitted: "Enviado",
+  underReview: "Em análise",
+  moreInfoRequired: "Mais informações necessárias",
+  approved: "Aprovado",
+  rejected: "Rejeitado",
+  passportIssued: "Passaporte disponível",
+  unknown: "Desconhecido",
+},
     registrationDetail: {
       backToAdminRegistrations: "Voltar aos registos de administração",
       backToRegistrations: "Voltar aos registos",
@@ -1923,7 +2248,6 @@ const pt: Dictionary = {
 };
 
 const ru: Dictionary = {
-  ...en,
   nav: {
     howItWorks: "Как это работает",
     login: "Войти",
@@ -1943,16 +2267,89 @@ const ru: Dictionary = {
     contactEquipRegistry: "Связаться с EquipRegistry",
   },
   pages: {
-    ...en.pages,
+    dashboard: {
+  registrations: {
+    eyebrow: "EquipRegistry",
+    title: "Заявки на регистрацию",
+    newRegistration: "Новая регистрация",
+  },
+},
+    verify: {
+      title: "Проверить актив",
+      subtitle:
+        "Введите серийный номер и проверьте, зарегистрировано ли оборудование, подтверждено, отмечено или имеет неизвестную историю.",
+      introTitle: "Публичная проверка",
+      introText:
+        "Эта страница станет отдельным публичным маршрутом проверки. Пока что живая проверка по-прежнему доступна на главной странице.",
+    },
+    register: {
+      title: "Зарегистрировать актив",
+      subtitle:
+        "Начните процесс регистрации оборудования, транспортных средств или прицепов и подготовьте актив к цифровому паспорту реестра.",
+      vehicleTitle: "Транспортное средство",
+      vehicleText:
+        "Автомобили, грузовики, фургоны, автодома и другие дорожные активы с VIN или серийной ссылкой.",
+      equipmentTitle: "Оборудование",
+      equipmentText:
+        "Строительное, сельскохозяйственное, промышленное и арендное оборудование с серийным номером машины.",
+      trailerTitle: "Прицеп",
+      trailerText:
+        "Прицепы и буксируемые активы, которым необходимы идентификация, происхождение и доверительная видимость.",
+    },
+    reportSighting: {
+      title: "Сообщить о наблюдении",
+      subtitle:
+        "Сообщите о замеченном отмеченном или украденном оборудовании и помогите улучшить трансграничную видимость.",
+      introTitle: "Почему сообщения о наблюдении важны",
+      introText:
+        "Публичные сообщения о наблюдении могут помочь страховщикам, властям и законным владельцам быстрее реагировать, когда оборудование отмечено, украдено или находится под расследованием.",
+    },
+    partners: {
+      title: "Для страховщиков / партнёров",
+      subtitle:
+        "EquipRegistry разработан как уровень доверия для страховщиков, арендных компаний, финансовых учреждений и логистических терминалов.",
+      insurersTitle: "Страховые компании",
+      insurersText:
+        "Улучшайте андеррайтинг, снижайте мошенничество и ускоряйте возврат активов. EquipRegistry позволяет в реальном времени проверять право собственности, историю актива и уровень риска. Мгновенно выявляйте украденные активы и предотвращайте страховые случаи по мошенническому оборудованию.",
+      rentalTitle: "Арендные компании",
+      rentalText:
+        "Получайте полную видимость вашей техники через границы. Предотвращайте мошенничество, проверяйте клиентов и защищайте активы от кражи, двойной регистрации и незаконной перепродажи.",
+      financeTitle: "Банки и финансовые учреждения",
+      financeText:
+        "Предотвращайте двойное финансирование и мошенничество с активами. EquipRegistry позволяет кредиторам проверять, не финансируется ли актив уже, не зарегистрирован ли он и не помечен ли как рискованный. Снижайте риск в структурах лизинга и финансирования под залог активов.",
+      terminalsTitle: "Порты и логистические терминалы",
+      terminalsText:
+        "Проверяйте входящее и исходящее оборудование в реальном времени. Выявляйте украденные или помеченные активы до того, как они войдут на ваш терминал или покинут его. Поддерживайте таможню, инспекции и трансграничное соответствие.",
+    },
     contact: {
       title: "Контакт",
       subtitle:
         "Свяжитесь с нами по вопросам партнёрства, страховых сценариев, пилотных проектов или стратегического сотрудничества.",
-      introTitle: "Связаться с EquipRegistry",
-      introText:
-        "Позже на этой странице могут быть размещены контактная форма, рабочие адреса электронной почты, региональные контакты и запросы на партнёрство.",
-      note:
-        "Сейчас мы сначала создаём структуру, чтобы фронтенд уже выглядел как настоящий продукт.",
+      generalTitle: "Общие вопросы",
+      generalText:
+        "Для общих вопросов об EquipRegistry, платформе, публичной проверке или о том, как работает реестр.",
+      businessTitle: "Бизнес и партнёрства",
+      businessText:
+        "Для страховых компаний, арендных компаний, банков, терминалов и других организаций, заинтересованных в сотрудничестве, пилотных проектах или интеграции.",
+      supportTitle: "Поддержка",
+      supportText:
+        "Для помощи по регистрациям, паспортам реестра, отправленным данным или вопросам, связанным с платформой.",
+      emailLabel: "Электронная почта",
+      formTitle: "Контактная форма",
+      formIntro:
+        "Выберите правильный тип обращения, чтобы ваше сообщение сразу попало в нужный почтовый ящик EquipRegistry.",
+      typeLabel: "Тип обращения",
+      typeGeneral: "Общий вопрос",
+      typeBusiness: "Бизнес / Партнёрства",
+      typeSupport: "Поддержка",
+      namePlaceholder: "Ваше имя",
+      emailPlaceholder: "Ваш email",
+      subjectPlaceholder: "Тема",
+      messagePlaceholder: "Ваше сообщение",
+      sendButton: "Отправить сообщение",
+      sendingButton: "Отправка...",
+      successMessage: "Ваше сообщение успешно отправлено.",
+      errorMessage: "Произошла ошибка при отправке сообщения.",
     },
     disclaimer: {
       title: "Отказ от ответственности",
@@ -1981,6 +2378,35 @@ const ru: Dictionary = {
   },
   result: {
     whyThisMatters: "Почему это важно",
+  },
+  howItWorks: {
+    title: "Как работает EquipRegistry",
+    step1Title: "1. Проверить",
+    step1Text:
+      "Введите VIN, серийный номер или ID реестра, чтобы мгновенно проверить статус регистрации.",
+    step2Title: "2. Подтвердить",
+    step2Text:
+      "Просмотрите историю владения, документы и уровень проверки, если они доступны.",
+    step3Title: "3. Зарегистрировать",
+    step3Text:
+      "Зарегистрируйте транспортные средства, оборудование или другие активы и добавьте подтверждающие документы.",
+    step4Title: "4. Использовать",
+    step4Text:
+      "Используйте паспорт реестра для страхования, аренды, перепродажи, возврата или соответствия требованиям.",
+  },
+  trust: {
+    title: "Создано для доверия в глобальном масштабе",
+    subtitle:
+      "EquipRegistry разработан как нейтральная инфраструктура для транспортных средств, оборудования и других ценных активов, поддерживая страховщиков, арендные компании, профессиональных владельцев и трансграничные сделки.",
+    card1Title: "Готово для страхования",
+    card1Text:
+      "Структурировано для поддержки андеррайтинга, циклов валидации и решений, основанных на риске.",
+    card2Title: "Независимо и нейтрально",
+    card2Text:
+      "Не связано с производителями, дистрибьюторами или юрисдикциями — глобальный источник доверия.",
+    card3Title: "Создано для масштабирования",
+    card3Text:
+      "От одного актива до глобальных парков — готово к внедрению в разных странах.",
   },
   footer: {
     copyright:
@@ -2051,6 +2477,17 @@ const ru: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+      draft: "Черновик",
+      incomplete: "Неполный",
+      submitted: "Отправлено",
+      underReview: "На рассмотрении",
+      moreInfoRequired: "Требуется дополнительная информация",
+      approved: "Одобрено",
+      rejected: "Отклонено",
+      passportIssued: "Паспорт доступен",
+      unknown: "Неизвестно",
+    },
     registrationDetail: {
       backToAdminRegistrations: "Назад к административным регистрациям",
       backToRegistrations: "Назад к регистрациям",
@@ -2082,8 +2519,7 @@ const ru: Dictionary = {
         completenessScore: "Уровень полноты",
         solarPanelSerialNumbers: "Серийные номера солнечных панелей",
         batterySerialNumbers: "Серийные номера батарей",
-        bikeBatterySerialNumbers:
-          "Серийные номера велосипедных батарей",
+        bikeBatterySerialNumbers: "Серийные номера велосипедных батарей",
         capacity: "Ёмкость",
         powerRating: "Мощность",
         batchLotNumber: "Номер партии / лота",
@@ -2098,7 +2534,6 @@ const ru: Dictionary = {
 };
 
 const zh: Dictionary = {
-  ...en,
   nav: {
     howItWorks: "运作方式",
     login: "登录",
@@ -2118,16 +2553,89 @@ const zh: Dictionary = {
     contactEquipRegistry: "联系 EquipRegistry",
   },
   pages: {
-    ...en.pages,
+    dashboard: {
+      registrations: {
+        eyebrow: "EquipRegistry",
+        title: "注册请求",
+        newRegistration: "新建注册",
+      },
+    },
+    verify: {
+      title: "验证资产",
+      subtitle:
+        "搜索序列号，检查设备是否已注册、已验证、被标记或历史未知。",
+      introTitle: "公开验证",
+      introText:
+        "该页面将成为专门的公开验证路由。目前，实时搜索体验仍保留在首页。",
+    },
+    register: {
+      title: "注册资产",
+      subtitle:
+        "开始设备、车辆或拖车的注册流程，并为该资产准备数字注册护照。",
+      vehicleTitle: "车辆",
+      vehicleText:
+        "汽车、卡车、厢式车、房车及其他带有 VIN 或序列号参考的道路资产。",
+      equipmentTitle: "设备",
+      equipmentText:
+        "具有机器序列号的建筑、农业、工业和租赁设备。",
+      trailerTitle: "拖车",
+      trailerText:
+        "需要身份、来源和信任可见性的拖车及被牵引资产。",
+    },
+    reportSighting: {
+      title: "报告发现",
+      subtitle:
+        "报告被标记或被盗设备的发现情况，帮助提升跨境可见性。",
+      introTitle: "为什么发现报告很重要",
+      introText:
+        "公开的发现报告可以帮助保险公司、主管部门和合法所有者在设备被标记、被盗或处于调查中时更快采取行动。",
+    },
+    partners: {
+      title: "面向保险公司 / 合作伙伴",
+      subtitle:
+        "EquipRegistry 被设计为保险公司、租赁公司、金融机构和物流码头的信任层。",
+      insurersTitle: "保险公司",
+      insurersText:
+        "提升承保质量，减少欺诈，加快追回流程。EquipRegistry 可实时验证所有权、资产历史和风险状态。即时识别被盗资产，防止欺诈设备产生理赔。",
+      rentalTitle: "租赁公司",
+      rentalText:
+        "获得跨境车队和设备的完整可视化。防止欺诈、核验客户，并保护资产免受盗窃、重复注册和非法转售。",
+      financeTitle: "银行与金融机构",
+      financeText:
+        "防止重复融资和资产欺诈。EquipRegistry 允许贷款方核实某项资产是否已被融资、注册或标记。降低租赁和资产融资结构中的风险。",
+      terminalsTitle: "港口与物流码头",
+      terminalsText:
+        "实时核验进出设备。在资产进出码头之前识别被盗或被标记的资产。支持海关、检查和跨境合规。",
+    },
     contact: {
       title: "联系",
       subtitle:
         "如需洽谈合作、保险使用场景、试点项目或战略合作，请与我们联系。",
-      introTitle: "联系 EquipRegistry",
-      introText:
-        "此页面之后可放置联系表单、商务邮箱、区域联系方式和合作申请。",
-      note:
-        "目前我们先把结构搭好，让前端看起来已经像一个真正的产品。",
+      generalTitle: "一般咨询",
+      generalText:
+        "如需了解 EquipRegistry、平台、公开验证或注册系统如何运作的一般问题，请通过这里联系。",
+      businessTitle: "商务与合作",
+      businessText:
+        "适用于保险公司、租赁公司、银行、码头及其他有意开展合作、试点项目或系统集成的机构。",
+      supportTitle: "支持",
+      supportText:
+        "如需注册、注册护照、已提交数据或平台相关问题的帮助，请通过这里联系。",
+      emailLabel: "电子邮箱",
+      formTitle: "联系表单",
+      formIntro:
+        "请选择正确的联系类型，以便您的消息直接发送到 EquipRegistry 的对应邮箱。",
+      typeLabel: "联系类型",
+      typeGeneral: "一般咨询",
+      typeBusiness: "商务 / 合作",
+      typeSupport: "支持",
+      namePlaceholder: "您的姓名",
+      emailPlaceholder: "您的电子邮箱",
+      subjectPlaceholder: "主题",
+      messagePlaceholder: "您的留言",
+      sendButton: "发送消息",
+      sendingButton: "发送中...",
+      successMessage: "您的消息已成功发送。",
+      errorMessage: "发送您的消息时出现错误。",
     },
     disclaimer: {
       title: "免责声明",
@@ -2156,6 +2664,35 @@ const zh: Dictionary = {
   },
   result: {
     whyThisMatters: "这为什么重要",
+  },
+  howItWorks: {
+    title: "EquipRegistry 如何运作",
+    step1Title: "1. 验证",
+    step1Text:
+      "输入 VIN、序列号或注册 ID，即可立即检查注册状态。",
+    step2Title: "2. 核实",
+    step2Text:
+      "在可用时查看所有权历史、文件和验证级别。",
+    step3Title: "3. 注册",
+    step3Text:
+      "注册车辆、设备或其他资产，并添加支持文件。",
+    step4Title: "4. 使用",
+    step4Text:
+      "将注册护照用于保险、租赁、转售、追回或合规。",
+  },
+  trust: {
+    title: "为全球规模的信任而打造",
+    subtitle:
+      "EquipRegistry 被设计为车辆、设备及其他高价值资产的中立基础设施，支持保险公司、租赁公司、专业所有者和跨境交易。",
+    card1Title: "保险就绪",
+    card1Text:
+      "其结构可支持承保、验证周期和基于风险的决策。",
+    card2Title: "独立且中立",
+    card2Text:
+      "不隶属于制造商、分销商或司法辖区——全球信任来源。",
+    card3Title: "为扩展而设计",
+    card3Text:
+      "从单一资产到全球车队，已为多国采用做好准备。",
   },
   footer: {
     copyright: "EquipRegistry — 资产数字信任基础设施",
@@ -2225,6 +2762,17 @@ const zh: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+      draft: "草稿",
+      incomplete: "不完整",
+      submitted: "已提交",
+      underReview: "审核中",
+      moreInfoRequired: "需要更多信息",
+      approved: "已批准",
+      rejected: "已拒绝",
+      passportIssued: "护照可用",
+      unknown: "未知",
+    },
     registrationDetail: {
       backToAdminRegistrations: "返回管理员注册列表",
       backToRegistrations: "返回注册列表",
@@ -2271,7 +2819,6 @@ const zh: Dictionary = {
 };
 
 const hi: Dictionary = {
-  ...en,
   nav: {
     howItWorks: "यह कैसे काम करता है",
     login: "लॉगिन",
@@ -2291,16 +2838,89 @@ const hi: Dictionary = {
     contactEquipRegistry: "EquipRegistry से संपर्क करें",
   },
   pages: {
-    ...en.pages,
+    dashboard: {
+      registrations: {
+        eyebrow: "EquipRegistry",
+        title: "पंजीकरण अनुरोध",
+        newRegistration: "नया पंजीकरण",
+      },
+    },
+    verify: {
+      title: "एसेट सत्यापित करें",
+      subtitle:
+        "सीरियल नंबर खोजें और जाँचें कि उपकरण पंजीकृत, सत्यापित, फ़्लैग किया गया है या उसका इतिहास अज्ञात है।",
+      introTitle: "सार्वजनिक सत्यापन",
+      introText:
+        "यह पेज आगे चलकर सार्वजनिक सत्यापन के लिए समर्पित रूट बनेगा। फिलहाल लाइव खोज अनुभव होमपेज पर ही उपलब्ध है।",
+    },
+    register: {
+      title: "एसेट पंजीकृत करें",
+      subtitle:
+        "उपकरण, वाहन या ट्रेलर के लिए पंजीकरण प्रक्रिया शुरू करें और एसेट को डिजिटल रजिस्ट्री पासपोर्ट के लिए तैयार करें।",
+      vehicleTitle: "वाहन",
+      vehicleText:
+        "कारें, ट्रक, वैन, मोटरहोम और अन्य सड़क एसेट जिनमें VIN या सीरियल संदर्भ हो।",
+      equipmentTitle: "उपकरण",
+      equipmentText:
+        "निर्माण, कृषि, औद्योगिक और रेंटल उपकरण जिनमें मशीन सीरियल नंबर हो।",
+      trailerTitle: "ट्रेलर",
+      trailerText:
+        "ट्रेलर और खींचे जाने वाले एसेट जिन्हें पहचान, उत्पत्ति और भरोसेमंद दृश्यता की आवश्यकता होती है।",
+    },
+    reportSighting: {
+      title: "देखे जाने की रिपोर्ट करें",
+      subtitle:
+        "फ़्लैग किए गए या चोरी हुए उपकरण के देखे जाने की रिपोर्ट करें और सीमा-पार दृश्यता को बेहतर बनाने में मदद करें।",
+      introTitle: "देखे जाने की रिपोर्ट क्यों महत्वपूर्ण है",
+      introText:
+        "सार्वजनिक रूप से दी गई देखे जाने की रिपोर्ट बीमाकर्ताओं, प्राधिकरणों और वैध मालिकों को तेजी से कार्रवाई करने में मदद कर सकती है जब उपकरण फ़्लैग, चोरी या जांच के अधीन हो।",
+    },
+    partners: {
+      title: "बीमाकर्ताओं / भागीदारों के लिए",
+      subtitle:
+        "EquipRegistry को बीमाकर्ताओं, रेंटल कंपनियों, वित्तीय संस्थानों और लॉजिस्टिक टर्मिनलों के लिए एक ट्रस्ट लेयर के रूप में बनाया गया है।",
+      insurersTitle: "बीमा कंपनियाँ",
+      insurersText:
+        "अंडरराइटिंग बेहतर करें, धोखाधड़ी कम करें और रिकवरी तेज़ करें। EquipRegistry स्वामित्व, एसेट इतिहास और जोखिम स्थिति की रियल-टाइम वैलिडेशन देता है। चोरी हुए एसेट तुरंत पहचानें और फर्जी उपकरण पर क्लेम रोकें।",
+      rentalTitle: "रेंटल कंपनियाँ",
+      rentalText:
+        "सीमा-पार अपनी फ्लीट पर पूर्ण दृश्यता पाएँ। धोखाधड़ी रोकें, ग्राहकों को सत्यापित करें और अपने एसेट को चोरी, डुप्लिकेट रजिस्ट्रेशन और अवैध रीसेल से बचाएँ।",
+      financeTitle: "बैंक और वित्तीय संस्थान",
+      financeText:
+        "डबल फाइनेंसिंग और एसेट फ्रॉड रोकें। EquipRegistry ऋणदाताओं को यह जाँचने देता है कि कोई एसेट पहले से वित्तपोषित, पंजीकृत या फ्लैग तो नहीं है। एसेट आधारित फाइनेंस और लीज संरचनाओं में जोखिम घटाएँ।",
+      terminalsTitle: "पोर्ट और लॉजिस्टिक टर्मिनल",
+      terminalsText:
+        "आने-जाने वाले उपकरण को रियल-टाइम में सत्यापित करें। चोरी या फ्लैग किए गए एसेट को टर्मिनल में आने या जाने से पहले पहचानें। कस्टम्स, निरीक्षण और सीमा-पार अनुपालन का समर्थन करें।",
+    },
     contact: {
       title: "संपर्क",
       subtitle:
         "भागीदारी, बीमा उपयोग मामलों, पायलट चर्चाओं या रणनीतिक सहयोग के लिए संपर्क करें।",
-      introTitle: "EquipRegistry से संपर्क करें",
-      introText:
-        "इस पेज पर बाद में आपका संपर्क फ़ॉर्म, बिज़नेस ईमेल, क्षेत्रीय संपर्क विवरण और पार्टनरशिप अनुरोध रखे जा सकते हैं।",
-      note:
-        "फ़िलहाल हम पहले संरचना बना रहे हैं ताकि फ्रंटएंड पहले से ही एक असली प्रोडक्ट जैसा लगे।",
+      generalTitle: "सामान्य पूछताछ",
+      generalText:
+        "EquipRegistry, प्लेटफ़ॉर्म, सार्वजनिक सत्यापन या रजिस्ट्री कैसे काम करती है, इस बारे में सामान्य प्रश्नों के लिए।",
+      businessTitle: "व्यावसायिक एवं भागीदारी",
+      businessText:
+        "बीमाकर्ताओं, रेंटल कंपनियों, बैंकों, टर्मिनलों और अन्य संगठनों के लिए जो सहयोग, पायलट प्रोजेक्ट या इंटीग्रेशन में रुचि रखते हैं।",
+      supportTitle: "सहायता",
+      supportText:
+        "पंजीकरण, रजिस्ट्री पासपोर्ट, जमा किए गए डेटा या प्लेटफ़ॉर्म से जुड़े प्रश्नों में सहायता के लिए।",
+      emailLabel: "ईमेल",
+      formTitle: "संपर्क फ़ॉर्म",
+      formIntro:
+        "सही संपर्क प्रकार चुनें ताकि आपका संदेश सीधे सही EquipRegistry इनबॉक्स में पहुँचे।",
+      typeLabel: "संपर्क प्रकार",
+      typeGeneral: "सामान्य पूछताछ",
+      typeBusiness: "व्यवसाय / भागीदारी",
+      typeSupport: "सहायता",
+      namePlaceholder: "आपका नाम",
+      emailPlaceholder: "आपका ईमेल",
+      subjectPlaceholder: "विषय",
+      messagePlaceholder: "आपका संदेश",
+      sendButton: "संदेश भेजें",
+      sendingButton: "भेजा जा रहा है...",
+      successMessage: "आपका संदेश सफलतापूर्वक भेज दिया गया है।",
+      errorMessage: "आपका संदेश भेजते समय कुछ गलत हो गया।",
     },
     disclaimer: {
       title: "अस्वीकरण",
@@ -2329,6 +2949,35 @@ const hi: Dictionary = {
   },
   result: {
     whyThisMatters: "यह क्यों महत्वपूर्ण है",
+  },
+  howItWorks: {
+    title: "EquipRegistry कैसे काम करता है",
+    step1Title: "1. सत्यापित करें",
+    step1Text:
+      "पंजीकरण स्थिति तुरंत जाँचने के लिए VIN, सीरियल नंबर या रजिस्ट्री आईडी दर्ज करें।",
+    step2Title: "2. मान्य करें",
+    step2Text:
+      "जहाँ उपलब्ध हो, स्वामित्व इतिहास, दस्तावेज़ और सत्यापन स्तर की समीक्षा करें।",
+    step3Title: "3. पंजीकृत करें",
+    step3Text:
+      "वाहनों, उपकरणों या अन्य एसेट्स को पंजीकृत करें और सहायक दस्तावेज़ जोड़ें।",
+    step4Title: "4. उपयोग करें",
+    step4Text:
+      "रजिस्ट्री पासपोर्ट का उपयोग बीमा, रेंटल, पुनर्विक्रय, रिकवरी या अनुपालन के लिए करें।",
+  },
+  trust: {
+    title: "वैश्विक स्तर पर भरोसे के लिए निर्मित",
+    subtitle:
+      "EquipRegistry को वाहनों, उपकरणों और अन्य मूल्यवान एसेट्स के लिए एक तटस्थ इन्फ्रास्ट्रक्चर के रूप में बनाया गया है, जो बीमाकर्ताओं, रेंटल कंपनियों, पेशेवर मालिकों और सीमा-पार लेनदेन का समर्थन करता है।",
+    card1Title: "बीमा के लिए तैयार",
+    card1Text:
+      "अंडरराइटिंग, वैलिडेशन चक्रों और जोखिम-आधारित निर्णयों का समर्थन करने के लिए संरचित।",
+    card2Title: "स्वतंत्र और तटस्थ",
+    card2Text:
+      "निर्माताओं, वितरकों या न्यायक्षेत्रों से जुड़ा नहीं — एक वैश्विक भरोसे का स्रोत।",
+    card3Title: "स्केल के लिए डिज़ाइन किया गया",
+    card3Text:
+      "एक एसेट से लेकर वैश्विक फ्लीट तक, बहु-देशीय अपनाने के लिए तैयार।",
   },
   footer: {
     copyright:
@@ -2399,6 +3048,17 @@ const hi: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+      draft: "ड्राफ्ट",
+      incomplete: "अपूर्ण",
+      submitted: "जमा किया गया",
+      underReview: "समीक्षा में",
+      moreInfoRequired: "अधिक जानकारी आवश्यक है",
+      approved: "स्वीकृत",
+      rejected: "अस्वीकृत",
+      passportIssued: "पासपोर्ट उपलब्ध",
+      unknown: "अज्ञात",
+    },
     registrationDetail: {
       backToAdminRegistrations: "एडमिन पंजीकरणों पर वापस जाएँ",
       backToRegistrations: "पंजीकरणों पर वापस जाएँ",
@@ -2445,7 +3105,6 @@ const hi: Dictionary = {
 };
 
 const ar: Dictionary = {
-  ...en,
   nav: {
     howItWorks: "كيف يعمل",
     login: "تسجيل الدخول",
@@ -2465,16 +3124,89 @@ const ar: Dictionary = {
     contactEquipRegistry: "الاتصال بـ EquipRegistry",
   },
   pages: {
-    ...en.pages,
+    dashboard: {
+      registrations: {
+        eyebrow: "EquipRegistry",
+        title: "طلبات التسجيل",
+        newRegistration: "تسجيل جديد",
+      },
+    },
+    verify: {
+      title: "التحقق من الأصل",
+      subtitle:
+        "ابحث باستخدام الرقم التسلسلي وتحقق مما إذا كانت المعدات مسجلة أو متحققًا منها أو مُعلّمة أو ذات سجل غير معروف.",
+      introTitle: "تحقق عام",
+      introText:
+        "ستصبح هذه الصفحة لاحقًا المسار العام المخصص للتحقق. حاليًا، تبقى تجربة البحث المباشر متاحة على الصفحة الرئيسية.",
+    },
+    register: {
+      title: "تسجيل الأصل",
+      subtitle:
+        "ابدأ عملية تسجيل المعدات أو المركبات أو المقطورات وقم بإعداد الأصل للحصول على جواز سجل رقمي.",
+      vehicleTitle: "مركبة",
+      vehicleText:
+        "السيارات والشاحنات والفانات والمركبات السكنية وغيرها من الأصول الطرقية التي تحمل رقم VIN أو مرجعًا تسلسليًا.",
+      equipmentTitle: "معدات",
+      equipmentText:
+        "معدات البناء والزراعة والصناعة والتأجير التي تحمل رقمًا تسلسليًا للآلة.",
+      trailerTitle: "مقطورة",
+      trailerText:
+        "المقطورات والأصول المسحوبة التي تتطلب هوية ومنشأ ووضوحًا قائمًا على الثقة.",
+    },
+    reportSighting: {
+      title: "الإبلاغ عن مشاهدة",
+      subtitle:
+        "أبلغ عن مشاهدة معدات مُعلّمة أو مسروقة وساعد في تحسين الرؤية عبر الحدود.",
+      introTitle: "لماذا تعتبر المشاهدات مهمة",
+      introText:
+        "يمكن أن تساعد تقارير المشاهدة العامة شركات التأمين والسلطات والمالكين الشرعيين على التصرف بشكل أسرع عندما تكون المعدات مُعلّمة أو مسروقة أو قيد التحقيق.",
+    },
+    partners: {
+      title: "لشركات التأمين / الشركاء",
+      subtitle:
+        "تم تصميم EquipRegistry كطبقة ثقة لشركات التأمين وشركات التأجير والمؤسسات المالية والمحطات اللوجستية.",
+      insurersTitle: "شركات التأمين",
+      insurersText:
+        "حسّن الاكتتاب، وقلّل الاحتيال، وسرّع الاسترداد. يتيح EquipRegistry التحقق الفوري من الملكية وتاريخ الأصل وحالة المخاطر. اكتشف الأصول المسروقة فورًا وامنع المطالبات على المعدات الاحتيالية.",
+      rentalTitle: "شركات التأجير",
+      rentalText:
+        "احصل على رؤية كاملة لأسطولك عبر الحدود. امنع الاحتيال، وتحقق من العملاء، واحمِ أصولك من السرقة والتسجيلات المكررة وإعادة البيع غير القانونية.",
+      financeTitle: "البنوك والمؤسسات المالية",
+      financeText:
+        "امنع التمويل المزدوج والاحتيال على الأصول. يتيح EquipRegistry للممولين التحقق مما إذا كان الأصل ممولًا بالفعل أو مسجلًا أو مُعلّمًا. قلّل المخاطر في هياكل التأجير والتمويل القائم على الأصول.",
+      terminalsTitle: "الموانئ والمحطات اللوجستية",
+      terminalsText:
+        "تحقق من المعدات الداخلة والخارجة في الوقت الفعلي. اكتشف الأصول المسروقة أو المُعلّمة قبل دخولها إلى محطتك أو مغادرتها. ادعم الجمارك والتفتيش والامتثال عبر الحدود.",
+    },
     contact: {
       title: "اتصال",
       subtitle:
         "تواصل معنا بخصوص الشراكات أو حالات الاستخدام التأمينية أو المشاريع التجريبية أو التعاون الاستراتيجي.",
-      introTitle: "الاتصال بـ EquipRegistry",
-      introText:
-        "يمكن أن تحتوي هذه الصفحة لاحقًا على نموذج الاتصال وعناوين البريد الإلكتروني الخاصة بالأعمال وبيانات الاتصال الإقليمية وطلبات الشراكة.",
-      note:
-        "في الوقت الحالي نقوم أولاً ببناء الهيكل حتى يبدو الواجهة الأمامية بالفعل كمنتج حقيقي.",
+      generalTitle: "استفسارات عامة",
+      generalText:
+        "للأسئلة العامة حول EquipRegistry أو المنصة أو التحقق العام أو كيفية عمل السجل.",
+      businessTitle: "الأعمال والشراكات",
+      businessText:
+        "لشركات التأمين وشركات التأجير والبنوك والمحطات وغيرها من الجهات المهتمة بالتعاون أو المشاريع التجريبية أو التكامل.",
+      supportTitle: "الدعم",
+      supportText:
+        "للمساعدة المتعلقة بالتسجيلات أو جوازات السجل أو البيانات المرسلة أو الأسئلة المتعلقة بالمنصة.",
+      emailLabel: "البريد الإلكتروني",
+      formTitle: "نموذج الاتصال",
+      formIntro:
+        "اختر نوع الاتصال الصحيح حتى تصل رسالتك مباشرة إلى صندوق EquipRegistry المناسب.",
+      typeLabel: "نوع الاتصال",
+      typeGeneral: "استفسار عام",
+      typeBusiness: "الأعمال / الشراكات",
+      typeSupport: "الدعم",
+      namePlaceholder: "اسمك",
+      emailPlaceholder: "بريدك الإلكتروني",
+      subjectPlaceholder: "الموضوع",
+      messagePlaceholder: "رسالتك",
+      sendButton: "إرسال الرسالة",
+      sendingButton: "جارٍ الإرسال...",
+      successMessage: "تم إرسال رسالتك بنجاح.",
+      errorMessage: "حدث خطأ أثناء إرسال رسالتك.",
     },
     disclaimer: {
       title: "إخلاء المسؤولية",
@@ -2503,6 +3235,35 @@ const ar: Dictionary = {
   },
   result: {
     whyThisMatters: "لماذا هذا مهم",
+  },
+  howItWorks: {
+    title: "كيف يعمل EquipRegistry",
+    step1Title: "1. تحقق",
+    step1Text:
+      "أدخل رقم VIN أو الرقم التسلسلي أو معرف السجل للتحقق فورًا من حالة التسجيل.",
+    step2Title: "2. التحقق",
+    step2Text:
+      "راجع سجل الملكية والمستندات ومستوى التحقق عندما تكون متاحة.",
+    step3Title: "3. التسجيل",
+    step3Text:
+      "سجّل المركبات أو المعدات أو الأصول الأخرى وأضف المستندات الداعمة.",
+    step4Title: "4. الاستخدام",
+    step4Text:
+      "استخدم جواز السجل للتأمين أو التأجير أو إعادة البيع أو الاسترداد أو الامتثال.",
+  },
+  trust: {
+    title: "مصمم للثقة على نطاق عالمي",
+    subtitle:
+      "تم تصميم EquipRegistry كبنية تحتية محايدة للمركبات والمعدات وغيرها من الأصول القيّمة، لدعم شركات التأمين وشركات التأجير والمالكين المحترفين والمعاملات العابرة للحدود.",
+    card1Title: "جاهز للتأمين",
+    card1Text:
+      "مهيكل لدعم الاكتتاب ودورات التحقق والقرارات القائمة على المخاطر.",
+    card2Title: "مستقل ومحايد",
+    card2Text:
+      "غير مرتبط بالمصنعين أو الموزعين أو الولايات القضائية — مصدر عالمي للثقة.",
+    card3Title: "مصمم للتوسع",
+    card3Text:
+      "من أصل واحد إلى أساطيل عالمية، جاهز للاعتماد في عدة دول.",
   },
   footer: {
     copyright:
@@ -2573,6 +3334,17 @@ const ar: Dictionary = {
     },
   },
   dashboard: {
+    requestStatuses: {
+      draft: "مسودة",
+      incomplete: "غير مكتمل",
+      submitted: "تم الإرسال",
+      underReview: "قيد المراجعة",
+      moreInfoRequired: "مطلوب مزيد من المعلومات",
+      approved: "تمت الموافقة",
+      rejected: "مرفوض",
+      passportIssued: "جواز الأصل متاح",
+      unknown: "غير معروف",
+    },
     registrationDetail: {
       backToAdminRegistrations: "العودة إلى تسجيلات الإدارة",
       backToRegistrations: "العودة إلى التسجيلات",
@@ -2604,8 +3376,7 @@ const ar: Dictionary = {
         completenessScore: "درجة الاكتمال",
         solarPanelSerialNumbers: "الأرقام التسلسلية للألواح الشمسية",
         batterySerialNumbers: "الأرقام التسلسلية للبطاريات",
-        bikeBatterySerialNumbers:
-          "الأرقام التسلسلية لبطاريات الدراجات",
+        bikeBatterySerialNumbers: "الأرقام التسلسلية لبطاريات الدراجات",
         capacity: "السعة",
         powerRating: "القدرة",
         batchLotNumber: "رقم الدفعة / التشغيلة",

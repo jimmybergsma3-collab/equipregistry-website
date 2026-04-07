@@ -25,7 +25,9 @@ const TEXT: Record<
     optional: string;
     status: string;
     fileName: string;
-    placeholder: string;
+    noFileSelected: string;
+    chooseFile: string;
+    replaceFile: string;
     statuses: Record<RegistrationFileStatus, string>;
   }
 > = {
@@ -37,7 +39,9 @@ const TEXT: Record<
     optional: "Optional",
     status: "Status",
     fileName: "File name",
-    placeholder: "example-file.pdf",
+    noFileSelected: "No file selected",
+    chooseFile: "Choose file",
+    replaceFile: "Replace file",
     statuses: {
       missing: "Missing",
       uploaded: "Uploaded",
@@ -53,7 +57,9 @@ const TEXT: Record<
     optional: "Opcional",
     status: "Estado",
     fileName: "Nombre del archivo",
-    placeholder: "ejemplo-archivo.pdf",
+    noFileSelected: "Ningún archivo seleccionado",
+    chooseFile: "Seleccionar archivo",
+    replaceFile: "Reemplazar archivo",
     statuses: {
       missing: "Falta",
       uploaded: "Subido",
@@ -69,7 +75,9 @@ const TEXT: Record<
     optional: "Optional",
     status: "Status",
     fileName: "Dateiname",
-    placeholder: "beispiel-datei.pdf",
+    noFileSelected: "Keine Datei ausgewählt",
+    chooseFile: "Datei auswählen",
+    replaceFile: "Datei ersetzen",
     statuses: {
       missing: "Fehlt",
       uploaded: "Hochgeladen",
@@ -85,7 +93,9 @@ const TEXT: Record<
     optional: "Optionnel",
     status: "Statut",
     fileName: "Nom du fichier",
-    placeholder: "exemple-fichier.pdf",
+    noFileSelected: "Aucun fichier sélectionné",
+    chooseFile: "Choisir un fichier",
+    replaceFile: "Remplacer le fichier",
     statuses: {
       missing: "Manquant",
       uploaded: "Téléversé",
@@ -101,7 +111,9 @@ const TEXT: Record<
     optional: "Opzionale",
     status: "Stato",
     fileName: "Nome file",
-    placeholder: "esempio-file.pdf",
+    noFileSelected: "Nessun file selezionato",
+    chooseFile: "Scegli file",
+    replaceFile: "Sostituisci file",
     statuses: {
       missing: "Mancante",
       uploaded: "Caricato",
@@ -117,7 +129,9 @@ const TEXT: Record<
     optional: "Optioneel",
     status: "Status",
     fileName: "Bestandsnaam",
-    placeholder: "voorbeeld-bestand.pdf",
+    noFileSelected: "Geen bestand geselecteerd",
+    chooseFile: "Bestand kiezen",
+    replaceFile: "Bestand vervangen",
     statuses: {
       missing: "Ontbreekt",
       uploaded: "Geüpload",
@@ -133,12 +147,85 @@ const TEXT: Record<
     optional: "Opcional",
     status: "Estado",
     fileName: "Nome do ficheiro",
-    placeholder: "exemplo-ficheiro.pdf",
+    noFileSelected: "Nenhum ficheiro selecionado",
+    chooseFile: "Escolher ficheiro",
+    replaceFile: "Substituir ficheiro",
     statuses: {
       missing: "Em falta",
       uploaded: "Carregado",
       accepted: "Aceite",
       rejected: "Rejeitado",
+    },
+  },
+  ru: {
+    title: "Подтверждающие документы",
+    subtitle:
+      "Необходимые документы зависят от типа заявителя и выбранной категории.",
+    required: "Обязательно",
+    optional: "Необязательно",
+    status: "Статус",
+    fileName: "Имя файла",
+    noFileSelected: "Файл не выбран",
+    chooseFile: "Выбрать файл",
+    replaceFile: "Заменить файл",
+    statuses: {
+      missing: "Отсутствует",
+      uploaded: "Загружен",
+      accepted: "Принят",
+      rejected: "Отклонён",
+    },
+  },
+  zh: {
+    title: "支持文件",
+    subtitle: "所需文件会根据申请人类型和所选类别而变化。",
+    required: "必填",
+    optional: "可选",
+    status: "状态",
+    fileName: "文件名",
+    noFileSelected: "未选择文件",
+    chooseFile: "选择文件",
+    replaceFile: "替换文件",
+    statuses: {
+      missing: "缺失",
+      uploaded: "已上传",
+      accepted: "已接受",
+      rejected: "已拒绝",
+    },
+  },
+  hi: {
+    title: "सहायक दस्तावेज़",
+    subtitle:
+      "आवश्यक दस्तावेज़ आवेदक के प्रकार और चुनी गई श्रेणी के आधार पर बदलते हैं।",
+    required: "अनिवार्य",
+    optional: "वैकल्पिक",
+    status: "स्थिति",
+    fileName: "फ़ाइल नाम",
+    noFileSelected: "कोई फ़ाइल चयनित नहीं",
+    chooseFile: "फ़ाइल चुनें",
+    replaceFile: "फ़ाइल बदलें",
+    statuses: {
+      missing: "अनुपस्थित",
+      uploaded: "अपलोड किया गया",
+      accepted: "स्वीकृत",
+      rejected: "अस्वीकृत",
+    },
+  },
+  ar: {
+    title: "المستندات الداعمة",
+    subtitle:
+      "تختلف المستندات المطلوبة حسب نوع مقدم الطلب والفئة المختارة.",
+    required: "إلزامي",
+    optional: "اختياري",
+    status: "الحالة",
+    fileName: "اسم الملف",
+    noFileSelected: "لم يتم اختيار ملف",
+    chooseFile: "اختر ملفًا",
+    replaceFile: "استبدال الملف",
+    statuses: {
+      missing: "مفقود",
+      uploaded: "تم الرفع",
+      accepted: "مقبول",
+      rejected: "مرفوض",
     },
   },
 };
@@ -164,28 +251,32 @@ export default function DocumentRequirementsPanel({
   onChange,
 }: Props) {
   const text = TEXT[lang];
-  const requiredDocuments = getRequiredDocumentsForContext(applicantType, category);
+  const requiredDocuments = getRequiredDocumentsForContext(
+  applicantType,
+  category,
+  lang
+);
 
   if (requiredDocuments.length === 0) return null;
 
   return (
     <section className="rounded-2xl border border-zinc-200 bg-white p-6">
       <div className="mb-5">
-        <h3 className="text-base font-semibold text-zinc-900">
-          {text.title}
-        </h3>
-        <p className="mt-1 text-sm text-zinc-600">
-          {text.subtitle}
-        </p>
+        <h3 className="text-base font-semibold text-zinc-900">{text.title}</h3>
+        <p className="mt-1 text-sm text-zinc-600">{text.subtitle}</p>
       </div>
 
       <div className="space-y-4">
         {requiredDocuments.map((doc) => {
           const current = documents[doc.key] ?? { status: "missing" as const };
           const badgeClass = getStatusClasses(current.status);
+          const inputId = `document-upload-${doc.key}`;
 
           return (
-            <div key={doc.key} className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+            <div
+              key={doc.key}
+              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4"
+            >
               <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -193,61 +284,77 @@ export default function DocumentRequirementsPanel({
                       {doc.label}
                     </p>
 
-                    <span className="inline-flex rounded-full px-2.5 py-1 text-xs font-medium border border-zinc-200 bg-white text-zinc-600">
+                    <span className="inline-flex rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-xs font-medium text-zinc-600">
                       {doc.required ? text.required : text.optional}
                     </span>
 
-                    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeClass}`}>
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeClass}`}
+                    >
                       {text.statuses[current.status]}
                     </span>
                   </div>
 
-                  {doc.description && (
+                  {doc.description ? (
                     <p className="mt-2 text-sm text-zinc-600">
                       {doc.description}
                     </p>
-                  )}
+                  ) : null}
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:w-[420px]">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-zinc-900">
-                      {text.status}
-                    </label>
-                    <select
-                      value={current.status}
-                      onChange={(e) =>
-                        onChange(doc.key, {
-                          ...current,
-                          status: e.target.value as RegistrationFileStatus,
-                        })
-                      }
-                      className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm"
-                    >
-                      {Object.entries(text.statuses).map(([value, label]) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                <div className="lg:w-[420px]">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-zinc-900">
                       {text.fileName}
                     </label>
-                    <input
-                      type="text"
-                      value={current.fileName ?? ""}
-                      onChange={(e) =>
-                        onChange(doc.key, {
-                          ...current,
-                          fileName: e.target.value,
-                        })
-                      }
-                      placeholder={text.placeholder}
-                      className="w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm"
-                    />
+
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <label
+                        htmlFor={inputId}
+                        className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
+                      >
+                        {current.fileName ? text.replaceFile : text.chooseFile}
+                      </label>
+
+                      <input
+                        id={inputId}
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+
+                          if (!file) {
+                            onChange(doc.key, {
+                              ...current,
+                              status: "missing",
+                              fileName: "",
+                            });
+                            return;
+                          }
+
+                          onChange(doc.key, {
+                            ...current,
+                            status: "uploaded",
+                            fileName: file.name,
+                          });
+                        }}
+                      />
+
+                      <span className="min-w-0 truncate text-sm text-zinc-600">
+                        {current.fileName || text.noFileSelected}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <label className="mb-2 block text-sm font-medium text-zinc-900">
+                      {text.status}
+                    </label>
+                    <div
+                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeClass}`}
+                    >
+                      {text.statuses[current.status]}
+                    </div>
                   </div>
                 </div>
               </div>

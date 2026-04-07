@@ -6,12 +6,71 @@ import DashboardRequestTable from "@/components/registry/dashboard-request-table
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { isValidLang } from "@/lib/i18n/config";
+import { normalizeRequestStatus } from "@/lib/registry/workflow";
 
 type Props = {
   params: Promise<{
     lang: string;
   }>;
 };
+
+const PAGE_TEXT = {
+  en: {
+    eyebrow: "EquipRegistry",
+    title: "Registration requests",
+    newRegistration: "New registration",
+  },
+  es: {
+    eyebrow: "EquipRegistry",
+    title: "Solicitudes de registro",
+    newRegistration: "Nuevo registro",
+  },
+  de: {
+    eyebrow: "EquipRegistry",
+    title: "Registrierungsanfragen",
+    newRegistration: "Neue Registrierung",
+  },
+  fr: {
+    eyebrow: "EquipRegistry",
+    title: "Demandes d’enregistrement",
+    newRegistration: "Nouvel enregistrement",
+  },
+  it: {
+    eyebrow: "EquipRegistry",
+    title: "Richieste di registrazione",
+    newRegistration: "Nuova registrazione",
+  },
+  nl: {
+    eyebrow: "EquipRegistry",
+    title: "Registratieaanvragen",
+    newRegistration: "Nieuwe registratie",
+  },
+  pt: {
+    eyebrow: "EquipRegistry",
+    title: "Pedidos de registo",
+    newRegistration: "Novo registo",
+  },
+  ru: {
+    eyebrow: "EquipRegistry",
+    title: "Заявки на регистрацию",
+    newRegistration: "Новая регистрация",
+  },
+  zh: {
+    eyebrow: "EquipRegistry",
+    title: "注册申请",
+    newRegistration: "新建注册",
+  },
+  hi: {
+    eyebrow: "EquipRegistry",
+    title: "पंजीकरण अनुरोध",
+    newRegistration: "नया पंजीकरण",
+  },
+  ar: {
+    eyebrow: "EquipRegistry",
+    title: "طلبات التسجيل",
+    newRegistration: "تسجيل جديد",
+  },
+} as const;
 
 export default async function RegistrationsPage({ params }: Props) {
   const { lang } = await params;
@@ -26,9 +85,16 @@ export default async function RegistrationsPage({ params }: Props) {
     redirect(`/${lang}/login?next=/${lang}/dashboard/registrations`);
   }
 
+  if (session.user.role === "admin") {
+    redirect(`/${lang}/admin`);
+  }
+
+  const text = PAGE_TEXT[lang] ?? PAGE_TEXT.en;
+
   const requests = await prisma.registrationRequest.findMany({
     where: {
       userId: session.user.id,
+      deletedAt: null,
     },
     orderBy: {
       createdAt: "desc",
@@ -42,7 +108,7 @@ export default async function RegistrationsPage({ params }: Props) {
     category: item.category,
     subcategory: item.subcategory,
     applicantType: item.applicantType,
-    requestStatus: item.requestStatus,
+    requestStatus: normalizeRequestStatus(item.requestStatus),
     passportStatus: null,
     createdAt: item.createdAt.toISOString(),
     updatedAt: item.updatedAt.toISOString(),
@@ -65,26 +131,19 @@ export default async function RegistrationsPage({ params }: Props) {
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">
-                EquipRegistry
+                {text.eyebrow}
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
-                Registration requests
+                {text.title}
               </h1>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <Link
-                href={`/${lang}/dashboard/admin/registrations`}
-                className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
-              >
-                Admin overview
-              </Link>
-
-              <Link
                 href={`/${lang}/dashboard/register`}
                 className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
               >
-                New registration
+                {text.newRegistration}
               </Link>
             </div>
           </div>

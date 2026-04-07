@@ -8,29 +8,30 @@ export async function POST(req: Request) {
     const raw = jar.get("er_session")?.value;
 
     if (!raw) {
-      return NextResponse.json({ error: "Niet ingelogd." }, { status: 401 });
+      return NextResponse.json({ error: "NOT_LOGGED_IN" }, { status: 401 });
     }
 
     const userId = Number(raw);
 
     if (!Number.isFinite(userId)) {
-      return NextResponse.json({ error: "Ongeldige sessie." }, { status: 401 });
+      return NextResponse.json({ error: "INVALID_SESSION" }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: String(userId) },
       select: { id: true },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Gebruiker niet gevonden." }, { status: 401 });
+      return NextResponse.json({ error: "USER_NOT_FOUND" }, { status: 401 });
     }
 
-    const { registryId, brand, model, year, status } = await req.json();
+    const { registryId, serialNumber, brand, model, year, status } =
+      await req.json();
 
-    if (!registryId || !brand || !model || !status) {
+    if (!registryId || !serialNumber || !brand || !model || !status) {
       return NextResponse.json(
-        { error: "Vul alle verplichte velden in." },
+        { error: "REQUIRED_FIELDS_MISSING" },
         { status: 400 }
       );
     }
@@ -40,18 +41,16 @@ export async function POST(req: Request) {
     });
 
     if (existing) {
-      return NextResponse.json(
-        { error: "Registry ID bestaat al." },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: "REGISTRY_ID_EXISTS" }, { status: 409 });
     }
 
     const machine = await prisma.machine.create({
       data: {
         registryId,
+        serialNumber,
         brand,
         model,
-        year: year ? Number(year) : null,
+        year: year ? String(year) : null,
         status,
         ownerId: user.id,
       },
@@ -60,6 +59,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, machineId: machine.id });
   } catch (error) {
     console.error("CREATE MACHINE ERROR:", error);
-    return NextResponse.json({ error: "Serverfout." }, { status: 500 });
+    return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 });
   }
 }

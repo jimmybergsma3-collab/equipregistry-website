@@ -9,17 +9,6 @@ type Props = {
 
 type ApplicantType = "private" | "sme";
 
-type AssetType =
-  | "Vehicle"
-  | "Equipment"
-  | "BikeLightMobility"
-  | "Trailer"
-  | "Energy"
-  | "Agriculture"
-  | "Medical"
-  | "Industrial"
-  | "Other";
-
 type Category =
   | "Vehicles"
   | "Machines"
@@ -29,6 +18,17 @@ type Category =
   | "Energy"
   | "Agriculture"
   | "Medical"
+  | "Other";
+
+type DerivedAssetType =
+  | "Vehicle"
+  | "Equipment"
+  | "BikeLightMobility"
+  | "Trailer"
+  | "Energy"
+  | "Agriculture"
+  | "Medical"
+  | "Industrial"
   | "Other";
 
 type Texts = {
@@ -52,7 +52,6 @@ type Texts = {
   vatNumberPlaceholder: string;
   assetTitle: string;
   assetSubtitle: string;
-  assetTypeLabel: string;
   assetNameLabel: string;
   assetNamePlaceholder: string;
   categoryLabel: string;
@@ -113,11 +112,10 @@ type Texts = {
   certificationPlaceholder: string;
   ownerOrganisationPlaceholder: string;
   removeButton: string;
-  assetTypeOptions: Record<AssetType, string>;
   categoryOptions: Record<Category, string>;
   subcategoryOptions: Record<Category, string[]>;
-  identifierLabel: Record<AssetType, string>;
-  identifierPlaceholder: Record<AssetType, string>;
+  identifierLabel: Record<DerivedAssetType, string>;
+  identifierPlaceholder: Record<DerivedAssetType, string>;
 };
 
 const baseEnglish: Texts = {
@@ -144,7 +142,6 @@ const baseEnglish: Texts = {
   assetTitle: "Asset details",
   assetSubtitle:
     "Enter the basic details of the asset. Further verification and documents can be added later.",
-  assetTypeLabel: "Asset type *",
   assetNameLabel: "Asset name *",
   assetNamePlaceholder:
     "E.g. Opel Corsa 1.2 / CAT 320D / Stromer ST3 / Atlas Copco Generator",
@@ -211,17 +208,6 @@ const baseEnglish: Texts = {
   certificationPlaceholder: "Example: CE / FDA",
   ownerOrganisationPlaceholder: "Hospital, clinic, leasing company or owner",
   removeButton: "×",
-  assetTypeOptions: {
-    Vehicle: "Vehicle",
-    Equipment: "Equipment",
-    BikeLightMobility: "Bike / Light mobility",
-    Trailer: "Trailer",
-    Energy: "Solar / Battery system",
-    Agriculture: "Agricultural equipment",
-    Medical: "Medical equipment",
-    Industrial: "Industrial equipment",
-    Other: "Other",
-  },
   categoryOptions: {
     Vehicles: "Vehicles",
     Machines: "Machines",
@@ -356,7 +342,6 @@ const textsByLang: Record<string, Texts> = {
     assetTitle: "Datos del activo",
     assetSubtitle:
       "Introduzca los datos básicos del activo. La verificación adicional y los documentos pueden añadirse más tarde.",
-    assetTypeLabel: "Tipo de activo *",
     assetNameLabel: "Nombre del activo *",
     categoryLabel: "Categoría *",
     subcategoryLabel: "Subcategoría *",
@@ -418,17 +403,6 @@ const textsByLang: Record<string, Texts> = {
     ownerOrganisationPlaceholder:
       "Hospital, clínica, empresa de leasing o propietario",
     removeButton: "×",
-    assetTypeOptions: {
-      Vehicle: "Vehículo",
-      Equipment: "Equipo",
-      BikeLightMobility: "Bici / movilidad ligera",
-      Trailer: "Remolque",
-      Energy: "Sistema solar / batería",
-      Agriculture: "Equipo agrícola",
-      Medical: "Equipo médico",
-      Industrial: "Equipo industrial",
-      Other: "Otro",
-    },
     categoryOptions: {
       Vehicles: "Vehículos",
       Machines: "Máquinas",
@@ -572,7 +546,6 @@ const textsByLang: Record<string, Texts> = {
     assetTitle: "Assetgegevens",
     assetSubtitle:
       "Geef de basisgegevens van het asset op. Verdere verificatie en documenten kunnen later worden aangevuld.",
-    assetTypeLabel: "Asset type *",
     assetNameLabel: "Asset naam *",
     categoryLabel: "Categorie *",
     subcategoryLabel: "Subcategorie *",
@@ -634,17 +607,6 @@ const textsByLang: Record<string, Texts> = {
     ownerOrganisationPlaceholder:
       "Ziekenhuis, kliniek, leasebedrijf of eigenaar",
     removeButton: "×",
-    assetTypeOptions: {
-      Vehicle: "Voertuig",
-      Equipment: "Equipment",
-      BikeLightMobility: "Fiets / lichte mobiliteit",
-      Trailer: "Trailer",
-      Energy: "Solar / batterijsysteem",
-      Agriculture: "Agrarisch materieel",
-      Medical: "Medisch equipment",
-      Industrial: "Industrieel equipment",
-      Other: "Overig",
-    },
     categoryOptions: {
       Vehicles: "Voertuigen",
       Machines: "Machines",
@@ -773,42 +735,6 @@ const textsByLang: Record<string, Texts> = {
   },
 };
 
-const categoryToAssetTypeMap: Record<Category, AssetType> = {
-  Vehicles: "Vehicle",
-  Machines: "Equipment",
-  Industry: "Industrial",
-  Bikes: "BikeLightMobility",
-  Trailers: "Trailer",
-  Energy: "Energy",
-  Agriculture: "Agriculture",
-  Medical: "Medical",
-  Other: "Other",
-};
-
-function getDefaultCategoryForAssetType(assetType: AssetType): Category {
-  switch (assetType) {
-    case "Vehicle":
-      return "Vehicles";
-    case "Equipment":
-      return "Machines";
-    case "BikeLightMobility":
-      return "Bikes";
-    case "Trailer":
-      return "Trailers";
-    case "Energy":
-      return "Energy";
-    case "Agriculture":
-      return "Agriculture";
-    case "Medical":
-      return "Medical";
-    case "Industrial":
-      return "Industry";
-    case "Other":
-    default:
-      return "Other";
-  }
-}
-
 function getRiskKey(category: Category): keyof Texts["riskLabels"] {
   switch (category) {
     case "Energy":
@@ -869,6 +795,30 @@ function getFilledValues(values: string[]) {
   return values.map((v) => v.trim()).filter(Boolean);
 }
 
+function getDerivedAssetType(category: Category): DerivedAssetType {
+  switch (category) {
+    case "Vehicles":
+      return "Vehicle";
+    case "Machines":
+      return "Equipment";
+    case "Bikes":
+      return "BikeLightMobility";
+    case "Trailers":
+      return "Trailer";
+    case "Energy":
+      return "Energy";
+    case "Agriculture":
+      return "Agriculture";
+    case "Medical":
+      return "Medical";
+    case "Industry":
+      return "Industrial";
+    case "Other":
+    default:
+      return "Other";
+  }
+}
+
 export default function RegisterPageClient({ lang }: Props) {
   const router = useRouter();
   const t = textsByLang[lang] ?? textsByLang.en;
@@ -882,7 +832,6 @@ export default function RegisterPageClient({ lang }: Props) {
   const [companyName, setCompanyName] = useState("");
   const [vatNumber, setVatNumber] = useState("");
 
-  const [assetType, setAssetType] = useState<AssetType>("Vehicle");
   const [assetName, setAssetName] = useState("");
   const [category, setCategory] = useState<Category>("Vehicles");
   const [subcategory, setSubcategory] = useState("");
@@ -920,6 +869,10 @@ export default function RegisterPageClient({ lang }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const assetType = useMemo<DerivedAssetType>(() => {
+    return getDerivedAssetType(category);
+  }, [category]);
+
   const identifierLabel = useMemo(() => {
     return t.identifierLabel[assetType];
   }, [assetType, t]);
@@ -955,14 +908,8 @@ export default function RegisterPageClient({ lang }: Props) {
   const isMachine = category === "Machines";
   const isAgriculture = category === "Agriculture";
 
-  function handleAssetTypeChange(nextType: AssetType) {
-    setAssetType(nextType);
-    setCategory(getDefaultCategoryForAssetType(nextType));
-  }
-
   function handleCategoryChange(nextCategory: Category) {
     setCategory(nextCategory);
-    setAssetType(categoryToAssetTypeMap[nextCategory]);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -1148,29 +1095,6 @@ export default function RegisterPageClient({ lang }: Props) {
           <div>
             <h2 className="text-xl font-semibold">{t.assetTitle}</h2>
             <p className="mt-1 text-sm text-slate-500">{t.assetSubtitle}</p>
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium">
-              {t.assetTypeLabel}
-            </label>
-            <select
-              value={assetType}
-              onChange={(e) => handleAssetTypeChange(e.target.value as AssetType)}
-              className="w-full rounded-lg border border-slate-300 px-4 py-3"
-            >
-              <option value="Vehicle">{t.assetTypeOptions.Vehicle}</option>
-              <option value="Equipment">{t.assetTypeOptions.Equipment}</option>
-              <option value="BikeLightMobility">
-                {t.assetTypeOptions.BikeLightMobility}
-              </option>
-              <option value="Trailer">{t.assetTypeOptions.Trailer}</option>
-              <option value="Energy">{t.assetTypeOptions.Energy}</option>
-              <option value="Agriculture">{t.assetTypeOptions.Agriculture}</option>
-              <option value="Medical">{t.assetTypeOptions.Medical}</option>
-              <option value="Industrial">{t.assetTypeOptions.Industrial}</option>
-              <option value="Other">{t.assetTypeOptions.Other}</option>
-            </select>
           </div>
 
           <div>

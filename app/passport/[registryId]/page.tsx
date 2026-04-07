@@ -17,9 +17,9 @@ export default async function PassportPage({
 }) {
   const { registryId } = await params;
 
-  // ✅ Stable on server + client to avoid hydration mismatch
   const origin =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+    "http://localhost:3000";
 
   const machine = await getMachineByRegistryId(registryId);
 
@@ -27,7 +27,7 @@ export default async function PassportPage({
     return (
       <div className="p-6">
         <h1 className="text-2xl font-semibold">Not Registered</h1>
-        <p className="text-sm text-slate-600 mt-2">Registry ID: {registryId}</p>
+        <p className="mt-2 text-sm text-slate-600">Registry ID: {registryId}</p>
         <div className="mt-4">
           <Link className="underline" href="/">
             Back to search
@@ -37,21 +37,21 @@ export default async function PassportPage({
     );
   }
 
-  // ✅ Canonical status for UI + copy
   const status = normalizeStatus(machine.status);
 
   const statusContent =
-    (STATUS_TEXT as any)[status] ??
-    (STATUS_TEXT as any).NOT_REGISTERED ?? {
+    (STATUS_TEXT as Record<string, { headline: string; primary: string }>)[
+      status
+    ] ??
+    (STATUS_TEXT as Record<string, { headline: string; primary: string }>)[
+      "NOT_REGISTERED"
+    ] ?? {
       headline: status,
       primary: "Status information not available.",
     };
 
-  // Placeholders until you add these fields to Prisma
   const serialMasked = "—";
   const machineType = "—";
-
-  // Public passport: financing is hidden
   const financingPublic = "Hidden";
 
   return (
@@ -63,7 +63,6 @@ export default async function PassportPage({
       </div>
 
       <PassportLayout title="" subtitle="">
-        {/* ===== HEADER (LOGO + TITLE + QR) ===== */}
         <header style={styles.headerRow}>
           <div>
             <Image
@@ -79,7 +78,6 @@ export default async function PassportPage({
             <p style={styles.issued}>Issued by EquipRegistry</p>
           </div>
 
-          {/* QR — fixed top-right, PDF safe */}
           <div style={styles.qrBlock}>
             <PassportQRCode registryId={machine.registryId} origin={origin} />
             <span style={styles.qrCaption}>Scan to verify</span>
@@ -88,9 +86,7 @@ export default async function PassportPage({
 
         <hr />
 
-        {/* ===== IDENTIFICATION + STATUS ===== */}
         <div style={styles.topGrid}>
-          {/* Left column */}
           <div>
             <Row label="Registry ID" value={machine.registryId} />
             <Row label="Serial Number" value={serialMasked} />
@@ -100,30 +96,24 @@ export default async function PassportPage({
             />
             <Row label="Machine Type" value={machineType} />
             <Row label="Year of Manufacture" value={machine.year ?? "-"} />
-
-            {/* Financing is intentionally hidden on public passport */}
             <Row label="Financing" value={financingPublic} />
           </div>
 
-          {/* Right column – Status */}
           <div
             style={{
               ...styles.statusCard,
-              ...(styles.statusByType as any)[status],
+              ...styles.statusByType[status],
             }}
           >
             <span style={styles.statusHeadline}>{statusContent.headline}</span>
             <p style={styles.statusPrimary}>{statusContent.primary}</p>
 
-            <p style={styles.small}>
-              Last validated: {machine.lastValidated ?? "—"}
-            </p>
+            <p style={styles.small}>Last validated: —</p>
           </div>
         </div>
 
         <hr style={{ margin: "28px 0" }} />
 
-        {/* ===== REGISTRY VALIDATION ===== */}
         <section>
           <h3 style={styles.sectionTitle}>Registry Validation</h3>
 
@@ -142,22 +132,22 @@ export default async function PassportPage({
 
         <hr />
 
-        {/* ===== ACTIONS (PUBLIC) ===== */}
         <PassportActions
+          lang="en"
           registryId={machine.registryId}
           status={status}
           mode="public"
         />
 
-        {/* ===== FOOTER ===== */}
         <footer style={styles.footer}>
           <p>
-            This document reflects the machine’s registry status at the time shown.
-            The current status can always be verified through the EquipRegistry platform.
+            This document reflects the machine’s registry status at the time
+            shown. The current status can always be verified through the
+            EquipRegistry platform.
           </p>
           <p style={styles.disclaimer}>
-            EquipRegistry provides an independent registry service and does not mediate
-            ownership, transactions, or disputes.
+            EquipRegistry provides an independent registry service and does not
+            mediate ownership, transactions, or disputes.
           </p>
         </footer>
 
@@ -166,8 +156,6 @@ export default async function PassportPage({
     </>
   );
 }
-
-/* ---------- Helper ---------- */
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
@@ -178,10 +166,8 @@ function Row({ label, value }: { label: string; value: string | number }) {
   );
 }
 
-/* ---------- Styles ---------- */
-
 const styles: {
-  [key: string]: React.CSSProperties | any;
+  [key: string]: React.CSSProperties | Record<string, React.CSSProperties>;
   statusByType: Record<string, React.CSSProperties>;
 } = {
   backRow: {

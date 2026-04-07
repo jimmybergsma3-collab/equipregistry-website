@@ -1,5 +1,3 @@
-// lib/registry/workflow.ts
-
 import { getRequiredDynamicFieldKeys } from "@/lib/registry/asset-fields";
 import {
   RegistrationDocumentKey,
@@ -23,9 +21,9 @@ export type RegistrationRequestStatus =
   | "payment_required"
   | "submitted"
   | "under_review"
+  | "more_info_required"
   | "approved"
   | "rejected"
-  | "more_info_required"
   | "passport_issued";
 
 export type PassportClassificationStatus =
@@ -53,6 +51,7 @@ export type RegistrationDraft = {
   country?: string;
   ownerName: string;
   ownerEmail: string;
+  vatNumber?: string;
   applicantType: ApplicantType;
   declarationAccepted: boolean;
   documents: RegistrationDocumentMap;
@@ -91,12 +90,10 @@ export function isPartnerApplicantType(applicantType: ApplicantType): boolean {
   );
 }
 
-export function requiresDirectPayment(applicantType: ApplicantType): boolean {
-  return applicantType === "private" || applicantType === "sme";
-}
-
-export function getRequiredFieldLabels(): Array<keyof RegistrationDraft> {
-  return [
+export function getRequiredFieldLabels(
+  applicantType?: ApplicantType
+): Array<keyof RegistrationDraft> {
+  const base: Array<keyof RegistrationDraft> = [
     "assetName",
     "category",
     "subcategory",
@@ -108,6 +105,12 @@ export function getRequiredFieldLabels(): Array<keyof RegistrationDraft> {
     "applicantType",
     "declarationAccepted",
   ];
+
+  if (applicantType === "sme") {
+    base.push("vatNumber");
+  }
+
+  return base;
 }
 
 export function evaluateRegistrationCompleteness(
@@ -117,7 +120,7 @@ export function evaluateRegistrationCompleteness(
   const missingDocuments: string[] = [];
   const missingDynamicFields: string[] = [];
 
-  const requiredFields = getRequiredFieldLabels();
+  const requiredFields = getRequiredFieldLabels(draft.applicantType);
 
   for (const field of requiredFields) {
     const value = draft[field];
@@ -145,9 +148,10 @@ export function evaluateRegistrationCompleteness(
   }
 
   const requiredDocuments = getRequiredDocumentsForContext(
-    draft.applicantType,
-    draft.category
-  );
+  draft.applicantType,
+  draft.category,
+  "en"
+);
 
   for (const documentDefinition of requiredDocuments) {
     if (!documentDefinition.required) continue;
@@ -187,7 +191,7 @@ export function evaluateRegistrationCompleteness(
 
 export function deriveRequestStatus(
   draft: RegistrationDraft,
-  paymentCompleted: boolean
+  paymentCompleted = true
 ): RegistrationRequestStatus {
   const completeness = evaluateRegistrationCompleteness(draft);
 
@@ -195,31 +199,37 @@ export function deriveRequestStatus(
     return "incomplete";
   }
 
-  if (requiresDirectPayment(draft.applicantType) && !paymentCompleted) {
+  if (!paymentCompleted) {
     return "payment_required";
   }
 
-  return "ready_for_submission";
+  return "submitted";
 }
 
-export function canSubmitRegistration(
-  draft: RegistrationDraft,
-  paymentCompleted: boolean
-): boolean {
-  const status = deriveRequestStatus(draft, paymentCompleted);
-  return status === "ready_for_submission";
+export function canSubmitRegistration(draft: RegistrationDraft): boolean {
+  const status = deriveRequestStatus(draft);
+  return status === "submitted";
 }
 
 export function getNextSubmitAction(
-  applicantType: ApplicantType,
-  isComplete: boolean,
-  paymentCompleted: boolean
+  applicantTypeOrIsComplete: ApplicantType | boolean,
+  isCompleteArg?: boolean,
+  paymentCompleted = true
 ): "complete_required" | "go_to_payment" | "submit_registration" {
+  const isComplete =
+    typeof applicantTypeOrIsComplete === "boolean"
+      ? applicantTypeOrIsComplete
+      : Boolean(isCompleteArg);
+
   if (!isComplete) {
     return "complete_required";
   }
 
-  if (requiresDirectPayment(applicantType) && !paymentCompleted) {
+  if (
+    typeof applicantTypeOrIsComplete !== "boolean" &&
+    !isPartnerApplicantType(applicantTypeOrIsComplete) &&
+    !paymentCompleted
+  ) {
     return "go_to_payment";
   }
 
@@ -230,6 +240,64 @@ export function isVisibleInDashboard(
   requestStatus: RegistrationRequestStatus
 ): boolean {
   return requestStatus !== "draft";
+}
+
+export function normalizeRequestStatus(
+  status: string | null | undefined
+): RegistrationRequestStatus {
+  switch (status) {
+    case "draft":
+      return "draft";
+    case "incomplete":
+      return "incomplete";
+    case "ready_for_submission":
+      return "ready_for_submission";
+    case "payment_required":
+      return "payment_required";
+    case "submitted":
+      return "submitted";
+    case "under_review":
+      return "under_review";
+    case "more_info_required":
+      return "more_info_required";
+    case "approved":
+      return "approved";
+    case "rejected":
+      return "rejected";
+    case "passport_issued":
+      return "passport_issued";
+    default:
+      return "submitted";
+  }
+}
+
+export function getRequestStatusKey(
+  status: RegistrationRequestStatus
+): string {
+  switch (status) {
+    case "draft":
+      return "draft";
+    case "incomplete":
+      return "incomplete";
+    case "ready_for_submission":
+      return "ready_for_submission";
+    case "payment_required":
+      return "payment_required";
+    case "submitted":
+      return "submitted";
+    case "under_review":
+      return "under_review";
+    case "more_info_required":
+      return "more_info_required";
+    case "approved":
+      return "approved";
+    case "rejected":
+      return "rejected";
+    case "passport_issued":
+      return "passport_issued";
+    default:
+      return "unknown";
+  }
 }
 
 export function getRequestStatusLabel(
@@ -248,14 +316,14 @@ export function getRequestStatusLabel(
       return "Submitted";
     case "under_review":
       return "Under review";
+    case "more_info_required":
+      return "More info required";
     case "approved":
       return "Approved";
     case "rejected":
       return "Rejected";
-    case "more_info_required":
-      return "More information required";
     case "passport_issued":
-      return "Passport available";
+      return "Passport issued";
     default:
       return "Unknown";
   }
@@ -272,17 +340,17 @@ export function getRequestStatusClasses(
     case "ready_for_submission":
       return "border border-blue-200 bg-blue-50 text-blue-700";
     case "payment_required":
-      return "border border-orange-200 bg-orange-50 text-orange-700";
+      return "border border-purple-200 bg-purple-50 text-purple-700";
     case "submitted":
-      return "border border-sky-200 bg-sky-50 text-sky-700";
+      return "border border-blue-200 bg-blue-50 text-blue-700";
     case "under_review":
-      return "border border-violet-200 bg-violet-50 text-violet-700";
+      return "border border-orange-200 bg-orange-50 text-orange-700";
+    case "more_info_required":
+      return "border border-red-200 bg-red-50 text-red-700";
     case "approved":
       return "border border-emerald-200 bg-emerald-50 text-emerald-700";
     case "rejected":
-      return "border border-red-200 bg-red-50 text-red-700";
-    case "more_info_required":
-      return "border border-amber-200 bg-amber-50 text-amber-700";
+      return "border border-zinc-300 bg-zinc-100 text-zinc-700";
     case "passport_issued":
       return "border border-emerald-200 bg-emerald-50 text-emerald-700";
     default:
@@ -323,6 +391,7 @@ export function createEmptyRegistrationDraft(
     country: "",
     ownerName: "",
     ownerEmail: "",
+    vatNumber: "",
     applicantType,
     declarationAccepted: false,
     documents: createEmptyDocumentMap(),

@@ -59,8 +59,7 @@ const TEXT: Record<
     missingDynamic: "Missing category-specific fields",
     missingDocuments: "Missing documents",
     paymentStatus: "Payment status",
-    paymentDone:
-      "Payment completed or not required for this partner type.",
+    paymentDone: "Payment completed or not required for this partner type.",
     paymentPending: "Payment has not been completed yet.",
     paid: "Paid / Cleared",
     pending: "Payment pending",
@@ -80,8 +79,7 @@ const TEXT: Record<
     missingDynamic: "Campos específicos faltantes",
     missingDocuments: "Documentos faltantes",
     paymentStatus: "Estado del pago",
-    paymentDone:
-      "Pago completado o no requerido para este tipo de socio.",
+    paymentDone: "Pago completado o no requerido para este tipo de socio.",
     paymentPending: "El pago aún no se ha completado.",
     paid: "Pagado",
     pending: "Pago pendiente",
@@ -173,8 +171,7 @@ const TEXT: Record<
     incomplete: "Incompleto",
     nextSteps: {
       incomplete: "Preencha todas as informações obrigatórias.",
-      payment:
-        "O ficheiro está completo. Continue para pagamento.",
+      payment: "O ficheiro está completo. Continue para pagamento.",
       ready: "O ficheiro está completo e pronto para envio.",
     },
     missingFields: "Campos em falta",
@@ -185,6 +182,85 @@ const TEXT: Record<
     paymentPending: "Pagamento ainda não concluído.",
     paid: "Pago",
     pending: "Pendente",
+  },
+  ru: {
+    title: "Готовность регистрации",
+    applicantType: "Тип заявителя",
+    complete: "Заполнено",
+    incomplete: "Не заполнено",
+    nextSteps: {
+      incomplete: "Заполните всю обязательную информацию.",
+      payment:
+        "Ваше досье заполнено. Перейдите к оплате, чтобы активировать отправку.",
+      ready: "Ваше досье заполнено и готово к отправке.",
+    },
+    missingFields: "Отсутствующие поля",
+    missingDynamic: "Отсутствующие поля по категории",
+    missingDocuments: "Отсутствующие документы",
+    paymentStatus: "Статус оплаты",
+    paymentDone: "Оплата выполнена или не требуется для этого типа партнёра.",
+    paymentPending: "Оплата ещё не выполнена.",
+    paid: "Оплачено / подтверждено",
+    pending: "Ожидается оплата",
+  },
+  zh: {
+    title: "注册准备状态",
+    applicantType: "申请人类型",
+    complete: "完整",
+    incomplete: "不完整",
+    nextSteps: {
+      incomplete: "请完成所有必填信息。",
+      payment: "您的资料已完整。继续付款以激活提交。",
+      ready: "您的资料已完整，可以提交。",
+    },
+    missingFields: "缺失字段",
+    missingDynamic: "缺失的类别专属字段",
+    missingDocuments: "缺失文件",
+    paymentStatus: "付款状态",
+    paymentDone: "已完成付款，或此合作伙伴类型无需付款。",
+    paymentPending: "尚未完成付款。",
+    paid: "已支付 / 已清算",
+    pending: "待付款",
+  },
+  hi: {
+    title: "पंजीकरण तैयारी स्थिति",
+    applicantType: "आवेदक प्रकार",
+    complete: "पूर्ण",
+    incomplete: "अपूर्ण",
+    nextSteps: {
+      incomplete: "सभी आवश्यक जानकारी पूरी करें।",
+      payment:
+        "आपकी फ़ाइल पूरी है। सबमिशन सक्रिय करने के लिए भुगतान पर जाएँ।",
+      ready: "आपकी फ़ाइल पूरी है और जमा करने के लिए तैयार है।",
+    },
+    missingFields: "गायब फ़ील्ड",
+    missingDynamic: "गायब श्रेणी-विशिष्ट फ़ील्ड",
+    missingDocuments: "गायब दस्तावेज़",
+    paymentStatus: "भुगतान स्थिति",
+    paymentDone:
+      "भुगतान पूरा हो चुका है या इस पार्टनर प्रकार के लिए आवश्यक नहीं है।",
+    paymentPending: "भुगतान अभी पूरा नहीं हुआ है।",
+    paid: "भुगतान किया गया / स्वीकृत",
+    pending: "भुगतान लंबित",
+  },
+  ar: {
+    title: "جاهزية التسجيل",
+    applicantType: "نوع مقدم الطلب",
+    complete: "مكتمل",
+    incomplete: "غير مكتمل",
+    nextSteps: {
+      incomplete: "أكمل جميع المعلومات المطلوبة.",
+      payment: "ملفك مكتمل. تابع إلى الدفع لتفعيل الإرسال.",
+      ready: "ملفك مكتمل وجاهز للإرسال.",
+    },
+    missingFields: "الحقول المفقودة",
+    missingDynamic: "الحقول الخاصة بالفئة المفقودة",
+    missingDocuments: "المستندات المفقودة",
+    paymentStatus: "حالة الدفع",
+    paymentDone: "تم الدفع أو أنه غير مطلوب لهذا النوع من الشركاء.",
+    paymentPending: "لم يكتمل الدفع بعد.",
+    paid: "مدفوع / تمت التسوية",
+    pending: "الدفع معلق",
   },
 };
 
@@ -233,7 +309,7 @@ export default function RegistrationReadinessPanel({
       {!!completeness.missingFields.length && (
         <div className="mt-4">
           <p className="text-sm font-medium">{text.missingFields}</p>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="mt-2 flex flex-wrap gap-2">
             {completeness.missingFields.map((f) => (
               <span key={f}>{prettifyKey(f)}</span>
             ))}
@@ -244,7 +320,7 @@ export default function RegistrationReadinessPanel({
       {!!completeness.missingDynamicFields.length && (
         <div className="mt-4">
           <p className="text-sm font-medium">{text.missingDynamic}</p>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="mt-2 flex flex-wrap gap-2">
             {completeness.missingDynamicFields.map((f) => (
               <span key={f}>{prettifyKey(f)}</span>
             ))}
@@ -255,7 +331,7 @@ export default function RegistrationReadinessPanel({
       {!!completeness.missingDocuments.length && (
         <div className="mt-4">
           <p className="text-sm font-medium">{text.missingDocuments}</p>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="mt-2 flex flex-wrap gap-2">
             {completeness.missingDocuments.map((f) => (
               <span key={f}>{prettifyKey(f)}</span>
             ))}
@@ -268,7 +344,7 @@ export default function RegistrationReadinessPanel({
         <p className="text-sm text-zinc-600">
           {paymentCompleted ? text.paymentDone : text.paymentPending}
         </p>
-        <p className="text-sm font-medium mt-2">
+        <p className="mt-2 text-sm font-medium">
           {paymentCompleted ? text.paid : text.pending}
         </p>
       </div>

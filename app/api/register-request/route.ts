@@ -1,36 +1,64 @@
+import { randomBytes, createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
+import type { ApplicantType } from "@prisma/client";
+import type { Lang } from "@/lib/i18n/config";
+import { sendAccountVerificationEmail } from "@/lib/email/send-registration-email";
 
 function createReferenceNumber() {
   return `ER-REQ-${Date.now()}`;
 }
 
 const ALLOWED_APPLICANT_TYPES = ["private", "sme"] as const;
-
-const ALLOWED_ASSET_TYPES = [
-  "Vehicle",
-  "Equipment",
-  "BikeLightMobility",
-  "Trailer",
-  "Energy",
-  "Agriculture",
-  "Medical",
-  "Industrial",
-  "Other",
+const ALLOWED_LANGS = [
+  "en",
+  "es",
+  "de",
+  "fr",
+  "it",
+  "nl",
+  "pt",
+  "ru",
+  "zh",
+  "hi",
+  "ar",
 ] as const;
 
-const ALLOWED_CATEGORIES = [
-  "Vehicles",
-  "Machines",
-  "Industry",
-  "Bikes",
-  "Trailers",
-  "Energy",
-  "Agriculture",
-  "Medical",
-  "Other",
-] as const;
+const FRONTEND_CATEGORY_TO_ASSET_TYPE = {
+  vehicle: "Vehicle",
+  equipment: "Equipment",
+  bikelightmobility: "BikeLightMobility",
+  trailer: "Trailer",
+  energy: "Energy",
+  agriculture: "Agriculture",
+  medical: "Medical",
+  industrial: "Industrial",
+  other: "Other",
+} as const;
+
+const FRONTEND_CATEGORY_TO_DB_CATEGORY = {
+  vehicle: "Vehicles",
+  equipment: "Machines",
+  bikelightmobility: "Bikes",
+  trailer: "Trailers",
+  energy: "Energy",
+  agriculture: "Agriculture",
+  medical: "Medical",
+  industrial: "Industry",
+  other: "Other",
+} as const;
+
+type FrontendCategory = keyof typeof FRONTEND_CATEGORY_TO_ASSET_TYPE;
+
+function isFrontendCategory(value: string): value is FrontendCategory {
+  return value in FRONTEND_CATEGORY_TO_ASSET_TYPE;
+}
+
+function isLang(value: string): value is Lang {
+  return ALLOWED_LANGS.includes(value as (typeof ALLOWED_LANGS)[number]);
+}
 
 function normalizeStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
@@ -86,23 +114,41 @@ function calculateCompletenessScore(input: {
   return Math.min(score, 100);
 }
 
+function createVerificationToken() {
+  return randomBytes(32).toString("hex");
+}
+
+function hashToken(token: string) {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+function getBaseUrl(req: Request) {
+  const envUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, "");
+  }
+
+  const url = new URL(req.url);
+  return url.origin.replace(/\/+$/, "");
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const applicantType = String(body.applicantType || "").trim();
+    const applicantTypeRaw = String(body.applicantType || "").trim();
     const name = String(body.name || "").trim();
     const email = String(body.email || "").trim().toLowerCase();
     const password = String(body.password || "");
     const companyName = String(body.companyName || "").trim();
     const vatNumber = String(body.vatNumber || "").trim();
 
-    const assetType = String(body.assetType || "Other").trim();
+    const frontendCategoryRaw = String(body.category || "").trim();
     const assetName = String(body.assetName || "").trim();
-    const category = String(body.category || "").trim();
     const subcategory = String(body.subcategory || "").trim();
     const brand = String(body.brand || "").trim();
     const model = String(body.model || "").trim();
+
     const serialNumber = String(body.serialNumber || "").trim();
     const year = String(body.year || "").trim();
     const country = String(body.country || "").trim();
@@ -119,6 +165,9 @@ export async function POST(req: Request) {
     const certification = String(body.certification || "").trim();
     const ownerOrganisation = String(body.ownerOrganisation || "").trim();
 
+    const langRaw = String(body.lang || "en").trim().toLowerCase();
+    const lang: Lang = isLang(langRaw) ? langRaw : "en";
+
     const solarPanelSerialNumbers = normalizeStringArray(
       body.solarPanelSerialNumbers
     );
@@ -127,58 +176,49 @@ export async function POST(req: Request) {
       body.bikeBatterySerialNumbers
     );
 
-    const declarationAccepted = body.declarationAccepted === true;
+    const declarationAccepted =
+      body.declarationAccepted === true || body.declarationAccepted === "true";
 
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: "Naam, e-mail en wachtwoord zijn verplicht." },
+        { error: "REQUIRED_FIELDS_MISSING" },
         { status: 400 }
       );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "Wachtwoord moet minimaal 6 tekens bevatten." },
+        { error: "PASSWORD_TOO_SHORT" },
         { status: 400 }
       );
     }
 
     if (
       !ALLOWED_APPLICANT_TYPES.includes(
-        applicantType as (typeof ALLOWED_APPLICANT_TYPES)[number]
+        applicantTypeRaw as (typeof ALLOWED_APPLICANT_TYPES)[number]
       )
     ) {
       return NextResponse.json(
-        { error: "Ongeldig aanvragerstype." },
+        { error: "INVALID_APPLICANT_TYPE" },
         { status: 400 }
       );
     }
 
-    if (
-      !ALLOWED_ASSET_TYPES.includes(
-        assetType as (typeof ALLOWED_ASSET_TYPES)[number]
-      )
-    ) {
+    const applicantType = applicantTypeRaw as ApplicantType;
+
+    if (!isFrontendCategory(frontendCategoryRaw)) {
       return NextResponse.json(
-        { error: "Ongeldig assettype." },
+        { error: "INVALID_CATEGORY" },
         { status: 400 }
       );
     }
 
-    if (
-      !ALLOWED_CATEGORIES.includes(
-        category as (typeof ALLOWED_CATEGORIES)[number]
-      )
-    ) {
-      return NextResponse.json(
-        { error: "Ongeldige categorie." },
-        { status: 400 }
-      );
-    }
+    const assetType = FRONTEND_CATEGORY_TO_ASSET_TYPE[frontendCategoryRaw];
+    const category = FRONTEND_CATEGORY_TO_DB_CATEGORY[frontendCategoryRaw];
 
-    if (!assetName || !category || !subcategory || !brand || !model) {
+    if (!assetName || !subcategory || !brand || !model) {
       return NextResponse.json(
-        { error: "Vul alle verplichte assetgegevens in." },
+        { error: "ASSET_FIELDS_MISSING" },
         { status: 400 }
       );
     }
@@ -194,43 +234,24 @@ export async function POST(req: Request) {
 
     if (!primaryIdentifier) {
       return NextResponse.json(
-        {
-          error:
-            "Minimaal één identificerend nummer is verplicht (serienummer, VIN, framenummer, paneelserienummer, accu serienummer of device ID).",
-        },
+        { error: "IDENTIFIER_REQUIRED" },
         { status: 400 }
       );
     }
 
     if (!declarationAccepted) {
       return NextResponse.json(
-        { error: "Je moet de verklaring accepteren." },
+        { error: "DECLARATION_REQUIRED" },
         { status: 400 }
       );
     }
 
     if (applicantType === "sme" && !companyName) {
       return NextResponse.json(
-        { error: "Bedrijfsnaam is verplicht voor zakelijke aanvragen." },
+        { error: "COMPANY_NAME_REQUIRED" },
         { status: 400 }
       );
     }
-
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        {
-          error:
-            "Er bestaat al een account met dit e-mailadres. Log eerst in om een nieuwe registratie toe te voegen.",
-        },
-        { status: 409 }
-      );
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
 
     const dynamicFields = {
       assetType,
@@ -250,83 +271,259 @@ export async function POST(req: Request) {
       ownerOrganisation: ownerOrganisation || null,
     };
 
-    const result = await prisma.$transaction(async (tx) => {
-      const user = await tx.user.create({
-        data: {
-          name,
-          email,
-          passwordHash,
-          companyName: companyName || null,
-          vatNumber: vatNumber || null,
-          role: "user",
-        },
-      });
+    const baseUrl = getBaseUrl(req);
+    const rawToken = createVerificationToken();
+    const tokenHash = hashToken(rawToken);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
-      const registrationRequest = await tx.registrationRequest.create({
-        data: {
-          reference: createReferenceNumber(),
-          userId: user.id,
-          assetName,
-          category,
-          subcategory,
-          brand,
-          model,
-          serialNumber: primaryIdentifier,
-          year: year || null,
-          country: country || null,
-          ownerName: name,
-          ownerEmail: email,
-          applicantType,
-          requestStatus: "payment_required",
-          paymentCompleted: false,
-          declarationAccepted: true,
-          dynamicFields,
-          documents: {},
-          completenessScore: calculateCompletenessScore({
-            serialNumber,
-            vin,
-            frameNumber,
-            deviceId,
-            solarPanelSerialNumbers,
-            batterySerialNumbers,
-            bikeBatterySerialNumbers,
-            engineNumber,
-            capacity,
-            powerRating,
-            batchLotNumber,
-            installationLocation,
-            hoursOfOperation,
-            certification,
-            ownerOrganisation,
-            year,
-            country,
-          }),
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        registrationRequests: {
+          where: { deletedAt: null },
+          orderBy: { createdAt: "desc" },
+          take: 1,
         },
-      });
-
-      return { user, registrationRequest };
+      },
     });
 
-    const res = NextResponse.json({
+    if (existingUser?.emailVerifiedAt) {
+      return NextResponse.json(
+        { error: "EMAIL_ALREADY_EXISTS" },
+        { status: 409 }
+      );
+    }
+
+    let requestId = "";
+    let reference = "";
+
+    if (existingUser && !existingUser.emailVerifiedAt) {
+      const existingDraft = existingUser.registrationRequests[0] ?? null;
+
+      const updated = await prisma.$transaction(async (tx) => {
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const user = await tx.user.update({
+          where: { id: existingUser.id },
+          data: {
+            name,
+            passwordHash,
+            companyName: companyName || null,
+            vatNumber: vatNumber || null,
+          },
+        });
+
+        let registrationRequest;
+
+        if (existingDraft) {
+          registrationRequest = await tx.registrationRequest.update({
+            where: { id: existingDraft.id },
+            data: {
+              assetName,
+              category,
+              subcategory,
+              brand,
+              model,
+              serialNumber: primaryIdentifier,
+              year: year || null,
+              country: country || null,
+              ownerName: name,
+              ownerEmail: email,
+              applicantType,
+              requestStatus: "payment_required",
+              paymentCompleted: false,
+              declarationAccepted: true,
+              dynamicFields,
+              documents:
+                existingDraft.documents === null
+                  ? Prisma.JsonNull
+                  : existingDraft.documents,
+              completenessScore: calculateCompletenessScore({
+                serialNumber,
+                vin,
+                frameNumber,
+                deviceId,
+                solarPanelSerialNumbers,
+                batterySerialNumbers,
+                bikeBatterySerialNumbers,
+                engineNumber,
+                capacity,
+                powerRating,
+                batchLotNumber,
+                installationLocation,
+                hoursOfOperation,
+                certification,
+                ownerOrganisation,
+                year,
+                country,
+              }),
+            },
+          });
+        } else {
+          registrationRequest = await tx.registrationRequest.create({
+            data: {
+              reference: createReferenceNumber(),
+              userId: user.id,
+              assetName,
+              category,
+              subcategory,
+              brand,
+              model,
+              serialNumber: primaryIdentifier,
+              year: year || null,
+              country: country || null,
+              ownerName: name,
+              ownerEmail: email,
+              applicantType,
+              requestStatus: "payment_required",
+              paymentCompleted: false,
+              declarationAccepted: true,
+              dynamicFields,
+              documents: {},
+              completenessScore: calculateCompletenessScore({
+                serialNumber,
+                vin,
+                frameNumber,
+                deviceId,
+                solarPanelSerialNumbers,
+                batterySerialNumbers,
+                bikeBatterySerialNumbers,
+                engineNumber,
+                capacity,
+                powerRating,
+                batchLotNumber,
+                installationLocation,
+                hoursOfOperation,
+                certification,
+                ownerOrganisation,
+                year,
+                country,
+              }),
+            },
+          });
+        }
+
+        await tx.emailVerificationToken.updateMany({
+          where: {
+            userId: user.id,
+            usedAt: null,
+          },
+          data: {
+            usedAt: new Date(),
+          },
+        });
+
+        await tx.emailVerificationToken.create({
+          data: {
+            userId: user.id,
+            tokenHash,
+            expiresAt,
+          },
+        });
+
+        return { user, registrationRequest };
+      });
+
+      requestId = updated.registrationRequest.id;
+      reference = updated.registrationRequest.reference;
+    } else {
+      const created = await prisma.$transaction(async (tx) => {
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const user = await tx.user.create({
+          data: {
+            name,
+            email,
+            passwordHash,
+            companyName: companyName || null,
+            vatNumber: vatNumber || null,
+            role: "user",
+            emailVerifiedAt: null,
+          },
+        });
+
+        const registrationRequest = await tx.registrationRequest.create({
+          data: {
+            reference: createReferenceNumber(),
+            userId: user.id,
+            assetName,
+            category,
+            subcategory,
+            brand,
+            model,
+            serialNumber: primaryIdentifier,
+            year: year || null,
+            country: country || null,
+            ownerName: name,
+            ownerEmail: email,
+            applicantType,
+            requestStatus: "payment_required",
+            paymentCompleted: false,
+            declarationAccepted: true,
+            dynamicFields,
+            documents: {},
+            completenessScore: calculateCompletenessScore({
+              serialNumber,
+              vin,
+              frameNumber,
+              deviceId,
+              solarPanelSerialNumbers,
+              batterySerialNumbers,
+              bikeBatterySerialNumbers,
+              engineNumber,
+              capacity,
+              powerRating,
+              batchLotNumber,
+              installationLocation,
+              hoursOfOperation,
+              certification,
+              ownerOrganisation,
+              year,
+              country,
+            }),
+          },
+        });
+
+        await tx.emailVerificationToken.create({
+          data: {
+            userId: user.id,
+            tokenHash,
+            expiresAt,
+          },
+        });
+
+        return { user, registrationRequest };
+      });
+
+      requestId = created.registrationRequest.id;
+      reference = created.registrationRequest.reference;
+    }
+
+    const verifyUrl = `${baseUrl}/${lang}/verify-email?token=${encodeURIComponent(
+      rawToken
+    )}&requestId=${encodeURIComponent(requestId)}`;
+
+    await sendAccountVerificationEmail({
+      to: email,
+      ownerName: name,
+      verifyUrl,
+      lang,
+    });
+
+    return NextResponse.json({
       success: true,
-      requestId: result.registrationRequest.id,
-      reference: result.registrationRequest.reference,
+      verificationRequired: true,
+      requestId,
+      reference,
+      message: "VERIFY_EMAIL_REQUIRED",
     });
-
-    res.cookies.set("er_session", result.user.id, {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return res;
   } catch (error) {
     console.error("REGISTER REQUEST ERROR:", error);
 
     return NextResponse.json(
-      { error: "Serverfout tijdens registreren." },
+      {
+        error: error instanceof Error ? error.message : "SERVER_ERROR",
+      },
       { status: 500 }
     );
   }

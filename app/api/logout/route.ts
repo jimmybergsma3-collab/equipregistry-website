@@ -5,9 +5,9 @@ export async function POST() {
 
   res.cookies.set("er_session", "", {
     httpOnly: true,
-    path: "/",
-    sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
     expires: new Date(0),
   });
 

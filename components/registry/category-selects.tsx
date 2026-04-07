@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import {
-  REGISTRY_CATEGORIES,
+  getRegistryCategories,
   getSubcategoriesByCategory,
 } from "@/lib/registry/categories";
 import type { Lang } from "@/lib/i18n/config";
@@ -76,6 +76,34 @@ const TEXT: Record<
     selectSubcategory: "Selecione uma subcategoria",
     chooseCategoryFirst: "Escolha primeiro uma categoria",
   },
+  ru: {
+    category: "Категория",
+    subcategory: "Подкатегория",
+    selectCategory: "Выберите категорию",
+    selectSubcategory: "Выберите подкатегорию",
+    chooseCategoryFirst: "Сначала выберите категорию",
+  },
+  zh: {
+    category: "类别",
+    subcategory: "子类别",
+    selectCategory: "选择类别",
+    selectSubcategory: "选择子类别",
+    chooseCategoryFirst: "请先选择类别",
+  },
+  hi: {
+    category: "श्रेणी",
+    subcategory: "उपश्रेणी",
+    selectCategory: "एक श्रेणी चुनें",
+    selectSubcategory: "एक उपश्रेणी चुनें",
+    chooseCategoryFirst: "पहले श्रेणी चुनें",
+  },
+  ar: {
+    category: "الفئة",
+    subcategory: "الفئة الفرعية",
+    selectCategory: "اختر فئة",
+    selectSubcategory: "اختر فئة فرعية",
+    chooseCategoryFirst: "اختر الفئة أولاً",
+  },
 };
 
 export default function CategorySelects({
@@ -89,9 +117,11 @@ export default function CategorySelects({
 }: Props) {
   const text = TEXT[lang];
 
+  const categories = useMemo(() => getRegistryCategories(lang), [lang]);
+
   const subcategories = useMemo(
-    () => getSubcategoriesByCategory(category),
-    [category]
+    () => getSubcategoriesByCategory(category, lang),
+    [category, lang]
   );
 
   useEffect(() => {
@@ -127,7 +157,7 @@ export default function CategorySelects({
           ].join(" ")}
         >
           <option value="">{text.selectCategory}</option>
-          {REGISTRY_CATEGORIES.map((item) => (
+          {categories.map((item) => (
             <option key={item.value} value={item.value}>
               {item.label}
             </option>

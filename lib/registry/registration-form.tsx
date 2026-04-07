@@ -106,6 +106,7 @@ export default function RegistrationForm() {
 
         <div className="mt-5">
           <CategorySelects
+            lang="en"
             category={category}
             subcategory={subcategory}
             onCategoryChange={(value) => {

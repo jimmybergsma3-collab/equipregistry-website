@@ -1,14 +1,14 @@
 "use client";
 
-// components/insurance/InsuranceMachinesTable.tsx
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import StatusBadge from "@/components/insurance/StatusBadge";
 import {
   MOCK_MACHINES,
   type InsuranceMachine,
   type InsuranceMachineStatus,
 } from "@/lib/insurance/mockMachines";
+import { safeParse } from "@/lib/utils/safeParse";
 
 type SortKey = "serial" | "brand" | "country" | "status" | "lastVerifiedAt";
 
@@ -68,30 +68,31 @@ function fraudSignals(machine: InsuranceMachine) {
 const STORAGE_KEY = "er_insurance_machines_v1";
 
 export default function InsuranceMachinesTable() {
-  // stateful dataset (demo)
   const [machines, setMachines] = useState<InsuranceMachine[]>(MOCK_MACHINES);
 
-  // filters
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<InsuranceMachineStatus | "ALL">("ALL");
   const [country, setCountry] = useState<string>("ALL");
-  const [showNeedsRecheck, setShowNeedsRecheck] = useState(false); // > 180 days
+  const [showNeedsRecheck, setShowNeedsRecheck] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("lastVerifiedAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
-  // load saved demo state
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
+
       if (raw) {
-const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArray(parsed) && parsed.length) setMachines(parsed);
+        const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];
+
+        if (Array.isArray(parsed) && parsed.length) {
+          setMachines(parsed);
+        }
       }
     } catch {
       // ignore
     }
   }, []);
 
-  // persist demo state
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(machines));
@@ -139,16 +140,14 @@ const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArra
     arr.sort((a, b) => {
       const dir = sortDir === "asc" ? 1 : -1;
 
-      // dates
       if (sortKey === "lastVerifiedAt") {
         const da = new Date(a.lastVerifiedAt).getTime();
         const db = new Date(b.lastVerifiedAt).getTime();
         return (da - db) * dir;
       }
 
-      // string compare
-      const va = (a as any)[sortKey];
-      const vb = (b as any)[sortKey];
+      const va = a[sortKey];
+      const vb = b[sortKey];
       return String(va).localeCompare(String(vb)) * dir;
     });
 
@@ -166,7 +165,6 @@ const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArra
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {/* Controls */}
       <div className="flex flex-col gap-3 border-b border-slate-200 p-4 md:flex-row md:items-end md:justify-between">
         <div className="flex w-full flex-col gap-3 md:flex-row md:items-end">
           <div className="w-full md:w-80">
@@ -183,7 +181,9 @@ const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArra
             <label className="text-xs font-semibold text-slate-700">Status</label>
             <select
               value={status}
-              onChange={(e) => setStatus(e.target.value as any)}
+              onChange={(e) =>
+                setStatus(e.target.value as InsuranceMachineStatus | "ALL")
+              }
               className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2"
             >
               <option value="ALL">All</option>
@@ -227,24 +227,39 @@ const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];        if (Array.isArra
         </div>
       </div>
 
-      {/* Table */}
       <div className="w-full overflow-x-auto">
         <table className="w-full min-w-[1120px] text-left text-sm">
           <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
             <tr>
-              <Th onClick={() => toggleSort("serial")} active={sortKey === "serial"} dir={sortDir}>
+              <Th
+                onClick={() => toggleSort("serial")}
+                active={sortKey === "serial"}
+                dir={sortDir}
+              >
                 Serial
               </Th>
-              <Th onClick={() => toggleSort("brand")} active={sortKey === "brand"} dir={sortDir}>
+              <Th
+                onClick={() => toggleSort("brand")}
+                active={sortKey === "brand"}
+                dir={sortDir}
+              >
                 Brand / Model
               </Th>
-              <Th onClick={() => toggleSort("country")} active={sortKey === "country"} dir={sortDir}>
+              <Th
+                onClick={() => toggleSort("country")}
+                active={sortKey === "country"}
+                dir={sortDir}
+              >
                 Country
               </Th>
               <th className="px-4 py-3">Owner</th>
               <th className="px-4 py-3">Policy</th>
               <th className="px-4 py-3">Financing</th>
-              <Th onClick={() => toggleSort("status")} active={sortKey === "status"} dir={sortDir}>
+              <Th
+                onClick={() => toggleSort("status")}
+                active={sortKey === "status"}
+                dir={sortDir}
+              >
                 Status
               </Th>
               <th className="px-4 py-3">Fraud risk</th>
@@ -296,7 +311,8 @@ function Row({
   const ageLabel = ageDays <= 1 ? "today" : `${ageDays} days ago`;
 
   const fraud = fraudSignals(m);
-  const riskLabel = fraud.tone === "red" ? "High" : fraud.tone === "orange" ? "Medium" : "Low";
+  const riskLabel =
+    fraud.tone === "red" ? "High" : fraud.tone === "orange" ? "Medium" : "Low";
 
   return (
     <tr className="hover:bg-slate-50">
@@ -330,7 +346,9 @@ function Row({
         >
           {riskLabel}
         </div>
-        <div className="mt-1 text-xs text-slate-600">{fraud.signals[0] || "—"}</div>
+        <div className="mt-1 text-xs text-slate-600">
+          {fraud.signals[0] || "—"}
+        </div>
       </td>
 
       <td className="px-4 py-4">
@@ -376,13 +394,17 @@ function Th({
   active,
   dir,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   onClick: () => void;
   active: boolean;
   dir: "asc" | "desc";
 }) {
   return (
-    <th onClick={onClick} className="cursor-pointer select-none px-4 py-3 hover:text-slate-900" title="Sort">
+    <th
+      onClick={onClick}
+      className="cursor-pointer select-none px-4 py-3 hover:text-slate-900"
+      title="Sort"
+    >
       <span className="inline-flex items-center gap-2">
         {children}
         {active && <span className="text-[10px]">{dir === "asc" ? "▲" : "▼"}</span>}

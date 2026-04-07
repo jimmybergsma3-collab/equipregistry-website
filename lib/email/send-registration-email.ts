@@ -1,6 +1,6 @@
-// lib/email/send-registration-email.ts
-
+import type { Lang } from "@/lib/i18n/config";
 import { sendEmail } from "@/lib/email/mailer";
+import { buildAccountVerificationEmail } from "@/lib/email/templates/account-verification";
 import {
   buildApprovedEmail,
   buildDraftSavedEmail,
@@ -11,6 +11,22 @@ import {
   buildUnderReviewEmail,
 } from "@/lib/email/templates/registration";
 import { MANUAL_PAYMENT_DETAILS } from "@/lib/registry/payment";
+
+export async function sendAccountVerificationEmail(params: {
+  to: string;
+  ownerName: string;
+  verifyUrl: string;
+  lang: Lang;
+}) {
+  const email = buildAccountVerificationEmail(params);
+
+  return sendEmail({
+    to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
 
 export async function sendDraftSavedEmail(params: {
   to: string;
@@ -38,7 +54,7 @@ export async function sendPaymentRequiredEmail(params: {
     iban: MANUAL_PAYMENT_DETAILS.iban,
     accountHolder: MANUAL_PAYMENT_DETAILS.accountHolder,
     bic: MANUAL_PAYMENT_DETAILS.bic,
-    feeText: MANUAL_PAYMENT_DETAILS.registrationFeeText,
+    feeText: MANUAL_PAYMENT_DETAILS.registrationFeeText.en,
   });
 
   return sendEmail({

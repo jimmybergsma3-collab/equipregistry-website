@@ -23,10 +23,6 @@ async function getRequestById(registrationId: string) {
   });
 }
 
-function getBaseUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-}
-
 export async function markRegistrationAsPaid(
   registrationId: string,
   lang: string
@@ -209,15 +205,12 @@ export async function issuePassport(
     },
   });
 
-  const passportUrl = `${getBaseUrl()}/${lang}/passport/${updated.reference}`;
-
   if (updated.ownerEmail?.trim()) {
     await sendPassportIssuedEmail({
       to: updated.ownerEmail,
       ownerName: updated.ownerName || "Customer",
       passportNumber: updated.reference,
       assetName: updated.assetName || "Unnamed asset",
-      passportUrl,
     });
   }
 

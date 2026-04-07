@@ -69,11 +69,19 @@ export default async function AdminRegistrationsPage({
     subcategory: item.subcategory,
     applicantType: item.applicantType,
     requestStatus: item.requestStatus,
+    passportStatus: null,
     paymentCompleted: item.paymentCompleted,
     ownerName: item.ownerName,
     ownerEmail: item.ownerEmail,
     createdAt: item.createdAt.toISOString(),
     updatedAt: item.updatedAt.toISOString(),
+    completeness: {
+      isComplete: item.completenessScore === 100,
+      missingFields: [],
+      missingDocuments: [],
+      missingDynamicFields: [],
+      score: item.completenessScore,
+    },
   }));
 
   return (

@@ -7,7 +7,7 @@ export async function getDashboardMachines() {
   });
 }
 
-export async function getMachineById(id: number) {
+export async function getMachineById(id: string) {
   return prisma.machine.findUnique({
     where: { id },
     include: { owner: true },

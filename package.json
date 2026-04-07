@@ -18,12 +18,14 @@
     "nodemailer": "^8.0.3",
     "prisma": "^6.19.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
