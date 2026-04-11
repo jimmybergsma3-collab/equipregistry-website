@@ -48,12 +48,29 @@ function getSmtpConfig() {
   };
 }
 
+export type EmailSendResult =
+  | {
+      success: true;
+      skipped: false;
+      messageId: string;
+    }
+  | {
+      success: false;
+      skipped: true;
+      reason: "config_invalid" | "send_failed";
+      message: string;
+      missingKeys?: string[];
+      errorCode?: string;
+      responseCode?: number;
+      command?: string;
+    };
+
 export async function sendEmail(params: {
   to: string;
   subject: string;
   html: string;
   text: string;
-}) {
+}): Promise<EmailSendResult> {
   const config = getSmtpConfig();
 
   if (!config.isConfigured) {
@@ -63,9 +80,13 @@ export async function sendEmail(params: {
       subject: params.subject,
     });
 
-    throw new Error(
-      `SMTP configuration is incomplete: ${config.missingKeys.join(", ")}`
-    );
+    return {
+      success: false,
+      skipped: true,
+      reason: "config_invalid",
+      message: `SMTP configuration is incomplete: ${config.missingKeys.join(", ")}`,
+      missingKeys: config.missingKeys,
+    };
   }
 
   const transporter = nodemailer.createTransport({
@@ -115,6 +136,14 @@ export async function sendEmail(params: {
       message: smtpError.message,
     });
 
-    throw smtpError;
+    return {
+      success: false,
+      skipped: true,
+      reason: "send_failed",
+      message: smtpError.message,
+      errorCode: smtpError.code,
+      responseCode: smtpError.responseCode,
+      command: smtpError.command,
+    };
   }
 }

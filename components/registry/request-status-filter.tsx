@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { getRequestStatusLabel } from "@/lib/registry/workflow";
+import { RegistrationRequestStatus } from "@/lib/registry/workflow";
+import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
 type Props = {
   lang: string;
@@ -9,17 +11,16 @@ type Props = {
   currentReview: string;
 };
 
-const FILTERS: Array<{ value: string; label: string }> = [
-  { value: "all", label: "All" },
-  { value: "payment_required", label: getRequestStatusLabel("payment_required") },
-  { value: "submitted", label: getRequestStatusLabel("submitted") },
-  { value: "under_review", label: getRequestStatusLabel("under_review") },
-  { value: "approved", label: getRequestStatusLabel("approved") },
-  { value: "passport_issued", label: getRequestStatusLabel("passport_issued") },
-  { value: "rejected", label: getRequestStatusLabel("rejected") },
-  { value: "more_info_required", label: getRequestStatusLabel("more_info_required") },
-  { value: "draft", label: getRequestStatusLabel("draft") },
-  { value: "incomplete", label: getRequestStatusLabel("incomplete") },
+const FILTER_VALUES: RegistrationRequestStatus[] = [
+  "payment_required",
+  "submitted",
+  "under_review",
+  "approved",
+  "passport_issued",
+  "rejected",
+  "more_info_required",
+  "draft",
+  "incomplete",
 ];
 
 const REVIEW_TEXT = {
@@ -109,8 +110,9 @@ export default function RequestStatusFilter({
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const text =
-    REVIEW_TEXT[lang as keyof typeof REVIEW_TEXT] ?? REVIEW_TEXT.en;
+    REVIEW_TEXT[safeLang as keyof typeof REVIEW_TEXT] ?? REVIEW_TEXT.en;
 
   function handleChange(value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -154,9 +156,10 @@ export default function RequestStatusFilter({
           onChange={(e) => handleChange(e.target.value)}
           className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[240px]"
         >
-          {FILTERS.map((filter) => (
-            <option key={filter.value} value={filter.value}>
-              {filter.value === "all" ? text.all : filter.label}
+          <option value="all">{text.all}</option>
+          {FILTER_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {getLocalizedRequestStatusLabel(value, safeLang)}
             </option>
           ))}
         </select>

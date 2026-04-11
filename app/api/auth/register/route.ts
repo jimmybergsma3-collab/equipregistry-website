@@ -161,34 +161,46 @@ export async function POST(request: Request) {
     const verifyUrl = `${baseUrl}/api/auth/verify-email?token=${encodeURIComponent(
       rawToken
     )}&lang=${encodeURIComponent(lang)}`;
+    let verificationEmailSent = false;
 
     try {
-      await sendAccountVerificationEmail({
+      const emailResult = await sendAccountVerificationEmail({
         to: email,
         ownerName: name,
         verifyUrl,
         lang,
       });
+
+      verificationEmailSent = emailResult.success;
+
+      if (!emailResult.success) {
+        console.warn("AUTH_REGISTER_VERIFICATION_EMAIL_SKIPPED", {
+          userId,
+          reason: emailResult.reason,
+          message: emailResult.message,
+          missingKeys: emailResult.missingKeys,
+          errorCode: emailResult.errorCode,
+          responseCode: emailResult.responseCode,
+        });
+      }
     } catch (error) {
       const mailError =
         error instanceof Error ? error : new Error("Unknown mail error");
 
-      console.error("AUTH_REGISTER_VERIFICATION_EMAIL_FAILED", {
+      console.error("AUTH_REGISTER_VERIFICATION_EMAIL_FAILED_UNEXPECTED", {
         userId,
         message: mailError.message,
       });
-
-      return NextResponse.json(
-        { error: "VERIFICATION_EMAIL_SEND_FAILED" },
-        { status: 503 }
-      );
     }
 
     return NextResponse.json({
       success: true,
-      verificationRequired: true,
+      verificationRequired: verificationEmailSent,
+      emailDeliverySkipped: !verificationEmailSent,
       userId,
-      message: "VERIFY_EMAIL_REQUIRED",
+      message: verificationEmailSent
+        ? "VERIFY_EMAIL_REQUIRED"
+        : "REGISTERED_EMAIL_SKIPPED",
     });
   } catch (error) {
     console.error("AUTH_REGISTER_ERROR", error);

@@ -9,12 +9,17 @@ import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { usesManualIbanPayment } from "@/lib/registry/payment";
-import {
-  ApplicantType,
-  getApplicantTypeLabel,
-} from "@/lib/registry/workflow";
+import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import {
+  getCategoryByValue,
+  getSubcategoriesByCategory,
+} from "@/lib/registry/categories";
+import {
+  formatDateForLang,
+  getLocalizedApplicantTypeLabel,
+} from "@/lib/i18n/registry-display";
 
 type Props = {
   params: Promise<{
@@ -93,14 +98,6 @@ type DetailDictionary = {
     requestDetail?: DetailDictionarySection;
   };
 };
-
-function formatDate(value: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(value);
-}
 
 function parseDynamicFields(value: unknown): DynamicFields {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -269,6 +266,7 @@ function DynamicFieldItem({
 function RegistrationDetailsCard({
   request,
   texts,
+  lang,
 }: {
   request: {
     reference: string;
@@ -288,8 +286,15 @@ function RegistrationDetailsCard({
     dynamicFields: unknown;
   };
   texts: DetailTexts;
+  lang: Lang;
 }) {
   const dynamicFields = parseDynamicFields(request.dynamicFields);
+  const localizedCategory =
+    getCategoryByValue(request.category, lang)?.label ?? request.category;
+  const localizedSubcategory =
+    getSubcategoriesByCategory(request.category, lang).find(
+      (item) => item.value === request.subcategory
+    )?.label ?? request.subcategory;
 
   const dynamicFieldEntries: Array<{ label: string; value: string | string[] }> = [
     {
@@ -348,18 +353,27 @@ function RegistrationDetailsCard({
         <DetailItem label={texts.labels.passportNumber} value={request.reference} />
         <DetailItem
           label={texts.labels.applicantType}
-          value={getApplicantTypeLabel(request.applicantType)}
+          value={getLocalizedApplicantTypeLabel(request.applicantType, lang)}
         />
         <DetailItem label={texts.labels.assetName} value={request.assetName} />
-        <DetailItem label={texts.labels.category} value={request.category} />
-        <DetailItem label={texts.labels.subcategory} value={request.subcategory} />
+        <DetailItem label={texts.labels.category} value={localizedCategory} />
+        <DetailItem
+          label={texts.labels.subcategory}
+          value={localizedSubcategory}
+        />
         <DetailItem label={texts.labels.brand} value={request.brand} />
         <DetailItem label={texts.labels.model} value={request.model} />
         <DetailItem label={texts.labels.serialNumber} value={request.serialNumber} />
         <DetailItem label={texts.labels.owner} value={request.ownerName} />
         <DetailItem label={texts.labels.ownerEmail} value={request.ownerEmail} />
-        <DetailItem label={texts.labels.created} value={formatDate(request.createdAt)} />
-        <DetailItem label={texts.labels.updated} value={formatDate(request.updatedAt)} />
+        <DetailItem
+          label={texts.labels.created}
+          value={formatDateForLang(request.createdAt, lang)}
+        />
+        <DetailItem
+          label={texts.labels.updated}
+          value={formatDateForLang(request.updatedAt, lang)}
+        />
         <DetailItem
           label={texts.labels.payment}
           value={request.paymentCompleted ? texts.paymentCompleted : texts.paymentPending}
@@ -444,7 +458,10 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
       <>
         <SiteHeader lang={lang} />
 
-        <main className="min-h-screen bg-zinc-50">
+        <main
+          dir={lang === "ar" ? "rtl" : "ltr"}
+          className="min-h-screen bg-zinc-50"
+        >
           <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-8">
               <Link
@@ -458,10 +475,21 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
                 {request.reference}
               </h1>
 
-              <div className="mt-4">
-                <RequestStatusBadge status={request.requestStatus} lang={lang} />
-              </div>
+            <div className="mt-4">
+              <RequestStatusBadge status={request.requestStatus} lang={lang} />
             </div>
+
+            {request.requestStatus === "passport_issued" ? (
+              <div className="mt-4">
+                <Link
+                  href={`/${lang}/passport/${request.reference}`}
+                  className="inline-flex items-center rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+                >
+                  {dictionary.statuses.registeredVerified.actionViewPassport}
+                </Link>
+              </div>
+            ) : null}
+          </div>
 
             {showManualPaymentPanel ? (
               <div className="mb-6">
@@ -508,7 +536,11 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
               </div>
             ) : null}
 
-            <RegistrationDetailsCard request={request} texts={texts} />
+            <RegistrationDetailsCard
+              request={request}
+              texts={texts}
+              lang={lang as Lang}
+            />
           </div>
         </main>
 
@@ -532,7 +564,10 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-screen bg-zinc-50">
+      <main
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="min-h-screen bg-zinc-50"
+      >
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8">
             <Link
@@ -549,6 +584,17 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
             <div className="mt-4">
               <RequestStatusBadge status={ownRequest.requestStatus} lang={lang} />
             </div>
+
+            {ownRequest.requestStatus === "passport_issued" ? (
+              <div className="mt-4">
+                <Link
+                  href={`/${lang}/passport/${ownRequest.reference}`}
+                  className="inline-flex items-center rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+                >
+                  {dictionary.statuses.registeredVerified.actionViewPassport}
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           {usesManualIbanPayment(ownRequest.applicantType) &&
@@ -564,7 +610,11 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
             </div>
           ) : null}
 
-          <RegistrationDetailsCard request={ownRequest} texts={texts} />
+          <RegistrationDetailsCard
+            request={ownRequest}
+            texts={texts}
+            lang={lang as Lang}
+          />
         </div>
       </main>
 

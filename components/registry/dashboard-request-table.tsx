@@ -5,6 +5,14 @@ import {
   isVisibleInDashboard,
 } from "@/lib/registry/workflow";
 import type { Lang } from "@/lib/i18n/config";
+import {
+  getCategoryByValue,
+  getSubcategoriesByCategory,
+} from "@/lib/registry/categories";
+import {
+  formatDateForLang,
+  getLocalizedApplicantTypeLabel,
+} from "@/lib/i18n/registry-display";
 
 type Props = {
   lang: string;
@@ -432,12 +440,20 @@ export default function DashboardRequestTable({
                 <td className="px-6 py-4 text-sm text-zinc-700">
                   <div className="font-medium text-zinc-900">{item.assetName}</div>
                   <div className="text-zinc-500">
-                    {item.category} / {item.subcategory}
+                    {getCategoryByValue(item.category, currentLang)?.label ??
+                      item.category}{" "}
+                    /{" "}
+                    {getSubcategoriesByCategory(item.category, currentLang).find(
+                      (subcategory) => subcategory.value === item.subcategory
+                    )?.label ?? item.subcategory}
                   </div>
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
-                  {getApplicantLabel(item.applicantType, currentLang)}
+                  {getLocalizedApplicantTypeLabel(
+                    item.applicantType,
+                    currentLang
+                  )}
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
@@ -449,7 +465,7 @@ export default function DashboardRequestTable({
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
-                  {formatDate(item.updatedAt, currentLang)}
+                  {formatDateForLang(item.updatedAt, currentLang)}
                 </td>
 
                 <td className="px-6 py-4 text-right text-sm">

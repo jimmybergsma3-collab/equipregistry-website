@@ -13,6 +13,7 @@ import {
   requestMoreInformation,
 } from "@/app/[lang]/dashboard/registrations/[id]/actions";
 import type { RegistrationRequestStatus } from "@/lib/registry/workflow";
+import { isValidLang, type Lang } from "@/lib/i18n/config";
 
 type Props = {
   registrationId: string;
@@ -30,6 +31,179 @@ type ActionHandler = (
   tone?: "success" | "warning" | "error";
   refresh?: boolean;
 }>;
+
+const TEXT: Record<
+  Lang,
+  {
+    open: string;
+    processing: string;
+    markPaid: string;
+    markReviewed: string;
+    approve: string;
+    requestInfo: string;
+    reject: string;
+    issuePassport: string;
+    delete: string;
+    deleting: string;
+    confirmDelete: string;
+    deleteError: string;
+  }
+> = {
+  en: {
+    open: "Open",
+    processing: "Processing...",
+    markPaid: "Mark paid",
+    markReviewed: "Mark reviewed",
+    approve: "Approve",
+    requestInfo: "Request info",
+    reject: "Reject",
+    issuePassport: "Issue passport",
+    delete: "Delete",
+    deleting: "Deleting...",
+    confirmDelete: "Are you sure you want to delete this registration?",
+    deleteError: "Failed to delete registration.",
+  },
+  es: {
+    open: "Abrir",
+    processing: "Procesando...",
+    markPaid: "Marcar pago",
+    markReviewed: "Marcar revisado",
+    approve: "Aprobar",
+    requestInfo: "Solicitar info",
+    reject: "Rechazar",
+    issuePassport: "Emitir pasaporte",
+    delete: "Eliminar",
+    deleting: "Eliminando...",
+    confirmDelete: "¿Seguro que desea eliminar este registro?",
+    deleteError: "No se pudo eliminar el registro.",
+  },
+  de: {
+    open: "Oeffnen",
+    processing: "Verarbeitung...",
+    markPaid: "Zahlung bestaetigen",
+    markReviewed: "Als geprueft markieren",
+    approve: "Genehmigen",
+    requestInfo: "Info anfordern",
+    reject: "Ablehnen",
+    issuePassport: "Pass ausstellen",
+    delete: "Loeschen",
+    deleting: "Loeschen...",
+    confirmDelete: "Moechten Sie diese Registrierung wirklich loeschen?",
+    deleteError: "Registrierung konnte nicht geloescht werden.",
+  },
+  fr: {
+    open: "Ouvrir",
+    processing: "Traitement...",
+    markPaid: "Marquer paye",
+    markReviewed: "Marquer revise",
+    approve: "Approuver",
+    requestInfo: "Demander info",
+    reject: "Rejeter",
+    issuePassport: "Emettre le passeport",
+    delete: "Supprimer",
+    deleting: "Suppression...",
+    confirmDelete: "Voulez-vous vraiment supprimer cet enregistrement ?",
+    deleteError: "Impossible de supprimer l'enregistrement.",
+  },
+  it: {
+    open: "Apri",
+    processing: "Elaborazione...",
+    markPaid: "Segna pagato",
+    markReviewed: "Segna revisionato",
+    approve: "Approva",
+    requestInfo: "Richiedi info",
+    reject: "Rifiuta",
+    issuePassport: "Emetti passaporto",
+    delete: "Elimina",
+    deleting: "Eliminazione...",
+    confirmDelete: "Vuole davvero eliminare questa registrazione?",
+    deleteError: "Impossibile eliminare la registrazione.",
+  },
+  nl: {
+    open: "Openen",
+    processing: "Verwerken...",
+    markPaid: "Markeer betaald",
+    markReviewed: "Markeer beoordeeld",
+    approve: "Goedkeuren",
+    requestInfo: "Info vragen",
+    reject: "Afwijzen",
+    issuePassport: "Paspoort uitgeven",
+    delete: "Verwijderen",
+    deleting: "Verwijderen...",
+    confirmDelete: "Weet je zeker dat je deze registratie wilt verwijderen?",
+    deleteError: "Registratie verwijderen mislukt.",
+  },
+  pt: {
+    open: "Abrir",
+    processing: "A processar...",
+    markPaid: "Marcar pago",
+    markReviewed: "Marcar revisto",
+    approve: "Aprovar",
+    requestInfo: "Pedir info",
+    reject: "Rejeitar",
+    issuePassport: "Emitir passaporte",
+    delete: "Eliminar",
+    deleting: "A eliminar...",
+    confirmDelete: "Tem a certeza de que pretende eliminar este registo?",
+    deleteError: "Nao foi possivel eliminar o registo.",
+  },
+  ru: {
+    open: "Открыть",
+    processing: "Обработка...",
+    markPaid: "Отметить оплату",
+    markReviewed: "Отметить как проверенное",
+    approve: "Одобрить",
+    requestInfo: "Запросить данные",
+    reject: "Отклонить",
+    issuePassport: "Выдать паспорт",
+    delete: "Удалить",
+    deleting: "Удаление...",
+    confirmDelete: "Вы уверены, что хотите удалить эту регистрацию?",
+    deleteError: "Не удалось удалить регистрацию.",
+  },
+  zh: {
+    open: "打开",
+    processing: "处理中...",
+    markPaid: "标记付款",
+    markReviewed: "标记已审核",
+    approve: "批准",
+    requestInfo: "请求信息",
+    reject: "拒绝",
+    issuePassport: "签发护照",
+    delete: "删除",
+    deleting: "删除中...",
+    confirmDelete: "确定要删除此注册吗？",
+    deleteError: "删除注册失败。",
+  },
+  hi: {
+    open: "खोलें",
+    processing: "प्रसंस्करण...",
+    markPaid: "भुगतान चिह्नित करें",
+    markReviewed: "समीक्षित चिह्नित करें",
+    approve: "स्वीकृत करें",
+    requestInfo: "जानकारी मांगें",
+    reject: "अस्वीकार करें",
+    issuePassport: "पासपोर्ट जारी करें",
+    delete: "हटाएं",
+    deleting: "हटाया जा रहा है...",
+    confirmDelete: "क्या आप वाकई इस पंजीकरण को हटाना चाहते हैं?",
+    deleteError: "पंजीकरण हटाया नहीं जा सका।",
+  },
+  ar: {
+    open: "فتح",
+    processing: "جارٍ المعالجة...",
+    markPaid: "تأكيد الدفع",
+    markReviewed: "تحديد كمراجع",
+    approve: "موافقة",
+    requestInfo: "طلب معلومات",
+    reject: "رفض",
+    issuePassport: "إصدار الجواز",
+    delete: "حذف",
+    deleting: "جارٍ الحذف...",
+    confirmDelete: "هل أنت متأكد من حذف هذا التسجيل؟",
+    deleteError: "تعذر حذف التسجيل.",
+  },
+};
 
 function actionButtonClassName(tone: "primary" | "secondary" | "neutral") {
   switch (tone) {
@@ -74,6 +248,8 @@ export default function AdminRequestRowActions({
   requestStatus,
   paymentCompleted,
 }: Props) {
+  const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
+  const text = TEXT[safeLang];
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -135,12 +311,12 @@ export default function AdminRequestRowActions({
           href={`/${lang}/dashboard/registrations/${registrationId}`}
           className="inline-flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50"
         >
-          Open
+          {text.open}
         </Link>
 
         {canMarkPaid ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Mark paid"}
+            label={isPending ? text.processing : text.markPaid}
             tone="primary"
             disabled={isPending}
             onClick={() => handleAction(markRegistrationAsPaid)}
@@ -149,7 +325,7 @@ export default function AdminRequestRowActions({
 
         {canMarkReviewed ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Mark reviewed"}
+            label={isPending ? text.processing : text.markReviewed}
             tone="primary"
             disabled={isPending}
             onClick={() => handleAction(moveRegistrationToReview)}
@@ -158,7 +334,7 @@ export default function AdminRequestRowActions({
 
         {canApprove ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Approve"}
+            label={isPending ? text.processing : text.approve}
             tone="primary"
             disabled={isPending}
             onClick={() => handleAction(approveRegistration)}
@@ -167,7 +343,7 @@ export default function AdminRequestRowActions({
 
         {canRequestInfo ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Request info"}
+            label={isPending ? text.processing : text.requestInfo}
             tone="secondary"
             disabled={isPending}
             onClick={() => handleAction(requestMoreInformation)}
@@ -176,7 +352,7 @@ export default function AdminRequestRowActions({
 
         {canReject ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Reject"}
+            label={isPending ? text.processing : text.reject}
             tone="neutral"
             disabled={isPending}
             onClick={() => handleAction(rejectRegistration)}
@@ -185,7 +361,7 @@ export default function AdminRequestRowActions({
 
         {canIssuePassport ? (
           <ActionButton
-            label={isPending ? "Processing..." : "Issue passport"}
+            label={isPending ? text.processing : text.issuePassport}
             tone="primary"
             disabled={isPending}
             onClick={() => handleAction(issuePassport)}
@@ -196,10 +372,10 @@ export default function AdminRequestRowActions({
           id={registrationId}
           lang={lang}
           admin
-          label="Delete"
-          deletingText="Deleting..."
-          confirmText="Are you sure you want to delete this registration?"
-          errorText="Failed to delete registration."
+          label={text.delete}
+          deletingText={text.deleting}
+          confirmText={text.confirmDelete}
+          errorText={text.deleteError}
         />
       </div>
 

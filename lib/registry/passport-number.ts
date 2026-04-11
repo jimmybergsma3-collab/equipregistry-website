@@ -1,42 +1,65 @@
-// lib/registry/passport-number.ts
-
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { generatePassportNumber } from "@/lib/registry/reference";
+import {
+  generatePassportNumber,
+  getPassportSequenceId,
+} from "@/lib/registry/reference";
 
-export async function reserveNextPassportNumber() {
-  const result = await prisma.$transaction(async (tx) => {
-    const existing = await tx.registrySequence.findUnique({
-      where: { id: "registry-sequence" },
-    });
+type RegistrySequenceClient = Pick<Prisma.TransactionClient, "registrySequence">;
 
-    if (!existing) {
-      const created = await tx.registrySequence.create({
-        data: {
-          id: "registry-sequence",
-          nextValue: 2,
-        },
-      });
+async function reserveNextPassportNumberInClient(
+  client: RegistrySequenceClient,
+  category: string,
+  subcategory?: string
+) {
+  const sequenceId = getPassportSequenceId(category, subcategory);
+  const existing = await client.registrySequence.findUnique({
+    where: { id: sequenceId },
+  });
 
-      return {
-        sequence: 1,
-        passportNumber: generatePassportNumber(1),
-      };
-    }
-
-    const currentValue = existing.nextValue;
-
-    await tx.registrySequence.update({
-      where: { id: "registry-sequence" },
+  if (!existing) {
+    await client.registrySequence.create({
       data: {
-        nextValue: currentValue + 1,
+        id: sequenceId,
+        nextValue: 2,
       },
     });
 
     return {
-      sequence: currentValue,
-      passportNumber: generatePassportNumber(currentValue),
+      sequence: 1,
+      passportNumber: generatePassportNumber(1, category, subcategory),
     };
+  }
+
+  const currentValue = existing.nextValue;
+
+  await client.registrySequence.update({
+    where: { id: sequenceId },
+    data: {
+      nextValue: currentValue + 1,
+    },
   });
 
-  return result;
+  return {
+    sequence: currentValue,
+    passportNumber: generatePassportNumber(
+      currentValue,
+      category,
+      subcategory
+    ),
+  };
+}
+
+export async function reserveNextPassportNumber(
+  category: string,
+  subcategory?: string,
+  client?: RegistrySequenceClient
+) {
+  if (client) {
+    return reserveNextPassportNumberInClient(client, category, subcategory);
+  }
+
+  return prisma.$transaction(async (tx) => {
+    return reserveNextPassportNumberInClient(tx, category, subcategory);
+  });
 }

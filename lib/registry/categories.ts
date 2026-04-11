@@ -140,7 +140,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Other",
+      label: "Light Mobility & Other Assets",
       subcategories: {
         bicycle: "Bicycle",
         ebike: "E-Bike",
@@ -266,7 +266,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Otros",
+      label: "Movilidad ligera y otros activos",
       subcategories: {
         bicycle: "Bicicleta",
         ebike: "Bicicleta eléctrica",
@@ -392,7 +392,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Sonstiges",
+      label: "Leichtmobilitaet und sonstige Assets",
       subcategories: {
         bicycle: "Fahrrad",
         ebike: "E-Bike",
@@ -518,7 +518,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Autre",
+      label: "Mobilite legere et autres actifs",
       subcategories: {
         bicycle: "Vélo",
         ebike: "Vélo électrique",
@@ -644,7 +644,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Altro",
+      label: "Mobilita leggera e altri asset",
       subcategories: {
         bicycle: "Bicicletta",
         ebike: "Bici elettrica",
@@ -770,7 +770,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Overig",
+      label: "Lichte mobiliteit en overige assets",
       subcategories: {
         bicycle: "Fiets",
         ebike: "E-bike",
@@ -896,7 +896,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Outro",
+      label: "Mobilidade leve e outros ativos",
       subcategories: {
         bicycle: "Bicicleta",
         ebike: "Bicicleta elétrica",
@@ -1022,7 +1022,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "Другое",
+      label: "Легкая мобильность и прочие активы",
       subcategories: {
         bicycle: "Велосипед",
         ebike: "Электровелосипед",
@@ -1148,7 +1148,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "其他",
+      label: "轻型出行与其他资产",
       subcategories: {
         bicycle: "自行车",
         ebike: "电动自行车",
@@ -1274,7 +1274,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "अन्य",
+      label: "हल्की गतिशीलता और अन्य एसेट",
       subcategories: {
         bicycle: "साइकिल",
         ebike: "ई-बाइक",
@@ -1400,7 +1400,7 @@ const CATEGORY_TEXT: Record<Lang, Record<RegistryCategoryKey, CategoryText>> = {
       },
     },
     other: {
-      label: "أخرى",
+      label: "التنقل الخفيف والأصول الأخرى",
       subcategories: {
         bicycle: "دراجة",
         ebike: "دراجة كهربائية",

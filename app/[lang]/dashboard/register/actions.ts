@@ -79,7 +79,10 @@ export async function saveRegistrationDraft(
 
   const draft = buildDraftFromFormData(formData);
   const completeness = evaluateRegistrationCompleteness(draft);
-  const { passportNumber } = await reserveNextPassportNumber();
+  const { passportNumber } = await reserveNextPassportNumber(
+    draft.category,
+    draft.subcategory
+  );
   const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
   const documents = draft.documents as Prisma.InputJsonValue;
 
@@ -159,7 +162,10 @@ export async function submitRegistrationRequest(
   const derivedStatus = deriveRequestStatus(draft, paymentCompleted);
   const finalStatus: RegistrationRequestStatus = partner ? "submitted" : derivedStatus;
 
-  const { passportNumber } = await reserveNextPassportNumber();
+  const { passportNumber } = await reserveNextPassportNumber(
+    draft.category,
+    draft.subcategory
+  );
   const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
   const documents = draft.documents as Prisma.InputJsonValue;
 

@@ -5,7 +5,8 @@ import SiteFooter from "@/components/site-footer";
 import DashboardRequestTable from "@/components/registry/dashboard-request-table";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
-import { isValidLang } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { normalizeRequestStatus } from "@/lib/registry/workflow";
 
 type Props = {
@@ -86,10 +87,10 @@ export default async function RegistrationsPage({ params }: Props) {
   }
 
   if (session.user.role === "admin") {
-    redirect(`/${lang}/admin`);
+    redirect(`/${lang}/dashboard/admin/registrations`);
   }
 
-  const text = PAGE_TEXT[lang] ?? PAGE_TEXT.en;
+  const text = getDictionary(lang as Lang).pages.dashboard.registrations;
 
   const requests = await prisma.registrationRequest.findMany({
     where: {
@@ -126,7 +127,10 @@ export default async function RegistrationsPage({ params }: Props) {
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-screen bg-zinc-50">
+      <main
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="min-h-screen bg-zinc-50"
+      >
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>

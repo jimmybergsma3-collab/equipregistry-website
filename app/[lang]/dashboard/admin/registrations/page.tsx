@@ -6,11 +6,10 @@ import RequestStatusFilter from "@/components/registry/request-status-filter";
 import AdminRequestTable from "@/components/registry/admin-request-table";
 import { prisma } from "@/lib/db";
 import { requireAdminSession } from "@/lib/auth/require-admin-session";
-import {
-  RegistrationRequestStatus,
-  getRequestStatusLabel,
-} from "@/lib/registry/workflow";
-import { isValidLang } from "@/lib/i18n/config";
+import { RegistrationRequestStatus } from "@/lib/registry/workflow";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
 type Props = {
   params: Promise<{
@@ -35,6 +34,120 @@ const ALLOWED_STATUSES: RegistrationRequestStatus[] = [
   "passport_issued",
 ];
 
+const PAGE_TEXT: Record<
+  Lang,
+  {
+    eyebrow: string;
+    title: string;
+    filteredByStatus: string;
+    showingReviewed: string;
+    showingNotReviewed: string;
+    showingAll: string;
+  }
+> = {
+  en: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registration management",
+    filteredByStatus: "Showing registrations filtered by:",
+    showingReviewed: "Showing reviewed registrations.",
+    showingNotReviewed: "Showing registrations that still need review.",
+    showingAll: "Showing all registrations across the current system view.",
+  },
+  es: {
+    eyebrow: "Administracion EquipRegistry",
+    title: "Gestion de registros",
+    filteredByStatus: "Mostrando registros filtrados por:",
+    showingReviewed: "Mostrando registros revisados.",
+    showingNotReviewed: "Mostrando registros que aun requieren revision.",
+    showingAll: "Mostrando todos los registros dentro de la vista actual del sistema.",
+  },
+  de: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registrierungsverwaltung",
+    filteredByStatus: "Angezeigte Registrierungen gefiltert nach:",
+    showingReviewed: "Es werden gepruefte Registrierungen angezeigt.",
+    showingNotReviewed:
+      "Es werden Registrierungen angezeigt, die noch geprueft werden muessen.",
+    showingAll:
+      "Es werden alle Registrierungen der aktuellen Systemansicht angezeigt.",
+  },
+  fr: {
+    eyebrow: "Administration EquipRegistry",
+    title: "Gestion des enregistrements",
+    filteredByStatus: "Enregistrements filtres par :",
+    showingReviewed: "Affichage des enregistrements examines.",
+    showingNotReviewed:
+      "Affichage des enregistrements qui necessitent encore une revision.",
+    showingAll:
+      "Affichage de tous les enregistrements dans la vue systeme actuelle.",
+  },
+  it: {
+    eyebrow: "Amministrazione EquipRegistry",
+    title: "Gestione registrazioni",
+    filteredByStatus: "Registrazioni filtrate per:",
+    showingReviewed: "Mostra le registrazioni revisionate.",
+    showingNotReviewed:
+      "Mostra le registrazioni che richiedono ancora revisione.",
+    showingAll:
+      "Mostra tutte le registrazioni nella vista di sistema corrente.",
+  },
+  nl: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registratiebeheer",
+    filteredByStatus: "Registraties gefilterd op:",
+    showingReviewed: "Beoordeelde registraties worden getoond.",
+    showingNotReviewed:
+      "Registraties die nog beoordeling nodig hebben worden getoond.",
+    showingAll: "Alle registraties binnen de huidige systeemweergave worden getoond.",
+  },
+  pt: {
+    eyebrow: "Administracao EquipRegistry",
+    title: "Gestao de registos",
+    filteredByStatus: "A mostrar registos filtrados por:",
+    showingReviewed: "A mostrar registos revistos.",
+    showingNotReviewed:
+      "A mostrar registos que ainda necessitam de revisao.",
+    showingAll:
+      "A mostrar todos os registos na vista atual do sistema.",
+  },
+  ru: {
+    eyebrow: "Администрирование EquipRegistry",
+    title: "Управление регистрациями",
+    filteredByStatus: "Показ регистраций с фильтром по статусу:",
+    showingReviewed: "Показаны проверенные регистрации.",
+    showingNotReviewed:
+      "Показаны регистрации, которые еще требуют проверки.",
+    showingAll:
+      "Показаны все регистрации в рамках текущего системного представления.",
+  },
+  zh: {
+    eyebrow: "EquipRegistry 管理",
+    title: "注册管理",
+    filteredByStatus: "按以下状态筛选注册：",
+    showingReviewed: "显示已审核注册。",
+    showingNotReviewed: "显示仍需审核的注册。",
+    showingAll: "显示当前系统视图中的全部注册。",
+  },
+  hi: {
+    eyebrow: "EquipRegistry एडमिन",
+    title: "पंजीकरण प्रबंधन",
+    filteredByStatus: "इस स्थिति के अनुसार पंजीकरण दिखाए जा रहे हैं:",
+    showingReviewed: "समीक्षित पंजीकरण दिखाए जा रहे हैं।",
+    showingNotReviewed:
+      "वे पंजीकरण दिखाए जा रहे हैं जिन्हें अभी समीक्षा की आवश्यकता है।",
+    showingAll: "वर्तमान सिस्टम दृश्य के सभी पंजीकरण दिखाए जा रहे हैं।",
+  },
+  ar: {
+    eyebrow: "إدارة EquipRegistry",
+    title: "إدارة التسجيلات",
+    filteredByStatus: "عرض التسجيلات المصفاة حسب:",
+    showingReviewed: "يتم عرض التسجيلات التي تمت مراجعتها.",
+    showingNotReviewed:
+      "يتم عرض التسجيلات التي ما زالت تحتاج إلى مراجعة.",
+    showingAll: "يتم عرض جميع التسجيلات ضمن عرض النظام الحالي.",
+  },
+};
+
 export default async function AdminRegistrationsPage({
   params,
   searchParams,
@@ -47,6 +160,9 @@ export default async function AdminRegistrationsPage({
   }
 
   await requireAdminSession(lang);
+  const safeLang = lang as Lang;
+  const pageText = PAGE_TEXT[safeLang];
+  const dictionary = getDictionary(safeLang);
 
   const validStatus =
     status && ALLOWED_STATUSES.includes(status as RegistrationRequestStatus)
@@ -113,26 +229,30 @@ export default async function AdminRegistrationsPage({
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-screen bg-zinc-50">
+      <main
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="min-h-screen bg-zinc-50"
+      >
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">
-                EquipRegistry Admin
+                {pageText.eyebrow}
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
-                Registration management
+                {pageText.title}
               </h1>
               <p className="mt-2 text-sm text-zinc-600">
                 {validStatus
-                  ? `Showing registrations filtered by: ${getRequestStatusLabel(
-                      validStatus
+                  ? `${pageText.filteredByStatus} ${getLocalizedRequestStatusLabel(
+                      validStatus,
+                      safeLang
                     )}`
                   : validReview === "reviewed"
-                  ? "Showing reviewed registrations."
+                  ? pageText.showingReviewed
                   : validReview === "not_reviewed"
-                  ? "Showing registrations that still need review."
-                  : "Showing all registrations across the current system view."}
+                  ? pageText.showingNotReviewed
+                  : pageText.showingAll}
               </p>
             </div>
 
@@ -147,7 +267,7 @@ export default async function AdminRegistrationsPage({
                 href={`/${lang}/dashboard/register`}
                 className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
               >
-                New registration
+                {dictionary.pages.dashboard.registrations.newRegistration}
               </Link>
             </div>
           </div>

@@ -398,7 +398,12 @@ export default function RegisterPage({ params }: Props) {
         return;
       }
 
-      router.push(`/${currentLang}/verify-email?status=sent`);
+      if (data?.verificationRequired) {
+        router.push(`/${currentLang}/verify-email?status=sent`);
+        return;
+      }
+
+      router.push(`/${currentLang}/login`);
     } catch {
       setError(t.serverError);
     } finally {
@@ -415,7 +420,7 @@ export default function RegisterPage({ params }: Props) {
         className="min-h-screen bg-zinc-50"
       >
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl">
+          <div className="mx-auto max-w-4xl">
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-zinc-500">
                 EquipRegistry
@@ -428,8 +433,7 @@ export default function RegisterPage({ params }: Props) {
               </p>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div className="sm:col-span-2">
@@ -545,16 +549,6 @@ export default function RegisterPage({ params }: Props) {
                     </p>
                   </div>
                 </form>
-              </div>
-
-              <aside className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
-                  {t.noteTitle}
-                </p>
-                <p className="mt-3 text-sm leading-6 text-zinc-600">
-                  {t.noteText}
-                </p>
-              </aside>
             </div>
           </div>
         </section>

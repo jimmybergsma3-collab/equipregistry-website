@@ -6,10 +6,7 @@ import { Prisma } from "@prisma/client";
 import type { ApplicantType } from "@prisma/client";
 import type { Lang } from "@/lib/i18n/config";
 import { sendAccountVerificationEmail } from "@/lib/email/send-registration-email";
-
-function createReferenceNumber() {
-  return `ER-REQ-${Date.now()}`;
-}
+import { reserveNextPassportNumber } from "@/lib/registry/passport-number";
 
 const ALLOWED_APPLICANT_TYPES = ["private", "sme"] as const;
 const ALLOWED_LANGS = [
@@ -360,9 +357,15 @@ export async function POST(req: Request) {
             },
           });
         } else {
+          const { passportNumber } = await reserveNextPassportNumber(
+            category,
+            subcategory,
+            tx
+          );
+
           registrationRequest = await tx.registrationRequest.create({
             data: {
-              reference: createReferenceNumber(),
+              reference: passportNumber,
               userId: user.id,
               assetName,
               category,
@@ -429,6 +432,11 @@ export async function POST(req: Request) {
     } else {
       const created = await prisma.$transaction(async (tx) => {
         const passwordHash = await bcrypt.hash(password, 10);
+        const { passportNumber } = await reserveNextPassportNumber(
+          category,
+          subcategory,
+          tx
+        );
 
         const user = await tx.user.create({
           data: {
@@ -444,7 +452,7 @@ export async function POST(req: Request) {
 
         const registrationRequest = await tx.registrationRequest.create({
           data: {
-            reference: createReferenceNumber(),
+            reference: passportNumber,
             userId: user.id,
             assetName,
             category,
@@ -502,36 +510,49 @@ export async function POST(req: Request) {
     const verifyUrl = `${baseUrl}/${lang}/verify-email?token=${encodeURIComponent(
       rawToken
     )}&requestId=${encodeURIComponent(requestId)}`;
+    let verificationEmailSent = false;
 
     try {
-      await sendAccountVerificationEmail({
+      const emailResult = await sendAccountVerificationEmail({
         to: email,
         ownerName: name,
         verifyUrl,
         lang,
       });
+
+      verificationEmailSent = emailResult.success;
+
+      if (!emailResult.success) {
+        console.warn("REGISTER_REQUEST_VERIFICATION_EMAIL_SKIPPED", {
+          requestId,
+          reference,
+          reason: emailResult.reason,
+          message: emailResult.message,
+          missingKeys: emailResult.missingKeys,
+          errorCode: emailResult.errorCode,
+          responseCode: emailResult.responseCode,
+        });
+      }
     } catch (error) {
       const mailError =
         error instanceof Error ? error : new Error("Unknown mail error");
 
-      console.error("REGISTER_REQUEST_VERIFICATION_EMAIL_FAILED", {
+      console.error("REGISTER_REQUEST_VERIFICATION_EMAIL_FAILED_UNEXPECTED", {
         requestId,
         reference,
         message: mailError.message,
       });
-
-      return NextResponse.json(
-        { error: "VERIFICATION_EMAIL_SEND_FAILED" },
-        { status: 503 }
-      );
     }
 
     return NextResponse.json({
       success: true,
-      verificationRequired: true,
+      verificationRequired: verificationEmailSent,
+      emailDeliverySkipped: !verificationEmailSent,
       requestId,
       reference,
-      message: "VERIFY_EMAIL_REQUIRED",
+      message: verificationEmailSent
+        ? "VERIFY_EMAIL_REQUIRED"
+        : "REGISTERED_EMAIL_SKIPPED",
     });
   } catch (error) {
     console.error("REGISTER REQUEST ERROR:", error);

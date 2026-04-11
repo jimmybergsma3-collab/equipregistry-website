@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { assertAdminAction } from "@/lib/auth/assert-admin-action";
 
@@ -10,6 +11,12 @@ type ActionResult = {
   tone?: "success" | "warning" | "error";
   refresh?: boolean;
 };
+
+type RegistrationRequestRecord = NonNullable<
+  Awaited<ReturnType<typeof getRequestById>>
+>;
+
+class PassportIssuanceError extends Error {}
 
 async function getRequestById(registrationId: string) {
   return prisma.registrationRequest.findFirst({
@@ -23,24 +30,152 @@ async function getRequestById(registrationId: string) {
 function revalidateRegistrationPaths(
   lang: string,
   registrationId: string,
-  reference?: string
+  reference?: string,
+  machineId?: string
 ) {
   revalidatePath(`/${lang}/admin`);
   revalidatePath(`/${lang}/dashboard/admin/registrations`);
   revalidatePath(`/${lang}/dashboard/registrations`);
   revalidatePath(`/${lang}/dashboard/registrations/${registrationId}`);
+  revalidatePath(`/${lang}/dashboard/machines`);
+
+  if (machineId) {
+    revalidatePath(`/${lang}/dashboard/machines/${machineId}`);
+  }
 
   if (reference) {
     revalidatePath(`/${lang}/passport/${reference}`);
   }
 }
 
+function normalizeOptionalValue(value: string | null | undefined) {
+  const normalized = value?.trim();
+  return normalized ? normalized : null;
+}
+
+async function createOrSyncPassportMachine(
+  tx: Prisma.TransactionClient,
+  request: RegistrationRequestRecord
+) {
+  const existingMachine = await tx.machine.findUnique({
+    where: {
+      registryId: request.reference,
+    },
+  });
+
+  if (existingMachine && existingMachine.ownerId !== request.userId) {
+    throw new PassportIssuanceError(
+      "A passport record already exists for this registration with a different owner. Resolve that record before approving again."
+    );
+  }
+
+  const machineData = {
+    registryId: request.reference,
+    serialNumber: request.serialNumber,
+    brand: normalizeOptionalValue(request.brand),
+    model: normalizeOptionalValue(request.model),
+    year: normalizeOptionalValue(request.year),
+    category: normalizeOptionalValue(request.category),
+    status: normalizeOptionalValue(existingMachine?.status) ?? "passport_issued",
+    ownerId: request.userId,
+  };
+
+  if (existingMachine) {
+    return tx.machine.update({
+      where: {
+        id: existingMachine.id,
+      },
+      data: machineData,
+    });
+  }
+
+  return tx.machine.create({
+    data: machineData,
+  });
+}
+
+async function issuePassportRecordForRequest(
+  tx: Prisma.TransactionClient,
+  registrationId: string,
+  entryStatus: "under_review" | "approved"
+) {
+  const request = await tx.registrationRequest.findFirst({
+    where: {
+      id: registrationId,
+      deletedAt: null,
+    },
+  });
+
+  if (!request) {
+    throw new PassportIssuanceError("Registration not found.");
+  }
+
+  if (request.requestStatus !== entryStatus) {
+    throw new PassportIssuanceError(
+      entryStatus === "under_review"
+        ? "This registration is no longer under review. Refresh the page and try again."
+        : "Only approved registrations can issue a passport."
+    );
+  }
+
+  if (entryStatus === "under_review") {
+    await tx.registrationRequest.update({
+      where: {
+        id: request.id,
+      },
+      data: {
+        requestStatus: "approved",
+      },
+    });
+  }
+
+  const machine = await createOrSyncPassportMachine(tx, request);
+  const updatedRequest = await tx.registrationRequest.update({
+    where: {
+      id: request.id,
+    },
+    data: {
+      requestStatus: "passport_issued",
+    },
+  });
+
+  return {
+    machine,
+    updatedRequest,
+  };
+}
+
+function getPassportIssuanceMessage(error: unknown) {
+  if (error instanceof PassportIssuanceError) {
+    return error.message;
+  }
+
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  ) {
+    return "A passport record already exists for this registration. Refresh the page and verify the issued passport before retrying.";
+  }
+
+  return "Passport creation failed. The registration was not updated. Please resolve the issue and try again.";
+}
+
 async function runNotification(
   actionName: string,
-  sendNotification: () => Promise<void>
+  sendNotification: () => Promise<{ success: boolean } | void>
 ) {
   try {
-    await sendNotification();
+    const result = await sendNotification();
+
+    if (
+      result &&
+      typeof result === "object" &&
+      "success" in result &&
+      result.success === false
+    ) {
+      return "Notification email could not be sent because SMTP delivery is misconfigured or unavailable.";
+    }
+
     return null;
   } catch (error) {
     const mailError = error as Error & {
@@ -247,25 +382,47 @@ export async function approveRegistration(
     };
   }
 
-  const updated = await prisma.registrationRequest.update({
-    where: { id: request.id },
-    data: {
-      requestStatus: "approved",
-    },
-  });
+  let updated: Awaited<
+    ReturnType<typeof issuePassportRecordForRequest>
+  >["updatedRequest"];
+  let machine: Awaited<ReturnType<typeof issuePassportRecordForRequest>>["machine"];
 
-  let message = "Registration approved.";
+  try {
+    const issued = await prisma.$transaction((tx) =>
+      issuePassportRecordForRequest(tx, request.id, "under_review")
+    );
+
+    updated = issued.updatedRequest;
+    machine = issued.machine;
+  } catch (error) {
+    console.error("APPROVE_REGISTRATION_PASSPORT_FAILED", {
+      registrationId,
+      message: error instanceof Error ? error.message : "Unknown error",
+      code:
+        error instanceof Prisma.PrismaClientKnownRequestError
+          ? error.code
+          : undefined,
+    });
+
+    return {
+      success: false,
+      message: getPassportIssuanceMessage(error),
+      tone: "error",
+    };
+  }
+
+  let message = "Registration approved and passport issued.";
   let tone: ActionResult["tone"] = "success";
 
   if (updated.ownerEmail?.trim()) {
     const mailWarning = await runNotification(
       "APPROVE_REGISTRATION",
       async () => {
-        const { sendApprovedEmail } = await import(
+        const { sendPassportIssuedEmail } = await import(
           "@/lib/email/send-registration-email"
         );
 
-        await sendApprovedEmail({
+        await sendPassportIssuedEmail({
           to: updated.ownerEmail,
           ownerName: updated.ownerName || "Customer",
           passportNumber: updated.reference,
@@ -280,7 +437,7 @@ export async function approveRegistration(
     }
   }
 
-  revalidateRegistrationPaths(lang, registrationId);
+  revalidateRegistrationPaths(lang, registrationId, updated.reference, machine.id);
 
   return {
     success: true,
@@ -416,12 +573,34 @@ export async function issuePassport(
     };
   }
 
-  const updated = await prisma.registrationRequest.update({
-    where: { id: request.id },
-    data: {
-      requestStatus: "passport_issued",
-    },
-  });
+  let updated: Awaited<
+    ReturnType<typeof issuePassportRecordForRequest>
+  >["updatedRequest"];
+  let machine: Awaited<ReturnType<typeof issuePassportRecordForRequest>>["machine"];
+
+  try {
+    const issued = await prisma.$transaction((tx) =>
+      issuePassportRecordForRequest(tx, request.id, "approved")
+    );
+
+    updated = issued.updatedRequest;
+    machine = issued.machine;
+  } catch (error) {
+    console.error("ISSUE_PASSPORT_FAILED", {
+      registrationId,
+      message: error instanceof Error ? error.message : "Unknown error",
+      code:
+        error instanceof Prisma.PrismaClientKnownRequestError
+          ? error.code
+          : undefined,
+    });
+
+    return {
+      success: false,
+      message: getPassportIssuanceMessage(error),
+      tone: "error",
+    };
+  }
 
   let message = "Passport issued successfully.";
   let tone: ActionResult["tone"] = "success";
@@ -449,7 +628,7 @@ export async function issuePassport(
     }
   }
 
-  revalidateRegistrationPaths(lang, registrationId, updated.reference);
+  revalidateRegistrationPaths(lang, registrationId, updated.reference, machine.id);
 
   return {
     success: true,
