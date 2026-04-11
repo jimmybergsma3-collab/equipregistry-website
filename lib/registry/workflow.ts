@@ -38,7 +38,7 @@ export type RegistrationFileStatus =
   | "accepted"
   | "rejected";
 
-export type DynamicAssetFieldValues = Record<string, string>;
+export type DynamicAssetFieldValues = Record<string, unknown>;
 
 export type RegistrationDraft = {
   assetName: string;
@@ -137,12 +137,29 @@ export function evaluateRegistrationCompleteness(
     }
   }
 
-  const requiredDynamicFieldKeys = getRequiredDynamicFieldKeys(draft.category);
+  const requiredDynamicFieldKeys = getRequiredDynamicFieldKeys(
+    draft.category,
+    draft.subcategory
+  );
 
   for (const fieldKey of requiredDynamicFieldKeys) {
     const value = draft.dynamicFields[fieldKey];
 
-    if (!value || value.trim() === "") {
+    if (typeof value === "string" && value.trim() === "") {
+      missingDynamicFields.push(fieldKey);
+      continue;
+    }
+
+    if (Array.isArray(value) && value.filter(Boolean).length === 0) {
+      missingDynamicFields.push(fieldKey);
+      continue;
+    }
+
+    if (
+      value === null ||
+      value === undefined ||
+      (typeof value !== "string" && !Array.isArray(value) && value === false)
+    ) {
       missingDynamicFields.push(fieldKey);
     }
   }
@@ -158,7 +175,14 @@ export function evaluateRegistrationCompleteness(
 
     const state = draft.documents[documentDefinition.key];
 
-    if (!state || state.status === "missing" || state.status === "rejected") {
+    const hasFiles = Array.isArray(state?.files) && state.files.length > 0;
+
+    if (
+      !state ||
+      state.status === "missing" ||
+      state.status === "rejected" ||
+      !hasFiles
+    ) {
       missingDocuments.push(documentDefinition.key);
     }
   }
@@ -191,7 +215,7 @@ export function evaluateRegistrationCompleteness(
 
 export function deriveRequestStatus(
   draft: RegistrationDraft,
-  paymentCompleted = true
+  paymentCompleted = isPartnerApplicantType(draft.applicantType)
 ): RegistrationRequestStatus {
   const completeness = evaluateRegistrationCompleteness(draft);
 
@@ -214,7 +238,7 @@ export function canSubmitRegistration(draft: RegistrationDraft): boolean {
 export function getNextSubmitAction(
   applicantTypeOrIsComplete: ApplicantType | boolean,
   isCompleteArg?: boolean,
-  paymentCompleted = true
+  paymentCompleted = false
 ): "complete_required" | "go_to_payment" | "submit_registration" {
   const isComplete =
     typeof applicantTypeOrIsComplete === "boolean"
@@ -338,9 +362,9 @@ export function getRequestStatusClasses(
     case "incomplete":
       return "border border-amber-200 bg-amber-50 text-amber-700";
     case "ready_for_submission":
-      return "border border-blue-200 bg-blue-50 text-blue-700";
+      return "border border-sky-200 bg-sky-50 text-sky-700";
     case "payment_required":
-      return "border border-purple-200 bg-purple-50 text-purple-700";
+      return "border border-amber-200 bg-amber-50 text-amber-700";
     case "submitted":
       return "border border-blue-200 bg-blue-50 text-blue-700";
     case "under_review":

@@ -1,19 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import {
+  RegistrationDocumentKey,
   RegistrationDocumentMap,
   RegistrationDocumentState,
+  documentSupportsMultipleFiles,
   getRequiredDocumentsForContext,
 } from "@/lib/registry/document-rules";
 import { ApplicantType, RegistrationFileStatus } from "@/lib/registry/workflow";
 import type { Lang } from "@/lib/i18n/config";
+import { MAX_UPLOAD_SIZE_BYTES } from "@/lib/registry/upload-types";
 
 type Props = {
   lang: Lang;
   applicantType: ApplicantType;
   category: string;
   documents: RegistrationDocumentMap;
-  onChange: (key: string, value: RegistrationDocumentState) => void;
+  onChange: (key: RegistrationDocumentKey, value: RegistrationDocumentState) => void;
 };
 
 const TEXT: Record<
@@ -24,10 +28,13 @@ const TEXT: Record<
     required: string;
     optional: string;
     status: string;
-    fileName: string;
     noFileSelected: string;
     chooseFile: string;
+    addFiles: string;
     replaceFile: string;
+    uploading: string;
+    clearFiles: string;
+    sizeHelp: string;
     statuses: Record<RegistrationFileStatus, string>;
   }
 > = {
@@ -38,10 +45,13 @@ const TEXT: Record<
     required: "Required",
     optional: "Optional",
     status: "Status",
-    fileName: "File name",
-    noFileSelected: "No file selected",
+    noFileSelected: "No files uploaded yet",
     chooseFile: "Choose file",
+    addFiles: "Add files",
     replaceFile: "Replace file",
+    uploading: "Uploading...",
+    clearFiles: "Clear",
+    sizeHelp: "PDF, JPG, PNG, or WEBP. Max 10 MB per file.",
     statuses: {
       missing: "Missing",
       uploaded: "Uploaded",
@@ -52,14 +62,17 @@ const TEXT: Record<
   es: {
     title: "Documentos de soporte",
     subtitle:
-      "Los documentos requeridos cambian según el tipo de solicitante y la categoría seleccionada.",
+      "Los documentos requeridos cambian segun el tipo de solicitante y la categoria seleccionada.",
     required: "Obligatorio",
     optional: "Opcional",
     status: "Estado",
-    fileName: "Nombre del archivo",
-    noFileSelected: "Ningún archivo seleccionado",
+    noFileSelected: "Todavia no hay archivos",
     chooseFile: "Seleccionar archivo",
+    addFiles: "Anadir archivos",
     replaceFile: "Reemplazar archivo",
+    uploading: "Subiendo...",
+    clearFiles: "Limpiar",
+    sizeHelp: "PDF, JPG, PNG o WEBP. Maximo 10 MB por archivo.",
     statuses: {
       missing: "Falta",
       uploaded: "Subido",
@@ -70,14 +83,17 @@ const TEXT: Record<
   de: {
     title: "Unterlagen",
     subtitle:
-      "Erforderliche Dokumente hängen vom Antragstyp und der gewählten Kategorie ab.",
+      "Erforderliche Dokumente hangen vom Antragstyp und der gewahlten Kategorie ab.",
     required: "Erforderlich",
     optional: "Optional",
     status: "Status",
-    fileName: "Dateiname",
-    noFileSelected: "Keine Datei ausgewählt",
-    chooseFile: "Datei auswählen",
+    noFileSelected: "Noch keine Dateien hochgeladen",
+    chooseFile: "Datei auswahlen",
+    addFiles: "Dateien hinzufugen",
     replaceFile: "Datei ersetzen",
+    uploading: "Wird hochgeladen...",
+    clearFiles: "Leeren",
+    sizeHelp: "PDF, JPG, PNG oder WEBP. Maximal 10 MB pro Datei.",
     statuses: {
       missing: "Fehlt",
       uploaded: "Hochgeladen",
@@ -88,19 +104,22 @@ const TEXT: Record<
   fr: {
     title: "Documents justificatifs",
     subtitle:
-      "Les documents requis varient selon le type de demandeur et la catégorie sélectionnée.",
+      "Les documents requis varient selon le type de demandeur et la categorie selectionnee.",
     required: "Obligatoire",
     optional: "Optionnel",
     status: "Statut",
-    fileName: "Nom du fichier",
-    noFileSelected: "Aucun fichier sélectionné",
+    noFileSelected: "Aucun fichier televerse pour le moment",
     chooseFile: "Choisir un fichier",
+    addFiles: "Ajouter des fichiers",
     replaceFile: "Remplacer le fichier",
+    uploading: "Televersement...",
+    clearFiles: "Effacer",
+    sizeHelp: "PDF, JPG, PNG ou WEBP. Maximum 10 Mo par fichier.",
     statuses: {
       missing: "Manquant",
-      uploaded: "Téléversé",
-      accepted: "Accepté",
-      rejected: "Rejeté",
+      uploaded: "Televerse",
+      accepted: "Accepte",
+      rejected: "Rejete",
     },
   },
   it: {
@@ -110,10 +129,13 @@ const TEXT: Record<
     required: "Obbligatorio",
     optional: "Opzionale",
     status: "Stato",
-    fileName: "Nome file",
-    noFileSelected: "Nessun file selezionato",
+    noFileSelected: "Nessun file caricato",
     chooseFile: "Scegli file",
+    addFiles: "Aggiungi file",
     replaceFile: "Sostituisci file",
+    uploading: "Caricamento...",
+    clearFiles: "Cancella",
+    sizeHelp: "PDF, JPG, PNG o WEBP. Massimo 10 MB per file.",
     statuses: {
       missing: "Mancante",
       uploaded: "Caricato",
@@ -128,13 +150,16 @@ const TEXT: Record<
     required: "Verplicht",
     optional: "Optioneel",
     status: "Status",
-    fileName: "Bestandsnaam",
-    noFileSelected: "Geen bestand geselecteerd",
+    noFileSelected: "Nog geen bestanden geupload",
     chooseFile: "Bestand kiezen",
+    addFiles: "Bestanden toevoegen",
     replaceFile: "Bestand vervangen",
+    uploading: "Uploaden...",
+    clearFiles: "Wissen",
+    sizeHelp: "PDF, JPG, PNG of WEBP. Maximaal 10 MB per bestand.",
     statuses: {
       missing: "Ontbreekt",
-      uploaded: "Geüpload",
+      uploaded: "Geupload",
       accepted: "Geaccepteerd",
       rejected: "Afgekeurd",
     },
@@ -142,14 +167,17 @@ const TEXT: Record<
   pt: {
     title: "Documentos de suporte",
     subtitle:
-      "Os documentos necessários variam conforme o tipo de requerente e a categoria selecionada.",
-    required: "Obrigatório",
+      "Os documentos necessarios variam conforme o tipo de requerente e a categoria selecionada.",
+    required: "Obrigatorio",
     optional: "Opcional",
     status: "Estado",
-    fileName: "Nome do ficheiro",
-    noFileSelected: "Nenhum ficheiro selecionado",
+    noFileSelected: "Ainda nao ha ficheiros carregados",
     chooseFile: "Escolher ficheiro",
+    addFiles: "Adicionar ficheiros",
     replaceFile: "Substituir ficheiro",
+    uploading: "A carregar...",
+    clearFiles: "Limpar",
+    sizeHelp: "PDF, JPG, PNG ou WEBP. Maximo 10 MB por ficheiro.",
     statuses: {
       missing: "Em falta",
       uploaded: "Carregado",
@@ -158,74 +186,86 @@ const TEXT: Record<
     },
   },
   ru: {
-    title: "Подтверждающие документы",
+    title: "Podtverzhdayushchiye dokumenty",
     subtitle:
-      "Необходимые документы зависят от типа заявителя и выбранной категории.",
-    required: "Обязательно",
-    optional: "Необязательно",
-    status: "Статус",
-    fileName: "Имя файла",
-    noFileSelected: "Файл не выбран",
-    chooseFile: "Выбрать файл",
-    replaceFile: "Заменить файл",
+      "Neobkhodimyye dokumenty zavisyat ot tipa zayavitelya i vybrannoy kategorii.",
+    required: "Obyazatelno",
+    optional: "Neobyazatelno",
+    status: "Status",
+    noFileSelected: "Fayly eshche ne zagruzheny",
+    chooseFile: "Vybrat fayl",
+    addFiles: "Dobavit fayly",
+    replaceFile: "Zamenit fayl",
+    uploading: "Zagruzka...",
+    clearFiles: "Ochistit",
+    sizeHelp: "PDF, JPG, PNG ili WEBP. Maksimum 10 MB na fayl.",
     statuses: {
-      missing: "Отсутствует",
-      uploaded: "Загружен",
-      accepted: "Принят",
-      rejected: "Отклонён",
+      missing: "Otsutstvuet",
+      uploaded: "Zagruzhen",
+      accepted: "Prinyat",
+      rejected: "Otkлонен",
     },
   },
   zh: {
-    title: "支持文件",
-    subtitle: "所需文件会根据申请人类型和所选类别而变化。",
-    required: "必填",
-    optional: "可选",
-    status: "状态",
-    fileName: "文件名",
-    noFileSelected: "未选择文件",
-    chooseFile: "选择文件",
-    replaceFile: "替换文件",
+    title: "Zhichi wenjian",
+    subtitle: "Suoxu wenjian hui genju shenqingren leixing he leibie bianhua.",
+    required: "Bixu",
+    optional: "Kexuan",
+    status: "Zhuangtai",
+    noFileSelected: "Shangwei shangchuan wenjian",
+    chooseFile: "Xuanze wenjian",
+    addFiles: "Tianjia wenjian",
+    replaceFile: "Tihuan wenjian",
+    uploading: "Shangchuan zhong...",
+    clearFiles: "Qingchu",
+    sizeHelp: "PDF, JPG, PNG huo WEBP. Meige wenjian zui duo 10 MB.",
     statuses: {
-      missing: "缺失",
-      uploaded: "已上传",
-      accepted: "已接受",
-      rejected: "已拒绝",
+      missing: "Que失",
+      uploaded: "Yi shangchuan",
+      accepted: "Yi jieshou",
+      rejected: "Yi jujue",
     },
   },
   hi: {
-    title: "सहायक दस्तावेज़",
+    title: "Supporting documents",
     subtitle:
-      "आवश्यक दस्तावेज़ आवेदक के प्रकार और चुनी गई श्रेणी के आधार पर बदलते हैं।",
-    required: "अनिवार्य",
-    optional: "वैकल्पिक",
-    status: "स्थिति",
-    fileName: "फ़ाइल नाम",
-    noFileSelected: "कोई फ़ाइल चयनित नहीं",
-    chooseFile: "फ़ाइल चुनें",
-    replaceFile: "फ़ाइल बदलें",
+      "Required documents applicant type aur selected category ke hisab se badalte hain.",
+    required: "Required",
+    optional: "Optional",
+    status: "Status",
+    noFileSelected: "Abhi tak koi file upload nahin hui",
+    chooseFile: "Choose file",
+    addFiles: "Add files",
+    replaceFile: "Replace file",
+    uploading: "Uploading...",
+    clearFiles: "Clear",
+    sizeHelp: "PDF, JPG, PNG, ya WEBP. Har file 10 MB se chhoti honi chahiye.",
     statuses: {
-      missing: "अनुपस्थित",
-      uploaded: "अपलोड किया गया",
-      accepted: "स्वीकृत",
-      rejected: "अस्वीकृत",
+      missing: "Missing",
+      uploaded: "Uploaded",
+      accepted: "Accepted",
+      rejected: "Rejected",
     },
   },
   ar: {
-    title: "المستندات الداعمة",
+    title: "Almustanadat aldaeima",
     subtitle:
-      "تختلف المستندات المطلوبة حسب نوع مقدم الطلب والفئة المختارة.",
-    required: "إلزامي",
-    optional: "اختياري",
-    status: "الحالة",
-    fileName: "اسم الملف",
-    noFileSelected: "لم يتم اختيار ملف",
-    chooseFile: "اختر ملفًا",
-    replaceFile: "استبدال الملف",
+      "Takhtalif almustanadat almatluba hasab naw muqaddim alttalab walfiea almukhtara.",
+    required: "Ilzami",
+    optional: "Ikhtiyari",
+    status: "Alhala",
+    noFileSelected: "Lam yutam raf eay malafat baed",
+    chooseFile: "Ikhtar milafan",
+    addFiles: "Idafat malafat",
+    replaceFile: "Istibdal alfile",
+    uploading: "Jari alraf...",
+    clearFiles: "Masah",
+    sizeHelp: "PDF, JPG, PNG aw WEBP. Alhadd alaqsa 10 MB likulli malaf.",
     statuses: {
-      missing: "مفقود",
-      uploaded: "تم الرفع",
-      accepted: "مقبول",
-      rejected: "مرفوض",
+      missing: "Mafqud",
+      uploaded: "Tam alraf",
+      accepted: "Maqbul",
+      rejected: "Marfud",
     },
   },
 };
@@ -252,12 +292,74 @@ export default function DocumentRequirementsPanel({
 }: Props) {
   const text = TEXT[lang];
   const requiredDocuments = getRequiredDocumentsForContext(
-  applicantType,
-  category,
-  lang
-);
+    applicantType,
+    category,
+    lang
+  );
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  if (requiredDocuments.length === 0) return null;
+  if (requiredDocuments.length === 0) {
+    return null;
+  }
+
+  async function uploadFiles(key: RegistrationDocumentKey, files: FileList | null) {
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const selectedFiles = Array.from(files);
+
+    const tooLarge = selectedFiles.find((file) => file.size > MAX_UPLOAD_SIZE_BYTES);
+    if (tooLarge) {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: text.sizeHelp,
+      }));
+      return;
+    }
+
+    setUploadingKey(key);
+    setErrors((prev) => ({ ...prev, [key]: "" }));
+
+    try {
+      const formData = new FormData();
+      formData.set("bucket", key);
+
+      for (const file of selectedFiles) {
+        formData.append("files", file);
+      }
+
+      const response = await fetch("/api/uploads", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.error || "Upload failed.");
+      }
+
+      const current = documents[key] ?? { status: "missing" as const, files: [] };
+      const nextFiles = documentSupportsMultipleFiles(key)
+        ? [...(current.files ?? []), ...(data.uploads ?? [])]
+        : [...(data.uploads ?? [])];
+
+      onChange(key, {
+        status: "uploaded",
+        fileName: nextFiles[0]?.originalName ?? "",
+        files: nextFiles,
+      });
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        [key]: error instanceof Error ? error.message : "Upload failed.",
+      }));
+    } finally {
+      setUploadingKey(null);
+    }
+  }
 
   return (
     <section className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -268,9 +370,13 @@ export default function DocumentRequirementsPanel({
 
       <div className="space-y-4">
         {requiredDocuments.map((doc) => {
-          const current = documents[doc.key] ?? { status: "missing" as const };
+          const current = documents[doc.key] ?? {
+            status: "missing" as const,
+            files: [],
+          };
           const badgeClass = getStatusClasses(current.status);
           const inputId = `document-upload-${doc.key}`;
+          const multiple = documentSupportsMultipleFiles(doc.key);
 
           return (
             <div
@@ -302,60 +408,72 @@ export default function DocumentRequirementsPanel({
                   ) : null}
                 </div>
 
-                <div className="lg:w-[420px]">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-zinc-900">
-                      {text.fileName}
-                    </label>
-
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <label
-                        htmlFor={inputId}
-                        className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
-                      >
-                        {current.fileName ? text.replaceFile : text.chooseFile}
-                      </label>
-
-                      <input
-                        id={inputId}
-                        type="file"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-
-                          if (!file) {
-                            onChange(doc.key, {
-                              ...current,
-                              status: "missing",
-                              fileName: "",
-                            });
-                            return;
-                          }
-
-                          onChange(doc.key, {
-                            ...current,
-                            status: "uploaded",
-                            fileName: file.name,
-                          });
-                        }}
-                      />
-
-                      <span className="min-w-0 truncate text-sm text-zinc-600">
-                        {current.fileName || text.noFileSelected}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="mt-3">
-                    <label className="mb-2 block text-sm font-medium text-zinc-900">
-                      {text.status}
-                    </label>
-                    <div
-                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeClass}`}
+                <div className="lg:w-[440px]">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label
+                      htmlFor={inputId}
+                      className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
                     >
-                      {text.statuses[current.status]}
-                    </div>
+                      {uploadingKey === doc.key
+                        ? text.uploading
+                        : current.files && current.files.length > 0
+                        ? multiple
+                          ? text.addFiles
+                          : text.replaceFile
+                        : text.chooseFile}
+                    </label>
+
+                    <input
+                      id={inputId}
+                      type="file"
+                      multiple={multiple}
+                      className="hidden"
+                      onChange={(event) => uploadFiles(doc.key, event.target.files)}
+                    />
+
+                    {current.files && current.files.length > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onChange(doc.key, {
+                            status: "missing",
+                            fileName: "",
+                            files: [],
+                          })
+                        }
+                        className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100"
+                      >
+                        {text.clearFiles}
+                      </button>
+                    ) : null}
                   </div>
+
+                  <p className="mt-3 text-xs text-zinc-500">{text.sizeHelp}</p>
+
+                  <div className="mt-4">
+                    <p className="mb-2 text-sm font-medium text-zinc-900">
+                      {text.status}
+                    </p>
+
+                    {current.files && current.files.length > 0 ? (
+                      <ul className="space-y-2">
+                        {current.files.map((file) => (
+                          <li
+                            key={file.id}
+                            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+                          >
+                            {file.originalName}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-zinc-500">{text.noFileSelected}</p>
+                    )}
+                  </div>
+
+                  {errors[doc.key] ? (
+                    <p className="mt-3 text-sm text-red-600">{errors[doc.key]}</p>
+                  ) : null}
                 </div>
               </div>
             </div>

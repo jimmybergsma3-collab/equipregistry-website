@@ -1,16 +1,18 @@
-import Link from "next/link";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
-import DeleteRequestButton from "@/components/registry/delete-request-button";
+import AdminRequestRowActions from "@/components/registry/admin-request-row-actions";
 import {
   RegistrationRequestSummary,
   getApplicantTypeLabel,
-  isVisibleInDashboard,
 } from "@/lib/registry/workflow";
-import { getDictionary } from "@/lib/i18n/dictionary";
+
+type AdminRegistrationRequest = RegistrationRequestSummary & {
+  ownerName: string;
+  ownerEmail: string;
+};
 
 type Props = {
   lang: string;
-  requests: RegistrationRequestSummary[];
+  requests: AdminRegistrationRequest[];
 };
 
 function formatDate(dateString: string) {
@@ -25,29 +27,33 @@ function formatDate(dateString: string) {
   }).format(date);
 }
 
-function canDeleteRequest(status: RegistrationRequestSummary["requestStatus"]) {
-  return (
-    status === "draft" ||
-    status === "incomplete" ||
-    status === "submitted"
-  );
+function getStatusDotClass(status: RegistrationRequestSummary["requestStatus"]) {
+  switch (status) {
+    case "passport_issued":
+    case "approved":
+      return "bg-emerald-500";
+    case "under_review":
+    case "more_info_required":
+    case "payment_required":
+      return "bg-amber-500";
+    case "rejected":
+      return "bg-red-500";
+    case "submitted":
+      return "bg-blue-500";
+    default:
+      return "bg-zinc-400";
+  }
 }
 
-export default function DashboardRequestTable({ lang, requests }: Props) {
-  const dict = getDictionary(lang);
-
-  const visibleRequests = requests.filter((item) =>
-    isVisibleInDashboard(item.requestStatus)
-  );
-
-  if (visibleRequests.length === 0) {
+export default function AdminRequestTable({ lang, requests }: Props) {
+  if (requests.length === 0) {
     return (
       <section className="rounded-2xl border border-zinc-200 bg-white p-6">
         <h2 className="text-lg font-semibold text-zinc-900">
-          Your registered assets
+          Registration requests
         </h2>
         <p className="mt-2 text-sm text-zinc-600">
-          No active registration requests are visible yet.
+          No registrations match the current admin view.
         </p>
       </section>
     );
@@ -60,7 +66,7 @@ export default function DashboardRequestTable({ lang, requests }: Props) {
           Registration requests
         </h2>
         <p className="mt-1 text-sm text-zinc-600">
-          Requests become visible in the dashboard once they move beyond draft.
+          Review, approve, request more information, confirm payment, or delete registrations directly from the overview.
         </p>
       </div>
 
@@ -69,7 +75,7 @@ export default function DashboardRequestTable({ lang, requests }: Props) {
           <thead className="bg-zinc-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
-                Passport Number
+                Reference
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 Asset
@@ -81,120 +87,27 @@ export default function DashboardRequestTable({ lang, requests }: Props) {
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                Payment
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 Completeness
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 Updated
               </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                Actions
+              </th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-zinc-200 bg-white">
-            {visibleRequests.map((item) => (
-              <tr key={item.id}>
-                <td className="px-6 py-4 text-sm font-medium text-zinc-900">
-                  <div>{item.reference}</div>
-
-                  {canDeleteRequest(item.requestStatus) ? (
-                    <div className="mt-2">
-                      <DeleteRequestButton
-                        id={item.id}
-                        lang={lang}
-                        label={
-                          lang === "es"
-                            ? "Eliminar"
-                            : lang === "de"
-                            ? "Löschen"
-                            : lang === "fr"
-                            ? "Supprimer"
-                            : lang === "it"
-                            ? "Elimina"
-                            : lang === "nl"
-                            ? "Verwijderen"
-                            : lang === "pt"
-                            ? "Eliminar"
-                            : lang === "ru"
-                            ? "Удалить"
-                            : lang === "zh"
-                            ? "删除"
-                            : lang === "hi"
-                            ? "हटाएँ"
-                            : lang === "ar"
-                            ? "حذف"
-                            : "Delete"
-                        }
-                        deletingText={
-                          lang === "es"
-                            ? "Eliminando..."
-                            : lang === "de"
-                            ? "Wird gelöscht..."
-                            : lang === "fr"
-                            ? "Suppression..."
-                            : lang === "it"
-                            ? "Eliminazione..."
-                            : lang === "nl"
-                            ? "Verwijderen..."
-                            : lang === "pt"
-                            ? "A eliminar..."
-                            : lang === "ru"
-                            ? "Удаление..."
-                            : lang === "zh"
-                            ? "删除中..."
-                            : lang === "hi"
-                            ? "हटाया जा रहा है..."
-                            : lang === "ar"
-                            ? "جارٍ الحذف..."
-                            : "Deleting..."
-                        }
-                        confirmText={
-                          lang === "es"
-                            ? "¿Está seguro de que desea eliminar este registro?"
-                            : lang === "de"
-                            ? "Möchten Sie diese Registrierung wirklich löschen?"
-                            : lang === "fr"
-                            ? "Voulez-vous vraiment supprimer cet enregistrement ?"
-                            : lang === "it"
-                            ? "Vuoi davvero eliminare questa registrazione?"
-                            : lang === "nl"
-                            ? "Weet je zeker dat je deze registratie wilt verwijderen?"
-                            : lang === "pt"
-                            ? "Tem a certeza de que pretende eliminar este registo?"
-                            : lang === "ru"
-                            ? "Вы уверены, что хотите удалить эту регистрацию?"
-                            : lang === "zh"
-                            ? "您确定要删除此注册吗？"
-                            : lang === "hi"
-                            ? "क्या आप वाकई इस पंजीकरण को हटाना चाहते हैं?"
-                            : lang === "ar"
-                            ? "هل أنت متأكد أنك تريد حذف هذا التسجيل؟"
-                            : "Are you sure you want to delete this registration?"
-                        }
-                        errorText={
-                          lang === "es"
-                            ? "No se pudo eliminar el registro."
-                            : lang === "de"
-                            ? "Registrierung konnte nicht gelöscht werden."
-                            : lang === "fr"
-                            ? "Impossible de supprimer l’enregistrement."
-                            : lang === "it"
-                            ? "Impossibile eliminare la registrazione."
-                            : lang === "nl"
-                            ? "Registratie kon niet worden verwijderd."
-                            : lang === "pt"
-                            ? "Não foi possível eliminar o registo."
-                            : lang === "ru"
-                            ? "Не удалось удалить регистрацию."
-                            : lang === "zh"
-                            ? "无法删除注册。"
-                            : lang === "hi"
-                            ? "पंजीकरण हटाया नहीं जा सका।"
-                            : lang === "ar"
-                            ? "تعذر حذف التسجيل."
-                            : "Failed to delete registration."
-                        }
-                      />
-                    </div>
-                  ) : null}
+            {requests.map((item) => (
+              <tr key={item.id} className="align-top">
+                <td className="px-6 py-4 text-sm text-zinc-700">
+                  <div className="font-medium text-zinc-900">{item.reference}</div>
+                  <div className="mt-1 text-zinc-600">{item.ownerName}</div>
+                  <div className="text-zinc-500">{item.ownerEmail}</div>
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
@@ -209,7 +122,19 @@ export default function DashboardRequestTable({ lang, requests }: Props) {
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
-                  <RequestStatusBadge status={item.requestStatus} lang={lang} />
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`inline-block size-2.5 rounded-full ${getStatusDotClass(
+                        item.requestStatus
+                      )}`}
+                      aria-hidden="true"
+                    />
+                    <RequestStatusBadge status={item.requestStatus} lang={lang} />
+                  </div>
+                </td>
+
+                <td className="px-6 py-4 text-sm text-zinc-700">
+                  {item.paymentCompleted ? "Paid" : "Pending"}
                 </td>
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
@@ -218,6 +143,15 @@ export default function DashboardRequestTable({ lang, requests }: Props) {
 
                 <td className="px-6 py-4 text-sm text-zinc-700">
                   {formatDate(item.updatedAt)}
+                </td>
+
+                <td className="px-6 py-4">
+                  <AdminRequestRowActions
+                    registrationId={item.id}
+                    lang={lang}
+                    requestStatus={item.requestStatus}
+                    paymentCompleted={item.paymentCompleted}
+                  />
                 </td>
               </tr>
             ))}

@@ -18,6 +18,7 @@ type Props = {
   }>;
   searchParams: Promise<{
     status?: string;
+    review?: string;
   }>;
 };
 
@@ -39,7 +40,7 @@ export default async function AdminRegistrationsPage({
   searchParams,
 }: Props) {
   const { lang } = await params;
-  const { status } = await searchParams;
+  const { status, review } = await searchParams;
 
   if (!isValidLang(lang)) {
     notFound();
@@ -51,13 +52,37 @@ export default async function AdminRegistrationsPage({
     status && ALLOWED_STATUSES.includes(status as RegistrationRequestStatus)
       ? (status as RegistrationRequestStatus)
       : null;
+  const validReview =
+    review === "reviewed" || review === "not_reviewed" ? review : "all";
+  const reviewedStatuses: RegistrationRequestStatus[] = [
+    "under_review",
+    "approved",
+    "rejected",
+    "more_info_required",
+    "passport_issued",
+  ];
 
   const requests = await prisma.registrationRequest.findMany({
-    where: validStatus
-      ? {
-          requestStatus: validStatus,
-        }
-      : undefined,
+    where: {
+      deletedAt: null,
+      ...(validStatus
+        ? {
+            requestStatus: validStatus,
+          }
+        : validReview === "reviewed"
+        ? {
+            requestStatus: {
+              in: reviewedStatuses,
+            },
+          }
+        : validReview === "not_reviewed"
+        ? {
+            requestStatus: {
+              notIn: reviewedStatuses,
+            },
+          }
+        : {}),
+    },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
   });
 
@@ -103,12 +128,20 @@ export default async function AdminRegistrationsPage({
                   ? `Showing registrations filtered by: ${getRequestStatusLabel(
                       validStatus
                     )}`
+                  : validReview === "reviewed"
+                  ? "Showing reviewed registrations."
+                  : validReview === "not_reviewed"
+                  ? "Showing registrations that still need review."
                   : "Showing all registrations across the current system view."}
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <RequestStatusFilter currentStatus={validStatus ?? "all"} />
+              <RequestStatusFilter
+                lang={lang}
+                currentStatus={validStatus ?? "all"}
+                currentReview={validReview}
+              />
 
               <Link
                 href={`/${lang}/dashboard/register`}

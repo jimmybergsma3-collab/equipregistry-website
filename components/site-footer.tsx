@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Lang } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionary";
 import { getLangDir } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 type Props = {
   lang: Lang;
@@ -10,15 +10,19 @@ type Props = {
 export default function SiteFooter({ lang }: Props) {
   const t = getDictionary(lang);
   const dir = getLangDir(lang);
+  const footerTextAlignClass = dir === "rtl" ? "md:text-right" : "md:text-left";
 
   return (
     <footer
       dir={dir}
       className="border-t border-slate-200 bg-slate-50 py-12 text-sm text-slate-600"
     >
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 md:flex-row md:items-center md:justify-between">
-        <div className="text-center md:text-left" suppressHydrationWarning>
-          © {new Date().getFullYear()} {t.footer.copyright}
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
+        <div
+          className={`text-center ${footerTextAlignClass}`}
+          suppressHydrationWarning
+        >
+          &copy; {new Date().getFullYear()} {t.footer.copyright}
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">

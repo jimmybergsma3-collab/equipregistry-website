@@ -180,7 +180,7 @@ export default async function InsuranceDashboardPage() {
             </div>
 
             <p className="text-sm text-slate-700 mb-3">
-              Machines with "History Unknown" status show a 3–5× higher fraud and theft probability.
+              Machines with the History Unknown status show a 3–5× higher fraud and theft probability.
             </p>
 
             <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">

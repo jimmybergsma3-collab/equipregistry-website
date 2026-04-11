@@ -503,12 +503,28 @@ export async function POST(req: Request) {
       rawToken
     )}&requestId=${encodeURIComponent(requestId)}`;
 
-    await sendAccountVerificationEmail({
-      to: email,
-      ownerName: name,
-      verifyUrl,
-      lang,
-    });
+    try {
+      await sendAccountVerificationEmail({
+        to: email,
+        ownerName: name,
+        verifyUrl,
+        lang,
+      });
+    } catch (error) {
+      const mailError =
+        error instanceof Error ? error : new Error("Unknown mail error");
+
+      console.error("REGISTER_REQUEST_VERIFICATION_EMAIL_FAILED", {
+        requestId,
+        reference,
+        message: mailError.message,
+      });
+
+      return NextResponse.json(
+        { error: "VERIFICATION_EMAIL_SEND_FAILED" },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json({
       success: true,

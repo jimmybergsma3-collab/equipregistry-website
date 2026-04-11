@@ -2,6 +2,7 @@
 
 import { ApplicantType } from "@/lib/registry/workflow";
 import type { Lang } from "@/lib/i18n/config";
+import { formatPricingAmount, getPricing } from "@/lib/registry/pricing";
 
 type LocalizedText = Partial<Record<Lang, string>> & { en: string };
 
@@ -22,16 +23,6 @@ export const MANUAL_PAYMENT_DETAILS = {
   bic: "CAIXESBBXXX",
   bankName: "CAIXABANK",
   currency: "EUR",
-
-  registrationFeeText: {
-    en: "€ 25.00 incl. VAT",
-    es: "€ 25,00 IVA incl.",
-    de: "25,00 € inkl. MwSt.",
-    fr: "25,00 € TTC",
-    it: "€ 25,00 IVA inclusa",
-    nl: "€ 25,00 incl. BTW",
-    pt: "€ 25,00 com IVA incluído",
-  } satisfies LocalizedText,
 
   processingText: {
     en: "After payment, your registration will be processed and validated within 24 hours.",
@@ -149,11 +140,21 @@ export function usesManualIbanPayment(applicantType: ApplicantType) {
 }
 
 export function getManualPaymentText(lang: string) {
+  return getManualPaymentTextForAsset(lang, "", "");
+}
+
+export function getManualPaymentTextForAsset(
+  lang: string,
+  category: string,
+  subcategory?: string
+) {
+  const registrationFeeText = formatPricingAmount(
+    getPricing(category, subcategory).registration,
+    lang
+  );
+
   return {
-    registrationFeeText: getLocalizedText(
-      MANUAL_PAYMENT_DETAILS.registrationFeeText,
-      lang
-    ),
+    registrationFeeText,
     processingText: getLocalizedText(
       MANUAL_PAYMENT_DETAILS.processingText,
       lang

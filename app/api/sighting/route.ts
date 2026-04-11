@@ -33,7 +33,13 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ ok: true, caseId });
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message ?? "Unknown error" }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

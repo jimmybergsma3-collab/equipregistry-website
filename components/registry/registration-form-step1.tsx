@@ -557,7 +557,11 @@ export default function RegistrationFormStep1({
     createEmptyRegistrationDraft(initialApplicantType)
   );
 
-  const paymentCompleted = true;
+  const paymentCompleted =
+    draft.applicantType === "insurer_partner" ||
+    draft.applicantType === "bank_partner" ||
+    draft.applicantType === "dealer_partner" ||
+    draft.applicantType === "rental_partner";
 
   const [saveState, saveAction, savePending] = useActionState(
     saveRegistrationDraft,
@@ -591,7 +595,7 @@ export default function RegistrationFormStep1({
     }));
   }
 
-  function updateDynamicField(key: string, value: string) {
+  function updateDynamicField(key: string, value: unknown) {
     setDraft((prev) => ({
       ...prev,
       dynamicFields: {
@@ -853,6 +857,7 @@ export default function RegistrationFormStep1({
         <DynamicAssetFields
           lang={lang}
           category={draft.category}
+          subcategory={draft.subcategory}
           values={draft.dynamicFields}
           onChange={updateDynamicField}
         />

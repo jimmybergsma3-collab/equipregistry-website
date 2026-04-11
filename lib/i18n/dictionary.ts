@@ -4,11 +4,15 @@ type Dictionary = {
   nav: {
     howItWorks: string;
     login: string;
+    dashboard: string;
+    logout: string;
+    menu: string;
   };
   menu: {
     home: string;
     verifyAsset: string;
     registerAsset: string;
+    pricing: string;
     reportSighting: string;
     partners: string;
     contact: string;
@@ -103,6 +107,8 @@ type Dictionary = {
     demoSerials: string;
     loggedInMessage: string;
     goToDashboard: string;
+    supportedAssetsTitle: string;
+    supportedAssetsItems: [string, string, string];
   };
   result: {
     whyThisMatters: string;
@@ -246,11 +252,15 @@ const en: Dictionary = {
   nav: {
     howItWorks: "How it works",
     login: "Login",
+    dashboard: "Dashboard",
+    logout: "Logout",
+    menu: "Menu",
   },
   menu: {
     home: "Home",
     verifyAsset: "Verify Asset",
     registerAsset: "Register Asset",
+    pricing: "Pricing",
     reportSighting: "Report Sighting",
     partners: "For Insurers / Partners",
     contact: "Contact",
@@ -370,6 +380,12 @@ errorMessage: "Something went wrong while sending your message.",
     loggedInMessage:
       "You’re logged in. You can use search normally and still access private passports.",
     goToDashboard: "Go to dashboard",
+    supportedAssetsTitle: "Supported assets",
+    supportedAssetsItems: [
+      "Vehicles (cars, trucks and classic vehicles)",
+      "Equipment and machinery",
+      "Bikes and light mobility",
+    ],
   },
   result: {
     whyThisMatters: "Why this matters",
@@ -531,11 +547,15 @@ const es: Dictionary = {
   nav: {
     howItWorks: "Cómo funciona",
     login: "Acceso",
+    dashboard: "Panel",
+    logout: "Cerrar sesión",
+    menu: "Menú",
   },
   menu: {
     home: "Inicio",
     verifyAsset: "Verificar activo",
     registerAsset: "Registrar activo",
+    pricing: "Precios",
     reportSighting: "Reportar avistamiento",
     partners: "Para aseguradoras / socios",
     contact: "Contacto",
@@ -655,6 +675,12 @@ errorMessage: "Se ha producido un error al enviar su mensaje.",
     loggedInMessage:
       "Ha iniciado sesión. Puede usar la búsqueda normalmente y acceder a pasaportes privados.",
     goToDashboard: "Ir al panel",
+    supportedAssetsTitle: "Activos compatibles",
+    supportedAssetsItems: [
+      "Vehículos (coches, camiones y vehículos clásicos)",
+      "Equipos y maquinaria",
+      "Bicicletas y movilidad ligera",
+    ],
   },
   result: {
     whyThisMatters: "Por qué es importante",
@@ -818,11 +844,15 @@ const de: Dictionary = {
   nav: {
     howItWorks: "So funktioniert es",
     login: "Anmelden",
+    dashboard: "Dashboard",
+    logout: "Abmelden",
+    menu: "Menü",
   },
   menu: {
     home: "Startseite",
     verifyAsset: "Asset prüfen",
     registerAsset: "Asset registrieren",
+    pricing: "Preise",
     reportSighting: "Sichtung melden",
     partners: "Für Versicherer / Partner",
     contact: "Kontakt",
@@ -942,6 +972,12 @@ errorMessage: "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten.",
     loggedInMessage:
       "Sie sind eingeloggt. Sie können die Suche normal nutzen und weiterhin auf private Pässe zugreifen.",
     goToDashboard: "Zum Dashboard",
+    supportedAssetsTitle: "Unterstützte Assets",
+    supportedAssetsItems: [
+      "Fahrzeuge (Autos, Lkw und Oldtimer)",
+      "Geräte und Maschinen",
+      "Fahrräder und leichte Mobilität",
+    ],
   },
   result: {
     whyThisMatters: "Warum das wichtig ist",
@@ -1104,11 +1140,15 @@ const fr: Dictionary = {
   nav: {
     howItWorks: "Fonctionnement",
     login: "Connexion",
+    dashboard: "Tableau de bord",
+    logout: "Déconnexion",
+    menu: "Menu",
   },
   menu: {
     home: "Accueil",
     verifyAsset: "Vérifier l’actif",
     registerAsset: "Enregistrer l’actif",
+    pricing: "Tarifs",
     reportSighting: "Signaler un repérage",
     partners: "Pour assureurs / partenaires",
     contact: "Contact",
@@ -1228,6 +1268,12 @@ errorMessage: "Une erreur s’est produite lors de l’envoi de votre message.",
     loggedInMessage:
       "Vous êtes connecté. Vous pouvez utiliser la recherche normalement et accéder aux passeports privés.",
     goToDashboard: "Aller au tableau de bord",
+    supportedAssetsTitle: "Actifs pris en charge",
+    supportedAssetsItems: [
+      "Véhicules (voitures, camions et véhicules de collection)",
+      "Équipements et machines",
+      "Vélos et mobilité légère",
+    ],
   },
   result: {
     whyThisMatters: "Pourquoi c’est important",
@@ -1391,11 +1437,15 @@ const it: Dictionary = {
   nav: {
     howItWorks: "Come funziona",
     login: "Accesso",
+    dashboard: "Dashboard",
+    logout: "Disconnetti",
+    menu: "Menu",
   },
   menu: {
     home: "Home",
     verifyAsset: "Verifica asset",
     registerAsset: "Registra asset",
+    pricing: "Tariffe",
     reportSighting: "Segnala avvistamento",
     partners: "Per assicuratori / partner",
     contact: "Contatto",
@@ -1515,6 +1565,12 @@ errorMessage: "Si è verificato un errore durante l’invio del messaggio.",
     loggedInMessage:
       "Hai effettuato l’accesso. Puoi usare la ricerca normalmente e accedere ai passaporti privati.",
     goToDashboard: "Vai alla dashboard",
+    supportedAssetsTitle: "Asset supportati",
+    supportedAssetsItems: [
+      "Veicoli (auto, camion e veicoli d'epoca)",
+      "Attrezzature e macchinari",
+      "Biciclette e mobilità leggera",
+    ],
   },
   result: {
     whyThisMatters: "Perché è importante",
@@ -1678,11 +1734,15 @@ const nl: Dictionary = {
   nav: {
     howItWorks: "Hoe het werkt",
     login: "Inloggen",
+    dashboard: "Dashboard",
+    logout: "Uitloggen",
+    menu: "Menu",
   },
   menu: {
     home: "Home",
     verifyAsset: "Asset verifiëren",
     registerAsset: "Asset registreren",
+    pricing: "Tarieven",
     reportSighting: "Melding doen",
     partners: "Voor verzekeraars / partners",
     contact: "Contact",
@@ -1802,6 +1862,12 @@ errorMessage: "Er ging iets mis bij het verzenden van je bericht.",
     loggedInMessage:
       "Je bent ingelogd. Je kunt normaal zoeken en nog steeds private paspoorten openen.",
     goToDashboard: "Ga naar dashboard",
+    supportedAssetsTitle: "Ondersteunde assets",
+    supportedAssetsItems: [
+      "Voertuigen (auto's, vrachtwagens en klassieke voertuigen)",
+      "Materieel en machines",
+      "Fietsen en lichte mobiliteit",
+    ],
   },
   result: {
     whyThisMatters: "Waarom dit belangrijk is",
@@ -1964,11 +2030,15 @@ const pt: Dictionary = {
   nav: {
     howItWorks: "Como funciona",
     login: "Entrar",
+    dashboard: "Painel",
+    logout: "Terminar sessão",
+    menu: "Menu",
   },
   menu: {
     home: "Início",
     verifyAsset: "Verificar ativo",
     registerAsset: "Registar ativo",
+    pricing: "Preços",
     reportSighting: "Reportar avistamento",
     partners: "Para seguradoras / parceiros",
     contact: "Contacto",
@@ -2088,6 +2158,12 @@ errorMessage: "Ocorreu um erro ao enviar a sua mensagem.",
     loggedInMessage:
       "Tem sessão iniciada. Pode usar a pesquisa normalmente e continuar a aceder a passaportes privados.",
     goToDashboard: "Ir para o painel",
+    supportedAssetsTitle: "Ativos suportados",
+    supportedAssetsItems: [
+      "Veículos (carros, camiões e veículos clássicos)",
+      "Equipamentos e maquinaria",
+      "Bicicletas e mobilidade ligeira",
+    ],
   },
   result: {
     whyThisMatters: "Porque isto importa",
@@ -2251,11 +2327,15 @@ const ru: Dictionary = {
   nav: {
     howItWorks: "Как это работает",
     login: "Войти",
+    dashboard: "Панель",
+    logout: "Выход",
+    menu: "Меню",
   },
   menu: {
     home: "Главная",
     verifyAsset: "Проверить актив",
     registerAsset: "Зарегистрировать актив",
+    pricing: "Цены",
     reportSighting: "Сообщить о наблюдении",
     partners: "Для страховщиков / партнёров",
     contact: "Контакт",
@@ -2375,6 +2455,12 @@ const ru: Dictionary = {
     loggedInMessage:
       "Вы вошли в систему. Вы можете пользоваться поиском как обычно и получать доступ к приватным паспортам.",
     goToDashboard: "Перейти в панель",
+    supportedAssetsTitle: "Поддерживаемые активы",
+    supportedAssetsItems: [
+      "Транспортные средства (автомобили, грузовики и классические автомобили)",
+      "Оборудование и техника",
+      "Велосипеды и лёгкая мобильность",
+    ],
   },
   result: {
     whyThisMatters: "Почему это важно",
@@ -2537,11 +2623,15 @@ const zh: Dictionary = {
   nav: {
     howItWorks: "运作方式",
     login: "登录",
+    dashboard: "控制台",
+    logout: "退出登录",
+    menu: "菜单",
   },
   menu: {
     home: "首页",
     verifyAsset: "验证资产",
     registerAsset: "注册资产",
+    pricing: "价格",
     reportSighting: "报告发现",
     partners: "面向保险公司 / 合作伙伴",
     contact: "联系",
@@ -2661,6 +2751,12 @@ const zh: Dictionary = {
     loggedInMessage:
       "您已登录。您可以正常使用搜索，并继续访问私有护照。",
     goToDashboard: "前往仪表板",
+    supportedAssetsTitle: "支持的资产",
+    supportedAssetsItems: [
+      "车辆（汽车、卡车和经典车辆）",
+      "设备和机械",
+      "自行车与轻型出行设备",
+    ],
   },
   result: {
     whyThisMatters: "这为什么重要",
@@ -2822,11 +2918,15 @@ const hi: Dictionary = {
   nav: {
     howItWorks: "यह कैसे काम करता है",
     login: "लॉगिन",
+    dashboard: "डैशबोर्ड",
+    logout: "लॉग आउट",
+    menu: "मेनू",
   },
   menu: {
     home: "होम",
     verifyAsset: "एसेट सत्यापित करें",
     registerAsset: "एसेट पंजीकृत करें",
+    pricing: "मूल्य",
     reportSighting: "देखे जाने की रिपोर्ट करें",
     partners: "बीमाकर्ताओं / भागीदारों के लिए",
     contact: "संपर्क",
@@ -2946,6 +3046,12 @@ const hi: Dictionary = {
     loggedInMessage:
       "आप लॉग इन हैं। आप सामान्य रूप से खोज का उपयोग कर सकते हैं और निजी पासपोर्ट तक पहुँच सकते हैं।",
     goToDashboard: "डैशबोर्ड पर जाएँ",
+    supportedAssetsTitle: "समर्थित एसेट्स",
+    supportedAssetsItems: [
+      "वाहन (कारें, ट्रक और क्लासिक वाहन)",
+      "उपकरण और मशीनरी",
+      "साइकिलें और हल्की मोबिलिटी",
+    ],
   },
   result: {
     whyThisMatters: "यह क्यों महत्वपूर्ण है",
@@ -3108,11 +3214,15 @@ const ar: Dictionary = {
   nav: {
     howItWorks: "كيف يعمل",
     login: "تسجيل الدخول",
+    dashboard: "لوحة التحكم",
+    logout: "تسجيل الخروج",
+    menu: "القائمة",
   },
   menu: {
     home: "الرئيسية",
     verifyAsset: "التحقق من الأصل",
     registerAsset: "تسجيل الأصل",
+    pricing: "الأسعار",
     reportSighting: "الإبلاغ عن مشاهدة",
     partners: "لشركات التأمين / الشركاء",
     contact: "اتصال",
@@ -3232,6 +3342,12 @@ const ar: Dictionary = {
     loggedInMessage:
       "أنت مسجل الدخول. يمكنك استخدام البحث بشكل طبيعي والاستمرار في الوصول إلى الجوازات الخاصة.",
     goToDashboard: "الانتقال إلى لوحة التحكم",
+    supportedAssetsTitle: "الأصول المدعومة",
+    supportedAssetsItems: [
+      "المركبات (السيارات والشاحنات والمركبات الكلاسيكية)",
+      "المعدات والآلات",
+      "الدراجات والتنقل الخفيف",
+    ],
   },
   result: {
     whyThisMatters: "لماذا هذا مهم",

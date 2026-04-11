@@ -1,0 +1,15 @@
+
+> equipregistry-website@0.1.0 start
+> next start --port 3103
+
+▲ Next.js 16.1.1
+- Local:         http://localhost:3103
+- Network:       http://192.168.1.112:3103
+
+✓ Starting...
+✓ Ready in 1877ms
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Error opening a TLS connection: No credentials are available in the security package (os error -2146893042)

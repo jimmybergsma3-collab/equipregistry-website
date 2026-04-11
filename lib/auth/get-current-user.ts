@@ -1,6 +1,6 @@
 // lib/auth/get-current-user.ts
-
 import { cookies } from "next/headers";
+import { canUseAuthenticatedApp } from "@/lib/auth/email-verification";
 import { prisma } from "@/lib/db";
 
 export async function getCurrentUser() {
@@ -16,8 +16,12 @@ export async function getCurrentUser() {
       email: true,
       role: true,
       name: true,
+      emailVerifiedAt: true,
     },
   });
+
+  if (!user) return null;
+  if (!canUseAuthenticatedApp(user)) return null;
 
   return user;
 }

@@ -1,0 +1,12 @@
+AUTH_REGISTER_ERROR Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Error opening a TLS connection: No credentials are available in the security package (os error -2146893042)
+    at async B (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:2287)
+    at async k (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:6951)
+    at async j (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:7963) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}

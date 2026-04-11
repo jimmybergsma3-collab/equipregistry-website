@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LANGUAGES, type Lang } from "@/lib/i18n/config";
+import { getLangDir, LANGUAGES, type Lang } from "@/lib/i18n/config";
 
 const LABELS: Record<Lang, string> = {
   en: "EN",
@@ -30,16 +30,15 @@ export default function LanguageSwitcher({ currentLang }: Props) {
   const [open, setOpen] = useState(false);
 
   const segments = pathname.split("/").filter(Boolean);
-
   const hasLang =
     segments.length > 0 && LANGUAGES.includes(segments[0] as Lang);
-
   const activeLang = currentLang
     ? (currentLang as Lang)
     : hasLang
       ? (segments[0] as Lang)
       : "en";
-
+  const dir = getLangDir(activeLang);
+  const isRtl = dir === "rtl";
   const rest = hasLang ? segments.slice(1) : segments;
 
   function changeLanguage(nextLang: Lang) {
@@ -72,18 +71,18 @@ export default function LanguageSwitcher({ currentLang }: Props) {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="relative" dir={dir}>
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-10 min-w-[84px] items-center justify-between rounded-xl border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600"
+        className="flex h-10 min-w-[84px] items-center justify-between rounded-xl border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Select language"
       >
         <span>{LABELS[activeLang]}</span>
         <span
-          className={`ml-3 text-[10px] text-zinc-500 transition-transform ${
+          className={`${isRtl ? "mr-3" : "ml-3"} text-[10px] text-zinc-500 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         >
@@ -92,7 +91,11 @@ export default function LanguageSwitcher({ currentLang }: Props) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-50 min-w-[84px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg">
+        <div
+          className={`absolute top-[calc(100%+8px)] z-50 min-w-[84px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg ${
+            isRtl ? "left-0" : "right-0"
+          }`}
+        >
           <ul role="listbox" className="py-1">
             {LANGUAGES.map((lang) => {
               const isActive = lang === activeLang;
@@ -102,11 +105,11 @@ export default function LanguageSwitcher({ currentLang }: Props) {
                   <button
                     type="button"
                     onClick={() => changeLanguage(lang)}
-                    className={`flex w-full items-center justify-start px-3 py-2 text-left text-sm transition ${
+                    className={`flex w-full items-center justify-start px-3 py-2 text-sm transition ${
                       isActive
                         ? "bg-zinc-100 font-semibold text-zinc-900"
                         : "text-zinc-700 hover:bg-zinc-50"
-                    }`}
+                    } ${isRtl ? "text-right" : "text-left"}`}
                     role="option"
                     aria-selected={isActive}
                   >

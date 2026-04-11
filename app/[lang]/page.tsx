@@ -2,10 +2,10 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import SiteHeader from "@/components/site-header";
+import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
-import { isValidLang, type Lang } from "@/lib/i18n/config";
 
 type Props = {
   params: Promise<{
@@ -63,74 +63,6 @@ function getActionClasses(style: ActionStyle) {
       return "border border-red-600 text-red-600 hover:bg-red-50";
     default:
       return "border border-slate-400 text-slate-700 hover:bg-slate-50";
-  }
-}
-
-function getSupportedAssets(lang: Lang) {
-  switch (lang) {
-    case "es":
-      return {
-        title: "Activos compatibles",
-        items: [
-          "Vehículos (coches, camiones y clásicos)",
-          "Equipos y maquinaria",
-          "Bicicletas y movilidad ligera",
-        ],
-      };
-    case "de":
-      return {
-        title: "Unterstützte Assets",
-        items: [
-          "Fahrzeuge (Autos, Lkw und Klassiker)",
-          "Maschinen und Geräte",
-          "Fahrräder und leichte Mobilität",
-        ],
-      };
-    case "nl":
-      return {
-        title: "Ondersteunde assets",
-        items: [
-          "Voertuigen (auto’s, trucks en classics)",
-          "Machines en equipment",
-          "Fietsen en lichte mobiliteit",
-        ],
-      };
-    case "fr":
-      return {
-        title: "Actifs pris en charge",
-        items: [
-          "Véhicules (voitures, camions et classiques)",
-          "Équipements et machines",
-          "Vélos et mobilité légère",
-        ],
-      };
-    case "it":
-      return {
-        title: "Asset supportati",
-        items: [
-          "Veicoli (auto, camion e classiche)",
-          "Attrezzature e macchinari",
-          "Biciclette e micromobilità",
-        ],
-      };
-    case "pt":
-      return {
-        title: "Ativos suportados",
-        items: [
-          "Veículos (carros, camiões e clássicos)",
-          "Equipamentos e maquinaria",
-          "Bicicletas e mobilidade leve",
-        ],
-      };
-    default:
-      return {
-        title: "Supported assets",
-        items: [
-          "Vehicles (cars, trucks and classic vehicles)",
-          "Equipment and machinery",
-          "Bikes and light mobility",
-        ],
-      };
   }
 }
 
@@ -271,7 +203,9 @@ export default async function Home({ params, searchParams }: Props) {
   }
 
   const t = getDictionary(lang);
-  const supportedAssets = getSupportedAssets(lang);
+  const dir = getLangDir(lang);
+  const isRtl = dir === "rtl";
+  const textAlignClass = isRtl ? "text-right" : "text-left";
   const query = searchParams ? await searchParams : undefined;
   const serial = query?.serial?.trim() || "";
   const normalizedSerial = serial ? serial.toUpperCase() : "";
@@ -283,202 +217,201 @@ export default async function Home({ params, searchParams }: Props) {
     <>
       <SiteHeader lang={lang} serial={normalizedSerial} />
 
-      <section className="py-20">
-        <div className="max-w-3xl mx-auto text-center px-6">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            {t.hero.title}
-          </h1>
+      <main dir={dir}>
+        <section className="py-20">
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">
+              {t.hero.title}
+            </h1>
 
-          <p className="text-lg text-slate-600 mb-10">{t.hero.subtitle}</p>
+            <p className="mb-10 text-lg text-slate-600">{t.hero.subtitle}</p>
 
-          {isLoggedIn && (
-            <div className="mb-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div>✅ {t.hero.loggedInMessage}</div>
-              <div className="flex gap-2">
-                <Link
-                  href={`/${lang}/dashboard`}
-                  className="px-3 py-2 rounded-lg bg-blue-700 text-white font-semibold"
-                >
-                  {t.hero.goToDashboard}
-                </Link>
-              </div>
-            </div>
-          )}
-
-          <form
-            method="GET"
-            action={`/${lang}`}
-            className="flex flex-col sm:flex-row gap-3"
-          >
-            <input
-              name="serial"
-              defaultValue={normalizedSerial}
-              placeholder={t.hero.placeholder}
-              className="flex-1 px-5 py-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-            <button className="px-8 py-4 rounded-xl bg-blue-700 hover:bg-blue-800 transition text-white font-semibold">
-              {t.hero.search}
-            </button>
-          </form>
-
-          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-left">
-            <p className="text-sm font-semibold text-slate-800 mb-2">
-              {supportedAssets.title}
-            </p>
-            <ul className="text-sm text-slate-600 space-y-1">
-              {supportedAssets.items.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-3 text-sm text-slate-500">
-            {t.hero.demoSerials}
-            {DEMO_SERIALS.map((demoSerial) => (
-              <Link
-                key={demoSerial}
-                href={`/${lang}?serial=${demoSerial}`}
-                className="ml-2 underline hover:text-blue-700"
-              >
-                {demoSerial}
-              </Link>
-            ))}
-          </div>
-
-          {status && (
-            <div
-              id="search-result"
-              className={`mt-12 text-left rounded-xl p-6 border-2 ${getStatusClasses(
-                status.color
-              )}`}
-            >
-              <h2 className="text-xl font-bold mb-3">{status.label}</h2>
-              <p className="mb-4">{status.message}</p>
-
-              {status.metadata && (
-                <ul className="text-sm mb-4 space-y-1">
-                  {status.metadata.map((item, index) => (
-                    <li key={`${item.label}-${index}`}>
-                      <strong>{item.label}:</strong> {item.value}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {status.warning && (
-                <p className="text-red-700 font-semibold mb-4">
-                  {status.warning}
-                </p>
-              )}
-
-              <div className="bg-white border rounded-lg p-4 mb-4">
-                <h3 className="font-semibold mb-2">{t.result.whyThisMatters}</h3>
-                <p className="text-sm">{status.why}</p>
-              </div>
-
-              <div className="flex gap-3 flex-wrap">
-                {status.actions?.map((action, index) => (
-                  <a
-                    key={`${action.label}-${index}`}
-                    href={action.href}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition ${getActionClasses(
-                      action.style
-                    )}`}
+            {isLoggedIn && (
+              <div className="mb-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 sm:flex-row">
+                <div>{t.hero.loggedInMessage}</div>
+                <div className="flex gap-2">
+                  <Link
+                    href={`/${lang}/dashboard`}
+                    className="rounded-lg bg-blue-700 px-3 py-2 font-semibold text-white"
                   >
-                    {action.label}
-                  </a>
+                    {t.hero.goToDashboard}
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            <form
+              method="GET"
+              action={`/${lang}`}
+              className="flex flex-col gap-3 sm:flex-row"
+            >
+              <input
+                name="serial"
+                dir="auto"
+                defaultValue={normalizedSerial}
+                placeholder={t.hero.placeholder}
+                className="flex-1 rounded-xl border border-slate-300 px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+              <button className="rounded-xl bg-blue-700 px-8 py-4 font-semibold text-white transition hover:bg-blue-800">
+                {t.hero.search}
+              </button>
+            </form>
+
+            <div className={`mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 ${textAlignClass}`}>
+              <p className="mb-2 text-sm font-semibold text-slate-800">
+                {t.hero.supportedAssetsTitle}
+              </p>
+              <ul className="list-inside list-disc space-y-1 text-sm text-slate-600">
+                {t.hero.supportedAssetsItems.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {status && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.addEventListener('load', () => {
-                const el = document.getElementById('search-result');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              });
-            `,
-          }}
-        />
-      )}
-
-      <section id="how" className="bg-slate-50 py-20 border-t">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            {t.howItWorks.title}
-          </h2>
-
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="bg-white rounded-2xl border p-6">
-              <div className="text-blue-700 font-bold text-xl mb-2">
-                {t.howItWorks.step1Title}
-              </div>
-              <p className="text-sm text-slate-600">{t.howItWorks.step1Text}</p>
+              </ul>
             </div>
 
-            <div className="bg-white rounded-2xl border p-6">
-              <div className="text-blue-800 font-bold text-xl mb-2">
-                {t.howItWorks.step2Title}
-              </div>
-              <p className="text-sm text-slate-600">{t.howItWorks.step2Text}</p>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm text-slate-500">
+              <span>{t.hero.demoSerials}</span>
+              {DEMO_SERIALS.map((demoSerial) => (
+                <Link
+                  key={demoSerial}
+                  href={`/${lang}?serial=${demoSerial}`}
+                  className="underline hover:text-blue-700"
+                >
+                  {demoSerial}
+                </Link>
+              ))}
             </div>
 
-            <div className="bg-white rounded-2xl border p-6">
-              <div className="text-blue-800 font-bold text-xl mb-2">
-                {t.howItWorks.step3Title}
-              </div>
-              <p className="text-sm text-slate-600">{t.howItWorks.step3Text}</p>
-            </div>
+            {status && (
+              <div
+                id="search-result"
+                className={`mt-12 rounded-xl border-2 p-6 ${textAlignClass} ${getStatusClasses(status.color)}`}
+              >
+                <h2 className="mb-3 text-xl font-bold">{status.label}</h2>
+                <p className="mb-4">{status.message}</p>
 
-            <div className="bg-white rounded-2xl border p-6">
-              <div className="text-blue-800 font-bold text-xl mb-2">
-                {t.howItWorks.step4Title}
+                {status.metadata && (
+                  <ul className="mb-4 space-y-1 text-sm">
+                    {status.metadata.map((item, index) => (
+                      <li key={`${item.label}-${index}`}>
+                        <strong>{item.label}:</strong> {item.value}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {status.warning && (
+                  <p className="mb-4 font-semibold text-red-700">
+                    {status.warning}
+                  </p>
+                )}
+
+                <div className="mb-4 rounded-lg border bg-white p-4">
+                  <h3 className="mb-2 font-semibold">{t.result.whyThisMatters}</h3>
+                  <p className="text-sm">{status.why}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  {status.actions?.map((action, index) => (
+                    <a
+                      key={`${action.label}-${index}`}
+                      href={action.href}
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition ${getActionClasses(action.style)}`}
+                    >
+                      {action.label}
+                    </a>
+                  ))}
+                </div>
               </div>
-              <p className="text-sm text-slate-600">{t.howItWorks.step4Text}</p>
+            )}
+          </div>
+        </section>
+
+        {status && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.addEventListener('load', () => {
+                  const el = document.getElementById('search-result');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                });
+              `,
+            }}
+          />
+        )}
+
+        <section id="how" className="border-t bg-slate-50 py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="mb-12 text-center text-3xl font-bold">
+              {t.howItWorks.title}
+            </h2>
+
+            <div className={`grid gap-8 md:grid-cols-4 ${textAlignClass}`}>
+              <div className="rounded-2xl border bg-white p-6">
+                <div className="mb-2 text-xl font-bold text-blue-700">
+                  {t.howItWorks.step1Title}
+                </div>
+                <p className="text-sm text-slate-600">{t.howItWorks.step1Text}</p>
+              </div>
+
+              <div className="rounded-2xl border bg-white p-6">
+                <div className="mb-2 text-xl font-bold text-blue-800">
+                  {t.howItWorks.step2Title}
+                </div>
+                <p className="text-sm text-slate-600">{t.howItWorks.step2Text}</p>
+              </div>
+
+              <div className="rounded-2xl border bg-white p-6">
+                <div className="mb-2 text-xl font-bold text-blue-800">
+                  {t.howItWorks.step3Title}
+                </div>
+                <p className="text-sm text-slate-600">{t.howItWorks.step3Text}</p>
+              </div>
+
+              <div className="rounded-2xl border bg-white p-6">
+                <div className="mb-2 text-xl font-bold text-blue-800">
+                  {t.howItWorks.step4Title}
+                </div>
+                <p className="text-sm text-slate-600">{t.howItWorks.step4Text}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="bg-white py-20 border-t">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-6">{t.trust.title}</h2>
+        <section className="border-t bg-white py-20">
+          <div className="mx-auto max-w-6xl px-6 text-center">
+            <h2 className="mb-6 text-3xl font-bold">{t.trust.title}</h2>
 
-          <p className="max-w-3xl mx-auto text-slate-600 mb-12">
-            {t.trust.subtitle}
-          </p>
+            <p className="mx-auto mb-12 max-w-3xl text-slate-600">
+              {t.trust.subtitle}
+            </p>
 
-          <div className="grid md:grid-cols-3 gap-8 text-left">
-            <div className="border rounded-2xl p-6">
-              <h3 className="font-semibold text-lg mb-2 text-blue-700">
-                {t.trust.card1Title}
-              </h3>
-              <p className="text-sm text-slate-600">{t.trust.card1Text}</p>
-            </div>
+            <div className={`grid gap-8 md:grid-cols-3 ${textAlignClass}`}>
+              <div className="rounded-2xl border p-6">
+                <h3 className="mb-2 text-lg font-semibold text-blue-700">
+                  {t.trust.card1Title}
+                </h3>
+                <p className="text-sm text-slate-600">{t.trust.card1Text}</p>
+              </div>
 
-            <div className="border rounded-2xl p-6">
-              <h3 className="font-semibold text-lg mb-2 text-blue-800">
-                {t.trust.card2Title}
-              </h3>
-              <p className="text-sm text-slate-600">{t.trust.card2Text}</p>
-            </div>
+              <div className="rounded-2xl border p-6">
+                <h3 className="mb-2 text-lg font-semibold text-blue-800">
+                  {t.trust.card2Title}
+                </h3>
+                <p className="text-sm text-slate-600">{t.trust.card2Text}</p>
+              </div>
 
-            <div className="border rounded-2xl p-6">
-              <h3 className="font-semibold text-lg mb-2 text-blue-800">
-                {t.trust.card3Title}
-              </h3>
-              <p className="text-sm text-slate-600">{t.trust.card3Text}</p>
+              <div className="rounded-2xl border p-6">
+                <h3 className="mb-2 text-lg font-semibold text-blue-800">
+                  {t.trust.card3Title}
+                </h3>
+                <p className="text-sm text-slate-600">{t.trust.card3Text}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <SiteFooter lang={lang} />
     </>

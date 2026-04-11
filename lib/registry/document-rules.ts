@@ -1,5 +1,6 @@
 import { ApplicantType, RegistrationFileStatus } from "@/lib/registry/workflow";
 import type { Lang } from "@/lib/i18n/config";
+import type { StoredUpload } from "@/lib/registry/upload-types";
 
 export type RegistrationDocumentKey =
   | "proof_of_ownership"
@@ -24,11 +25,23 @@ export type RegistrationDocumentDefinition = {
 export type RegistrationDocumentState = {
   status: RegistrationFileStatus;
   fileName?: string;
+  files?: StoredUpload[];
 };
 
 export type RegistrationDocumentMap = Partial<
   Record<RegistrationDocumentKey, RegistrationDocumentState>
 >;
+
+const MULTI_FILE_DOCUMENT_KEYS: RegistrationDocumentKey[] = [
+  "applicant_id",
+  "invoice_purchase_proof",
+  "asset_overview_photo",
+  "serial_plate_photo",
+  "vin_chassis_photo",
+  "hull_id_photo",
+  "engine_serial_photo",
+  "additional_supporting_document",
+];
 
 type DocumentText = {
   label: string;
@@ -1179,6 +1192,10 @@ export function getRequiredDocumentsForContext(
   }
 
   return Array.from(unique.values());
+}
+
+export function documentSupportsMultipleFiles(key: RegistrationDocumentKey) {
+  return MULTI_FILE_DOCUMENT_KEYS.includes(key);
 }
 
 export function createEmptyDocumentMap(): RegistrationDocumentMap {

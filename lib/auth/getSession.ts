@@ -1,11 +1,17 @@
 import { cookies } from "next/headers";
+import { canUseAuthenticatedApp } from "@/lib/auth/email-verification";
 import { prisma } from "@/lib/db";
 
 export type Session =
   | { isAuthenticated: false; user: null }
   | {
       isAuthenticated: true;
-      user: { id: string; email: string; role: "user" | "admin" };
+      user: {
+        id: string;
+        email: string;
+        role: "user" | "admin";
+        emailVerifiedAt: Date | null;
+      };
     };
 
 export async function getSession(): Promise<Session> {
@@ -25,10 +31,15 @@ export async function getSession(): Promise<Session> {
         id: true,
         email: true,
         role: true,
+        emailVerifiedAt: true,
       },
     });
 
     if (!user) {
+      return { isAuthenticated: false, user: null };
+    }
+
+    if (!canUseAuthenticatedApp(user)) {
       return { isAuthenticated: false, user: null };
     }
 
@@ -38,6 +49,7 @@ export async function getSession(): Promise<Session> {
         id: user.id,
         email: user.email,
         role: user.role,
+        emailVerifiedAt: user.emailVerifiedAt,
       },
     };
   } catch (error) {

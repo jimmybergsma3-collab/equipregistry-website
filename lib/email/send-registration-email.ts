@@ -11,6 +11,7 @@ import {
   buildUnderReviewEmail,
 } from "@/lib/email/templates/registration";
 import { MANUAL_PAYMENT_DETAILS } from "@/lib/registry/payment";
+import { formatPricingAmount, getPricing } from "@/lib/registry/pricing";
 
 export async function sendAccountVerificationEmail(params: {
   to: string;
@@ -48,13 +49,20 @@ export async function sendPaymentRequiredEmail(params: {
   ownerName: string;
   passportNumber: string;
   assetName: string;
+  category: string;
+  subcategory?: string;
 }) {
+  const feeText = formatPricingAmount(
+    getPricing(params.category, params.subcategory).registration,
+    "en"
+  );
+
   const email = buildPaymentRequiredEmail({
     ...params,
     iban: MANUAL_PAYMENT_DETAILS.iban,
     accountHolder: MANUAL_PAYMENT_DETAILS.accountHolder,
     bic: MANUAL_PAYMENT_DETAILS.bic,
-    feeText: MANUAL_PAYMENT_DETAILS.registrationFeeText.en,
+    feeText,
   });
 
   return sendEmail({

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { reserveNextPassportNumber } from "@/lib/registry/passport-number";
@@ -79,6 +80,8 @@ export async function saveRegistrationDraft(
   const draft = buildDraftFromFormData(formData);
   const completeness = evaluateRegistrationCompleteness(draft);
   const { passportNumber } = await reserveNextPassportNumber();
+  const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
+  const documents = draft.documents as Prisma.InputJsonValue;
 
   const request = await prisma.registrationRequest.create({
     data: {
@@ -98,8 +101,8 @@ export async function saveRegistrationDraft(
       requestStatus: "draft",
       paymentCompleted: false,
       declarationAccepted: draft.declarationAccepted,
-      dynamicFields: draft.dynamicFields,
-      documents: draft.documents,
+      dynamicFields,
+      documents,
       completenessScore: completeness.score,
     },
   });
@@ -157,6 +160,8 @@ export async function submitRegistrationRequest(
   const finalStatus: RegistrationRequestStatus = partner ? "submitted" : derivedStatus;
 
   const { passportNumber } = await reserveNextPassportNumber();
+  const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
+  const documents = draft.documents as Prisma.InputJsonValue;
 
   const request = await prisma.registrationRequest.create({
     data: {
@@ -176,8 +181,8 @@ export async function submitRegistrationRequest(
       requestStatus: finalStatus,
       paymentCompleted,
       declarationAccepted: draft.declarationAccepted,
-      dynamicFields: draft.dynamicFields,
-      documents: draft.documents,
+      dynamicFields,
+      documents,
       completenessScore: completeness.score,
     },
   });
@@ -197,6 +202,8 @@ export async function submitRegistrationRequest(
         ownerName: draft.ownerName || "Customer",
         passportNumber,
         assetName: draft.assetName || "Unnamed asset",
+        category: draft.category,
+        subcategory: draft.subcategory,
       });
     }
   }

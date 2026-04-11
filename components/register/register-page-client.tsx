@@ -983,7 +983,20 @@ export default function RegisterPageClient({ lang }: Props) {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || t.errorRegisterFailed);
+        if (
+          data?.error === "VERIFICATION_EMAIL_SEND_FAILED" ||
+          data?.error === "SERVER_ERROR"
+        ) {
+          setError(t.errorServer);
+        } else {
+          setError(data?.error || t.errorRegisterFailed);
+        }
+        return;
+      }
+
+      if (data?.verificationRequired) {
+        router.push(`/${lang}/verify-email?status=sent`);
+        router.refresh();
         return;
       }
 

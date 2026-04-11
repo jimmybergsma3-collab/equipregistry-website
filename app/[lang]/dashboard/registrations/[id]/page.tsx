@@ -9,7 +9,10 @@ import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { usesManualIbanPayment } from "@/lib/registry/payment";
-import { getApplicantTypeLabel } from "@/lib/registry/workflow";
+import {
+  ApplicantType,
+  getApplicantTypeLabel,
+} from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 
@@ -75,6 +78,22 @@ type DetailTexts = {
   };
 };
 
+type DetailDictionarySection = Partial<
+  Omit<DetailTexts, "labels"> & {
+    labels?: Partial<DetailTexts["labels"]>;
+    backAdmin?: string;
+    back?: string;
+  }
+>;
+
+type DetailDictionary = {
+  dashboard?: {
+    registrationDetail?: DetailDictionarySection;
+    registrationDetails?: DetailDictionarySection;
+    requestDetail?: DetailDictionarySection;
+  };
+};
+
 function formatDate(value: Date) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -134,7 +153,7 @@ function hasRenderableValue(value: unknown) {
 }
 
 function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
-  const dict = dictionary as Record<string, any>;
+  const dict = dictionary as DetailDictionary;
 
   const section =
     dict?.dashboard?.registrationDetail ??
@@ -253,7 +272,7 @@ function RegistrationDetailsCard({
 }: {
   request: {
     reference: string;
-    applicantType: string;
+    applicantType: ApplicantType;
     assetName: string;
     category: string;
     subcategory: string;
@@ -328,9 +347,9 @@ function RegistrationDetailsCard({
       <div className="grid gap-5 sm:grid-cols-2">
         <DetailItem label={texts.labels.passportNumber} value={request.reference} />
         <DetailItem
-  label={texts.labels.applicantType}
-  value={request.applicantType}
-/>
+          label={texts.labels.applicantType}
+          value={getApplicantTypeLabel(request.applicantType)}
+        />
         <DetailItem label={texts.labels.assetName} value={request.assetName} />
         <DetailItem label={texts.labels.category} value={request.category} />
         <DetailItem label={texts.labels.subcategory} value={request.subcategory} />
@@ -446,7 +465,12 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
 
             {showManualPaymentPanel ? (
               <div className="mb-6">
-                <ManualPaymentPanel passportNumber={request.reference} lang={lang} />
+                <ManualPaymentPanel
+                  passportNumber={request.reference}
+                  lang={lang}
+                  category={request.category}
+                  subcategory={request.subcategory}
+                />
               </div>
             ) : null}
 
@@ -531,7 +555,12 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
           ownRequest.requestStatus === "payment_required" &&
           !ownRequest.paymentCompleted ? (
             <div className="mb-6">
-              <ManualPaymentPanel passportNumber={ownRequest.reference} lang={lang} />
+              <ManualPaymentPanel
+                passportNumber={ownRequest.reference}
+                lang={lang}
+                category={ownRequest.category}
+                subcategory={ownRequest.subcategory}
+              />
             </div>
           ) : null}
 

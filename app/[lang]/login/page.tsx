@@ -7,6 +7,78 @@ import type { Lang } from "@/lib/i18n/config";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 
+const LOGIN_ERROR_TEXT: Record<
+  Lang,
+  Record<"REQUIRED_FIELDS_MISSING" | "INVALID_CREDENTIALS" | "EMAIL_NOT_VERIFIED" | "SERVER_ERROR", string>
+> = {
+  en: {
+    REQUIRED_FIELDS_MISSING: "Complete the required fields.",
+    INVALID_CREDENTIALS: "Incorrect email or password.",
+    EMAIL_NOT_VERIFIED: "Verify your email address before logging in.",
+    SERVER_ERROR: "Server error. Please try again.",
+  },
+  es: {
+    REQUIRED_FIELDS_MISSING: "Complete los campos obligatorios.",
+    INVALID_CREDENTIALS: "Correo electronico o contrasena incorrectos.",
+    EMAIL_NOT_VERIFIED: "Verifique su correo electronico antes de iniciar sesion.",
+    SERVER_ERROR: "Error del servidor. Intentalo de nuevo.",
+  },
+  de: {
+    REQUIRED_FIELDS_MISSING: "Bitte fuellen Sie die Pflichtfelder aus.",
+    INVALID_CREDENTIALS: "E-Mail-Adresse oder Passwort ist falsch.",
+    EMAIL_NOT_VERIFIED: "Bestaetigen Sie Ihre E-Mail-Adresse, bevor Sie sich anmelden.",
+    SERVER_ERROR: "Serverfehler. Bitte versuchen Sie es erneut.",
+  },
+  fr: {
+    REQUIRED_FIELDS_MISSING: "Veuillez remplir les champs obligatoires.",
+    INVALID_CREDENTIALS: "Adresse e-mail ou mot de passe incorrect.",
+    EMAIL_NOT_VERIFIED: "Verifiez votre adresse e-mail avant de vous connecter.",
+    SERVER_ERROR: "Erreur du serveur. Veuillez reessayer.",
+  },
+  it: {
+    REQUIRED_FIELDS_MISSING: "Compili i campi obbligatori.",
+    INVALID_CREDENTIALS: "E-mail o password non corretti.",
+    EMAIL_NOT_VERIFIED: "Verifichi il suo indirizzo e-mail prima di accedere.",
+    SERVER_ERROR: "Errore del server. Riprovi.",
+  },
+  nl: {
+    REQUIRED_FIELDS_MISSING: "Vul de verplichte velden in.",
+    INVALID_CREDENTIALS: "Onjuist e-mailadres of wachtwoord.",
+    EMAIL_NOT_VERIFIED: "Verifieer eerst je e-mailadres voordat je inlogt.",
+    SERVER_ERROR: "Serverfout. Probeer het opnieuw.",
+  },
+  pt: {
+    REQUIRED_FIELDS_MISSING: "Preencha os campos obrigatorios.",
+    INVALID_CREDENTIALS: "E-mail ou palavra-passe incorretos.",
+    EMAIL_NOT_VERIFIED: "Verifique o seu endereco de e-mail antes de iniciar sessao.",
+    SERVER_ERROR: "Erro do servidor. Tente novamente.",
+  },
+  ru: {
+    REQUIRED_FIELDS_MISSING: "Zapolnite obyazatel'nye polya.",
+    INVALID_CREDENTIALS: "Nevernyi adres elektronnoy pocty ili parol'.",
+    EMAIL_NOT_VERIFIED: "Podtverdite adres elektronnoy pocty pered vhodom.",
+    SERVER_ERROR: "Oshibka servera. Pozhaluysta, poprobuyte snova.",
+  },
+  zh: {
+    REQUIRED_FIELDS_MISSING: "请填写必填字段。",
+    INVALID_CREDENTIALS: "电子邮箱或密码不正确。",
+    EMAIL_NOT_VERIFIED: "登录前请先验证您的电子邮箱地址。",
+    SERVER_ERROR: "服务器错误。请重试。",
+  },
+  hi: {
+    REQUIRED_FIELDS_MISSING: "कृपया आवश्यक फ़ील्ड भरें।",
+    INVALID_CREDENTIALS: "ईमेल या पासवर्ड गलत है।",
+    EMAIL_NOT_VERIFIED: "लॉग इन करने से पहले अपना ईमेल सत्यापित करें।",
+    SERVER_ERROR: "सर्वर त्रुटि। कृपया फिर से प्रयास करें।",
+  },
+  ar: {
+    REQUIRED_FIELDS_MISSING: "يرجى اكمال الحقول المطلوبة.",
+    INVALID_CREDENTIALS: "البريد الالكتروني او كلمة المرور غير صحيحة.",
+    EMAIL_NOT_VERIFIED: "يرجى تاكيد بريدك الالكتروني قبل تسجيل الدخول.",
+    SERVER_ERROR: "حدث خطا في الخادم. يرجى المحاولة مرة اخرى.",
+  },
+};
+
 const LOGIN_TEXT: Record<
   Lang,
   {
@@ -197,6 +269,16 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  function getLoginErrorMessage(code?: string) {
+    const messages = LOGIN_ERROR_TEXT[lang] ?? LOGIN_ERROR_TEXT.en;
+
+    if (code && code in messages) {
+      return messages[code as keyof typeof messages];
+    }
+
+    return messages.SERVER_ERROR;
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -214,7 +296,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || t.loginFailed);
+        setError(getLoginErrorMessage(data?.error) || t.loginFailed);
         return;
       }
 
@@ -280,7 +362,6 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 text-center text-sm text-slate-500">
-              {t.setupDone}{" "}
               <Link href={`/${lang}`} className="underline hover:text-blue-700">
                 {t.homepage}
               </Link>

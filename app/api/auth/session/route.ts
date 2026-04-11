@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { canUseAuthenticatedApp } from "@/lib/auth/email-verification";
 import { prisma } from "@/lib/db";
 
 export async function GET() {
@@ -17,11 +18,32 @@ export async function GET() {
         id: true,
         email: true,
         role: true,
+        emailVerifiedAt: true,
       },
     });
 
     if (!user) {
-      return NextResponse.json({ loggedIn: false });
+      const response = NextResponse.json({ loggedIn: false });
+      response.cookies.set("er_session", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        expires: new Date(0),
+      });
+      return response;
+    }
+
+    if (!canUseAuthenticatedApp(user)) {
+      const response = NextResponse.json({ loggedIn: false });
+      response.cookies.set("er_session", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        expires: new Date(0),
+      });
+      return response;
     }
 
     return NextResponse.json({

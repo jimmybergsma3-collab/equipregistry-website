@@ -2,19 +2,23 @@
 
 import {
   MANUAL_PAYMENT_DETAILS,
-  getManualPaymentText,
+  getManualPaymentTextForAsset,
 } from "@/lib/registry/payment";
 
 type Props = {
   passportNumber: string;
   lang: string;
+  category: string;
+  subcategory?: string;
 };
 
 export default function ManualPaymentPanel({
   passportNumber,
   lang,
+  category,
+  subcategory,
 }: Props) {
-  const text = getManualPaymentText(lang);
+  const text = getManualPaymentTextForAsset(lang, category, subcategory);
 
   return (
     <section className="rounded-2xl border border-orange-200 bg-orange-50 p-6">

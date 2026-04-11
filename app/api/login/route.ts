@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/db";
+import {
+  canUseAuthenticatedApp,
+  isUsingVerificationBypass,
+} from "@/lib/auth/email-verification";
 
 export async function POST(req: Request) {
   try {
@@ -11,18 +15,24 @@ export async function POST(req: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "Vul e-mail en wachtwoord in." },
+        { error: "REQUIRED_FIELDS_MISSING" },
         { status: 400 }
       );
     }
 
     const user = await prisma.user.findUnique({
       where: { email },
+      select: {
+        id: true,
+        passwordHash: true,
+        role: true,
+        emailVerifiedAt: true,
+      },
     });
 
     if (!user) {
       return NextResponse.json(
-        { error: "Ongeldige gegevens." },
+        { error: "INVALID_CREDENTIALS" },
         { status: 401 }
       );
     }
@@ -31,15 +41,30 @@ export async function POST(req: Request) {
 
     if (!valid) {
       return NextResponse.json(
-        { error: "Ongeldige gegevens." },
+        { error: "INVALID_CREDENTIALS" },
         { status: 401 }
       );
     }
 
+    if (!canUseAuthenticatedApp(user)) {
+      return NextResponse.json(
+        { error: "EMAIL_NOT_VERIFIED" },
+        { status: 403 }
+      );
+    }
+
+    if (isUsingVerificationBypass(user)) {
+      console.warn(
+        "LOGIN WARNING: allowing unverified account during temporary SMTP bypass",
+        {
+          userId: user.id,
+          role: user.role,
+        }
+      );
+    }
+
     const redirectTo =
-      user.role === "admin"
-        ? "/dashboard/admin"
-        : "/dashboard/registrations";
+      user.role === "admin" ? "/dashboard/admin" : "/dashboard";
 
     const res = NextResponse.json({
       success: true,
@@ -59,6 +84,6 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
-    return NextResponse.json({ error: "Serverfout." }, { status: 500 });
+    return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 });
   }
 }

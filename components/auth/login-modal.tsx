@@ -5,6 +5,78 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Lang } from "@/lib/i18n/config";
 
+const LOGIN_ERROR_TEXT: Record<
+  Lang,
+  Record<"REQUIRED_FIELDS_MISSING" | "INVALID_CREDENTIALS" | "EMAIL_NOT_VERIFIED" | "SERVER_ERROR", string>
+> = {
+  en: {
+    REQUIRED_FIELDS_MISSING: "Complete the required fields.",
+    INVALID_CREDENTIALS: "Incorrect email or password.",
+    EMAIL_NOT_VERIFIED: "Verify your email address before logging in.",
+    SERVER_ERROR: "Server error during login.",
+  },
+  es: {
+    REQUIRED_FIELDS_MISSING: "Complete los campos obligatorios.",
+    INVALID_CREDENTIALS: "Correo electronico o contrasena incorrectos.",
+    EMAIL_NOT_VERIFIED: "Verifique su correo electronico antes de iniciar sesion.",
+    SERVER_ERROR: "Error del servidor durante el inicio de sesion.",
+  },
+  de: {
+    REQUIRED_FIELDS_MISSING: "Bitte fuellen Sie die Pflichtfelder aus.",
+    INVALID_CREDENTIALS: "E-Mail-Adresse oder Passwort ist falsch.",
+    EMAIL_NOT_VERIFIED: "Bestaetigen Sie Ihre E-Mail-Adresse, bevor Sie sich anmelden.",
+    SERVER_ERROR: "Serverfehler waehrend der Anmeldung.",
+  },
+  fr: {
+    REQUIRED_FIELDS_MISSING: "Veuillez remplir les champs obligatoires.",
+    INVALID_CREDENTIALS: "Adresse e-mail ou mot de passe incorrect.",
+    EMAIL_NOT_VERIFIED: "Verifiez votre adresse e-mail avant de vous connecter.",
+    SERVER_ERROR: "Erreur du serveur pendant la connexion.",
+  },
+  it: {
+    REQUIRED_FIELDS_MISSING: "Compili i campi obbligatori.",
+    INVALID_CREDENTIALS: "E-mail o password non corretti.",
+    EMAIL_NOT_VERIFIED: "Verifichi il suo indirizzo e-mail prima di accedere.",
+    SERVER_ERROR: "Errore del server durante l'accesso.",
+  },
+  nl: {
+    REQUIRED_FIELDS_MISSING: "Vul de verplichte velden in.",
+    INVALID_CREDENTIALS: "Onjuist e-mailadres of wachtwoord.",
+    EMAIL_NOT_VERIFIED: "Verifieer eerst je e-mailadres voordat je inlogt.",
+    SERVER_ERROR: "Serverfout tijdens het inloggen.",
+  },
+  pt: {
+    REQUIRED_FIELDS_MISSING: "Preencha os campos obrigatorios.",
+    INVALID_CREDENTIALS: "E-mail ou palavra-passe incorretos.",
+    EMAIL_NOT_VERIFIED: "Verifique o seu endereco de e-mail antes de iniciar sessao.",
+    SERVER_ERROR: "Erro do servidor durante o inicio de sessao.",
+  },
+  ru: {
+    REQUIRED_FIELDS_MISSING: "Zapolnite obyazatel'nye polya.",
+    INVALID_CREDENTIALS: "Nevernyi adres elektronnoy pocty ili parol'.",
+    EMAIL_NOT_VERIFIED: "Podtverdite adres elektronnoy pocty pered vhodom.",
+    SERVER_ERROR: "Oshibka servera pri vhode.",
+  },
+  zh: {
+    REQUIRED_FIELDS_MISSING: "请填写必填字段。",
+    INVALID_CREDENTIALS: "电子邮箱或密码不正确。",
+    EMAIL_NOT_VERIFIED: "登录前请先验证您的电子邮箱地址。",
+    SERVER_ERROR: "登录时发生服务器错误。",
+  },
+  hi: {
+    REQUIRED_FIELDS_MISSING: "कृपया आवश्यक फ़ील्ड भरें।",
+    INVALID_CREDENTIALS: "ईमेल या पासवर्ड गलत है।",
+    EMAIL_NOT_VERIFIED: "लॉग इन करने से पहले अपना ईमेल सत्यापित करें।",
+    SERVER_ERROR: "लॉग इन के दौरान सर्वर त्रुटि हुई।",
+  },
+  ar: {
+    REQUIRED_FIELDS_MISSING: "يرجى اكمال الحقول المطلوبة.",
+    INVALID_CREDENTIALS: "البريد الالكتروني او كلمة المرور غير صحيحة.",
+    EMAIL_NOT_VERIFIED: "يرجى تاكيد بريدك الالكتروني قبل تسجيل الدخول.",
+    SERVER_ERROR: "حدث خطا في الخادم اثناء تسجيل الدخول.",
+  },
+};
+
 type Props = {
   lang: Lang;
   next?: string;
@@ -208,6 +280,16 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  function getLoginErrorMessage(code?: string) {
+    const messages = LOGIN_ERROR_TEXT[lang] ?? LOGIN_ERROR_TEXT.en;
+
+    if (code && code in messages) {
+      return messages[code as keyof typeof messages];
+    }
+
+    return messages.SERVER_ERROR;
+  }
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -244,7 +326,7 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || t.loginFailed);
+        setError(getLoginErrorMessage(data?.error) || t.loginFailed);
         return;
       }
 
@@ -266,62 +348,23 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   return (
     <div
       dir={lang === "ar" ? "rtl" : "ltr"}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 99999,
-        background: "rgba(0,0,0,0.55)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
-      }}
+      className="fixed inset-0 z-[99999] grid place-items-center bg-black/55 p-4"
       onClick={onClose}
     >
       <div
-        style={{
-          width: "100%",
-          maxWidth: "460px",
-          background: "#ffffff",
-          borderRadius: "18px",
-          padding: "24px",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
-        }}
+        className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.18)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ marginBottom: "20px" }}>
-          <h2
-            style={{
-              fontSize: "28px",
-              fontWeight: 700,
-              margin: 0,
-              color: "#18181b",
-            }}
-          >
+        <div className="mb-5">
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-950">
             {t.title}
           </h2>
-          <p
-            style={{
-              marginTop: "8px",
-              fontSize: "14px",
-              color: "#52525b",
-            }}
-          >
-            {t.subtitle}
-          </p>
+          <p className="mt-2 text-sm text-zinc-600">{t.subtitle}</p>
         </div>
 
-        <form onSubmit={handleLogin} style={{ display: "grid", gap: "14px" }}>
+        <form onSubmit={handleLogin} className="grid gap-4">
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "6px",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "#18181b",
-              }}
-            >
+            <label className="mb-2 block text-sm font-medium text-zinc-900">
               {t.email}
             </label>
             <input
@@ -330,26 +373,12 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t.emailPlaceholder}
               required
-              style={{
-                width: "100%",
-                border: "1px solid #d4d4d8",
-                borderRadius: "10px",
-                padding: "12px 14px",
-                fontSize: "14px",
-              }}
+              className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
             />
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "6px",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "#18181b",
-              }}
-            >
+            <label className="mb-2 block text-sm font-medium text-zinc-900">
               {t.password}
             </label>
             <input
@@ -358,80 +387,31 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder={t.passwordPlaceholder}
               required
-              style={{
-                width: "100%",
-                border: "1px solid #d4d4d8",
-                borderRadius: "10px",
-                padding: "12px 14px",
-                fontSize: "14px",
-              }}
+              className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
             />
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "12px",
-              flexWrap: "wrap",
-              fontSize: "14px",
-              marginTop: "-2px",
-            }}
-          >
-            <Link
-              href={`/${lang}/forgot-password`}
-              onClick={onClose}
-              style={{
-                color: "#52525b",
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
-              }}
-            >
-              {t.forgotPassword}
-            </Link>
-
+          <div className="flex justify-end text-sm">
             <Link
               href={`/${lang}/register`}
               onClick={onClose}
-              style={{
-                color: "#52525b",
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
-              }}
+              className="text-zinc-600 underline underline-offset-4 transition hover:text-zinc-900"
             >
               {t.noAccount}
             </Link>
           </div>
 
           {error && (
-            <div
-              style={{
-                border: "1px solid #fecaca",
-                background: "#fef2f2",
-                color: "#b91c1c",
-                borderRadius: "10px",
-                padding: "12px 14px",
-                fontSize: "14px",
-              }}
-            >
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
-          <div style={{ display: "flex", gap: "12px", paddingTop: "6px" }}>
+          <div className="flex gap-3 pt-1">
             <button
               type="button"
               onClick={onClose}
-              style={{
-                flex: 1,
-                border: "1px solid #d4d4d8",
-                background: "#ffffff",
-                color: "#27272a",
-                borderRadius: "10px",
-                padding: "12px 14px",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
+              className="flex-1 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-50"
             >
               {t.cancel}
             </button>
@@ -439,17 +419,7 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                flex: 1,
-                border: "none",
-                background: "#1d4ed8",
-                color: "#ffffff",
-                borderRadius: "10px",
-                padding: "12px 14px",
-                fontWeight: 700,
-                cursor: "pointer",
-                opacity: loading ? 0.6 : 1,
-              }}
+              className="flex-1 rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? t.loading : t.login}
             </button>

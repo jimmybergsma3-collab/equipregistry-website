@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getCookieTexts } from "@/lib/i18n/cookie-text";
@@ -11,7 +11,13 @@ type ConsentValue = "accepted" | "declined";
 const STORAGE_KEY = "er_cookie_consent";
 
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return !window.localStorage.getItem(STORAGE_KEY);
+  });
   const pathname = usePathname();
 
   const lang: Lang = useMemo(() => {
@@ -21,13 +27,6 @@ export default function CookieBanner() {
   }, [pathname]);
 
   const texts = useMemo(() => getCookieTexts(lang), [lang]);
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) {
-      setVisible(true);
-    }
-  }, []);
 
   function saveConsent(value: ConsentValue) {
     window.localStorage.setItem(STORAGE_KEY, value);

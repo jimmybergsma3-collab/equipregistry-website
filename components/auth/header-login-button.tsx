@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LoginModal from "@/components/auth/login-modal";
+import type { Lang } from "@/lib/i18n/config";
 
 type Props = {
   lang: string;
@@ -23,6 +25,7 @@ export default function HeaderLoginButton({
 }: Props) {
   const [session, setSession] = useState<SessionState>({ loggedIn: false });
   const [loading, setLoading] = useState(true);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -74,7 +77,24 @@ export default function HeaderLoginButton({
   if (loading) return null;
 
   if (!session.loggedIn) {
-    return <Link href={`/${lang}/login`}>{loginLabel}</Link>;
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setLoginOpen(true)}
+          className="text-sm font-medium text-zinc-900 hover:underline"
+        >
+          {loginLabel}
+        </button>
+
+        <LoginModal
+          lang={lang as Lang}
+          next={`/${lang}/dashboard/registrations`}
+          isOpen={loginOpen}
+          onClose={() => setLoginOpen(false)}
+        />
+      </>
+    );
   }
 
   const dashboardHref =

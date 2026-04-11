@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   approveRegistration,
   issuePassport,
@@ -19,14 +20,17 @@ export default function ReviewFlowActions({
   lang,
   requestStatus,
 }: Props) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [tone, setTone] = useState<"success" | "warning" | "error">("success");
 
   function runAction(
     action: (registrationId: string, lang: string) => Promise<{
       success: boolean;
       message: string;
+      tone?: "success" | "warning" | "error";
+      refresh?: boolean;
     }>
   ) {
     setMessage("");
@@ -34,7 +38,11 @@ export default function ReviewFlowActions({
     startTransition(async () => {
       const result = await action(registrationId, lang);
       setMessage(result.message);
-      setIsSuccess(result.success);
+      setTone(result.tone ?? (result.success ? "success" : "error"));
+
+      if (result.refresh) {
+        router.refresh();
+      }
     });
   }
 
@@ -79,8 +87,10 @@ export default function ReviewFlowActions({
         <div
           className={[
             "rounded-xl border px-4 py-3 text-sm",
-            isSuccess
+            tone === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : tone === "warning"
+              ? "border-amber-200 bg-amber-50 text-amber-700"
               : "border-red-200 bg-red-50 text-red-700",
           ].join(" ")}
         >

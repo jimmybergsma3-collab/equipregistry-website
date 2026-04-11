@@ -68,16 +68,11 @@ function fraudSignals(machine: InsuranceMachine) {
 const STORAGE_KEY = "er_insurance_machines_v1";
 
 export default function InsuranceMachinesTable() {
-  const [machines, setMachines] = useState<InsuranceMachine[]>(MOCK_MACHINES);
+  const [machines, setMachines] = useState<InsuranceMachine[]>(() => {
+    if (typeof window === "undefined") {
+      return MOCK_MACHINES;
+    }
 
-  const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<InsuranceMachineStatus | "ALL">("ALL");
-  const [country, setCountry] = useState<string>("ALL");
-  const [showNeedsRecheck, setShowNeedsRecheck] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey>("lastVerifiedAt");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-
-  useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
 
@@ -85,13 +80,22 @@ export default function InsuranceMachinesTable() {
         const parsed = safeParse<InsuranceMachine[]>(raw) ?? [];
 
         if (Array.isArray(parsed) && parsed.length) {
-          setMachines(parsed);
+          return parsed;
         }
       }
     } catch {
       // ignore
     }
-  }, []);
+
+    return MOCK_MACHINES;
+  });
+
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState<InsuranceMachineStatus | "ALL">("ALL");
+  const [country, setCountry] = useState<string>("ALL");
+  const [showNeedsRecheck, setShowNeedsRecheck] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("lastVerifiedAt");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
   useEffect(() => {
     try {
