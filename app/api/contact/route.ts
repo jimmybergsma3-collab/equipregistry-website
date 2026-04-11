@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 type ContactType = "general" | "business" | "support";
 
 function getTargetEmail(contactType: ContactType) {
@@ -25,6 +23,16 @@ function getDefaultSubject(contactType: ContactType) {
     default:
       return "General inquiry";
   }
+}
+
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is missing.");
+  }
+
+  return new Resend(apiKey);
 }
 
 export async function POST(req: Request) {
@@ -55,6 +63,7 @@ export async function POST(req: Request) {
     const from =
       process.env.CONTACT_FROM_EMAIL || "contact@equipregistry.com";
     const finalSubject = subject || getDefaultSubject(contactType);
+    const resend = getResendClient();
 
     const html = `
       <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #111827;">
@@ -90,6 +99,7 @@ export async function POST(req: Request) {
     });
 
     if (error) {
+      console.error("CONTACT EMAIL ERROR:", error);
       return NextResponse.json(
         { error: "Email could not be sent." },
         { status: 500 }
@@ -97,7 +107,18 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "RESEND_API_KEY is missing."
+    ) {
+      return NextResponse.json(
+        { error: "Contact email is not configured. Missing RESEND_API_KEY." },
+        { status: 503 }
+      );
+    }
+
+    console.error("CONTACT API ERROR:", error);
     return NextResponse.json(
       { error: "Unexpected server error." },
       { status: 500 }
