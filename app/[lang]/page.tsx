@@ -4,8 +4,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
+import { prisma } from "@/lib/db";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getStolenCaseText } from "@/lib/i18n/stolen-case";
+import {
+  getRegistryAssetStatus,
+  getStolenCaseRecord,
+} from "@/lib/registry/request-meta";
+import {
+  getPublicDateValue,
+  getPublicIncidentLocation,
+} from "@/lib/registry/stolen-case";
 
 type Props = {
   params: Promise<{
@@ -42,6 +52,16 @@ const DEMO_SERIALS = [
   "ER-STOL-777",
 ] as const;
 
+function normalizeLookupSerial(serial: string) {
+  return serial.trim().toUpperCase();
+}
+
+function isDemoSerial(serial: string) {
+  return DEMO_SERIALS.includes(
+    normalizeLookupSerial(serial) as (typeof DEMO_SERIALS)[number]
+  );
+}
+
 function getStatusClasses(color: StatusColor) {
   switch (color) {
     case "green":
@@ -66,8 +86,8 @@ function getActionClasses(style: ActionStyle) {
   }
 }
 
-function getStatus(serial: string, lang: Lang): Status {
-  const s = serial.trim().toUpperCase();
+function getDemoStatus(serial: string, lang: Lang): Status {
+  const s = normalizeLookupSerial(serial);
   const t = getDictionary(lang).statuses;
 
   if (s === "ER-REG-001") {
@@ -195,6 +215,181 @@ function getStatus(serial: string, lang: Lang): Status {
   };
 }
 
+async function getStoredStatus(serial: string, lang: Lang): Promise<Status | null> {
+  const trimmedSerial = serial.trim();
+  const normalizedSerial = normalizeLookupSerial(serial);
+
+  if (!trimmedSerial) {
+    return null;
+  }
+
+  const orderBy = [
+    { updatedAt: "desc" as const },
+    { createdAt: "desc" as const },
+    { reference: "asc" as const },
+  ];
+
+  let request = await prisma.registrationRequest.findFirst({
+    where: {
+      deletedAt: null,
+      requestStatus: "passport_issued",
+      reference: normalizedSerial,
+    },
+    orderBy,
+    select: {
+      reference: true,
+      dynamicFields: true,
+    },
+  });
+
+  if (!request) {
+    request = await prisma.registrationRequest.findFirst({
+      where: {
+        deletedAt: null,
+        requestStatus: "passport_issued",
+        serialNumber: {
+          equals: trimmedSerial,
+          mode: "insensitive",
+        },
+      },
+      orderBy,
+      select: {
+        reference: true,
+        dynamicFields: true,
+      },
+    });
+  }
+
+  if (!request) {
+    return null;
+  }
+
+  const dictionary = getDictionary(lang);
+  const t = dictionary.statuses;
+  const stolenText = getStolenCaseText(lang);
+  const stolenCase = getStolenCaseRecord(request.dynamicFields);
+
+  if (stolenCase?.isStolen && stolenCase.status === "open") {
+    return {
+      label: t.stolen.label,
+      color: "red",
+      message: t.stolen.message,
+      warning: t.stolen.warning,
+      why: t.stolen.why,
+      metadata: [
+        {
+          label: t.stolen.metadataStatus,
+          value: t.metadataValues.blacklisted,
+        },
+        {
+          label: t.stolen.metadataRisk,
+          value: t.metadataValues.high,
+        },
+        {
+          label: stolenText.public.caseReference,
+          value: stolenCase.caseReference,
+        },
+        {
+          label: stolenText.public.incidentLocation,
+          value: getPublicIncidentLocation(
+            stolenCase,
+            stolenText.public.unknownLocation
+          ),
+        },
+        {
+          label: stolenText.public.incidentDate,
+          value: getPublicDateValue(
+            stolenCase.incidentDate,
+            stolenText.public.unknownDate
+          ),
+        },
+      ],
+      actions: [
+        {
+          label: t.stolen.actionContactAuthorities,
+          href: `/${lang}/contact-authorities?registryId=${encodeURIComponent(
+            request.reference
+          )}&caseId=${encodeURIComponent(stolenCase.caseReference)}`,
+          style: "danger",
+        },
+        {
+          label: t.registeredVerified.actionViewPassport,
+          href: `/${lang}/passport/${encodeURIComponent(request.reference)}`,
+          style: "secondary",
+        },
+      ],
+    };
+  }
+
+  const registryStatus = getRegistryAssetStatus(
+    request.dynamicFields,
+    "passport_issued"
+  );
+
+  if (registryStatus === "history_unknown") {
+    return {
+      label: t.historyUnknown.label,
+      color: "orange",
+      message: t.historyUnknown.message,
+      why: t.historyUnknown.why,
+      metadata: [
+        {
+          label: t.historyUnknown.metadataStatus,
+          value: t.metadataValues.limitedPassport,
+        },
+        {
+          label: t.historyUnknown.metadataRisk,
+          value: t.metadataValues.medium,
+        },
+      ],
+      actions: [
+        {
+          label: t.historyUnknown.actionViewPassport,
+          href: `/${lang}/passport/${encodeURIComponent(request.reference)}`,
+          style: "secondary",
+        },
+      ],
+    };
+  }
+
+  return {
+    label: t.registeredVerified.label,
+    color: "green",
+    message: t.registeredVerified.message,
+    why: t.registeredVerified.why,
+    metadata: [
+      {
+        label: t.registeredVerified.metadataStatus,
+        value: t.metadataValues.active,
+      },
+      {
+        label: t.registeredVerified.metadataPassport,
+        value: t.metadataValues.full,
+      },
+      {
+        label: t.registeredVerified.metadataValidation,
+        value: t.metadataValues.lastValidation2025,
+      },
+    ],
+    actions: [
+      {
+        label: t.registeredVerified.actionViewPassport,
+        href: `/${lang}/passport/${encodeURIComponent(request.reference)}`,
+        style: "primary",
+      },
+    ],
+  };
+}
+
+async function getStatus(serial: string, lang: Lang): Promise<Status> {
+  if (isDemoSerial(serial)) {
+    return getDemoStatus(serial, lang);
+  }
+
+  const storedStatus = await getStoredStatus(serial, lang);
+  return storedStatus ?? getDemoStatus(serial, lang);
+}
+
 export default async function Home({ params, searchParams }: Props) {
   const { lang } = await params;
 
@@ -208,8 +403,10 @@ export default async function Home({ params, searchParams }: Props) {
   const textAlignClass = isRtl ? "text-right" : "text-left";
   const query = searchParams ? await searchParams : undefined;
   const serial = query?.serial?.trim() || "";
-  const normalizedSerial = serial ? serial.toUpperCase() : "";
-  const status = normalizedSerial ? getStatus(normalizedSerial, lang) : null;
+  const normalizedSerial = serial ? normalizeLookupSerial(serial) : "";
+  const status = normalizedSerial
+    ? await getStatus(serial, lang)
+    : null;
 
   const isLoggedIn = false;
 

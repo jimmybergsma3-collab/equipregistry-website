@@ -6,9 +6,12 @@ import RequestStatusBadge from "@/components/registry/request-status-badge";
 import ManualPaymentPanel from "@/components/registry/manual-payment-panel";
 import MarkPaidButton from "@/components/registry/mark-paid-button";
 import ReviewFlowActions from "@/components/registry/review-flow-actions";
+import StolenCasePanel from "@/components/registry/stolen-case-panel";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { usesManualIbanPayment } from "@/lib/registry/payment";
+import { getStolenCaseRecord } from "@/lib/registry/request-meta";
+import { canManageStolenCase } from "@/lib/registry/stolen-case";
 import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
@@ -453,6 +456,11 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
       request.requestStatus === "submitted" ||
       request.requestStatus === "under_review" ||
       request.requestStatus === "approved";
+    const stolenCase = getStolenCaseRecord(request.dynamicFields);
+    const showStolenCasePanel = canManageStolenCase(
+      request.requestStatus,
+      Boolean(stolenCase)
+    );
 
     return (
       <>
@@ -460,7 +468,7 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
 
         <main
           dir={lang === "ar" ? "rtl" : "ltr"}
-          className="min-h-screen bg-zinc-50"
+          className="min-h-screen bg-white"
         >
           <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-8">
@@ -536,6 +544,14 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
               </div>
             ) : null}
 
+            {showStolenCasePanel ? (
+              <StolenCasePanel
+                registrationId={request.id}
+                lang={lang}
+                existingCase={stolenCase}
+              />
+            ) : null}
+
             <RegistrationDetailsCard
               request={request}
               texts={texts}
@@ -566,7 +582,7 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
 
       <main
         dir={lang === "ar" ? "rtl" : "ltr"}
-        className="min-h-screen bg-zinc-50"
+        className="min-h-screen bg-white"
       >
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8">

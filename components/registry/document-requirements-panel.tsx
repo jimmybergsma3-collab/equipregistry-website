@@ -10,7 +10,9 @@ import {
 } from "@/lib/registry/document-rules";
 import { ApplicantType, RegistrationFileStatus } from "@/lib/registry/workflow";
 import type { Lang } from "@/lib/i18n/config";
-import { MAX_UPLOAD_SIZE_BYTES } from "@/lib/registry/upload-types";
+import { getRegistryUploadText } from "@/lib/i18n/registry-upload";
+import { uploadFilesForBucket, ClientUploadError } from "@/lib/registry/client-uploads";
+import { ALLOWED_UPLOAD_ACCEPT } from "@/lib/registry/upload-types";
 
 type Props = {
   lang: Lang;
@@ -227,24 +229,24 @@ const TEXT: Record<
     },
   },
   hi: {
-    title: "Supporting documents",
+    title: "Sahayak dastavez",
     subtitle:
-      "Required documents applicant type aur selected category ke hisab se badalte hain.",
-    required: "Required",
-    optional: "Optional",
-    status: "Status",
-    noFileSelected: "Abhi tak koi file upload nahin hui",
-    chooseFile: "Choose file",
-    addFiles: "Add files",
-    replaceFile: "Replace file",
-    uploading: "Uploading...",
-    clearFiles: "Clear",
-    sizeHelp: "PDF, JPG, PNG, ya WEBP. Har file 10 MB se chhoti honi chahiye.",
+      "Zaruri dastavez applicant type aur chuni hui category ke hisab se badalte hain.",
+    required: "Zaruri",
+    optional: "Vikalpik",
+    status: "Sthiti",
+    noFileSelected: "Abhi tak koi dastavez upload nahin hua",
+    chooseFile: "Dastavez chunen",
+    addFiles: "Dastavez joden",
+    replaceFile: "Dastavez badlen",
+    uploading: "Bheja ja raha hai...",
+    clearFiles: "Saf karen",
+    sizeHelp: "PDF, JPG, PNG, ya WEBP. Har dastavez 10 MB se chhota hona chahiye.",
     statuses: {
-      missing: "Missing",
-      uploaded: "Uploaded",
-      accepted: "Accepted",
-      rejected: "Rejected",
+      missing: "Anupasthit",
+      uploaded: "Bheja gaya",
+      accepted: "Sweekrit",
+      rejected: "Asweekrit",
     },
   },
   ar: {
@@ -291,6 +293,7 @@ export default function DocumentRequirementsPanel({
   onChange,
 }: Props) {
   const text = TEXT[lang];
+  const uploadText = getRegistryUploadText(lang);
   const requiredDocuments = getRequiredDocumentsForContext(
     applicantType,
     category,
@@ -310,41 +313,16 @@ export default function DocumentRequirementsPanel({
 
     const selectedFiles = Array.from(files);
 
-    const tooLarge = selectedFiles.find((file) => file.size > MAX_UPLOAD_SIZE_BYTES);
-    if (tooLarge) {
-      setErrors((prev) => ({
-        ...prev,
-        [key]: text.sizeHelp,
-      }));
-      return;
-    }
-
     setUploadingKey(key);
     setErrors((prev) => ({ ...prev, [key]: "" }));
 
     try {
-      const formData = new FormData();
-      formData.set("bucket", key);
-
-      for (const file of selectedFiles) {
-        formData.append("files", file);
-      }
-
-      const response = await fetch("/api/uploads", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok || !data?.success) {
-        throw new Error(data?.error || "Upload failed.");
-      }
+      const uploads = await uploadFilesForBucket(key, selectedFiles);
 
       const current = documents[key] ?? { status: "missing" as const, files: [] };
       const nextFiles = documentSupportsMultipleFiles(key)
-        ? [...(current.files ?? []), ...(data.uploads ?? [])]
-        : [...(data.uploads ?? [])];
+        ? [...(current.files ?? []), ...uploads]
+        : [...uploads];
 
       onChange(key, {
         status: "uploaded",
@@ -352,9 +330,15 @@ export default function DocumentRequirementsPanel({
         files: nextFiles,
       });
     } catch (error) {
+      const localizedError =
+        error instanceof ClientUploadError &&
+        (error.code === "file_too_large" || error.code === "invalid_file_type")
+          ? uploadText.sizeHelp
+          : uploadText.uploadFailed;
+
       setErrors((prev) => ({
         ...prev,
-        [key]: error instanceof Error ? error.message : "Upload failed.",
+        [key]: localizedError,
       }));
     } finally {
       setUploadingKey(null);
@@ -366,6 +350,7 @@ export default function DocumentRequirementsPanel({
       <div className="mb-5">
         <h3 className="text-base font-semibold text-zinc-900">{text.title}</h3>
         <p className="mt-1 text-sm text-zinc-600">{text.subtitle}</p>
+        <p className="mt-2 text-xs text-zinc-500">{uploadText.privacyNote}</p>
       </div>
 
       <div className="space-y-4">
@@ -415,20 +400,24 @@ export default function DocumentRequirementsPanel({
                       className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
                     >
                       {uploadingKey === doc.key
-                        ? text.uploading
+                        ? uploadText.uploading
                         : current.files && current.files.length > 0
                         ? multiple
-                          ? text.addFiles
-                          : text.replaceFile
-                        : text.chooseFile}
+                          ? uploadText.addFiles
+                          : uploadText.replaceFile
+                        : uploadText.chooseFile}
                     </label>
 
                     <input
                       id={inputId}
                       type="file"
                       multiple={multiple}
+                      accept={ALLOWED_UPLOAD_ACCEPT}
                       className="hidden"
-                      onChange={(event) => uploadFiles(doc.key, event.target.files)}
+                      onChange={(event) => {
+                        void uploadFiles(doc.key, event.target.files);
+                        event.currentTarget.value = "";
+                      }}
                     />
 
                     {current.files && current.files.length > 0 ? (
@@ -443,12 +432,12 @@ export default function DocumentRequirementsPanel({
                         }
                         className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100"
                       >
-                        {text.clearFiles}
+                        {uploadText.clearFiles}
                       </button>
                     ) : null}
                   </div>
 
-                  <p className="mt-3 text-xs text-zinc-500">{text.sizeHelp}</p>
+                  <p className="mt-3 text-xs text-zinc-500">{uploadText.sizeHelp}</p>
 
                   <div className="mt-4">
                     <p className="mb-2 text-sm font-medium text-zinc-900">
@@ -467,7 +456,9 @@ export default function DocumentRequirementsPanel({
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-sm text-zinc-500">{text.noFileSelected}</p>
+                      <p className="text-sm text-zinc-500">
+                        {uploadText.noFileSelected}
+                      </p>
                     )}
                   </div>
 

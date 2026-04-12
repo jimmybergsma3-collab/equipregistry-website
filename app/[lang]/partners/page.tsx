@@ -116,36 +116,29 @@ export default async function PartnersPage({ params }: Props) {
 
           <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
             <h4 className="mb-3 text-lg font-semibold text-slate-900">
-              Double financing risk
+              {p.financeRiskTitle}
             </h4>
             <p className="text-sm leading-6 text-slate-600">
-              The same asset can be used as collateral multiple times across
-              different institutions or countries. Without a shared trust layer,
-              this creates hidden exposure, fraud risk and potential financial
-              loss.
+              {p.financeRiskText}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-white p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Verification before financing
+                {p.financeVerificationTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Confirm whether an asset is already registered, financed,
-                flagged, or associated with a risk event before approving a
-                lease or loan.
+                {p.financeVerificationText}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Cross-border trust
+                {p.financeTrustTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Support safer international transactions involving machines,
-                vehicles, trailers and other movable assets used in financing
-                structures.
+                {p.financeTrustText}
               </p>
             </div>
           </div>
@@ -168,31 +161,28 @@ export default async function PartnersPage({ params }: Props) {
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Fleet visibility
+                {p.rentalVisibilityTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Keep a clearer overview of equipment identity, status and risk
-                across multiple countries and operating locations.
+                {p.rentalVisibilityText}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Theft prevention
+                {p.rentalPreventionTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Support faster flagging and stronger fraud prevention around
-                stolen, missing or illegally resold assets.
+                {p.rentalPreventionText}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Proof of origin
+                {p.rentalOriginTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Improve ownership proof and trust for insurers, buyers,
-                partners, and cross-border stakeholders.
+                {p.rentalOriginText}
               </p>
             </div>
           </div>
@@ -215,21 +205,19 @@ export default async function PartnersPage({ params }: Props) {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-white p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Entry and exit control
+                {p.terminalsEntryTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Add an extra verification layer before equipment enters or
-                leaves secure operational zones.
+                {p.terminalsEntryText}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                Customs and inspections
+                {p.terminalsCustomsTitle}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                Support customs, terminal checks and compliance processes with
-                stronger asset identification and risk visibility.
+                {p.terminalsCustomsText}
               </p>
             </div>
           </div>
@@ -240,8 +228,7 @@ export default async function PartnersPage({ params }: Props) {
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h3 className="mb-6 text-3xl font-semibold">{t.common.contactEquipRegistry}</h3>
           <p className="mb-8 text-lg leading-8 text-slate-200">
-            EquipRegistry is built to support trusted partners across insurance,
-            rental, finance, logistics and recovery workflows.
+            {p.ctaText}
           </p>
           <a
             href={`/${currentLang}/contact`}

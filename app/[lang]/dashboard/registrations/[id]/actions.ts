@@ -4,6 +4,21 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { assertAdminAction } from "@/lib/auth/assert-admin-action";
+import { getStolenCaseText } from "@/lib/i18n/stolen-case";
+import {
+  getStolenCaseRecord,
+  setRegistryAssetStatus,
+  setStolenCaseRecord,
+} from "@/lib/registry/request-meta";
+import {
+  canManageStolenCase,
+  createOrUpdateStolenCaseRecord,
+  getPreviousRegistryStatus,
+  getResolvedRegistryStatus,
+  getStolenRegistryStatus,
+  parseStolenCaseInput,
+  resolveStolenCaseRecord,
+} from "@/lib/registry/stolen-case";
 
 type ActionResult = {
   success: boolean;
@@ -15,6 +30,19 @@ type ActionResult = {
 type RegistrationRequestRecord = NonNullable<
   Awaited<ReturnType<typeof getRequestById>>
 >;
+
+type PassportMachineSource = Pick<
+  RegistrationRequestRecord,
+  | "reference"
+  | "serialNumber"
+  | "brand"
+  | "model"
+  | "year"
+  | "category"
+  | "userId"
+> & {
+  dynamicFields: unknown;
+};
 
 class PassportIssuanceError extends Error {}
 
@@ -53,9 +81,22 @@ function normalizeOptionalValue(value: string | null | undefined) {
   return normalized ? normalized : null;
 }
 
+function getMachineStatusForIssuedRequest(
+  dynamicFields: unknown,
+  existingMachineStatus?: string | null
+) {
+  const caseRecord = getStolenCaseRecord(dynamicFields);
+
+  if (caseRecord?.isStolen && caseRecord.status === "open") {
+    return getStolenRegistryStatus(caseRecord.previousRegistryStatus);
+  }
+
+  return normalizeOptionalValue(existingMachineStatus) ?? "passport_issued";
+}
+
 async function createOrSyncPassportMachine(
   tx: Prisma.TransactionClient,
-  request: RegistrationRequestRecord
+  request: PassportMachineSource
 ) {
   const existingMachine = await tx.machine.findUnique({
     where: {
@@ -76,7 +117,10 @@ async function createOrSyncPassportMachine(
     model: normalizeOptionalValue(request.model),
     year: normalizeOptionalValue(request.year),
     category: normalizeOptionalValue(request.category),
-    status: normalizeOptionalValue(existingMachine?.status) ?? "passport_issued",
+    status: getMachineStatusForIssuedRequest(
+      request.dynamicFields,
+      existingMachine?.status
+    ),
     ownerId: request.userId,
   };
 
@@ -129,13 +173,32 @@ async function issuePassportRecordForRequest(
     });
   }
 
-  const machine = await createOrSyncPassportMachine(tx, request);
+  const existingCase = getStolenCaseRecord(request.dynamicFields);
+  const nextDynamicFields =
+    existingCase?.isStolen && existingCase.status === "open"
+      ? setRegistryAssetStatus(
+          setStolenCaseRecord(request.dynamicFields, {
+            ...existingCase,
+            previousRegistryStatus: "registered_verified",
+            previousMachineStatus:
+              normalizeOptionalValue(existingCase.previousMachineStatus) ??
+              "passport_issued",
+          }),
+          "verified_stolen"
+        )
+      : request.dynamicFields;
+
+  const machine = await createOrSyncPassportMachine(tx, {
+    ...request,
+    dynamicFields: nextDynamicFields,
+  });
   const updatedRequest = await tx.registrationRequest.update({
     where: {
       id: request.id,
     },
     data: {
       requestStatus: "passport_issued",
+      dynamicFields: nextDynamicFields as Prisma.InputJsonObject,
     },
   });
 
@@ -634,6 +697,211 @@ export async function issuePassport(
     success: true,
     message,
     tone,
+    refresh: true,
+  };
+}
+
+export async function saveStolenCase(
+  registrationId: string,
+  lang: string,
+  formData: FormData
+): Promise<ActionResult> {
+  const auth = await assertAdminAction();
+
+  if (!auth.ok) {
+    return { success: false, message: auth.message, tone: "error" };
+  }
+
+  const text = getStolenCaseText(lang);
+  const request = await getRequestById(registrationId);
+
+  if (!request) {
+    return {
+      success: false,
+      message: text.admin.messages.requestMissing,
+      tone: "error",
+    };
+  }
+
+  const existingCase = getStolenCaseRecord(request.dynamicFields);
+
+  if (!canManageStolenCase(request.requestStatus, Boolean(existingCase))) {
+    return {
+      success: false,
+      message: text.admin.messages.notEligible,
+      tone: "error",
+    };
+  }
+
+  const input = parseStolenCaseInput(formData);
+
+  if (!input.incidentDescription) {
+    return {
+      success: false,
+      message: text.admin.messages.missingDescription,
+      tone: "error",
+    };
+  }
+
+  const previousRegistryStatus =
+    existingCase?.previousRegistryStatus ??
+    getPreviousRegistryStatus(request.dynamicFields, request.requestStatus);
+  const machine =
+    request.requestStatus === "passport_issued"
+      ? await prisma.machine.findUnique({
+          where: {
+            registryId: request.reference,
+          },
+        })
+      : null;
+  const nextCase = createOrUpdateStolenCaseRecord({
+    existingCase,
+    registrationReference: request.reference,
+    previousRegistryStatus,
+    previousMachineStatus: normalizeOptionalValue(
+      existingCase?.previousMachineStatus ?? machine?.status
+    ),
+    actorUserId: auth.session.user.id,
+    input,
+  });
+  const updatedDynamicFields = setRegistryAssetStatus(
+    setStolenCaseRecord(request.dynamicFields, nextCase),
+    getStolenRegistryStatus(previousRegistryStatus)
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.registrationRequest.update({
+      where: {
+        id: request.id,
+      },
+      data: {
+        dynamicFields: updatedDynamicFields as Prisma.InputJsonObject,
+      },
+    });
+
+    if (machine) {
+      await tx.machine.update({
+        where: {
+          id: machine.id,
+        },
+        data: {
+          status: getStolenRegistryStatus(nextCase.previousRegistryStatus),
+        },
+      });
+    }
+  });
+
+  revalidateRegistrationPaths(
+    lang,
+    registrationId,
+    request.reference,
+    machine?.id
+  );
+
+  return {
+    success: true,
+    message: text.admin.messages.saved,
+    tone: "success",
+    refresh: true,
+  };
+}
+
+export async function resolveStolenCase(
+  registrationId: string,
+  lang: string
+): Promise<ActionResult> {
+  const auth = await assertAdminAction();
+
+  if (!auth.ok) {
+    return { success: false, message: auth.message, tone: "error" };
+  }
+
+  const text = getStolenCaseText(lang);
+  const request = await getRequestById(registrationId);
+
+  if (!request) {
+    return {
+      success: false,
+      message: text.admin.messages.requestMissing,
+      tone: "error",
+    };
+  }
+
+  const existingCase = getStolenCaseRecord(request.dynamicFields);
+
+  if (!existingCase) {
+    return {
+      success: false,
+      message: text.admin.messages.caseMissing,
+      tone: "error",
+    };
+  }
+
+  if (!canManageStolenCase(request.requestStatus, true)) {
+    return {
+      success: false,
+      message: text.admin.messages.notEligible,
+      tone: "error",
+    };
+  }
+
+  const machine =
+    request.requestStatus === "passport_issued"
+      ? await prisma.machine.findUnique({
+          where: {
+            registryId: request.reference,
+          },
+        })
+      : null;
+  const restoredRegistryStatus = getResolvedRegistryStatus({
+    existingCase,
+    requestStatus: request.requestStatus,
+    machineCreatedAt: machine?.createdAt ?? null,
+  });
+  const resolvedCase = resolveStolenCaseRecord(
+    existingCase,
+    auth.session.user.id
+  );
+  const updatedDynamicFields = setRegistryAssetStatus(
+    setStolenCaseRecord(request.dynamicFields, resolvedCase),
+    restoredRegistryStatus
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.registrationRequest.update({
+      where: {
+        id: request.id,
+      },
+      data: {
+        dynamicFields: updatedDynamicFields as Prisma.InputJsonObject,
+      },
+    });
+
+    if (machine) {
+      await tx.machine.update({
+        where: {
+          id: machine.id,
+        },
+        data: {
+          status:
+            normalizeOptionalValue(existingCase.previousMachineStatus) ??
+            "passport_issued",
+        },
+      });
+    }
+  });
+
+  revalidateRegistrationPaths(
+    lang,
+    registrationId,
+    request.reference,
+    machine?.id
+  );
+
+  return {
+    success: true,
+    message: text.admin.messages.resolved,
+    tone: "success",
     refresh: true,
   };
 }

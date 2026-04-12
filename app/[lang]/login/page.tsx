@@ -313,7 +313,7 @@ export default function LoginPage() {
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-screen bg-zinc-50">
+      <main className="min-h-screen bg-white">
         <div className="mx-auto max-w-md px-6 py-20">
           <div className="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
             <div className="mb-8 text-center">

@@ -5,6 +5,7 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import OfficialPassport from "@/components/passport/official-passport";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import {
   getLangDir,
   isRTL,
@@ -12,10 +13,15 @@ import {
   type Lang,
 } from "@/lib/i18n/config";
 import { getPassportPageContent } from "@/lib/i18n/passport-page";
+import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import {
   getCategoryByValue,
   getSubcategoriesByCategory,
 } from "@/lib/registry/categories";
+import {
+  getPublicDateValue,
+  getPublicIncidentLocation,
+} from "@/lib/registry/stolen-case";
 
 type Props = {
   params: Promise<{
@@ -76,6 +82,7 @@ export default async function PassportPage({ params }: Props) {
   const headerList = await headers();
   const content = getPassportPageContent(safeLang);
   const dictionary = getDictionary(safeLang);
+  const stolenText = getStolenCaseText(safeLang);
   const direction = getLangDir(safeLang);
   const rtl = isRTL(safeLang);
   const alignClassName = rtl ? "text-right" : "text-left";
@@ -96,12 +103,18 @@ export default async function PassportPage({ params }: Props) {
       serialNumber: true,
       year: true,
       country: true,
+      dynamicFields: true,
     },
   });
 
   if (!request) {
     notFound();
   }
+
+  const stolenCase = getStolenCaseRecord(request.dynamicFields);
+  const isPubliclyStolen = Boolean(
+    stolenCase?.isStolen && stolenCase.status === "open"
+  );
 
   const localizedCategory =
     getCategoryByValue(request.category, safeLang)?.label ??
@@ -156,12 +169,58 @@ export default async function PassportPage({ params }: Props) {
       value: maskSerial(request.serialNumber, content.unavailable),
     },
   ];
+  const publicCaseReference = isPubliclyStolen
+    ? stolenCase?.caseReference ?? request.reference
+    : null;
+  const publicIncidentLocation = isPubliclyStolen
+    ? getPublicIncidentLocation(
+        stolenCase!,
+        stolenText.public.unknownLocation
+      )
+    : null;
+  const publicIncidentDate = isPubliclyStolen
+    ? getPublicDateValue(stolenCase?.incidentDate, stolenText.public.unknownDate)
+    : null;
+  const publicPoliceReportDate = isPubliclyStolen
+    ? getPublicDateValue(
+        stolenCase?.policeReportDate,
+        stolenText.public.unknownDate
+      )
+    : null;
+
+  if (isPubliclyStolen && publicCaseReference) {
+    passportFields.push({
+      label: stolenText.public.caseReference,
+      value: publicCaseReference,
+    });
+  }
+
+  if (isPubliclyStolen && publicIncidentLocation) {
+    passportFields.push({
+      label: stolenText.public.incidentLocation,
+      value: publicIncidentLocation,
+    });
+  }
+
+  if (isPubliclyStolen && publicIncidentDate) {
+    passportFields.push({
+      label: stolenText.public.incidentDate,
+      value: publicIncidentDate,
+    });
+  }
+
+  if (isPubliclyStolen && publicPoliceReportDate) {
+    passportFields.push({
+      label: stolenText.public.policeReportDate,
+      value: publicPoliceReportDate,
+    });
+  }
 
   return (
     <>
       <SiteHeader lang={safeLang} />
 
-      <main className="min-h-screen bg-zinc-50" dir={direction}>
+      <main className="min-h-screen bg-white" dir={direction}>
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
           <OfficialPassport
             direction={direction}
@@ -172,14 +231,27 @@ export default async function PassportPage({ params }: Props) {
             passportNumberLabel={content.fields.passportNumber}
             passportNumber={request.reference}
             statusLabel={content.statusLabel}
-            statusValue={dictionary.dashboard.requestStatuses.passportIssued}
+            statusValue={
+              isPubliclyStolen
+                ? dictionary.statuses.stolen.label
+                : dictionary.dashboard.requestStatuses.passportIssued
+            }
+            statusTone={isPubliclyStolen ? "danger" : "default"}
             verificationSummaryTitle={
-              dictionary.statuses.registeredVerified.label
+              isPubliclyStolen
+                ? dictionary.statuses.stolen.label
+                : dictionary.statuses.registeredVerified.label
             }
             verificationSummaryMessage={
-              dictionary.statuses.registeredVerified.message
+              isPubliclyStolen
+                ? dictionary.statuses.stolen.message
+                : dictionary.statuses.registeredVerified.message
             }
-            verificationSummaryWhy={dictionary.statuses.registeredVerified.why}
+            verificationSummaryWhy={
+              isPubliclyStolen
+                ? dictionary.statuses.stolen.why
+                : dictionary.statuses.registeredVerified.why
+            }
             verificationPanelTitle={content.verificationPanelTitle}
             verificationPanelText={content.verificationPanelText}
             verificationUrlLabel={content.verificationUrlLabel}
@@ -190,6 +262,60 @@ export default async function PassportPage({ params }: Props) {
             qrImageUrl={qrImageUrl}
             fields={passportFields}
           />
+
+          {isPubliclyStolen && publicCaseReference ? (
+            <section className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6">
+              <h2 className="text-lg font-semibold text-red-800">
+                {stolenText.public.warningTitle}
+              </h2>
+              <p className="mt-2 text-sm font-medium text-red-700">
+                {dictionary.statuses.stolen.warning}
+              </p>
+              <p className="mt-3 text-sm text-red-700">
+                {stolenText.public.limitedInfo}
+              </p>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-red-200 bg-white px-4 py-3">
+                  <p className="text-xs uppercase tracking-[0.14em] text-red-500">
+                    {stolenText.public.caseReference}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-zinc-900">
+                    {publicCaseReference}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-red-200 bg-white px-4 py-3">
+                  <p className="text-xs uppercase tracking-[0.14em] text-red-500">
+                    {stolenText.public.incidentLocation}
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-zinc-900">
+                    {publicIncidentLocation}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                <a
+                  href={`/${safeLang}/contact-authorities?registryId=${encodeURIComponent(
+                    request.reference
+                  )}&caseId=${encodeURIComponent(publicCaseReference)}`}
+                  className="inline-flex items-center rounded-xl border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                >
+                  {dictionary.statuses.stolen.actionContactAuthorities}
+                </a>
+
+                <a
+                  href={`/${safeLang}/report-sighting?registryId=${encodeURIComponent(
+                    request.reference
+                  )}&caseId=${encodeURIComponent(publicCaseReference)}`}
+                  className="inline-flex items-center rounded-xl border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                >
+                  {dictionary.statuses.stolen.actionReportSighting}
+                </a>
+              </div>
+            </section>
+          ) : null}
         </div>
       </main>
 

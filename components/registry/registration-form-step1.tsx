@@ -13,25 +13,45 @@ import {
   deriveRequestStatus,
   evaluateRegistrationCompleteness,
 } from "@/lib/registry/workflow";
-import { RegistrationDocumentState } from "@/lib/registry/document-rules";
+import {
+  RegistrationDocumentKey,
+  RegistrationDocumentMap,
+  RegistrationDocumentState,
+  getDocumentText,
+} from "@/lib/registry/document-rules";
 import {
   saveRegistrationDraft,
   submitRegistrationRequest,
 } from "@/app/[lang]/dashboard/register/actions";
 import type { Lang } from "@/lib/i18n/config";
+import { getRegistryUploadText } from "@/lib/i18n/registry-upload";
+import { uploadFilesForBucket, ClientUploadError } from "@/lib/registry/client-uploads";
+import {
+  ALLOWED_UPLOAD_ACCEPT,
+  type StoredUpload,
+} from "@/lib/registry/upload-types";
 
 type Props = {
   lang: Lang;
   initialApplicantType?: ApplicantType;
 };
 
-const APPLICANT_TYPE_OPTIONS: ApplicantType[] = [
+type StandardApplicantTypeOption = "private" | "sme_business";
+
+type ProofDocumentKey = "applicant_id" | "proof_of_address";
+
+type StolenAssetIntakeState = {
+  enabled: boolean;
+  policeReportNumber: string;
+  incidentDate: string;
+  country: string;
+  incidentDescription: string;
+  supportingDocuments: StoredUpload[];
+};
+
+const APPLICANT_TYPE_OPTIONS: StandardApplicantTypeOption[] = [
   "private",
-  "sme",
-  "insurer_partner",
-  "bank_partner",
-  "dealer_partner",
-  "rental_partner",
+  "sme_business",
 ];
 
 const initialActionState = {
@@ -549,12 +569,568 @@ const FORM_TEXT: Record<
   },
 };
 
+const EXTRA_FORM_TEXT: Record<
+  Lang,
+  {
+    applicantTypeOptionLabels: Record<StandardApplicantTypeOption, string>;
+    proofTitle: string;
+    proofSubtitle: string;
+    proofPrivateHint: string;
+    proofBusinessHint: string;
+    redactionHint: string;
+    stolenTitle: string;
+    stolenSubtitle: string;
+    stolenToggle: string;
+    policeReportNumber: string;
+    incidentDate: string;
+    incidentCountry: string;
+    incidentCountryPlaceholder: string;
+    incidentDescription: string;
+    incidentDescriptionPlaceholder: string;
+    supportingDocuments: string;
+    supportingDocumentsDescription: string;
+  }
+> = {
+  en: {
+    applicantTypeOptionLabels: {
+      private: "Private",
+      sme_business: "SME / Business",
+    },
+    proofTitle: "Proof of applicant",
+    proofSubtitle:
+      "Optional first-step proof for private and SME / business registrations.",
+    proofPrivateHint:
+      "Upload only the minimum identity pages needed to confirm the applicant.",
+    proofBusinessHint:
+      "If useful, add proof for the authorized contact or business address.",
+    redactionHint:
+      "Please mask or redact unnecessary sensitive fields before upload.",
+    stolenTitle: "Stolen asset intake",
+    stolenSubtitle:
+      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
+    stolenToggle: "This registration concerns an already stolen asset",
+    policeReportNumber: "Police report number",
+    incidentDate: "Incident date",
+    incidentCountry: "Incident country",
+    incidentCountryPlaceholder: "e.g. Spain",
+    incidentDescription: "Incident description",
+    incidentDescriptionPlaceholder:
+      "Add the known theft details, location, and any safe references.",
+    supportingDocuments: "Supporting documents",
+    supportingDocumentsDescription:
+      "Upload redacted police-report-related files or safe supporting evidence.",
+  },
+  es: {
+    applicantTypeOptionLabels: {
+      private: "Particular",
+      sme_business: "PYME / Empresa",
+    },
+    proofTitle: "Prueba del solicitante",
+    proofSubtitle:
+      "Primer paso opcional para particulares y registros PYME / empresa.",
+    proofPrivateHint:
+      "Suba solo las paginas minimas de identidad necesarias para confirmar al solicitante.",
+    proofBusinessHint:
+      "Si ayuda, anada prueba del contacto autorizado o de la direccion comercial.",
+    redactionHint:
+      "Enmascare o tache los campos sensibles no necesarios antes de subirlos.",
+    stolenTitle: "Declaracion de activo robado",
+    stolenSubtitle:
+      "Si este activo ya fue denunciado como robado, anada aqui los primeros datos del caso. El administrador podra completar el caso despues.",
+    stolenToggle: "Este registro corresponde a un activo ya robado",
+    policeReportNumber: "Numero de denuncia policial",
+    incidentDate: "Fecha del incidente",
+    incidentCountry: "Pais del incidente",
+    incidentCountryPlaceholder: "p. ej. Espana",
+    incidentDescription: "Descripcion del incidente",
+    incidentDescriptionPlaceholder:
+      "Anada los detalles conocidos del robo, la ubicacion y referencias seguras.",
+    supportingDocuments: "Documentos de soporte",
+    supportingDocumentsDescription:
+      "Suba archivos relacionados con la denuncia policial o pruebas de soporte ya redactadas.",
+  },
+  de: {
+    applicantTypeOptionLabels: {
+      private: "Privat",
+      sme_business: "KMU / Unternehmen",
+    },
+    proofTitle: "Nachweis des Antragstellers",
+    proofSubtitle:
+      "Optionaler erster Nachweis fur Privat- und KMU / Unternehmensregistrierungen.",
+    proofPrivateHint:
+      "Laden Sie nur die minimal erforderlichen Identitatsseiten hoch.",
+    proofBusinessHint:
+      "Falls hilfreich, fugen Sie Nachweise fur den bevollmachtigten Kontakt oder die Geschaftsadresse hinzu.",
+    redactionHint:
+      "Schwarzen Sie unnotige sensible Felder vor dem Upload ab.",
+    stolenTitle: "Erfassung gestohlenes Asset",
+    stolenSubtitle:
+      "Wenn dieses Asset bereits als gestohlen gemeldet wurde, erfassen Sie hier die ersten Falldetails. Das Admin-Team kann den Fall spater vervollstandigen.",
+    stolenToggle: "Diese Registrierung betrifft ein bereits gestohlenes Asset",
+    policeReportNumber: "Polizeiberichtsnummer",
+    incidentDate: "Vorfallsdatum",
+    incidentCountry: "Land des Vorfalls",
+    incidentCountryPlaceholder: "z. B. Spanien",
+    incidentDescription: "Vorfallsbeschreibung",
+    incidentDescriptionPlaceholder:
+      "Fugen Sie bekannte Diebstahlangaben, Ort und sichere Referenzen hinzu.",
+    supportingDocuments: "Unterstutzende Dokumente",
+    supportingDocumentsDescription:
+      "Laden Sie geschwatzte polizeibezogene Dateien oder sichere Nachweise hoch.",
+  },
+  fr: {
+    applicantTypeOptionLabels: {
+      private: "Particulier",
+      sme_business: "PME / Entreprise",
+    },
+    proofTitle: "Preuve du demandeur",
+    proofSubtitle:
+      "Premiere preuve optionnelle pour les inscriptions particulier et PME / entreprise.",
+    proofPrivateHint:
+      "Televersez seulement les pages d'identite minimales necessaires.",
+    proofBusinessHint:
+      "Si utile, ajoutez une preuve du contact autorise ou de l'adresse professionnelle.",
+    redactionHint:
+      "Masquez les champs sensibles non necessaires avant le televersement.",
+    stolenTitle: "Declaration d'actif vole",
+    stolenSubtitle:
+      "Si cet actif est deja signale comme vole, ajoutez ici les premiers details du dossier. L'administration pourra completer le dossier ensuite.",
+    stolenToggle: "Cet enregistrement concerne un actif deja vole",
+    policeReportNumber: "Numero de rapport de police",
+    incidentDate: "Date de l'incident",
+    incidentCountry: "Pays de l'incident",
+    incidentCountryPlaceholder: "ex. Espagne",
+    incidentDescription: "Description de l'incident",
+    incidentDescriptionPlaceholder:
+      "Ajoutez les details connus du vol, le lieu et des references sures.",
+    supportingDocuments: "Documents justificatifs",
+    supportingDocumentsDescription:
+      "Televersez des fichiers lies au rapport de police ou des preuves deja masquees.",
+  },
+  it: {
+    applicantTypeOptionLabels: {
+      private: "Privato",
+      sme_business: "PMI / Azienda",
+    },
+    proofTitle: "Prova del richiedente",
+    proofSubtitle:
+      "Primo passaggio opzionale per registrazioni private e PMI / azienda.",
+    proofPrivateHint:
+      "Carica solo le pagine di identita minime necessarie per confermare il richiedente.",
+    proofBusinessHint:
+      "Se utile, aggiungi prova del contatto autorizzato o dell'indirizzo aziendale.",
+    redactionHint:
+      "Oscura i campi sensibili non necessari prima del caricamento.",
+    stolenTitle: "Segnalazione bene rubato",
+    stolenSubtitle:
+      "Se questo bene e gia stato denunciato come rubato, inserisci qui i primi dettagli del caso. L'amministrazione potra completarlo dopo.",
+    stolenToggle: "Questa registrazione riguarda un bene gia rubato",
+    policeReportNumber: "Numero del rapporto di polizia",
+    incidentDate: "Data dell'incidente",
+    incidentCountry: "Paese dell'incidente",
+    incidentCountryPlaceholder: "es. Spagna",
+    incidentDescription: "Descrizione dell'incidente",
+    incidentDescriptionPlaceholder:
+      "Aggiungi i dettagli noti del furto, la localita e riferimenti sicuri.",
+    supportingDocuments: "Documenti di supporto",
+    supportingDocumentsDescription:
+      "Carica file legati alla denuncia o prove di supporto gia oscurate.",
+  },
+  nl: {
+    applicantTypeOptionLabels: {
+      private: "Particulier",
+      sme_business: "MKB / Bedrijf",
+    },
+    proofTitle: "Bewijs van aanvrager",
+    proofSubtitle:
+      "Optionele eerste stap voor particuliere en MKB / bedrijfsregistraties.",
+    proofPrivateHint:
+      "Upload alleen de minimale identiteitsbladen die nodig zijn om de aanvrager te bevestigen.",
+    proofBusinessHint:
+      "Voeg indien nuttig bewijs toe van de bevoegde contactpersoon of het bedrijfsadres.",
+    redactionHint:
+      "Maskeer onnodige gevoelige velden voor het uploaden.",
+    stolenTitle: "Melding gestolen asset",
+    stolenSubtitle:
+      "Als dit asset al als gestolen is gemeld, voeg hier de eerste zaakgegevens toe. Admin kan de volledige zaak later aanvullen.",
+    stolenToggle: "Deze registratie gaat over een al gestolen asset",
+    policeReportNumber: "Politierapportnummer",
+    incidentDate: "Datum van incident",
+    incidentCountry: "Land van incident",
+    incidentCountryPlaceholder: "bijv. Spanje",
+    incidentDescription: "Beschrijving van incident",
+    incidentDescriptionPlaceholder:
+      "Voeg bekende diefstalgegevens, locatie en veilige referenties toe.",
+    supportingDocuments: "Ondersteunende documenten",
+    supportingDocumentsDescription:
+      "Upload afgeschermde politiedocumenten of veilig ondersteunend bewijs.",
+  },
+  pt: {
+    applicantTypeOptionLabels: {
+      private: "Particular",
+      sme_business: "PME / Empresa",
+    },
+    proofTitle: "Prova do requerente",
+    proofSubtitle:
+      "Primeiro passo opcional para registos particulares e PME / empresa.",
+    proofPrivateHint:
+      "Carregue apenas as paginas minimas de identidade necessarias para confirmar o requerente.",
+    proofBusinessHint:
+      "Se ajudar, adicione prova do contacto autorizado ou da morada comercial.",
+    redactionHint:
+      "Mascare campos sensiveis desnecessarios antes do carregamento.",
+    stolenTitle: "Declaracao de ativo roubado",
+    stolenSubtitle:
+      "Se este ativo ja foi comunicado como roubado, adicione aqui os primeiros detalhes do caso. A administracao pode completar o caso depois.",
+    stolenToggle: "Este registo diz respeito a um ativo ja roubado",
+    policeReportNumber: "Numero do relatorio policial",
+    incidentDate: "Data do incidente",
+    incidentCountry: "Pais do incidente",
+    incidentCountryPlaceholder: "ex. Espanha",
+    incidentDescription: "Descricao do incidente",
+    incidentDescriptionPlaceholder:
+      "Adicione detalhes conhecidos do roubo, local e referencias seguras.",
+    supportingDocuments: "Documentos de suporte",
+    supportingDocumentsDescription:
+      "Carregue ficheiros ligados ao relatorio policial ou provas seguras ja ocultadas.",
+  },
+  ru: {
+    applicantTypeOptionLabels: {
+      private: "Chastnoye litso",
+      sme_business: "MSP / Biznes",
+    },
+    proofTitle: "Podtverzhdeniye zayavitelya",
+    proofSubtitle:
+      "Neobyazatelnyy pervyy shag dlya chastnykh i biznes / MSP registratsiy.",
+    proofPrivateHint:
+      "Zagruzite tolko minimalno neobkhodimyye stranitsy udostovereniya lichnosti.",
+    proofBusinessHint:
+      "Pri neobkhodimosti dobavte dokazatelstvo dlya upolnomochennogo kontakta ili adresa biznesa.",
+    redactionHint:
+      "Skroyte lishniye chuvstvitelnyye polya pered zagruzkoy.",
+    stolenTitle: "Zayavleniye o pokhishchennom aktive",
+    stolenSubtitle:
+      "Esli etot aktiv uzhe zayavlen kak pokhishchennyy, dobavte zdes pervyye dannyye po delu. Admin mozhet dopolnit delo pozhe.",
+    stolenToggle: "Eta registratsiya otnositsya k uzhe pokhishchennomu aktivu",
+    policeReportNumber: "Nomer politseskogo otcheta",
+    incidentDate: "Data intsidenta",
+    incidentCountry: "Strana intsidenta",
+    incidentCountryPlaceholder: "naprimer, Ispaniya",
+    incidentDescription: "Opisaniye intsidenta",
+    incidentDescriptionPlaceholder:
+      "Dobavte izvestnyye detali krazhi, mesto i bezopasnyye ssylki.",
+    supportingDocuments: "Podderzhivayushchiye dokumenty",
+    supportingDocumentsDescription:
+      "Zagruzite otreduaktirovannyye fayly po politsii ili bezopasnoye podtverzhdeniye.",
+  },
+  zh: {
+    applicantTypeOptionLabels: {
+      private: "Siren",
+      sme_business: "Zhongxiao qiye / Gongsi",
+    },
+    proofTitle: "Shenqingren zhengming",
+    proofSubtitle:
+      "Siren he zhongxiao qiye / gongsi zhuce de kexuan chubu zhengming.",
+    proofPrivateHint:
+      "Zhi shangchuan queren shenqingren suo bixu de zuixiao shenfen yemian.",
+    proofBusinessHint:
+      "Ruguo you bangzhu, keyi buchong shouquan lianxiren huo gongsi dizhi zhengming.",
+    redactionHint:
+      "Shangchuan qian qing zhedang bu bixu de mingan ziduan.",
+    stolenTitle: "Bei dao zican dengji",
+    stolenSubtitle:
+      "Ruguo gai zican yi bao bei dao, qing zai zheli tianxie chubu anjian xinxi. Houxu keyi you admin buchong wanzheng anjian.",
+    stolenToggle: "Ci ci zhuce sheji yige yi bei dao de zican",
+    policeReportNumber: "Baoan bianhao",
+    incidentDate: "Shijian riqi",
+    incidentCountry: "Shijian guojia",
+    incidentCountryPlaceholder: "li ru Xibanya",
+    incidentDescription: "Shijian shuoming",
+    incidentDescriptionPlaceholder:
+      "Tianxie yizhi de daoqie xiangqing, didian he anquan cankao.",
+    supportingDocuments: "Zhichi wenjian",
+    supportingDocumentsDescription:
+      "Shangchuan yi zhedang de baoan xiangguan wenjian huo anquan zhichi zhengju.",
+  },
+  hi: {
+    applicantTypeOptionLabels: {
+      private: "Niji",
+      sme_business: "SME / Vyavsay",
+    },
+    proofTitle: "Aavedak ka praman",
+    proofSubtitle:
+      "Private aur SME / vyavsay registrations ke liye ek optional pehla step.",
+    proofPrivateHint:
+      "Sirf utne hi pahchan panne upload karen jitne aavedak ki pushti ke liye zaruri hon.",
+    proofBusinessHint:
+      "Zarurat ho to adhikrit sampark ya vyavsayik pate ka praman bhi joden.",
+    redactionHint:
+      "Upload se pehle gair-zaruri samvedanshil fields ko chhupa den.",
+    stolenTitle: "Chori hui sampatti jankari",
+    stolenSubtitle:
+      "Agar yeh sampatti pehle se chori report ho chuki hai, to yahan prarambhik case details joden. Admin baad mein poora case complete kar sakta hai.",
+    stolenToggle: "Yeh registration ek pehle se chori hui sampatti ke liye hai",
+    policeReportNumber: "Police report sankhya",
+    incidentDate: "Ghatna ki tarikh",
+    incidentCountry: "Ghatna ka desh",
+    incidentCountryPlaceholder: "jaise Spain",
+    incidentDescription: "Ghatna ka varnan",
+    incidentDescriptionPlaceholder:
+      "Chori ki jani hui details, jagah aur surakshit references joden.",
+    supportingDocuments: "Sahayak dastavez",
+    supportingDocumentsDescription:
+      "Chhupai gayi police-sambandhit files ya surakshit sahayak saboot upload karen.",
+  },
+  ar: {
+    applicantTypeOptionLabels: {
+      private: "Fard",
+      sme_business: "SME / Sharika",
+    },
+    proofTitle: "Ithbat muqaddim alttalab",
+    proofSubtitle:
+      "Khutwa awalya ikhtiyariya litasjilat alafrad wa SME / alsharikat.",
+    proofPrivateHint:
+      "Arfiq faqat safahat alhuwia aladna aldaruria litaakid muqaddim alttalab.",
+    proofBusinessHint:
+      "Idha kan mufidan, arfiq ithbatan liljihah almufawada aw alunwan altijari.",
+    redactionHint:
+      "Ihجب alhuqul alhassasa ghayr aldaruria qabl alraf.",
+    stolenTitle: "Tasjil asl masruq",
+    stolenSubtitle:
+      "Idha kan hadha alasl qad utabir masruqan min qabl, faadkhil huna tafasil alqadiya alawaliya. Yumkin lilidara istikmal alqadiya لاحqan.",
+    stolenToggle: "Hatha altasjil yakhuss aslan masruqan min qabl",
+    policeReportNumber: "Raqm taqrir alshurta",
+    incidentDate: "Tarikh alhadith",
+    incidentCountry: "Dawlat alhadith",
+    incidentCountryPlaceholder: "mithal: Isbaniya",
+    incidentDescription: "Wasf alhadith",
+    incidentDescriptionPlaceholder:
+      "Adif tafasil alsariqa almaerufa walmakan wa almajiat alamina.",
+    supportingDocuments: "Mustanadat daima",
+    supportingDocumentsDescription:
+      "Arfiq malafat mutaaliqa bitaqrir alshurta aw adilla daima amina baada alikhfa.",
+  },
+};
+
+function normalizeStandardApplicantType(
+  value: ApplicantType
+): Extract<ApplicantType, "private" | "sme"> {
+  return value === "sme" ? "sme" : "private";
+}
+
+function getApplicantTypeOption(
+  value: ApplicantType
+): StandardApplicantTypeOption {
+  return value === "sme" ? "sme_business" : "private";
+}
+
+function toApplicantType(
+  value: StandardApplicantTypeOption
+): Extract<ApplicantType, "private" | "sme"> {
+  return value === "sme_business" ? "sme" : "private";
+}
+
+function createInitialStolenAssetIntake(): StolenAssetIntakeState {
+  return {
+    enabled: false,
+    policeReportNumber: "",
+    incidentDate: "",
+    country: "",
+    incidentDescription: "",
+    supportingDocuments: [],
+  };
+}
+
+function buildSubmissionDocuments(
+  documents: RegistrationDocumentMap,
+  proofDocuments: Partial<Record<ProofDocumentKey, RegistrationDocumentState>>,
+  applicantType: ApplicantType
+): RegistrationDocumentMap {
+  const nextDocuments: RegistrationDocumentMap = { ...documents };
+
+  if (proofDocuments.applicant_id?.files?.length) {
+    nextDocuments.applicant_id = proofDocuments.applicant_id;
+  } else {
+    delete nextDocuments.applicant_id;
+  }
+
+  if (applicantType === "sme" && proofDocuments.proof_of_address?.files?.length) {
+    nextDocuments.proof_of_address = proofDocuments.proof_of_address;
+  } else {
+    delete nextDocuments.proof_of_address;
+  }
+
+  return nextDocuments;
+}
+
+function buildSubmissionDynamicFields(
+  dynamicFields: RegistrationDraft["dynamicFields"],
+  stolenAssetIntake: StolenAssetIntakeState
+) {
+  const nextFields = { ...dynamicFields };
+
+  if (!stolenAssetIntake.enabled) {
+    delete nextFields.stolenAssetIntake;
+    return nextFields;
+  }
+
+  nextFields.stolenAssetIntake = {
+    enabled: true,
+    policeReportNumber: stolenAssetIntake.policeReportNumber.trim(),
+    incidentDate: stolenAssetIntake.incidentDate,
+    country: stolenAssetIntake.country.trim(),
+    incidentDescription: stolenAssetIntake.incidentDescription.trim(),
+    supportingDocuments: stolenAssetIntake.supportingDocuments,
+    supportingDocumentReferences: stolenAssetIntake.supportingDocuments.map(
+      (file) => file.originalName
+    ),
+  };
+
+  return nextFields;
+}
+
+type UploadFieldCardProps = {
+  lang: Lang;
+  inputId: string;
+  label: string;
+  description?: string;
+  bucket: RegistrationDocumentKey | "stolen_supporting_document";
+  multiple?: boolean;
+  files: StoredUpload[];
+  onChange: (files: StoredUpload[]) => void;
+};
+
+function UploadFieldCard({
+  lang,
+  inputId,
+  label,
+  description,
+  bucket,
+  multiple = false,
+  files,
+  onChange,
+}: UploadFieldCardProps) {
+  const uploadText = getRegistryUploadText(lang);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleUpload(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) {
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+
+    try {
+      const uploads = await uploadFilesForBucket(bucket, Array.from(fileList));
+      const nextFiles = multiple ? [...files, ...uploads] : uploads;
+      onChange(nextFiles);
+    } catch (uploadError) {
+      const localizedError =
+        uploadError instanceof ClientUploadError &&
+        (uploadError.code === "file_too_large" ||
+          uploadError.code === "invalid_file_type")
+          ? uploadText.sizeHelp
+          : uploadText.uploadFailed;
+
+      setError(localizedError);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-zinc-900">{label}</p>
+          {description ? (
+            <p className="mt-2 text-sm text-zinc-600">{description}</p>
+          ) : null}
+        </div>
+
+        <div className="lg:w-[440px]">
+          <div className="flex flex-wrap items-center gap-3">
+            <label
+              htmlFor={inputId}
+              className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
+            >
+              {uploading
+                ? uploadText.uploading
+                : files.length > 0
+                ? multiple
+                  ? uploadText.addFiles
+                  : uploadText.replaceFile
+                : uploadText.chooseFile}
+            </label>
+
+            <input
+              id={inputId}
+              type="file"
+              multiple={multiple}
+              accept={ALLOWED_UPLOAD_ACCEPT}
+              className="hidden"
+              onChange={(event) => {
+                void handleUpload(event.target.files);
+                event.currentTarget.value = "";
+              }}
+            />
+
+            {files.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onChange([]);
+                  setError("");
+                }}
+                className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100"
+              >
+                {uploadText.clearFiles}
+              </button>
+            ) : null}
+          </div>
+
+          <p className="mt-3 text-xs text-zinc-500">{uploadText.sizeHelp}</p>
+
+          <div className="mt-4">
+            {files.length > 0 ? (
+              <ul className="space-y-2">
+                {files.map((file) => (
+                  <li
+                    key={file.id}
+                    className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+                  >
+                    {file.originalName}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-zinc-500">{uploadText.noFileSelected}</p>
+            )}
+          </div>
+
+          {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function RegistrationFormStep1({
   lang,
   initialApplicantType = "private",
 }: Props) {
+  const normalizedInitialApplicantType =
+    normalizeStandardApplicantType(initialApplicantType);
   const [draft, setDraft] = useState<RegistrationDraft>(
-    createEmptyRegistrationDraft(initialApplicantType)
+    createEmptyRegistrationDraft(normalizedInitialApplicantType)
+  );
+  const [proofDocuments, setProofDocuments] = useState<
+    Partial<Record<ProofDocumentKey, RegistrationDocumentState>>
+  >({});
+  const [stolenAssetIntake, setStolenAssetIntake] = useState<StolenAssetIntakeState>(
+    createInitialStolenAssetIntake
   );
 
   const paymentCompleted =
@@ -573,17 +1149,41 @@ export default function RegistrationFormStep1({
     initialActionState
   );
 
+  const submissionDynamicFields = useMemo(
+    () => buildSubmissionDynamicFields(draft.dynamicFields, stolenAssetIntake),
+    [draft.dynamicFields, stolenAssetIntake]
+  );
+
+  const submissionDocuments = useMemo(
+    () =>
+      buildSubmissionDocuments(draft.documents, proofDocuments, draft.applicantType),
+    [draft.documents, proofDocuments, draft.applicantType]
+  );
+
+  const composedDraft = useMemo(
+    () => ({
+      ...draft,
+      dynamicFields: submissionDynamicFields,
+      documents: submissionDocuments,
+    }),
+    [draft, submissionDynamicFields, submissionDocuments]
+  );
+
   const completeness = useMemo(
-    () => evaluateRegistrationCompleteness(draft),
-    [draft]
+    () => evaluateRegistrationCompleteness(composedDraft),
+    [composedDraft]
   );
 
   const requestStatus = useMemo(
-    () => deriveRequestStatus(draft),
-    [draft]
+    () => deriveRequestStatus(composedDraft),
+    [composedDraft]
   );
 
   const text = FORM_TEXT[lang];
+  const extraText = EXTRA_FORM_TEXT[lang];
+  const uploadText = getRegistryUploadText(lang);
+  const applicantIdText = getDocumentText(lang, "applicant_id");
+  const proofOfAddressText = getDocumentText(lang, "proof_of_address");
 
   function updateField<K extends keyof RegistrationDraft>(
     key: K,
@@ -632,9 +1232,40 @@ export default function RegistrationFormStep1({
     }));
   }
 
-  function handleApplicantTypeChange(value: ApplicantType) {
-    updateField("applicantType", value);
+  function updateProofDocumentField(
+    key: ProofDocumentKey,
+    files: StoredUpload[]
+  ) {
+    setProofDocuments((prev) => ({
+      ...prev,
+      [key]:
+        files.length > 0
+          ? {
+              status: "uploaded",
+              fileName: files[0]?.originalName ?? "",
+              files,
+            }
+          : undefined,
+    }));
   }
+
+  function updateStolenAssetIntake<K extends keyof StolenAssetIntakeState>(
+    key: K,
+    value: StolenAssetIntakeState[K]
+  ) {
+    setStolenAssetIntake((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }
+
+  function handleApplicantTypeChange(value: StandardApplicantTypeOption) {
+    updateField("applicantType", toApplicantType(value));
+  }
+
+  const applicantTypeOption = getApplicantTypeOption(draft.applicantType);
+  const showProofOfApplicant =
+    draft.applicantType === "private" || draft.applicantType === "sme";
 
   return (
     <div className="space-y-8">
@@ -662,12 +1293,12 @@ export default function RegistrationFormStep1({
         <input
           type="hidden"
           name="dynamicFields"
-          value={JSON.stringify(draft.dynamicFields)}
+          value={JSON.stringify(submissionDynamicFields)}
         />
         <input
           type="hidden"
           name="documents"
-          value={JSON.stringify(draft.documents)}
+          value={JSON.stringify(submissionDocuments)}
         />
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -690,15 +1321,17 @@ export default function RegistrationFormStep1({
               </label>
               <select
                 id="applicantType"
-                value={draft.applicantType}
+                value={applicantTypeOption}
                 onChange={(e) =>
-                  handleApplicantTypeChange(e.target.value as ApplicantType)
+                  handleApplicantTypeChange(
+                    e.target.value as StandardApplicantTypeOption
+                  )
                 }
                 className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
               >
                 {APPLICANT_TYPE_OPTIONS.map((option) => (
                   <option key={option} value={option}>
-                    {text.applicantTypeLabels[option]}
+                    {extraText.applicantTypeOptionLabels[option]}
                   </option>
                 ))}
               </select>
@@ -854,6 +1487,129 @@ export default function RegistrationFormStep1({
           </div>
         </section>
 
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <div className="mb-5">
+            <h3 className="text-lg font-semibold text-zinc-900">
+              {extraText.stolenTitle}
+            </h3>
+            <p className="mt-1 text-sm text-zinc-600">
+              {extraText.stolenSubtitle}
+            </p>
+            <p className="mt-2 text-xs text-zinc-500">{uploadText.privacyNote}</p>
+          </div>
+
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={stolenAssetIntake.enabled}
+              onChange={(event) =>
+                updateStolenAssetIntake("enabled", event.target.checked)
+              }
+              className="mt-1 h-4 w-4 rounded border-zinc-300"
+            />
+            <span className="text-sm text-zinc-700">{extraText.stolenToggle}</span>
+          </label>
+
+          {stolenAssetIntake.enabled ? (
+            <div className="mt-5 space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="policeReportNumber"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {extraText.policeReportNumber}
+                  </label>
+                  <input
+                    id="policeReportNumber"
+                    type="text"
+                    value={stolenAssetIntake.policeReportNumber}
+                    onChange={(event) =>
+                      updateStolenAssetIntake(
+                        "policeReportNumber",
+                        event.target.value
+                      )
+                    }
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="incidentDate"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {extraText.incidentDate}
+                  </label>
+                  <input
+                    id="incidentDate"
+                    type="date"
+                    value={stolenAssetIntake.incidentDate}
+                    onChange={(event) =>
+                      updateStolenAssetIntake("incidentDate", event.target.value)
+                    }
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="incidentCountry"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {extraText.incidentCountry}
+                  </label>
+                  <input
+                    id="incidentCountry"
+                    type="text"
+                    value={stolenAssetIntake.country}
+                    onChange={(event) =>
+                      updateStolenAssetIntake("country", event.target.value)
+                    }
+                    placeholder={extraText.incidentCountryPlaceholder}
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="incidentDescription"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {extraText.incidentDescription}
+                  </label>
+                  <textarea
+                    id="incidentDescription"
+                    value={stolenAssetIntake.incidentDescription}
+                    onChange={(event) =>
+                      updateStolenAssetIntake(
+                        "incidentDescription",
+                        event.target.value
+                      )
+                    }
+                    placeholder={extraText.incidentDescriptionPlaceholder}
+                    rows={4}
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
+              </div>
+
+              <UploadFieldCard
+                lang={lang}
+                inputId="stolen-supporting-documents"
+                label={extraText.supportingDocuments}
+                description={extraText.supportingDocumentsDescription}
+                bucket="stolen_supporting_document"
+                multiple
+                files={stolenAssetIntake.supportingDocuments}
+                onChange={(files) =>
+                  updateStolenAssetIntake("supportingDocuments", files)
+                }
+              />
+            </div>
+          ) : null}
+        </section>
+
         <DynamicAssetFields
           lang={lang}
           category={draft.category}
@@ -861,6 +1617,49 @@ export default function RegistrationFormStep1({
           values={draft.dynamicFields}
           onChange={updateDynamicField}
         />
+
+        {showProofOfApplicant ? (
+          <section className="rounded-2xl border border-zinc-200 bg-white p-6">
+            <div className="mb-5">
+              <h3 className="text-lg font-semibold text-zinc-900">
+                {extraText.proofTitle}
+              </h3>
+              <p className="mt-1 text-sm text-zinc-600">
+                {extraText.proofSubtitle}
+              </p>
+              <p className="mt-2 text-xs text-zinc-500">
+                {extraText.redactionHint}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <UploadFieldCard
+                lang={lang}
+                inputId="applicant-proof-upload"
+                label={applicantIdText.label}
+                description={`${extraText.proofPrivateHint} ${applicantIdText.description ?? ""}`.trim()}
+                bucket="applicant_id"
+                multiple
+                files={proofDocuments.applicant_id?.files ?? []}
+                onChange={(files) => updateProofDocumentField("applicant_id", files)}
+              />
+
+              {draft.applicantType === "sme" ? (
+                <UploadFieldCard
+                  lang={lang}
+                  inputId="business-proof-upload"
+                  label={proofOfAddressText.label}
+                  description={`${extraText.proofBusinessHint} ${proofOfAddressText.description ?? ""}`.trim()}
+                  bucket="proof_of_address"
+                  files={proofDocuments.proof_of_address?.files ?? []}
+                  onChange={(files) =>
+                    updateProofDocumentField("proof_of_address", files)
+                  }
+                />
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         <DocumentRequirementsPanel
           lang={lang}
@@ -945,12 +1744,12 @@ export default function RegistrationFormStep1({
         <input
           type="hidden"
           name="dynamicFields"
-          value={JSON.stringify(draft.dynamicFields)}
+          value={JSON.stringify(submissionDynamicFields)}
         />
         <input
           type="hidden"
           name="documents"
-          value={JSON.stringify(draft.documents)}
+          value={JSON.stringify(submissionDocuments)}
         />
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">

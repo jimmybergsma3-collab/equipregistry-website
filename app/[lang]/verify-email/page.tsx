@@ -205,7 +205,7 @@ export default async function VerifyEmailPage({
 
       <main
         dir={currentLang === "ar" ? "rtl" : "ltr"}
-        className="min-h-screen bg-zinc-50"
+        className="min-h-screen bg-white"
       >
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">

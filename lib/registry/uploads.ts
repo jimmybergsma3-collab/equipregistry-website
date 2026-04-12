@@ -2,16 +2,10 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  ALLOWED_UPLOAD_MIME_TYPES,
   MAX_UPLOAD_SIZE_BYTES,
   type StoredUpload,
 } from "@/lib/registry/upload-types";
-
-export const ALLOWED_UPLOAD_MIME_TYPES = [
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-] as const;
 
 export type UploadBucket =
   | "proof_of_ownership"
@@ -95,7 +89,7 @@ export function validateUploadFile(file: File) {
   }
 
   if (file.size > MAX_UPLOAD_SIZE_BYTES) {
-    throw new Error("Each file must be 10 MB or smaller.");
+    throw new Error("Each file must be 6 MB or smaller.");
   }
 
   if (

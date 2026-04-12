@@ -39,7 +39,7 @@ export default async function SecureAdminAccessPage({ params }: Props) {
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-[70vh] bg-neutral-50">
+      <main className="min-h-[70vh] bg-white">
         <section className="mx-auto max-w-md px-6 py-16">
           <div className="mb-6">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500">

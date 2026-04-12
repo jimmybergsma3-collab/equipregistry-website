@@ -25,7 +25,7 @@ export default async function TermsPage({ params }: Props) {
     <>
       <SiteHeader lang={safeLang} />
 
-      <main dir={dir} className="min-h-screen bg-[#f7f7f9] text-slate-900">
+      <main dir={dir} className="min-h-screen bg-white text-slate-900">
         <div className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-10">
           <a
             href={`/${safeLang}`}

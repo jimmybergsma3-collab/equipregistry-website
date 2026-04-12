@@ -376,7 +376,7 @@ export function getDynamicFieldsForCategory(
 
   if (category === "vehicles") {
     return buildFields(
-      [fieldCatalog.vin, fieldCatalog.registrationNumber, fieldCatalog.fuelType],
+      [fieldCatalog.registrationNumber, fieldCatalog.fuelType],
       lang
     );
   }

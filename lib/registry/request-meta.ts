@@ -28,6 +28,34 @@ export type StolenAssetMeta = {
   policeReportFiles: StoredUpload[];
 };
 
+export type StolenCaseStatus = "open" | "resolved";
+
+export type StolenCaseRecord = {
+  caseReference: string;
+  assetReference: string;
+  registrationReference: string;
+  isStolen: boolean;
+  status: StolenCaseStatus;
+  previousRegistryStatus: "history_unknown" | "registered_verified";
+  previousMachineStatus: string | null;
+  policeReportNumber: string | null;
+  policeReportDate: string | null;
+  country: string | null;
+  cityRegion: string | null;
+  incidentDate: string | null;
+  incidentDescription: string;
+  supportingDocumentReferences: string[];
+  caseNotes: string | null;
+  createdBy: string;
+  updatedBy: string;
+  resolvedBy: string | null;
+  resolvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  evidenceFiles: StoredUpload[];
+  policeReportFiles: StoredUpload[];
+};
+
 type DynamicFieldsRecord = Record<string, unknown>;
 
 const META_KEYS = {
@@ -75,6 +103,14 @@ export function getRegistryAssetStatus(
   }
 
   if (requestStatus === "passport_issued") {
+    const caseRecord = getStolenCaseRecord(record);
+
+    if (caseRecord?.isStolen && caseRecord.status === "open") {
+      return caseRecord.previousRegistryStatus === "history_unknown"
+        ? "stolen"
+        : "verified_stolen";
+    }
+
     return "registered_verified";
   }
 
@@ -143,6 +179,24 @@ export function setStripePaymentMeta(
 }
 
 export function getStolenAssetMeta(value: unknown): StolenAssetMeta | null {
+  const caseRecord = getStolenCaseRecord(value);
+
+  if (caseRecord?.isStolen && caseRecord.status === "open") {
+    return {
+      status:
+        caseRecord.previousRegistryStatus === "history_unknown"
+          ? "stolen"
+          : "verified_stolen",
+      summary: caseRecord.incidentDescription,
+      reportedAt:
+        caseRecord.policeReportDate ??
+        caseRecord.incidentDate ??
+        caseRecord.createdAt,
+      evidenceFiles: caseRecord.evidenceFiles,
+      policeReportFiles: caseRecord.policeReportFiles,
+    };
+  }
+
   const record = getDynamicFieldsRecord(value);
   const stolen = record[META_KEYS.stolen];
 
@@ -179,6 +233,136 @@ export function setStolenAssetMeta(
 ): DynamicFieldsRecord {
   return {
     ...getDynamicFieldsRecord(value),
+    [META_KEYS.stolen]: meta,
+  };
+}
+
+export function getStolenCaseRecord(value: unknown): StolenCaseRecord | null {
+  const record = getDynamicFieldsRecord(value);
+  const stolen = record[META_KEYS.stolen];
+
+  if (!isRecord(stolen)) {
+    return null;
+  }
+
+  const evidenceFiles = Array.isArray(stolen.evidenceFiles)
+    ? (stolen.evidenceFiles as StoredUpload[])
+    : [];
+  const policeReportFiles = Array.isArray(stolen.policeReportFiles)
+    ? (stolen.policeReportFiles as StoredUpload[])
+    : [];
+  const supportingDocumentReferences = Array.isArray(
+    stolen.supportingDocumentReferences
+  )
+    ? stolen.supportingDocumentReferences
+        .filter((item): item is string => typeof item === "string")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [];
+
+  if (
+    typeof stolen.caseReference === "string" &&
+    typeof stolen.registrationReference === "string" &&
+    typeof stolen.incidentDescription === "string" &&
+    typeof stolen.createdBy === "string" &&
+    typeof stolen.updatedBy === "string" &&
+    typeof stolen.createdAt === "string" &&
+    typeof stolen.updatedAt === "string"
+  ) {
+    return {
+      caseReference: stolen.caseReference,
+      assetReference:
+        typeof stolen.assetReference === "string"
+          ? stolen.assetReference
+          : stolen.registrationReference,
+      registrationReference: stolen.registrationReference,
+      isStolen: stolen.isStolen !== false,
+      status: stolen.status === "resolved" ? "resolved" : "open",
+      previousRegistryStatus:
+        stolen.previousRegistryStatus === "history_unknown"
+          ? "history_unknown"
+          : "registered_verified",
+      previousMachineStatus:
+        typeof stolen.previousMachineStatus === "string"
+          ? stolen.previousMachineStatus
+          : null,
+      policeReportNumber:
+        typeof stolen.policeReportNumber === "string"
+          ? stolen.policeReportNumber
+          : null,
+      policeReportDate:
+        typeof stolen.policeReportDate === "string"
+          ? stolen.policeReportDate
+          : null,
+      country: typeof stolen.country === "string" ? stolen.country : null,
+      cityRegion:
+        typeof stolen.cityRegion === "string" ? stolen.cityRegion : null,
+      incidentDate:
+        typeof stolen.incidentDate === "string" ? stolen.incidentDate : null,
+      incidentDescription: stolen.incidentDescription,
+      supportingDocumentReferences,
+      caseNotes: typeof stolen.caseNotes === "string" ? stolen.caseNotes : null,
+      createdBy: stolen.createdBy,
+      updatedBy: stolen.updatedBy,
+      resolvedBy:
+        typeof stolen.resolvedBy === "string" ? stolen.resolvedBy : null,
+      resolvedAt:
+        typeof stolen.resolvedAt === "string" ? stolen.resolvedAt : null,
+      createdAt: stolen.createdAt,
+      updatedAt: stolen.updatedAt,
+      evidenceFiles,
+      policeReportFiles,
+    };
+  }
+
+  const legacyStatus =
+    stolen.status === "verified_stolen" ? "verified_stolen" : "stolen";
+
+  if (typeof stolen.summary !== "string" || typeof stolen.reportedAt !== "string") {
+    return null;
+  }
+
+  return {
+    caseReference: "legacy-stolen-case",
+    assetReference: "",
+    registrationReference: "",
+    isStolen: true,
+    status: "open",
+    previousRegistryStatus:
+      legacyStatus === "stolen" ? "history_unknown" : "registered_verified",
+    previousMachineStatus: null,
+    policeReportNumber: null,
+    policeReportDate: stolen.reportedAt,
+    country: null,
+    cityRegion: null,
+    incidentDate: stolen.reportedAt,
+    incidentDescription: stolen.summary,
+    supportingDocumentReferences: [],
+    caseNotes: null,
+    createdBy: "legacy",
+    updatedBy: "legacy",
+    resolvedBy: null,
+    resolvedAt: null,
+    createdAt: stolen.reportedAt,
+    updatedAt: stolen.reportedAt,
+    evidenceFiles,
+    policeReportFiles,
+  };
+}
+
+export function setStolenCaseRecord(
+  value: unknown,
+  meta: StolenCaseRecord | null
+): DynamicFieldsRecord {
+  const record = getDynamicFieldsRecord(value);
+
+  if (!meta) {
+    delete record[META_KEYS.stolen];
+    return record;
+  }
+
+  return {
+    ...record,
     [META_KEYS.stolen]: meta,
   };
 }

@@ -24,7 +24,7 @@ export default async function RegisterPage({ params }: Props) {
     <>
       <SiteHeader lang={lang} />
 
-      <main className="min-h-screen bg-zinc-50">
+      <main className="min-h-screen bg-white">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">

@@ -15,6 +15,7 @@ type Props = {
   passportNumber: string;
   statusLabel: string;
   statusValue: string;
+  statusTone?: "default" | "danger";
   verificationSummaryTitle: string;
   verificationSummaryMessage: string;
   verificationSummaryWhy: string;
@@ -61,6 +62,7 @@ export default function OfficialPassport({
   passportNumber,
   statusLabel,
   statusValue,
+  statusTone = "default",
   verificationSummaryTitle,
   verificationSummaryMessage,
   verificationSummaryWhy,
@@ -74,6 +76,11 @@ export default function OfficialPassport({
   qrImageUrl,
   fields,
 }: Props) {
+  const statusClassName =
+    statusTone === "danger"
+      ? "border-red-200 bg-red-50 text-red-700"
+      : "border-emerald-200 bg-emerald-50 text-emerald-700";
+
   return (
     <section
       dir={direction}
@@ -112,7 +119,9 @@ export default function OfficialPassport({
               </p>
             </div>
 
-            <div className="mt-3 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+            <div
+              className={`mt-3 inline-flex rounded-full border px-3 py-1 text-xs font-medium ${statusClassName}`}
+            >
               {statusLabel}: {statusValue}
             </div>
           </div>

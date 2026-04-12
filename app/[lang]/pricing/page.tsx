@@ -118,7 +118,7 @@ export default async function PricingPage({ params }: Props) {
   return (
     <>
       <SiteHeader lang={currentLang} />
-      <main dir={dir} className="min-h-screen bg-zinc-50">
+      <main dir={dir} className="min-h-screen bg-white">
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl">
             <div className={`mb-10 ${textAlignClass}`}>

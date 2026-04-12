@@ -55,8 +55,25 @@ type Dictionary = {
     rentalText: string;
     financeTitle: string;
     financeText: string;
+    financeRiskTitle: string;
+    financeRiskText: string;
+    financeVerificationTitle: string;
+    financeVerificationText: string;
+    financeTrustTitle: string;
+    financeTrustText: string;
     terminalsTitle: string;
     terminalsText: string;
+    rentalVisibilityTitle: string;
+    rentalVisibilityText: string;
+    rentalPreventionTitle: string;
+    rentalPreventionText: string;
+    rentalOriginTitle: string;
+    rentalOriginText: string;
+    terminalsEntryTitle: string;
+    terminalsEntryText: string;
+    terminalsCustomsTitle: string;
+    terminalsCustomsText: string;
+    ctaText: string;
   };
   contact: {
     title: string;
@@ -322,9 +339,35 @@ const en: Dictionary = {
       financeTitle: "Banks & financial institutions",
       financeText:
         "Prevent double financing and asset fraud. EquipRegistry allows lenders to verify if an asset is already financed, registered or flagged. Reduce risk in asset-based lending and leasing structures.",
+      financeRiskTitle: "Double financing risk",
+      financeRiskText:
+        "The same asset can be used as collateral multiple times across different institutions or countries. Without a shared trust layer, this creates hidden exposure, fraud risk and potential financial loss.",
+      financeVerificationTitle: "Verification before financing",
+      financeVerificationText:
+        "Confirm whether an asset is already registered, financed, flagged, or associated with a risk event before approving a lease or loan.",
+      financeTrustTitle: "Cross-border trust",
+      financeTrustText:
+        "Support safer international transactions involving machines, vehicles, trailers and other movable assets used in financing structures.",
       terminalsTitle: "Ports & logistics terminals",
       terminalsText:
         "Verify incoming and outgoing equipment in real-time. Detect stolen or flagged assets before they enter or leave your terminal. Support customs, inspections and cross-border compliance.",
+      rentalVisibilityTitle: "Fleet visibility",
+      rentalVisibilityText:
+        "Keep a clearer overview of equipment identity, status and risk across multiple countries and operating locations.",
+      rentalPreventionTitle: "Theft prevention",
+      rentalPreventionText:
+        "Support faster flagging and stronger fraud prevention around stolen, missing or illegally resold assets.",
+      rentalOriginTitle: "Proof of origin",
+      rentalOriginText:
+        "Improve ownership proof and trust for insurers, buyers, partners, and cross-border stakeholders.",
+      terminalsEntryTitle: "Entry and exit control",
+      terminalsEntryText:
+        "Add an extra verification layer before equipment enters or leaves secure operational zones.",
+      terminalsCustomsTitle: "Customs and inspections",
+      terminalsCustomsText:
+        "Support customs, terminal checks and compliance processes with stronger asset identification and risk visibility.",
+      ctaText:
+        "EquipRegistry is built to support trusted partners across insurance, rental, finance, logistics and recovery workflows.",
     },
     contact: {
   title: "Contact",
@@ -617,9 +660,35 @@ const es: Dictionary = {
       financeTitle: "Bancos e instituciones financieras",
       financeText:
         "Evite la doble financiación y el fraude de activos. EquipRegistry permite verificar si un activo ya está financiado, registrado o señalado. Reduzca el riesgo en estructuras de leasing y financiación basada en activos.",
+      financeRiskTitle: "Riesgo de doble financiación",
+      financeRiskText:
+        "El mismo activo puede utilizarse como garantía varias veces en diferentes entidades o países. Sin una capa de confianza compartida, esto crea exposición oculta, riesgo de fraude y posibles pérdidas financieras.",
+      financeVerificationTitle: "Verificación antes de financiar",
+      financeVerificationText:
+        "Confirme si un activo ya está registrado, financiado, señalado o vinculado a un incidente de riesgo antes de aprobar un leasing o un préstamo.",
+      financeTrustTitle: "Confianza transfronteriza",
+      financeTrustText:
+        "Impulse transacciones internacionales más seguras relacionadas con maquinaria, vehículos, remolques y otros activos móviles utilizados en estructuras de financiación.",
       terminalsTitle: "Puertos y terminales logísticos",
       terminalsText:
         "Verifique equipos entrantes y salientes en tiempo real. Detecte activos robados o marcados antes de que entren o salgan de su terminal. Apoye aduanas, inspecciones y cumplimiento transfronterizo.",
+      rentalVisibilityTitle: "Visibilidad de la flota",
+      rentalVisibilityText:
+        "Mantenga una visión más clara de la identidad, el estado y el riesgo del equipo en varios países y ubicaciones operativas.",
+      rentalPreventionTitle: "Prevención del robo",
+      rentalPreventionText:
+        "Facilite un marcado más rápido y una prevención más sólida del fraude en torno a activos robados, desaparecidos o revendidos ilegalmente.",
+      rentalOriginTitle: "Prueba de procedencia",
+      rentalOriginText:
+        "Refuerce la prueba de propiedad y la confianza para aseguradoras, compradores, socios y actores transfronterizos.",
+      terminalsEntryTitle: "Control de entrada y salida",
+      terminalsEntryText:
+        "Añada una capa extra de verificación antes de que el equipo entre o salga de zonas operativas seguras.",
+      terminalsCustomsTitle: "Aduanas e inspecciones",
+      terminalsCustomsText:
+        "Apoye los controles aduaneros, las revisiones en terminales y los procesos de cumplimiento con una identificación de activos y una visibilidad del riesgo más sólidas.",
+      ctaText:
+        "EquipRegistry está diseñado para apoyar a socios de confianza en flujos de seguros, alquiler, financiación, logística y recuperación.",
     },
    contact: {
   title: "Contacto",
@@ -914,9 +983,35 @@ const de: Dictionary = {
       financeTitle: "Banken & Finanzinstitute",
       financeText:
         "Verhindern Sie Doppelfinanzierung und Asset-Betrug. EquipRegistry ermöglicht es Kreditgebern zu prüfen, ob ein Asset bereits finanziert, registriert oder markiert ist. Reduzieren Sie Risiken in Leasing- und assetbasierten Finanzierungsstrukturen.",
+      financeRiskTitle: "Doppelfinanzierungsrisiko",
+      financeRiskText:
+        "Dasselbe Asset kann bei verschiedenen Instituten oder in mehreren Ländern mehrfach als Sicherheit eingesetzt werden. Ohne eine gemeinsame Vertrauensebene entstehen verdeckte Exponierung, Betrugsrisiken und potenzielle finanzielle Verluste.",
+      financeVerificationTitle: "Prüfung vor der Finanzierung",
+      financeVerificationText:
+        "Prüfen Sie vor der Freigabe von Leasing oder Kredit, ob ein Asset bereits registriert, finanziert, markiert oder mit einem Risikofall verbunden ist.",
+      financeTrustTitle: "Grenzüberschreitendes Vertrauen",
+      financeTrustText:
+        "Unterstützen Sie sicherere internationale Transaktionen mit Maschinen, Fahrzeugen, Anhängern und anderen beweglichen Assets in Finanzierungsstrukturen.",
       terminalsTitle: "Häfen & Logistikterminals",
       terminalsText:
         "Verifizieren Sie ein- und ausgehendes Equipment in Echtzeit. Erkennen Sie gestohlene oder markierte Assets, bevor sie Ihr Terminal betreten oder verlassen. Unterstützen Sie Zoll, Inspektionen und grenzüberschreitende Compliance.",
+      rentalVisibilityTitle: "Flottentransparenz",
+      rentalVisibilityText:
+        "Behalten Sie Identität, Status und Risiko Ihres Equipments über mehrere Länder und Einsatzorte hinweg besser im Blick.",
+      rentalPreventionTitle: "Diebstahlprävention",
+      rentalPreventionText:
+        "Ermöglichen Sie schnelleres Flagging und stärkere Betrugsprävention bei gestohlenen, vermissten oder illegal weiterverkauften Assets.",
+      rentalOriginTitle: "Herkunftsnachweis",
+      rentalOriginText:
+        "Verbessern Sie Eigentumsnachweis und Vertrauen für Versicherer, Käufer, Partner und grenzüberschreitende Beteiligte.",
+      terminalsEntryTitle: "Ein- und Ausgangskontrolle",
+      terminalsEntryText:
+        "Fügen Sie eine zusätzliche Verifizierungsebene hinzu, bevor Equipment geschützte Betriebszonen betritt oder verlässt.",
+      terminalsCustomsTitle: "Zoll und Inspektionen",
+      terminalsCustomsText:
+        "Unterstützen Sie Zoll-, Terminal- und Compliance-Prozesse mit stärkerer Asset-Identifikation und besserer Risikotransparenz.",
+      ctaText:
+        "EquipRegistry wurde entwickelt, um vertrauenswürdige Partner in Versicherungs-, Vermietungs-, Finanzierungs-, Logistik- und Wiederbeschaffungsprozessen zu unterstützen.",
     },
     contact: {
   title: "Kontakt",
@@ -1210,9 +1305,35 @@ const fr: Dictionary = {
       financeTitle: "Banques et institutions financières",
       financeText:
         "Prévenez le double financement et la fraude liée aux actifs. EquipRegistry permet aux prêteurs de vérifier si un actif est déjà financé, enregistré ou signalé. Réduisez les risques dans les structures de leasing et de financement adossé à des actifs.",
+      financeRiskTitle: "Risque de double financement",
+      financeRiskText:
+        "Le même actif peut être utilisé comme garantie plusieurs fois auprès d’institutions ou dans différents pays. Sans couche de confiance partagée, cela crée une exposition cachée, un risque de fraude et des pertes financières potentielles.",
+      financeVerificationTitle: "Vérification avant financement",
+      financeVerificationText:
+        "Vérifiez si un actif est déjà enregistré, financé, signalé ou associé à un événement de risque avant d’approuver un leasing ou un prêt.",
+      financeTrustTitle: "Confiance transfrontalière",
+      financeTrustText:
+        "Soutenez des transactions internationales plus sûres impliquant des machines, des véhicules, des remorques et d’autres actifs mobiles utilisés dans des structures de financement.",
       terminalsTitle: "Ports et terminaux logistiques",
       terminalsText:
         "Vérifiez les équipements entrants et sortants en temps réel. Détectez les actifs volés ou signalés avant qu’ils n’entrent ou ne quittent votre terminal. Soutenez les douanes, les inspections et la conformité transfrontalière.",
+      rentalVisibilityTitle: "Visibilité de flotte",
+      rentalVisibilityText:
+        "Gardez une vue plus claire de l’identité, du statut et du risque des équipements dans plusieurs pays et sites d’exploitation.",
+      rentalPreventionTitle: "Prévention du vol",
+      rentalPreventionText:
+        "Permettez un signalement plus rapide et une prévention renforcée de la fraude autour des actifs volés, manquants ou revendus illégalement.",
+      rentalOriginTitle: "Preuve de provenance",
+      rentalOriginText:
+        "Renforcez la preuve de propriété et la confiance pour les assureurs, acheteurs, partenaires et acteurs transfrontaliers.",
+      terminalsEntryTitle: "Contrôle des entrées et sorties",
+      terminalsEntryText:
+        "Ajoutez une couche de vérification supplémentaire avant que l’équipement n’entre ou ne sorte de zones opérationnelles sécurisées.",
+      terminalsCustomsTitle: "Douanes et inspections",
+      terminalsCustomsText:
+        "Soutenez les contrôles douaniers, les vérifications terminalaires et les processus de conformité grâce à une identification des actifs et une visibilité du risque renforcées.",
+      ctaText:
+        "EquipRegistry est conçu pour soutenir des partenaires de confiance dans les flux d’assurance, de location, de financement, de logistique et de récupération.",
     },
     contact: {
   title: "Contact",
@@ -1507,9 +1628,35 @@ const it: Dictionary = {
       financeTitle: "Banche e istituzioni finanziarie",
       financeText:
         "Previeni doppio finanziamento e frode sugli asset. EquipRegistry consente ai finanziatori di verificare se un asset è già finanziato, registrato o segnalato. Riduci il rischio nelle strutture di leasing e finanziamento basato su asset.",
+      financeRiskTitle: "Rischio di doppio finanziamento",
+      financeRiskText:
+        "Lo stesso asset può essere usato come garanzia più volte presso istituti o paesi diversi. Senza un livello di fiducia condiviso, ciò crea esposizione nascosta, rischio di frode e potenziali perdite finanziarie.",
+      financeVerificationTitle: "Verifica prima del finanziamento",
+      financeVerificationText:
+        "Conferma se un asset è già registrato, finanziato, segnalato o associato a un evento di rischio prima di approvare un leasing o un prestito.",
+      financeTrustTitle: "Fiducia transfrontaliera",
+      financeTrustText:
+        "Supporta transazioni internazionali più sicure che coinvolgono macchine, veicoli, rimorchi e altri asset mobili usati in strutture di finanziamento.",
       terminalsTitle: "Porti e terminal logistici",
       terminalsText:
         "Verifica attrezzature in entrata e in uscita in tempo reale. Rileva asset rubati o segnalati prima che entrino o escano dal terminal. Supporta dogane, ispezioni e conformità transfrontaliera.",
+      rentalVisibilityTitle: "Visibilità della flotta",
+      rentalVisibilityText:
+        "Mantieni una visione più chiara dell’identità, dello stato e del rischio delle attrezzature in più paesi e sedi operative.",
+      rentalPreventionTitle: "Prevenzione dei furti",
+      rentalPreventionText:
+        "Supporta segnalazioni più rapide e una prevenzione più forte delle frodi su asset rubati, scomparsi o rivenduti illegalmente.",
+      rentalOriginTitle: "Prova di provenienza",
+      rentalOriginText:
+        "Rafforza la prova di proprietà e la fiducia per assicuratori, acquirenti, partner e soggetti transfrontalieri.",
+      terminalsEntryTitle: "Controllo in entrata e uscita",
+      terminalsEntryText:
+        "Aggiungi un ulteriore livello di verifica prima che le attrezzature entrino o escano da aree operative protette.",
+      terminalsCustomsTitle: "Dogane e ispezioni",
+      terminalsCustomsText:
+        "Supporta controlli doganali, verifiche terminali e processi di conformità con un’identificazione degli asset e una visibilità del rischio più forti.",
+      ctaText:
+        "EquipRegistry è progettato per supportare partner affidabili nei flussi assicurativi, di noleggio, finanziari, logistici e di recupero.",
     },
     contact: {
   title: "Contatto",
@@ -1804,9 +1951,35 @@ const nl: Dictionary = {
       financeTitle: "Banken & financiële instellingen",
       financeText:
         "Voorkom dubbele financiering en assetfraude. EquipRegistry laat financiers controleren of een asset al gefinancierd, geregistreerd of gemarkeerd is. Verlaag risico in lease- en asset based finance-structuren.",
+      financeRiskTitle: "Risico op dubbele financiering",
+      financeRiskText:
+        "Hetzelfde asset kan meerdere keren als onderpand worden gebruikt bij verschillende instellingen of in verschillende landen. Zonder een gedeelde vertrouwenslaag ontstaat verborgen blootstelling, frauderisico en potentieel financieel verlies.",
+      financeVerificationTitle: "Verificatie vóór financiering",
+      financeVerificationText:
+        "Controleer voordat je een lease of lening goedkeurt of een asset al geregistreerd, gefinancierd, gemarkeerd of gekoppeld aan een risico-incident is.",
+      financeTrustTitle: "Grensoverschrijdend vertrouwen",
+      financeTrustText:
+        "Ondersteun veiligere internationale transacties met machines, voertuigen, trailers en andere verplaatsbare assets binnen financieringsstructuren.",
       terminalsTitle: "Havens & logistieke terminals",
       terminalsText:
         "Verifieer inkomend en uitgaand equipment in realtime. Detecteer gestolen of gemarkeerde assets voordat ze je terminal binnenkomen of verlaten. Ondersteun douane, inspecties en grensoverschrijdende compliance.",
+      rentalVisibilityTitle: "Vlootzichtbaarheid",
+      rentalVisibilityText:
+        "Houd beter overzicht op de identiteit, status en risico's van equipment over meerdere landen en operationele locaties.",
+      rentalPreventionTitle: "Diefstalpreventie",
+      rentalPreventionText:
+        "Ondersteun snellere markering en sterkere fraudepreventie rond gestolen, vermiste of illegaal doorverkochte assets.",
+      rentalOriginTitle: "Herkomstbewijs",
+      rentalOriginText:
+        "Versterk eigendomsbewijs en vertrouwen voor verzekeraars, kopers, partners en grensoverschrijdende stakeholders.",
+      terminalsEntryTitle: "In- en uitgangscontrole",
+      terminalsEntryText:
+        "Voeg een extra verificatielaag toe voordat equipment beveiligde operationele zones binnenkomt of verlaat.",
+      terminalsCustomsTitle: "Douane en inspecties",
+      terminalsCustomsText:
+        "Ondersteun douanecontroles, terminalchecks en complianceprocessen met sterkere asset-identificatie en beter inzicht in risico's.",
+      ctaText:
+        "EquipRegistry is gebouwd om vertrouwde partners te ondersteunen in verzekerings-, verhuur-, financierings-, logistieke en terughaalprocessen.",
     },
     contact: {
   title: "Contact",
@@ -2100,9 +2273,35 @@ const pt: Dictionary = {
       financeTitle: "Bancos e instituições financeiras",
       financeText:
         "Previna duplo financiamento e fraude de ativos. A EquipRegistry permite aos financiadores verificar se um ativo já está financiado, registado ou sinalizado. Reduza o risco em estruturas de leasing e financiamento baseado em ativos.",
+      financeRiskTitle: "Risco de duplo financiamento",
+      financeRiskText:
+        "O mesmo ativo pode ser usado como garantia várias vezes em diferentes instituições ou países. Sem uma camada de confiança partilhada, isso cria exposição oculta, risco de fraude e potenciais perdas financeiras.",
+      financeVerificationTitle: "Verificação antes do financiamento",
+      financeVerificationText:
+        "Confirme se um ativo já está registado, financiado, sinalizado ou associado a um evento de risco antes de aprovar um leasing ou um empréstimo.",
+      financeTrustTitle: "Confiança transfronteiriça",
+      financeTrustText:
+        "Apoie transações internacionais mais seguras envolvendo máquinas, veículos, reboques e outros ativos móveis usados em estruturas de financiamento.",
       terminalsTitle: "Portos e terminais logísticos",
       terminalsText:
         "Verifique equipamento de entrada e saída em tempo real. Detete ativos roubados ou sinalizados antes de entrarem ou saírem do seu terminal. Apoie alfândegas, inspeções e conformidade transfronteiriça.",
+      rentalVisibilityTitle: "Visibilidade da frota",
+      rentalVisibilityText:
+        "Mantenha uma visão mais clara da identidade, do estado e do risco do equipamento em vários países e localizações operacionais.",
+      rentalPreventionTitle: "Prevenção de roubo",
+      rentalPreventionText:
+        "Apoie uma sinalização mais rápida e uma prevenção de fraude mais forte em torno de ativos roubados, desaparecidos ou revendidos ilegalmente.",
+      rentalOriginTitle: "Prova de origem",
+      rentalOriginText:
+        "Reforce a prova de titularidade e a confiança para seguradoras, compradores, parceiros e intervenientes transfronteiriços.",
+      terminalsEntryTitle: "Controlo de entrada e saída",
+      terminalsEntryText:
+        "Adicione uma camada extra de verificação antes de o equipamento entrar ou sair de zonas operacionais seguras.",
+      terminalsCustomsTitle: "Alfândegas e inspeções",
+      terminalsCustomsText:
+        "Apoie controlos aduaneiros, verificações terminais e processos de conformidade com uma identificação de ativos e visibilidade de risco mais fortes.",
+      ctaText:
+        "A EquipRegistry foi concebida para apoiar parceiros de confiança em fluxos de seguros, aluguer, financiamento, logística e recuperação.",
     },
    contact: {
   title: "Contacto",
@@ -2397,9 +2596,35 @@ const ru: Dictionary = {
       financeTitle: "Банки и финансовые учреждения",
       financeText:
         "Предотвращайте двойное финансирование и мошенничество с активами. EquipRegistry позволяет кредиторам проверять, не финансируется ли актив уже, не зарегистрирован ли он и не помечен ли как рискованный. Снижайте риск в структурах лизинга и финансирования под залог активов.",
+      financeRiskTitle: "Риск двойного финансирования",
+      financeRiskText:
+        "Один и тот же актив может использоваться как залог несколько раз в разных организациях или странах. Без общего уровня доверия это создаёт скрытую экспозицию, риск мошенничества и возможные финансовые потери.",
+      financeVerificationTitle: "Проверка перед финансированием",
+      financeVerificationText:
+        "Перед одобрением лизинга или кредита проверьте, не зарегистрирован ли актив, не профинансирован ли он уже, не помечен ли он и не связан ли с рисковым событием.",
+      financeTrustTitle: "Трансграничное доверие",
+      financeTrustText:
+        "Поддерживайте более безопасные международные сделки с машинами, транспортом, прицепами и другими движимыми активами, используемыми в финансовых структурах.",
       terminalsTitle: "Порты и логистические терминалы",
       terminalsText:
         "Проверяйте входящее и исходящее оборудование в реальном времени. Выявляйте украденные или помеченные активы до того, как они войдут на ваш терминал или покинут его. Поддерживайте таможню, инспекции и трансграничное соответствие.",
+      rentalVisibilityTitle: "Прозрачность парка",
+      rentalVisibilityText:
+        "Сохраняйте более ясное представление об идентичности, статусе и рисках оборудования в разных странах и на разных площадках.",
+      rentalPreventionTitle: "Предотвращение краж",
+      rentalPreventionText:
+        "Обеспечьте более быстрое выставление флага и более сильную защиту от мошенничества вокруг украденных, пропавших или незаконно перепроданных активов.",
+      rentalOriginTitle: "Подтверждение происхождения",
+      rentalOriginText:
+        "Укрепляйте подтверждение права собственности и доверие для страховщиков, покупателей, партнёров и трансграничных участников.",
+      terminalsEntryTitle: "Контроль въезда и выезда",
+      terminalsEntryText:
+        "Добавьте дополнительный уровень проверки до того, как оборудование войдёт в защищённые операционные зоны или покинет их.",
+      terminalsCustomsTitle: "Таможня и инспекции",
+      terminalsCustomsText:
+        "Поддерживайте таможенные проверки, терминальные проверки и процессы комплаенса за счёт более сильной идентификации активов и видимости рисков.",
+      ctaText:
+        "EquipRegistry создан для поддержки надёжных партнёров в страховых, арендных, финансовых, логистических и восстановительных процессах.",
     },
     contact: {
       title: "Контакт",
@@ -2693,9 +2918,35 @@ const zh: Dictionary = {
       financeTitle: "银行与金融机构",
       financeText:
         "防止重复融资和资产欺诈。EquipRegistry 允许贷款方核实某项资产是否已被融资、注册或标记。降低租赁和资产融资结构中的风险。",
+      financeRiskTitle: "重复融资风险",
+      financeRiskText:
+        "同一资产可能在不同机构或不同国家被多次用作抵押。如果没有共享的信任层，就会带来隐藏敞口、欺诈风险和潜在财务损失。",
+      financeVerificationTitle: "融资前核验",
+      financeVerificationText:
+        "在批准租赁或贷款之前，确认资产是否已经登记、融资、被标记，或与某个风险事件有关。",
+      financeTrustTitle: "跨境信任",
+      financeTrustText:
+        "为融资结构中使用的机械、车辆、拖车及其他可移动资产提供更安全的国际交易支持。",
       terminalsTitle: "港口与物流码头",
       terminalsText:
         "实时核验进出设备。在资产进出码头之前识别被盗或被标记的资产。支持海关、检查和跨境合规。",
+      rentalVisibilityTitle: "车队可视性",
+      rentalVisibilityText:
+        "更清晰地掌握设备在多个国家和运营地点的身份、状态和风险。",
+      rentalPreventionTitle: "防盗防诈",
+      rentalPreventionText:
+        "为被盗、丢失或被非法转售的资产提供更快的标记能力和更强的欺诈防范。",
+      rentalOriginTitle: "来源证明",
+      rentalOriginText:
+        "加强面向保险公司、买方、合作伙伴和跨境相关方的所有权证明与信任。",
+      terminalsEntryTitle: "进出控制",
+      terminalsEntryText:
+        "在设备进入或离开受保护的作业区域之前，增加一层额外的核验。",
+      terminalsCustomsTitle: "海关与检查",
+      terminalsCustomsText:
+        "通过更强的资产识别和风险可见性，支持海关、码头检查和合规流程。",
+      ctaText:
+        "EquipRegistry 旨在为保险、租赁、融资、物流和追回流程中的可信合作伙伴提供支持。",
     },
     contact: {
       title: "联系",
@@ -2988,9 +3239,35 @@ const hi: Dictionary = {
       financeTitle: "बैंक और वित्तीय संस्थान",
       financeText:
         "डबल फाइनेंसिंग और एसेट फ्रॉड रोकें। EquipRegistry ऋणदाताओं को यह जाँचने देता है कि कोई एसेट पहले से वित्तपोषित, पंजीकृत या फ्लैग तो नहीं है। एसेट आधारित फाइनेंस और लीज संरचनाओं में जोखिम घटाएँ।",
+      financeRiskTitle: "दोहरी वित्तपोषण का जोखिम",
+      financeRiskText:
+        "एक ही एसेट को अलग-अलग संस्थानों या देशों में कई बार गिरवी रखा जा सकता है। साझा ट्रस्ट लेयर के बिना इससे छिपी हुई एक्सपोज़र, धोखाधड़ी का जोखिम और संभावित वित्तीय नुकसान पैदा होता है।",
+      financeVerificationTitle: "वित्तपोषण से पहले सत्यापन",
+      financeVerificationText:
+        "लीज़ या ऋण स्वीकृत करने से पहले पुष्टि करें कि एसेट पहले से पंजीकृत, वित्तपोषित, फ्लैग किया गया या किसी जोखिम घटना से जुड़ा तो नहीं है।",
+      financeTrustTitle: "सीमापार भरोसा",
+      financeTrustText:
+        "वित्तीय संरचनाओं में उपयोग होने वाली मशीनों, वाहनों, ट्रेलरों और अन्य चल संपत्तियों से जुड़ी अधिक सुरक्षित अंतरराष्ट्रीय लेनदेन का समर्थन करें।",
       terminalsTitle: "पोर्ट और लॉजिस्टिक टर्मिनल",
       terminalsText:
         "आने-जाने वाले उपकरण को रियल-टाइम में सत्यापित करें। चोरी या फ्लैग किए गए एसेट को टर्मिनल में आने या जाने से पहले पहचानें। कस्टम्स, निरीक्षण और सीमा-पार अनुपालन का समर्थन करें।",
+      rentalVisibilityTitle: "फ्लीट दृश्यता",
+      rentalVisibilityText:
+        "कई देशों और परिचालन स्थलों में उपकरण की पहचान, स्थिति और जोखिम का अधिक स्पष्ट अवलोकन बनाए रखें।",
+      rentalPreventionTitle: "चोरी की रोकथाम",
+      rentalPreventionText:
+        "चोरी हुए, लापता या अवैध रूप से दोबारा बेचे गए एसेट्स पर तेज़ फ्लैगिंग और मजबूत धोखाधड़ी रोकथाम का समर्थन करें।",
+      rentalOriginTitle: "उत्पत्ति का प्रमाण",
+      rentalOriginText:
+        "बीमाकर्ताओं, खरीदारों, भागीदारों और सीमापार हितधारकों के लिए स्वामित्व प्रमाण और भरोसा मजबूत करें।",
+      terminalsEntryTitle: "प्रवेश और निकास नियंत्रण",
+      terminalsEntryText:
+        "उपकरण के सुरक्षित परिचालन क्षेत्रों में प्रवेश करने या बाहर जाने से पहले एक अतिरिक्त सत्यापन परत जोड़ें।",
+      terminalsCustomsTitle: "सीमा शुल्क और निरीक्षण",
+      terminalsCustomsText:
+        "मज़बूत एसेट पहचान और जोखिम दृश्यता के साथ सीमा शुल्क, टर्मिनल जाँच और अनुपालन प्रक्रियाओं का समर्थन करें।",
+      ctaText:
+        "EquipRegistry को बीमा, रेंटल, वित्तपोषण, लॉजिस्टिक्स और पुनर्प्राप्ति प्रक्रियाओं में भरोसेमंद भागीदारों का समर्थन करने के लिए बनाया गया है।",
     },
     contact: {
       title: "संपर्क",
@@ -3284,9 +3561,35 @@ const ar: Dictionary = {
       financeTitle: "البنوك والمؤسسات المالية",
       financeText:
         "امنع التمويل المزدوج والاحتيال على الأصول. يتيح EquipRegistry للممولين التحقق مما إذا كان الأصل ممولًا بالفعل أو مسجلًا أو مُعلّمًا. قلّل المخاطر في هياكل التأجير والتمويل القائم على الأصول.",
+      financeRiskTitle: "مخاطر التمويل المزدوج",
+      financeRiskText:
+        "يمكن استخدام الأصل نفسه كضمان عدة مرات لدى مؤسسات أو دول مختلفة. ومن دون طبقة ثقة مشتركة، يؤدي ذلك إلى انكشاف خفي ومخاطر احتيال وخسائر مالية محتملة.",
+      financeVerificationTitle: "التحقق قبل التمويل",
+      financeVerificationText:
+        "تحقق مما إذا كان الأصل مسجلاً أو ممولاً أو مُعلَّماً بالفعل أو مرتبطاً بحادثة مخاطر قبل الموافقة على عقد تأجير أو قرض.",
+      financeTrustTitle: "ثقة عابرة للحدود",
+      financeTrustText:
+        "ادعم معاملات دولية أكثر أماناً تشمل الآلات والمركبات والمقطورات وغيرها من الأصول المنقولة المستخدمة في هياكل التمويل.",
       terminalsTitle: "الموانئ والمحطات اللوجستية",
       terminalsText:
         "تحقق من المعدات الداخلة والخارجة في الوقت الفعلي. اكتشف الأصول المسروقة أو المُعلّمة قبل دخولها إلى محطتك أو مغادرتها. ادعم الجمارك والتفتيش والامتثال عبر الحدود.",
+      rentalVisibilityTitle: "رؤية الأسطول",
+      rentalVisibilityText:
+        "حافظ على صورة أوضح لهوية المعدات وحالتها ومخاطرها عبر عدة دول ومواقع تشغيلية.",
+      rentalPreventionTitle: "الوقاية من السرقة",
+      rentalPreventionText:
+        "ادعم وضع العلامات بشكل أسرع وتعزيز الوقاية من الاحتيال حول الأصول المسروقة أو المفقودة أو المعاد بيعها بشكل غير قانوني.",
+      rentalOriginTitle: "إثبات المنشأ",
+      rentalOriginText:
+        "عزّز إثبات الملكية والثقة لشركات التأمين والمشترين والشركاء والأطراف المعنية عبر الحدود.",
+      terminalsEntryTitle: "التحكم في الدخول والخروج",
+      terminalsEntryText:
+        "أضف طبقة تحقق إضافية قبل دخول المعدات إلى المناطق التشغيلية الآمنة أو خروجها منها.",
+      terminalsCustomsTitle: "الجمارك والتفتيش",
+      terminalsCustomsText:
+        "ادعم فحوصات الجمارك وعمليات التحقق في المحطات وإجراءات الامتثال من خلال تعريف أقوى للأصول ورؤية أوضح للمخاطر.",
+      ctaText:
+        "تم إنشاء EquipRegistry لدعم الشركاء الموثوقين عبر مسارات التأمين والتأجير والتمويل والخدمات اللوجستية والاسترداد.",
     },
     contact: {
       title: "اتصال",

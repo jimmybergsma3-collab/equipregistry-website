@@ -43,7 +43,7 @@ const MULTI_FILE_DOCUMENT_KEYS: RegistrationDocumentKey[] = [
   "additional_supporting_document",
 ];
 
-type DocumentText = {
+export type DocumentText = {
   label: string;
   description?: string;
 };
@@ -571,6 +571,13 @@ function t(lang: Lang, key: RegistrationDocumentKey): DocumentText {
   return DOCUMENT_TEXT[lang]?.[key] ?? DOCUMENT_TEXT.en[key];
 }
 
+export function getDocumentText(
+  lang: Lang,
+  key: RegistrationDocumentKey
+): DocumentText {
+  return t(lang, key);
+}
+
 function createDocument(
   lang: Lang,
   key: RegistrationDocumentKey,
@@ -594,7 +601,6 @@ export function getBaseDocumentsForApplicantType(
   if (applicantType === "private" || applicantType === "sme") {
     return [
       createDocument(lang, "proof_of_ownership", true),
-      createDocument(lang, "applicant_id", true),
       createDocument(lang, "invoice_purchase_proof", true),
     ];
   }

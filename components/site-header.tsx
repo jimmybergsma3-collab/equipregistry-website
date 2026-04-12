@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n/dictionary";
 type Props = {
   lang: string;
   serial?: string;
+  showDivider?: boolean;
 };
 
 function navLinkClassName(isRtl: boolean) {
@@ -16,7 +17,10 @@ function navLinkClassName(isRtl: boolean) {
   }`;
 }
 
-export default function SiteHeader({ lang }: Props) {
+export default function SiteHeader({
+  lang,
+  showDivider = true,
+}: Props) {
   const safeLang = isValidLang(lang) ? lang : "en";
   const t = getDictionary(safeLang);
   const dir = getLangDir(safeLang);
@@ -34,7 +38,10 @@ export default function SiteHeader({ lang }: Props) {
   return (
     <header
       dir={dir}
-      className="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 pb-3 backdrop-blur"
+      className={[
+        "sticky top-0 z-40 bg-white/95 pb-3 backdrop-blur",
+        showDivider ? "border-b border-zinc-200" : "",
+      ].join(" ")}
     >
       <div className="mx-auto grid h-[4.5rem] max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">

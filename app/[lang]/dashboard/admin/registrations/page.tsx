@@ -231,7 +231,7 @@ export default async function AdminRegistrationsPage({
 
       <main
         dir={lang === "ar" ? "rtl" : "ltr"}
-        className="min-h-screen bg-zinc-50"
+        className="min-h-screen bg-white"
       >
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
