@@ -264,13 +264,154 @@ const TEXT: Record<
   },
 };
 
+const STATUS_COPY_OVERRIDES: Record<
+  Lang,
+  Pick<
+    (typeof TEXT)[Lang],
+    "paymentStatus" | "paymentDone" | "paymentPending" | "paid" | "pending"
+  > & {
+    nextSteps: Pick<(typeof TEXT)[Lang]["nextSteps"], "payment">;
+  }
+> = {
+  en: {
+    nextSteps: {
+      payment:
+        "Your file is complete. Final processing starts after checkout confirmation.",
+    },
+    paymentStatus: "Checkout status",
+    paymentDone: "Checkout is confirmed or not required for this applicant type.",
+    paymentPending: "Checkout has not been completed yet.",
+    paid: "Confirmed",
+    pending: "Awaiting checkout",
+  },
+  es: {
+    nextSteps: {
+      payment:
+        "El expediente esta completo. El procesamiento final comienza despues de la confirmacion del checkout.",
+    },
+    paymentStatus: "Estado del checkout",
+    paymentDone: "El checkout esta confirmado o no es necesario para este tipo de solicitante.",
+    paymentPending: "El checkout aun no se ha completado.",
+    paid: "Confirmado",
+    pending: "En espera de checkout",
+  },
+  de: {
+    nextSteps: {
+      payment:
+        "Die Datei ist vollstaendig. Die weitere Bearbeitung beginnt nach der Checkout-Bestaetigung.",
+    },
+    paymentStatus: "Checkout-Status",
+    paymentDone: "Checkout ist bestaetigt oder fuer diesen Antragstyp nicht erforderlich.",
+    paymentPending: "Checkout wurde noch nicht abgeschlossen.",
+    paid: "Bestaetigt",
+    pending: "Checkout ausstehend",
+  },
+  fr: {
+    nextSteps: {
+      payment:
+        "Le dossier est complet. Le traitement final commence apres la confirmation du checkout.",
+    },
+    paymentStatus: "Statut du checkout",
+    paymentDone: "Le checkout est confirme ou non requis pour ce type de demandeur.",
+    paymentPending: "Le checkout n'a pas encore ete finalise.",
+    paid: "Confirme",
+    pending: "Checkout en attente",
+  },
+  it: {
+    nextSteps: {
+      payment:
+        "Il dossier e completo. L'elaborazione finale inizia dopo la conferma del checkout.",
+    },
+    paymentStatus: "Stato checkout",
+    paymentDone: "Il checkout e confermato o non richiesto per questo tipo di richiedente.",
+    paymentPending: "Il checkout non e ancora stato completato.",
+    paid: "Confermato",
+    pending: "Checkout in attesa",
+  },
+  nl: {
+    nextSteps: {
+      payment:
+        "Je dossier is compleet. De verdere verwerking start na checkoutbevestiging.",
+    },
+    paymentStatus: "Checkoutstatus",
+    paymentDone: "Checkout is bevestigd of niet vereist voor dit type aanvrager.",
+    paymentPending: "Checkout is nog niet voltooid.",
+    paid: "Bevestigd",
+    pending: "Wacht op checkout",
+  },
+  pt: {
+    nextSteps: {
+      payment:
+        "O ficheiro esta completo. O processamento final comeca apos a confirmacao do checkout.",
+    },
+    paymentStatus: "Estado do checkout",
+    paymentDone: "O checkout esta confirmado ou nao e necessario para este tipo de requerente.",
+    paymentPending: "O checkout ainda nao foi concluido.",
+    paid: "Confirmado",
+    pending: "Aguardar checkout",
+  },
+  ru: {
+    nextSteps: {
+      payment:
+        "Fail polnostyu gotov. Finalnaya obrabotka nachinayetsya posle podtverzhdeniya checkout.",
+    },
+    paymentStatus: "Status checkout",
+    paymentDone: "Checkout podtverzhden ili ne trebuetsya dlya etogo tipa zayavitelya.",
+    paymentPending: "Checkout eshche ne zavershen.",
+    paid: "Podtverzhdeno",
+    pending: "Ozhidayet checkout",
+  },
+  zh: {
+    nextSteps: {
+      payment:
+        "Wenjian yi wancheng. Zuizhong chuli jiang zai checkout queren hou kaishi.",
+    },
+    paymentStatus: "Checkout zhuangtai",
+    paymentDone: "Checkout yi queren huo ci shenqingren leixing wuxu checkout.",
+    paymentPending: "Checkout shangwei wancheng.",
+    paid: "Yi queren",
+    pending: "Dengdai checkout",
+  },
+  hi: {
+    nextSteps: {
+      payment:
+        "Aapki file poori hai. Antim processing checkout pushti ke baad shuru hoti hai.",
+    },
+    paymentStatus: "Checkout sthiti",
+    paymentDone: "Checkout pusht hai ya is applicant type ke liye zaruri nahin hai.",
+    paymentPending: "Checkout abhi tak poora nahin hua hai.",
+    paid: "Pusht",
+    pending: "Checkout ka intizar",
+  },
+  ar: {
+    nextSteps: {
+      payment:
+        "Almalaf maktamil. Tabda almu3alaja alnihaiya baed taqid alcheckout.",
+    },
+    paymentStatus: "Halat alcheckout",
+    paymentDone: "Alcheckout muakkad aw ghayr matlub lihadha naw muqaddim alttalab.",
+    paymentPending: "Lam yaktamil alcheckout baed.",
+    paid: "Muakkad",
+    pending: "Fi intizar alcheckout",
+  },
+};
+
 export default function RegistrationReadinessPanel({
   lang,
   applicantType,
   completeness,
   paymentCompleted,
 }: Props) {
-  const text = TEXT[lang];
+  const baseText = TEXT[lang];
+  const override = STATUS_COPY_OVERRIDES[lang];
+  const text = {
+    ...baseText,
+    ...override,
+    nextSteps: {
+      ...baseText.nextSteps,
+      ...override.nextSteps,
+    },
+  };
 
   const nextAction = getNextSubmitAction(
     applicantType,

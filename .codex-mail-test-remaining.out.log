@@ -1,0 +1,10 @@
+
+> equipregistry-website@0.1.0 start
+> next start --port 3118
+
+▲ Next.js 16.1.1
+- Local:         http://localhost:3118
+- Network:       http://192.168.1.112:3118
+
+✓ Starting...
+✓ Ready in 1721ms

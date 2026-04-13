@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
 import RegistrationFormStep1 from "@/components/registry/registration-form-step1";
 import { isValidLang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -38,7 +39,9 @@ export default async function RegisterPage({ params }: Props) {
             </p>
           </div>
 
-<RegistrationFormStep1 lang={lang} />
+          <CustomerDashboardNav lang={lang} active="dashboard" />
+
+          <RegistrationFormStep1 lang={lang} />
         </div>
       </main>
 

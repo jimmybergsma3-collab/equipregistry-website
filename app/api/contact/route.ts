@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import {
+  type ContactMailboxType,
+  getContactRecipient,
+  MAILBOXES,
+} from "@/lib/email/addresses";
+import { sendEmail } from "@/lib/email/mailer";
 
-type ContactType = "general" | "business" | "support";
-
-function getTargetEmail(contactType: ContactType) {
-  switch (contactType) {
-    case "business":
-      return process.env.CONTACT_BUSINESS_EMAIL || "business@equipregistry.com";
-    case "support":
-      return process.env.CONTACT_SUPPORT_EMAIL || "support@equipregistry.com";
-    default:
-      return process.env.CONTACT_GENERAL_EMAIL || "info@equipregistry.com";
-  }
-}
+type ContactType = ContactMailboxType;
 
 function getDefaultSubject(contactType: ContactType) {
   switch (contactType) {
@@ -23,16 +17,6 @@ function getDefaultSubject(contactType: ContactType) {
     default:
       return "General inquiry";
   }
-}
-
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-
-  if (!apiKey) {
-    throw new Error("RESEND_API_KEY is missing.");
-  }
-
-  return new Resend(apiKey);
 }
 
 export async function POST(req: Request) {
@@ -59,11 +43,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const to = getTargetEmail(contactType);
-    const from =
-      process.env.CONTACT_FROM_EMAIL || "contact@equipregistry.com";
+    const to = getContactRecipient(contactType);
     const finalSubject = subject || getDefaultSubject(contactType);
-    const resend = getResendClient();
 
     const html = `
       <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #111827;">
@@ -89,8 +70,8 @@ export async function POST(req: Request) {
       message,
     ].join("\n");
 
-    const { error } = await resend.emails.send({
-      from,
+    const result = await sendEmail({
+      from: MAILBOXES.contactFrom,
       to,
       replyTo: email,
       subject: finalSubject,
@@ -98,8 +79,24 @@ export async function POST(req: Request) {
       text,
     });
 
-    if (error) {
-      console.error("CONTACT EMAIL ERROR:", error);
+    if (!result.success) {
+      console.error("CONTACT EMAIL ERROR:", {
+        to,
+        subject: finalSubject,
+        reason: result.reason,
+        message: result.message,
+        missingKeys: result.missingKeys,
+        errorCode: result.errorCode,
+        responseCode: result.responseCode,
+      });
+
+      if (result.reason === "config_invalid") {
+        return NextResponse.json(
+          { error: "Contact email is not configured. Missing RESEND_API_KEY." },
+          { status: 503 }
+        );
+      }
+
       return NextResponse.json(
         { error: "Email could not be sent." },
         { status: 500 }
@@ -108,16 +105,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === "RESEND_API_KEY is missing."
-    ) {
-      return NextResponse.json(
-        { error: "Contact email is not configured. Missing RESEND_API_KEY." },
-        { status: 503 }
-      );
-    }
-
     console.error("CONTACT API ERROR:", error);
     return NextResponse.json(
       { error: "Unexpected server error." },

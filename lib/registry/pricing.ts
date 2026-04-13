@@ -1,23 +1,43 @@
 export type AssetPricingCategory =
-  | "light_mobility_step"
-  | "bike"
-  | "standard_vehicle"
-  | "heavy_asset";
+  | "light_mobility"
+  | "vehicles"
+  | "machines"
+  | "agriculture"
+  | "construction"
+  | "marine"
+  | "energy"
+  | "industry";
 
 export const PRICING = {
-  light_mobility_step: {
-    registration: 4.95,
-    yearly: 1.95,
-  },
-  bike: {
+  light_mobility: {
     registration: 9.95,
     yearly: 2.95,
   },
-  standard_vehicle: {
+  vehicles: {
     registration: 19.95,
     yearly: 4.95,
   },
-  heavy_asset: {
+  machines: {
+    registration: 24.95,
+    yearly: 6.95,
+  },
+  agriculture: {
+    registration: 24.95,
+    yearly: 6.95,
+  },
+  construction: {
+    registration: 24.95,
+    yearly: 6.95,
+  },
+  marine: {
+    registration: 24.95,
+    yearly: 6.95,
+  },
+  energy: {
+    registration: 24.95,
+    yearly: 6.95,
+  },
+  industry: {
     registration: 24.95,
     yearly: 6.95,
   },
@@ -29,18 +49,18 @@ export const PRICING = {
   }
 >;
 
-const LIGHT_MOBILITY_SUBCATEGORIES = new Set([
-  "electric scooter",
-  "moped / light mobility",
-  "patinete electrico",
-  "ciclomotor / movilidad ligera",
-  "elektrische step",
-  "brommer / lichte mobiliteit",
-  "electric_scooter",
-  "scooter",
-]);
+export const PRICING_SECTION_ORDER: AssetPricingCategory[] = [
+  "light_mobility",
+  "vehicles",
+  "machines",
+  "agriculture",
+  "construction",
+  "marine",
+  "energy",
+  "industry",
+];
 
-const BIKE_SUBCATEGORIES = new Set([
+const LIGHT_MOBILITY_SUBCATEGORIES = new Set([
   "bicycle",
   "e-bike",
   "cargo bike",
@@ -48,6 +68,13 @@ const BIKE_SUBCATEGORIES = new Set([
   "fiets",
   "bakfiets",
   "ebike",
+  "electric scooter",
+  "electric_scooter",
+  "patinete electrico",
+  "trottinette electrique",
+  "trotinette eletrica",
+  "elektrische step",
+  "scooter electrique",
 ]);
 
 function normalizeValue(value: string | undefined) {
@@ -66,15 +93,20 @@ export function getPricingCategory(
   const normalizedSubcategory = normalizeValue(subcategory);
 
   if (LIGHT_MOBILITY_SUBCATEGORIES.has(normalizedSubcategory)) {
-    return "light_mobility_step";
+    return "light_mobility";
   }
 
-  if (BIKE_SUBCATEGORIES.has(normalizedSubcategory)) {
-    return "bike";
-  }
-
-  if (normalizedCategory === "bikes") {
-    return "bike";
+  if (
+    normalizedCategory === "other" ||
+    normalizedCategory === "bike" ||
+    normalizedCategory === "bikes" ||
+    normalizedCategory === "light mobility" ||
+    normalizedCategory === "light_mobility" ||
+    normalizedCategory === "bikelightmobility"
+  ) {
+    return LIGHT_MOBILITY_SUBCATEGORIES.has(normalizedSubcategory)
+      ? "light_mobility"
+      : "machines";
   }
 
   if (
@@ -83,10 +115,34 @@ export function getPricingCategory(
     normalizedCategory === "vehicle" ||
     normalizedCategory === "trailer"
   ) {
-    return "standard_vehicle";
+    return "vehicles";
   }
 
-  return "heavy_asset";
+  if (normalizedCategory === "machines" || normalizedCategory === "equipment") {
+    return "machines";
+  }
+
+  if (normalizedCategory === "agriculture") {
+    return "agriculture";
+  }
+
+  if (normalizedCategory === "construction") {
+    return "construction";
+  }
+
+  if (normalizedCategory === "marine") {
+    return "marine";
+  }
+
+  if (normalizedCategory === "energy") {
+    return "energy";
+  }
+
+  if (normalizedCategory === "industry" || normalizedCategory === "industrial") {
+    return "industry";
+  }
+
+  return "machines";
 }
 
 export function getPricing(category: string, subcategory?: string) {

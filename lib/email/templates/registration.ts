@@ -7,10 +7,19 @@ type BaseTemplateParams = {
 };
 
 type PaymentRequiredParams = BaseTemplateParams & {
-  iban: string;
-  accountHolder: string;
-  bic: string;
   feeText: string;
+};
+
+type InternalRequestNotificationParams = {
+  reference: string;
+  assetName: string;
+  ownerName: string;
+  ownerEmail: string;
+  category: string;
+  subcategory?: string;
+  applicantType: string;
+  source: "dashboard_submit" | "stripe_confirmed";
+  lang: string;
 };
 
 function wrapEmailHtml(content: string) {
@@ -82,16 +91,13 @@ export function buildPaymentRequiredEmail(params: PaymentRequiredParams) {
     `Hello ${params.ownerName},`,
     ``,
     `Your EquipRegistry registration file has been created.`,
-    `Processing will continue after payment has been received and matched to your passport number.`,
+    `Processing will continue after your payment has been completed through Stripe Checkout.`,
     ``,
     `Passport Number / Reference: ${params.passportNumber}`,
     `Asset: ${params.assetName}`,
-    `Account Holder: ${params.accountHolder}`,
-    `IBAN: ${params.iban}`,
-    `BIC: ${params.bic}`,
     `Fee: ${params.feeText}`,
     ``,
-    `Use the passport number exactly as payment reference.`,
+    `Sign in to your EquipRegistry dashboard to complete payment securely.`,
     ``,
     `EquipRegistry`,
   ].join("\n");
@@ -99,14 +105,14 @@ export function buildPaymentRequiredEmail(params: PaymentRequiredParams) {
   const html = wrapEmailHtml(`
     <p style="margin:0 0 16px; font-size:15px; line-height:1.7;">Hello ${params.ownerName},</p>
     <p style="margin:0 0 16px; font-size:15px; line-height:1.7;">
-      Your EquipRegistry registration file has been created. Processing will continue after payment has been received and matched to your passport number.
+      Your EquipRegistry registration file has been created. Processing will continue after your payment has been completed through Stripe Checkout.
     </p>
 
     <div style="margin:20px 0; padding:18px; border:1px solid #fdba74; border-radius:12px; background:#fff7ed;">
-      <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#9a3412;">Payment Reference / Passport Number</div>
+      <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#9a3412;">Passport Number / Reference</div>
       <div style="margin-top:6px; font-size:20px; font-weight:700; color:#18181b;">${params.passportNumber}</div>
       <div style="margin-top:12px; font-size:14px; color:#44403c;">
-        Use this exact reference in your bank transfer.
+        Use your dashboard payment button to continue this registration securely.
       </div>
     </div>
 
@@ -114,18 +120,13 @@ export function buildPaymentRequiredEmail(params: PaymentRequiredParams) {
       <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Asset</div>
       <div style="margin-top:6px; font-size:15px; font-weight:600;">${params.assetName}</div>
 
-      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Account Holder</div>
-      <div style="margin-top:6px; font-size:15px;">${params.accountHolder}</div>
-
-      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">IBAN</div>
-      <div style="margin-top:6px; font-size:15px;">${params.iban}</div>
-
-      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">BIC / SWIFT</div>
-      <div style="margin-top:6px; font-size:15px;">${params.bic}</div>
-
       <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Fee</div>
       <div style="margin-top:6px; font-size:15px;">${params.feeText}</div>
     </div>
+
+    <p style="margin:0; font-size:15px; line-height:1.7;">
+      Sign in to your EquipRegistry dashboard to complete payment securely.
+    </p>
   `);
 
   return { subject, text, html };
@@ -310,6 +311,69 @@ export function buildPassportIssuedEmail(params: BaseTemplateParams) {
 
     <p style="margin:0; font-size:15px; line-height:1.7;">
       Your passport is now available in your account.
+    </p>
+  `);
+
+  return { subject, text, html };
+}
+
+export function buildInternalRequestNotificationEmail(
+  params: InternalRequestNotificationParams
+) {
+  const sourceLabel =
+    params.source === "stripe_confirmed"
+      ? "Stripe checkout confirmed"
+      : "Dashboard submission";
+  const categoryLine = params.subcategory?.trim()
+    ? `${params.category} / ${params.subcategory.trim()}`
+    : params.category;
+  const subject = `New EquipRegistry request - ${params.reference}`;
+
+  const text = [
+    "EquipRegistry internal request notification",
+    "",
+    `Reference: ${params.reference}`,
+    `Source: ${sourceLabel}`,
+    `Asset: ${params.assetName}`,
+    `Category: ${categoryLine}`,
+    `Applicant type: ${params.applicantType}`,
+    `Owner: ${params.ownerName}`,
+    `Owner email: ${params.ownerEmail}`,
+    `Language: ${params.lang}`,
+    "",
+    "Review this request in the EquipRegistry admin dashboard.",
+  ].join("\n");
+
+  const html = wrapEmailHtml(`
+    <p style="margin:0 0 16px; font-size:15px; line-height:1.7;">
+      EquipRegistry internal request notification.
+    </p>
+
+    <div style="margin:20px 0; padding:18px; border:1px solid #e4e4e7; border-radius:12px; background:#fafafa;">
+      <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Reference</div>
+      <div style="margin-top:6px; font-size:20px; font-weight:700; color:#18181b;">${params.reference}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Source</div>
+      <div style="margin-top:6px; font-size:15px;">${sourceLabel}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Asset</div>
+      <div style="margin-top:6px; font-size:15px; font-weight:600;">${params.assetName}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Category</div>
+      <div style="margin-top:6px; font-size:15px;">${categoryLine}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Applicant</div>
+      <div style="margin-top:6px; font-size:15px;">${params.applicantType}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Owner</div>
+      <div style="margin-top:6px; font-size:15px;">${params.ownerName}</div>
+
+      <div style="margin-top:16px; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#71717a;">Owner email</div>
+      <div style="margin-top:6px; font-size:15px;">${params.ownerEmail}</div>
+    </div>
+
+    <p style="margin:0; font-size:15px; line-height:1.7;">
+      Review this request in the EquipRegistry admin dashboard.
     </p>
   `);
 

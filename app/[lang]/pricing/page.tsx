@@ -1,45 +1,46 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
+import {
+  getPricingCatalogSubtitle,
+  getPricingCategoryContent,
+} from "@/lib/i18n/pricing-categories";
 import { getPricingPageContent } from "@/lib/i18n/pricing-page";
 import {
   type AssetPricingCategory,
-  formatPricingAmount,
   PRICING,
+  PRICING_SECTION_ORDER,
 } from "@/lib/registry/pricing";
+import {
+  formatLocalizedPricingAmount,
+  getLocalizedPricingDisplay,
+  getVisitorCountryCodeFromHeaders,
+  type LocalizedPricingDisplay,
+} from "@/lib/registry/display-pricing";
 
 type Props = {
   params: Promise<{ lang: string }>;
 };
 
-const PRICING_SECTION_ORDER: AssetPricingCategory[] = [
-  "light_mobility_step",
-  "bike",
-  "standard_vehicle",
-  "heavy_asset",
-];
-
 function Section({
   pricingCategory,
   content,
-  locale,
-  registrationLabel,
-  yearlyLabel,
-  examplesLabel,
+  pricingDisplay,
+  priceLabel,
+  priceNote,
   textAlignClass,
 }: {
   pricingCategory: AssetPricingCategory;
   content: {
-    title: string;
+    name: string;
     description: string;
-    examples: string[];
   };
-  locale: Lang;
-  registrationLabel: string;
-  yearlyLabel: string;
-  examplesLabel: string;
+  pricingDisplay: LocalizedPricingDisplay;
+  priceLabel: string;
+  priceNote: string | null;
   textAlignClass: string;
 }) {
   const pricing = PRICING[pricingCategory];
@@ -48,34 +49,19 @@ function Section({
     <section className="border-t border-zinc-200 py-8 first:border-t-0 first:pt-0 last:pb-0">
       <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
         <div className={textAlignClass}>
-          <h2 className="text-xl font-semibold text-zinc-950">{content.title}</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
-              <p className="text-xs tracking-[0.14em] text-zinc-500">
-                {registrationLabel}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-zinc-950">
-                {formatPricingAmount(pricing.registration, locale)}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
-              <p className="text-xs tracking-[0.14em] text-zinc-500">
-                {yearlyLabel}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-zinc-950">
-                {formatPricingAmount(pricing.yearly, locale)}
-              </p>
-            </div>
+          <h2 className="text-xl font-semibold text-zinc-950">{content.name}</h2>
+          <div className="mt-4 max-w-xs rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+            <p className="text-xs tracking-[0.14em] text-zinc-500">{priceLabel}</p>
+            <p className="mt-1 text-sm font-semibold text-zinc-950">
+              {formatLocalizedPricingAmount(pricing.registration, pricingDisplay)}
+            </p>
+            {priceNote ? (
+              <p className="mt-2 text-xs leading-5 text-zinc-500">{priceNote}</p>
+            ) : null}
           </div>
-          <p className="mt-3 text-sm leading-6 text-zinc-600">
-            {content.description}
-          </p>
         </div>
         <div className={`rounded-2xl border border-zinc-200 bg-zinc-50 p-5 ${textAlignClass}`}>
-          <p className="text-sm leading-6 text-zinc-700">
-            <span className="font-semibold text-zinc-900">{examplesLabel}:</span>{" "}
-            {content.examples.join(", ")}
-          </p>
+          <p className="text-sm leading-6 text-zinc-700">{content.description}</p>
         </div>
       </div>
     </section>
@@ -109,11 +95,21 @@ export default async function PricingPage({ params }: Props) {
   }
 
   const currentLang = lang as Lang;
+  const headerList = await headers();
   const dir = getLangDir(currentLang);
   const isRtl = dir === "rtl";
   const textAlignClass = isRtl ? "text-right" : "text-left";
   const ctaLayoutClass = isRtl ? "justify-end" : "";
   const content = getPricingPageContent(currentLang);
+  const subtitle = getPricingCatalogSubtitle(currentLang);
+  const pricingDisplay = await getLocalizedPricingDisplay({
+    lang: currentLang,
+    acceptLanguage: headerList.get("accept-language"),
+    countryCode: getVisitorCountryCodeFromHeaders(headerList),
+  });
+  const priceNote = pricingDisplay.usedFallback
+    ? null
+    : content.labels.estimatedLocalCurrency;
 
   return (
     <>
@@ -129,7 +125,7 @@ export default async function PricingPage({ params }: Props) {
                 {content.title}
               </h1>
               <p className="mt-4 max-w-3xl text-sm leading-6 text-zinc-600 sm:text-base">
-                {content.subtitle}
+                {subtitle}
               </p>
             </div>
 
@@ -138,11 +134,10 @@ export default async function PricingPage({ params }: Props) {
                 <Section
                   key={pricingCategory}
                   pricingCategory={pricingCategory}
-                  content={content.sections[pricingCategory]}
-                  locale={currentLang}
-                  registrationLabel={content.labels.registration}
-                  yearlyLabel={content.labels.yearly}
-                  examplesLabel={content.labels.examples}
+                  content={getPricingCategoryContent(currentLang, pricingCategory)}
+                  pricingDisplay={pricingDisplay}
+                  priceLabel={content.labels.registration}
+                  priceNote={priceNote}
                   textAlignClass={textAlignClass}
                 />
               ))}

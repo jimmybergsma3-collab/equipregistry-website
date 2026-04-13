@@ -1,16 +1,17 @@
 import type { Lang } from "@/lib/i18n/config";
+import { MAILBOXES } from "@/lib/email/addresses";
 import { sendEmail } from "@/lib/email/mailer";
 import { buildAccountVerificationEmail } from "@/lib/email/templates/account-verification";
 import {
   buildApprovedEmail,
   buildDraftSavedEmail,
+  buildInternalRequestNotificationEmail,
   buildPartnerSubmittedEmail,
   buildPaymentConfirmedEmail,
   buildPaymentRequiredEmail,
   buildPassportIssuedEmail,
   buildUnderReviewEmail,
 } from "@/lib/email/templates/registration";
-import { MANUAL_PAYMENT_DETAILS } from "@/lib/registry/payment";
 import { formatPricingAmount, getPricing } from "@/lib/registry/pricing";
 
 export async function sendAccountVerificationEmail(params: {
@@ -59,9 +60,6 @@ export async function sendPaymentRequiredEmail(params: {
 
   const email = buildPaymentRequiredEmail({
     ...params,
-    iban: MANUAL_PAYMENT_DETAILS.iban,
-    accountHolder: MANUAL_PAYMENT_DETAILS.accountHolder,
-    bic: MANUAL_PAYMENT_DETAILS.bic,
     feeText,
   });
 
@@ -142,6 +140,27 @@ export async function sendPassportIssuedEmail(params: {
   const email = buildPassportIssuedEmail(params);
   return sendEmail({
     to: params.to,
+    subject: email.subject,
+    text: email.text,
+    html: email.html,
+  });
+}
+
+export async function sendRegistrationRequestNotificationEmail(params: {
+  reference: string;
+  assetName: string;
+  ownerName: string;
+  ownerEmail: string;
+  category: string;
+  subcategory?: string;
+  applicantType: string;
+  source: "dashboard_submit" | "stripe_confirmed";
+  lang: string;
+}) {
+  const email = buildInternalRequestNotificationEmail(params);
+
+  return sendEmail({
+    to: MAILBOXES.internalRequests,
     subject: email.subject,
     text: email.text,
     html: email.html,

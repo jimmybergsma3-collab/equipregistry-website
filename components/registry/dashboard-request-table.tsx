@@ -335,6 +335,81 @@ const TABLE_TEXT: Record<
   },
 };
 
+const DASHBOARD_TABLE_OVERRIDES: Record<
+  Lang,
+  Pick<
+    (typeof TABLE_TEXT)[Lang],
+    "emptyTitle" | "emptyDescription" | "sectionTitle" | "sectionDescription"
+  >
+> = {
+  en: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "No active registrations are visible yet.",
+    sectionTitle: "My registrations",
+    sectionDescription: "Registrations appear here as soon as they move beyond draft.",
+  },
+  es: {
+    emptyTitle: "Panel",
+    emptyDescription: "Todavia no hay registros activos visibles.",
+    sectionTitle: "Mis registros",
+    sectionDescription: "Los registros aparecen aqui cuando superan la fase de borrador.",
+  },
+  de: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Es sind noch keine aktiven Registrierungen sichtbar.",
+    sectionTitle: "Meine Registrierungen",
+    sectionDescription: "Registrierungen erscheinen hier, sobald sie den Entwurfsstatus verlassen.",
+  },
+  fr: {
+    emptyTitle: "Tableau de bord",
+    emptyDescription: "Aucun enregistrement actif n'est encore visible.",
+    sectionTitle: "Mes enregistrements",
+    sectionDescription: "Les enregistrements apparaissent ici une fois le statut brouillon depasse.",
+  },
+  it: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Non ci sono ancora registrazioni attive visibili.",
+    sectionTitle: "Le mie registrazioni",
+    sectionDescription: "Le registrazioni appaiono qui quando superano la fase di bozza.",
+  },
+  nl: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Er zijn nog geen actieve registraties zichtbaar.",
+    sectionTitle: "Mijn registraties",
+    sectionDescription: "Registraties verschijnen hier zodra ze verder zijn dan concept.",
+  },
+  pt: {
+    emptyTitle: "Painel",
+    emptyDescription: "Ainda nao existem registos ativos visiveis.",
+    sectionTitle: "Os meus registos",
+    sectionDescription: "Os registos aparecem aqui quando ultrapassam a fase de rascunho.",
+  },
+  ru: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Poka net vidimykh aktivnykh registratsiy.",
+    sectionTitle: "Moi registratsii",
+    sectionDescription: "Registratsii poyavlyayutsya zdes posle vykhoda iz statusa chernovika.",
+  },
+  zh: {
+    emptyTitle: "Yibiao ban",
+    emptyDescription: "Muqian hai meiyou kejian de huoyue zhuce.",
+    sectionTitle: "Wo de zhuce",
+    sectionDescription: "Zhuce zai likai caogao jieduan hou hui xianshi zai zheli.",
+  },
+  hi: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Abhi tak koi sakriya registrations dikhai nahin de rahi hain.",
+    sectionTitle: "Meri registrations",
+    sectionDescription: "Registrations yahan tab dikhai deti hain jab ve draft se aage badh jati hain.",
+  },
+  ar: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "La tujad tasjilat nashita zahira hatta alaan.",
+    sectionTitle: "Tasjilati",
+    sectionDescription: "Tazhar altasjilat huna eind tajawuz marhalat almusawada.",
+  },
+};
+
 function formatDate(dateString: string, lang: Lang) {
   const date = new Date(dateString);
 
@@ -373,7 +448,10 @@ export default function DashboardRequestTable({
   showOnlyVisible = true,
 }: Props) {
   const currentLang = lang as Lang;
-  const text = TABLE_TEXT[currentLang] ?? TABLE_TEXT.en;
+  const text = {
+    ...(TABLE_TEXT[currentLang] ?? TABLE_TEXT.en),
+    ...(DASHBOARD_TABLE_OVERRIDES[currentLang] ?? DASHBOARD_TABLE_OVERRIDES.en),
+  };
   const detailPath = detailBasePath ?? `/${lang}/dashboard/registrations`;
 
   const visibleRequests = showOnlyVisible

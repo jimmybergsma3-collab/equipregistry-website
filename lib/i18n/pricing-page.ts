@@ -1,5 +1,4 @@
 import type { Lang } from "./config";
-import type { AssetPricingCategory } from "@/lib/registry/pricing";
 
 type PricingSectionContent = {
   title: string;
@@ -20,8 +19,9 @@ export type PricingPageContent = {
     registration: string;
     yearly: string;
     examples: string;
+    estimatedLocalCurrency: string;
   };
-  sections: Record<AssetPricingCategory, PricingSectionContent>;
+  sections: Record<string, PricingSectionContent>;
   info: {
     afterPayment: PricingInfoContent;
     passport: PricingInfoContent;
@@ -44,6 +44,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registration",
       yearly: "Yearly",
       examples: "Examples",
+      estimatedLocalCurrency:
+        "Estimated in your local currency. Final amount shown at checkout.",
     },
     sections: {
       light_mobility_step: {
@@ -116,6 +118,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registro",
       yearly: "Anual",
       examples: "Ejemplos",
+      estimatedLocalCurrency:
+        "Estimado en tu moneda local. El importe final se muestra en el checkout.",
     },
     sections: {
       light_mobility_step: {
@@ -188,6 +192,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registrierung",
       yearly: "Jährlich",
       examples: "Beispiele",
+      estimatedLocalCurrency:
+        "Geschätzt in Ihrer lokalen Währung. Der endgültige Betrag wird im Checkout angezeigt.",
     },
     sections: {
       light_mobility_step: {
@@ -254,6 +260,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Enregistrement",
       yearly: "Annuel",
       examples: "Exemples",
+      estimatedLocalCurrency:
+        "Estimation dans votre devise locale. Le montant final est indiqué au moment du paiement.",
     },
     sections: {
       light_mobility_step: {
@@ -320,6 +328,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registrazione",
       yearly: "Annuale",
       examples: "Esempi",
+      estimatedLocalCurrency:
+        "Stimato nella tua valuta locale. L'importo finale viene mostrato al checkout.",
     },
     sections: {
       light_mobility_step: {
@@ -386,6 +396,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registratie",
       yearly: "Jaarlijks",
       examples: "Voorbeelden",
+      estimatedLocalCurrency:
+        "Geschat in je lokale valuta. Het definitieve bedrag wordt bij het afrekenen getoond.",
     },
     sections: {
       light_mobility_step: {
@@ -452,6 +464,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Registo",
       yearly: "Anual",
       examples: "Exemplos",
+      estimatedLocalCurrency:
+        "Estimado na tua moeda local. O montante final é mostrado no checkout.",
     },
     sections: {
       light_mobility_step: {
@@ -518,6 +532,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "Регистрация",
       yearly: "Ежегодно",
       examples: "Примеры",
+      estimatedLocalCurrency:
+        "Оценка в вашей местной валюте. Окончательная сумма будет показана при оплате.",
     },
     sections: {
       light_mobility_step: {
@@ -590,6 +606,7 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "注册",
       yearly: "年费",
       examples: "示例",
+      estimatedLocalCurrency: "按您的本地货币估算。最终金额将在结账时显示。",
     },
     sections: {
       light_mobility_step: {
@@ -656,6 +673,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "पंजीकरण",
       yearly: "वार्षिक",
       examples: "उदाहरण",
+      estimatedLocalCurrency:
+        "आपकी स्थानीय मुद्रा में अनुमानित। अंतिम राशि चेकआउट पर दिखाई जाएगी।",
     },
     sections: {
       light_mobility_step: {
@@ -722,6 +741,8 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       registration: "التسجيل",
       yearly: "سنوي",
       examples: "أمثلة",
+      estimatedLocalCurrency:
+        "تقديريًا بعملتك المحلية. سيظهر المبلغ النهائي عند إتمام الدفع.",
     },
     sections: {
       light_mobility_step: {

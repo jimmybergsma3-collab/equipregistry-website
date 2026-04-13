@@ -1,0 +1,78 @@
+AUTH_REGISTER_ERROR Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Error opening a TLS connection: No credentials are available in the security package (os error -2146893042)
+    at async B (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:2087)
+    at async k (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:6944)
+    at async j (C:\Users\jim\equipregistry-website\.next\server\app\api\auth\register\route.js:1:7956) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry Contact <contact@equipregistry.com>',
+  to: [ 'co***@equipregistry.com' ],
+  subject: 'Codex general contact runtime test',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+CONTACT EMAIL ERROR: {
+  to: 'contact@equipregistry.com',
+  subject: 'Codex general contact runtime test',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry Contact <contact@equipregistry.com>',
+  to: [ 'su***@equipregistry.com' ],
+  subject: 'Codex support runtime test',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+CONTACT EMAIL ERROR: {
+  to: 'support@equipregistry.com',
+  subject: 'Codex support runtime test',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry Contact <contact@equipregistry.com>',
+  to: [ 'bu***@equipregistry.com' ],
+  subject: 'Codex business runtime test',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+CONTACT EMAIL ERROR: {
+  to: 'business@equipregistry.com',
+  subject: 'Codex business runtime test',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}
+REGISTER REQUEST ERROR: Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Error opening a TLS connection: No credentials are available in the security package (os error -2146893042)
+    at async P (C:\Users\jim\equipregistry-website\.next\server\app\api\register-request\route.js:1:5628)
+    at async k (C:\Users\jim\equipregistry-website\.next\server\app\api\register-request\route.js:1:12649)
+    at async j (C:\Users\jim\equipregistry-website\.next\server\app\api\register-request\route.js:1:13661) {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}

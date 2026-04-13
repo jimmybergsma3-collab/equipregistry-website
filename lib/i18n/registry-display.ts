@@ -116,37 +116,37 @@ const EXTRA_STATUS_LABELS: Record<
 > = {
   en: {
     ready_for_submission: "Ready for submission",
-    payment_required: "Payment required",
+    payment_required: "Checkout pending",
     unknown: "Unknown",
   },
   es: {
     ready_for_submission: "Listo para enviar",
-    payment_required: "Pago requerido",
+    payment_required: "Checkout pendiente",
     unknown: "Desconocido",
   },
   de: {
     ready_for_submission: "Bereit zur Einreichung",
-    payment_required: "Zahlung erforderlich",
+    payment_required: "Checkout ausstehend",
     unknown: "Unbekannt",
   },
   fr: {
     ready_for_submission: "Pret pour soumission",
-    payment_required: "Paiement requis",
+    payment_required: "Checkout en attente",
     unknown: "Inconnu",
   },
   it: {
     ready_for_submission: "Pronto per l'invio",
-    payment_required: "Pagamento richiesto",
+    payment_required: "Checkout in attesa",
     unknown: "Sconosciuto",
   },
   nl: {
     ready_for_submission: "Klaar voor indiening",
-    payment_required: "Betaling vereist",
+    payment_required: "Checkout in afwachting",
     unknown: "Onbekend",
   },
   pt: {
     ready_for_submission: "Pronto para envio",
-    payment_required: "Pagamento obrigatorio",
+    payment_required: "Checkout pendente",
     unknown: "Desconhecido",
   },
   ru: {
@@ -169,6 +169,20 @@ const EXTRA_STATUS_LABELS: Record<
     payment_required: "الدفع مطلوب",
     unknown: "غير معروف",
   },
+};
+
+const PAYMENT_REQUIRED_LABEL_OVERRIDES: Record<Lang, string> = {
+  en: "Checkout pending",
+  es: "Checkout pendiente",
+  de: "Checkout ausstehend",
+  fr: "Checkout en attente",
+  it: "Checkout in attesa",
+  nl: "Checkout in afwachting",
+  pt: "Checkout pendente",
+  ru: "Checkout ozhidayetsya",
+  zh: "Checkout dai queren",
+  hi: "Checkout pending",
+  ar: "Checkout muntazar",
 };
 
 export function formatDateForLang(value: Date | string, lang: Lang) {
@@ -207,7 +221,7 @@ export function getLocalizedRequestStatusLabel(
     case "ready_for_submission":
       return extra.ready_for_submission;
     case "payment_required":
-      return extra.payment_required;
+      return PAYMENT_REQUIRED_LABEL_OVERRIDES[lang] ?? extra.payment_required;
     case "submitted":
       return dict.dashboard.requestStatuses.submitted;
     case "under_review":

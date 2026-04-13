@@ -89,7 +89,7 @@ export default function HeaderLoginButton({
 
         <LoginModal
           lang={lang as Lang}
-          next={`/${lang}/dashboard/registrations`}
+          next={`/${lang}/dashboard`}
           isOpen={loginOpen}
           onClose={() => setLoginOpen(false)}
         />
@@ -100,7 +100,7 @@ export default function HeaderLoginButton({
   const dashboardHref =
     session.role === "admin"
       ? `/${lang}/dashboard/admin`
-      : `/${lang}/dashboard/registrations`;
+      : `/${lang}/dashboard`;
 
   return (
     <div className="flex items-center gap-4">

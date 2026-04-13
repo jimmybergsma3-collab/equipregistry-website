@@ -3,8 +3,8 @@ type VerificationAwareUser = {
   emailVerifiedAt: Date | null;
 };
 
-// Temporary development bypass while SMTP delivery is unavailable.
-// Keep the verification flow and database field intact so this can be removed cleanly later.
+// Launch behavior: keep account creation and login non-blocking for customer users
+// even when verification delivery fails. The verification flow and database field stay intact.
 export const TEMPORARY_ALLOW_UNVERIFIED_LOGIN = true;
 
 export function canUseAuthenticatedApp(user: VerificationAwareUser) {

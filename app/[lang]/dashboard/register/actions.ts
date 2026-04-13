@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
+import { isValidLang } from "@/lib/i18n/config";
 import { reserveNextPassportNumber } from "@/lib/registry/passport-number";
 import {
   ApplicantType,
@@ -17,6 +18,7 @@ import {
   sendDraftSavedEmail,
   sendPartnerSubmittedEmail,
   sendPaymentRequiredEmail,
+  sendRegistrationRequestNotificationEmail,
 } from "@/lib/email/send-registration-email";
 
 type ActionResult = {
@@ -64,6 +66,32 @@ function getEmailRecipient(draft: RegistrationDraft) {
   return draft.ownerEmail.trim();
 }
 
+async function logEmailAttempt(
+  event: string,
+  context: Record<string, unknown>,
+  send: () => ReturnType<typeof sendDraftSavedEmail>
+) {
+  try {
+    const result = await send();
+
+    if (!result.success) {
+      console.warn(event, {
+        ...context,
+        reason: result.reason,
+        message: result.message,
+        missingKeys: result.missingKeys,
+        errorCode: result.errorCode,
+        responseCode: result.responseCode,
+      });
+    }
+  } catch (error) {
+    console.error(`${event}_UNEXPECTED`, {
+      ...context,
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+}
+
 export async function saveRegistrationDraft(
   prevState: ActionResult | null,
   formData: FormData
@@ -78,6 +106,8 @@ export async function saveRegistrationDraft(
   }
 
   const draft = buildDraftFromFormData(formData);
+  const langValue = normalizeString(formData.get("lang")).toLowerCase();
+  const lang = isValidLang(langValue) ? langValue : "en";
   const completeness = evaluateRegistrationCompleteness(draft);
   const { passportNumber } = await reserveNextPassportNumber(
     draft.category,
@@ -112,16 +142,25 @@ export async function saveRegistrationDraft(
 
   const to = getEmailRecipient(draft);
   if (to) {
-    await sendDraftSavedEmail({
-      to,
-      ownerName: draft.ownerName || "Customer",
-      passportNumber,
-      assetName: draft.assetName || "Unnamed asset",
-    });
+    await logEmailAttempt(
+      "REGISTRATION_DRAFT_EMAIL_SKIPPED",
+      {
+        passportNumber,
+        requestId: request.id,
+      },
+      () =>
+        sendDraftSavedEmail({
+          to,
+          ownerName: draft.ownerName || "Customer",
+          passportNumber,
+          assetName: draft.assetName || "Unnamed asset",
+        })
+    );
   }
 
   revalidatePath("/");
   revalidatePath("/dashboard/registrations");
+  revalidatePath(`/${lang}/dashboard/registrations`);
 
   return {
     success: true,
@@ -146,6 +185,8 @@ export async function submitRegistrationRequest(
   }
 
   const draft = buildDraftFromFormData(formData);
+  const langValue = normalizeString(formData.get("lang")).toLowerCase();
+  const lang = isValidLang(langValue) ? langValue : "en";
   const completeness = evaluateRegistrationCompleteness(draft);
 
   if (!completeness.isComplete) {
@@ -196,26 +237,70 @@ export async function submitRegistrationRequest(
   const to = getEmailRecipient(draft);
   if (to) {
     if (partner) {
-      await sendPartnerSubmittedEmail({
-        to,
-        ownerName: draft.ownerName || "Customer",
-        passportNumber,
-        assetName: draft.assetName || "Unnamed asset",
-      });
+      await logEmailAttempt(
+        "REGISTRATION_SUBMITTED_EMAIL_SKIPPED",
+        {
+          passportNumber,
+          requestId: request.id,
+        },
+        () =>
+          sendPartnerSubmittedEmail({
+            to,
+            ownerName: draft.ownerName || "Customer",
+            passportNumber,
+            assetName: draft.assetName || "Unnamed asset",
+          })
+      );
     } else {
-      await sendPaymentRequiredEmail({
-        to,
-        ownerName: draft.ownerName || "Customer",
-        passportNumber,
-        assetName: draft.assetName || "Unnamed asset",
-        category: draft.category,
-        subcategory: draft.subcategory,
-      });
+      await logEmailAttempt(
+        "REGISTRATION_CHECKOUT_EMAIL_SKIPPED",
+        {
+          passportNumber,
+          requestId: request.id,
+        },
+        () =>
+          sendPaymentRequiredEmail({
+            to,
+            ownerName: draft.ownerName || "Customer",
+            passportNumber,
+            assetName: draft.assetName || "Unnamed asset",
+            category: draft.category,
+            subcategory: draft.subcategory,
+          })
+      );
     }
+  }
+
+  if (partner) {
+    await logEmailAttempt(
+      "INTERNAL_REQUEST_NOTIFICATION_SKIPPED",
+      {
+        passportNumber,
+        requestId: request.id,
+        destination: "request@equipregistry.com",
+      },
+      () =>
+        sendRegistrationRequestNotificationEmail({
+          reference: passportNumber,
+          assetName: draft.assetName || "Unnamed asset",
+          ownerName: draft.ownerName || "Customer",
+          ownerEmail: draft.ownerEmail || "",
+          category: draft.category,
+          subcategory: draft.subcategory || undefined,
+          applicantType: draft.applicantType,
+          source: "dashboard_submit",
+          lang,
+        })
+    );
   }
 
   revalidatePath("/");
   revalidatePath("/dashboard/registrations");
+  revalidatePath(`/${lang}/dashboard/registrations`);
+
+  if (partner) {
+    revalidatePath(`/${lang}/dashboard/admin/registrations`);
+  }
 
   return {
     success: true,

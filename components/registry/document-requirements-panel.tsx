@@ -20,6 +20,7 @@ type Props = {
   category: string;
   documents: RegistrationDocumentMap;
   onChange: (key: RegistrationDocumentKey, value: RegistrationDocumentState) => void;
+  hiddenKeys?: RegistrationDocumentKey[];
 };
 
 const TEXT: Record<
@@ -291,14 +292,12 @@ export default function DocumentRequirementsPanel({
   category,
   documents,
   onChange,
+  hiddenKeys = [],
 }: Props) {
   const text = TEXT[lang];
   const uploadText = getRegistryUploadText(lang);
-  const requiredDocuments = getRequiredDocumentsForContext(
-    applicantType,
-    category,
-    lang
-  );
+  const requiredDocuments = getRequiredDocumentsForContext(applicantType, category, lang)
+    .filter((document) => !hiddenKeys.includes(document.key));
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 

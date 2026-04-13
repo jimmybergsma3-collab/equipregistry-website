@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
     if (isUsingVerificationBypass(user)) {
       console.warn(
-        "LOGIN WARNING: allowing unverified account during temporary SMTP bypass",
+        "LOGIN WARNING: allowing unverified account during non-blocking verification flow",
         {
           userId: user.id,
           role: user.role,

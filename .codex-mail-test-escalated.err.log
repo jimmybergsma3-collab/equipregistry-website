@@ -1,0 +1,53 @@
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry <no_reply@equipregistry.com>',
+  to: [ 'co***@example.com' ],
+  subject: 'Verify your email address | EquipRegistry',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+AUTH_REGISTER_VERIFICATION_EMAIL_SKIPPED {
+  userId: 'cmnxnsfoc0000vdwkrbj62nac',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry Contact <contact@equipregistry.com>',
+  to: [ 'co***@equipregistry.com' ],
+  subject: 'Codex general contact runtime test',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+CONTACT EMAIL ERROR: {
+  to: 'contact@equipregistry.com',
+  subject: 'Codex general contact runtime test',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}
+MAIL_SEND_FAILED {
+  provider: 'resend',
+  from: 'EquipRegistry <no_reply@equipregistry.com>',
+  to: [ 'co***@example.com' ],
+  subject: 'Verify your email address | EquipRegistry',
+  errorCode: 'validation_error',
+  responseCode: 401,
+  message: 'API key is invalid'
+}
+REGISTER_REQUEST_VERIFICATION_EMAIL_SKIPPED {
+  requestId: 'cmnxnsh550005vdwk3yrxow3g',
+  reference: 'ER-SV-000001',
+  reason: 'send_failed',
+  message: 'API key is invalid',
+  missingKeys: undefined,
+  errorCode: 'validation_error',
+  responseCode: 401
+}

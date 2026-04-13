@@ -11,6 +11,7 @@ import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import { formatDateForLang } from "@/lib/i18n/registry-display";
 import type { StolenCaseRecord } from "@/lib/registry/request-meta";
 import { formatSupportingDocumentReferences } from "@/lib/registry/stolen-case";
+import SearchableCountrySelect from "@/components/registry/searchable-country-select";
 
 type Props = {
   registrationId: string;
@@ -51,6 +52,7 @@ export default function StolenCasePanel({
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   const [tone, setTone] = useState<"success" | "warning" | "error">("success");
+  const [country, setCountry] = useState(existingCase?.country ?? "");
 
   function applyResult(result: ActionResult) {
     setMessage(result.message);
@@ -160,10 +162,12 @@ export default function StolenCasePanel({
             <span className="text-sm font-medium text-zinc-700">
               {text.admin.fields.country}
             </span>
-            <input
-              type="text"
+            <SearchableCountrySelect
+              id="stolen-case-country"
               name="country"
-              defaultValue={existingCase?.country ?? ""}
+              lang={safeLang}
+              value={country}
+              onChange={setCountry}
               className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
             />
           </label>

@@ -2,11 +2,12 @@ import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
 import DashboardRequestTable from "@/components/registry/dashboard-request-table";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
-import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
 import { normalizeRequestStatus } from "@/lib/registry/workflow";
 
 type Props = {
@@ -90,7 +91,7 @@ export default async function RegistrationsPage({ params }: Props) {
     redirect(`/${lang}/dashboard/admin/registrations`);
   }
 
-  const text = getDictionary(lang as Lang).pages.dashboard.registrations;
+  const text = getCustomerDashboardText(lang as Lang);
 
   const requests = await prisma.registrationRequest.findMany({
     where: {
@@ -135,11 +136,14 @@ export default async function RegistrationsPage({ params }: Props) {
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">
-                {text.eyebrow}
+                EquipRegistry
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
-                {text.title}
+                {text.dashboardTitle}
               </h1>
+              <p className="mt-2 max-w-3xl text-sm text-zinc-600">
+                {text.dashboardSubtitle}
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -151,6 +155,8 @@ export default async function RegistrationsPage({ params }: Props) {
               </Link>
             </div>
           </div>
+
+          <CustomerDashboardNav lang={lang as Lang} active="dashboard" />
 
           <DashboardRequestTable lang={lang} requests={mappedRequests} />
         </div>

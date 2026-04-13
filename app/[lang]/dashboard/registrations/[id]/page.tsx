@@ -2,19 +2,22 @@ import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
-import ManualPaymentPanel from "@/components/registry/manual-payment-panel";
-import MarkPaidButton from "@/components/registry/mark-paid-button";
 import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import StolenCasePanel from "@/components/registry/stolen-case-panel";
+import StripeCheckoutButton from "@/components/registry/stripe-checkout-button";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
-import { usesManualIbanPayment } from "@/lib/registry/payment";
+import { getPricing, getPricingCategory } from "@/lib/registry/pricing";
 import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import { canManageStolenCase } from "@/lib/registry/stolen-case";
 import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
+import { getPricingCategoryContent } from "@/lib/i18n/pricing-categories";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getStripePaymentText } from "@/lib/i18n/stripe-payment";
 import {
   getCategoryByValue,
   getSubcategoriesByCategory,
@@ -28,6 +31,9 @@ type Props = {
   params: Promise<{
     lang: string;
     id: string;
+  }>;
+  searchParams?: Promise<{
+    payment?: string | string[] | undefined;
   }>;
 };
 
@@ -176,7 +182,7 @@ function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
       section?.adminPaymentConfirmationTitle ?? "Admin payment confirmation",
     adminPaymentConfirmationDescription:
       section?.adminPaymentConfirmationDescription ??
-      "After you have confirmed the bank transfer manually, mark this registration as paid.",
+      "Payment is confirmed automatically after Stripe Checkout completes.",
     reviewWorkflowTitle: section?.reviewWorkflowTitle ?? "Review workflow",
     reviewWorkflowDescription:
       section?.reviewWorkflowDescription ??
@@ -410,15 +416,24 @@ function RegistrationDetailsCard({
   );
 }
 
-export default async function RegistrationRequestDetailPage({ params }: Props) {
+export default async function RegistrationRequestDetailPage({
+  params,
+  searchParams,
+}: Props) {
   const { lang, id } = await params;
+  const query = (await searchParams) ?? {};
 
   if (!isValidLang(lang)) {
     notFound();
   }
 
   const dictionary = await getDictionary(lang as Lang);
+  const customerDashboardText = getCustomerDashboardText(lang as Lang);
   const texts = getDetailTexts(lang as Lang, dictionary);
+  const stripeText = getStripePaymentText(lang as Lang);
+  const paymentReturnState = Array.isArray(query.payment)
+    ? query.payment[0]
+    : query.payment;
 
   const session = await getSession();
 
@@ -441,16 +456,6 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
     if (!request) {
       notFound();
     }
-
-    const showManualPaymentPanel =
-      usesManualIbanPayment(request.applicantType) &&
-      request.requestStatus === "payment_required" &&
-      !request.paymentCompleted;
-
-    const showMarkPaidButton =
-      usesManualIbanPayment(request.applicantType) &&
-      request.requestStatus === "payment_required" &&
-      !request.paymentCompleted;
 
     const showReviewActions =
       request.requestStatus === "submitted" ||
@@ -498,32 +503,6 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
               </div>
             ) : null}
           </div>
-
-            {showManualPaymentPanel ? (
-              <div className="mb-6">
-                <ManualPaymentPanel
-                  passportNumber={request.reference}
-                  lang={lang}
-                  category={request.category}
-                  subcategory={request.subcategory}
-                />
-              </div>
-            ) : null}
-
-            {showMarkPaidButton ? (
-              <div className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
-                <div className="mb-4">
-                  <h2 className="text-lg font-semibold text-zinc-900">
-                    {texts.adminPaymentConfirmationTitle}
-                  </h2>
-                  <p className="mt-1 text-sm text-zinc-600">
-                    {texts.adminPaymentConfirmationDescription}
-                  </p>
-                </div>
-
-                <MarkPaidButton registrationId={request.id} lang={lang} />
-              </div>
-            ) : null}
 
             {showReviewActions ? (
               <div className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
@@ -576,6 +555,22 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
     notFound();
   }
 
+  const pricingCategory = getPricingCategory(
+    ownRequest.category,
+    ownRequest.subcategory
+  );
+  const pricingCategoryContent = getPricingCategoryContent(
+    lang as Lang,
+    pricingCategory
+  );
+  const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
+  const paymentBannerTone =
+    paymentReturnState === "stripe_success"
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : paymentReturnState === "stripe_cancel"
+      ? "border-amber-200 bg-amber-50 text-amber-700"
+      : "";
+
   return (
     <>
       <SiteHeader lang={lang} />
@@ -585,12 +580,14 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
         className="min-h-screen bg-white"
       >
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+          <CustomerDashboardNav lang={lang as Lang} active="dashboard" />
+
           <div className="mb-8">
             <Link
               href={`/${lang}/dashboard/registrations`}
               className="text-sm font-medium text-zinc-600 underline underline-offset-4"
             >
-              {texts.backToRegistrations}
+              {customerDashboardText.backToDashboard}
             </Link>
 
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900">
@@ -613,17 +610,71 @@ export default async function RegistrationRequestDetailPage({ params }: Props) {
             ) : null}
           </div>
 
-          {usesManualIbanPayment(ownRequest.applicantType) &&
-          ownRequest.requestStatus === "payment_required" &&
-          !ownRequest.paymentCompleted ? (
-            <div className="mb-6">
-              <ManualPaymentPanel
-                passportNumber={ownRequest.reference}
-                lang={lang}
-                category={ownRequest.category}
-                subcategory={ownRequest.subcategory}
-              />
+          {paymentReturnState === "stripe_success" ||
+          paymentReturnState === "stripe_cancel" ? (
+            <div className={`mb-6 rounded-2xl border px-5 py-4 text-sm ${paymentBannerTone}`}>
+              <p className="font-semibold">
+                {paymentReturnState === "stripe_success"
+                  ? stripeText.returnSuccessTitle
+                  : stripeText.returnCancelTitle}
+              </p>
+              <p className="mt-1">
+                {paymentReturnState === "stripe_success"
+                  ? stripeText.returnSuccessText
+                  : stripeText.returnCancelText}
+              </p>
             </div>
+          ) : null}
+
+          {ownRequest.requestStatus === "payment_required" &&
+          !ownRequest.paymentCompleted ? (
+            <section className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
+              <div className="mb-5">
+                <h2 className="text-lg font-semibold text-zinc-900">
+                  {stripeText.checkoutTitle}
+                </h2>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {stripeText.checkoutDescription}
+                </p>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">
+                    {stripeText.amountLabel}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-zinc-900">
+                    {new Intl.NumberFormat(lang, {
+                      style: "currency",
+                      currency: "EUR",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(pricing.registration)}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+                  <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">
+                    {texts.labels.category}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-zinc-900">
+                    {pricingCategoryContent.name}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:col-span-2">
+                  <p className="text-sm leading-6 text-zinc-700">
+                    {pricingCategoryContent.description}
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm text-zinc-600">{stripeText.webhookNote}</p>
+
+              <div className="mt-5">
+                <StripeCheckoutButton registrationId={ownRequest.id} lang={lang} />
+              </div>
+            </section>
           ) : null}
 
           <RegistrationDetailsCard

@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n/config";
+import { MAILBOXES } from "@/lib/email/addresses";
 
 type VerificationEmailParams = {
   ownerName: string;
@@ -16,6 +17,8 @@ type VerificationEmailContent = {
   ignore: string;
   signature: string;
 };
+
+const TRANSACTIONAL_SIGNATURE = `EquipRegistry · ${MAILBOXES.transactionalFromEmail}`;
 
 const CONTENT: Record<Lang, VerificationEmailContent> = {
   en: {
@@ -172,6 +175,7 @@ export function buildAccountVerificationEmail({
   lang,
 }: VerificationEmailParams) {
   const t = CONTENT[lang] ?? CONTENT.en;
+  const signature = TRANSACTIONAL_SIGNATURE;
   const safeName = ownerName.trim() || "User";
   const dir = lang === "ar" ? "rtl" : "ltr";
   const align = lang === "ar" ? "right" : "left";
@@ -191,7 +195,7 @@ ${verifyUrl}
 
 ${t.ignore}
 
-${t.signature}`;
+${signature}`;
 
   const html = `
     <div dir="${dir}" style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #111;">
@@ -230,7 +234,7 @@ ${t.signature}`;
         </div>
 
         <p style="margin: 16px 0 0; font-size: 12px; color: #6b7280; text-align: center;">
-          ${escapeHtml(t.signature)}
+          ${escapeHtml(signature)}
         </p>
       </div>
     </div>

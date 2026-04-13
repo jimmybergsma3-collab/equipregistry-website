@@ -26,10 +26,12 @@ import {
 import type { Lang } from "@/lib/i18n/config";
 import { getRegistryUploadText } from "@/lib/i18n/registry-upload";
 import { uploadFilesForBucket, ClientUploadError } from "@/lib/registry/client-uploads";
+import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 import {
   ALLOWED_UPLOAD_ACCEPT,
   type StoredUpload,
 } from "@/lib/registry/upload-types";
+import SearchableCountrySelect from "@/components/registry/searchable-country-select";
 
 type Props = {
   lang: Lang;
@@ -912,6 +914,20 @@ const EXTRA_FORM_TEXT: Record<
   },
 };
 
+const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
+  en: "Current dashboard status:",
+  es: "Estado actual del dashboard:",
+  de: "Aktueller Dashboard-Status:",
+  fr: "Statut actuel du tableau de bord :",
+  it: "Stato attuale del dashboard:",
+  nl: "Huidige dashboardstatus:",
+  pt: "Estado atual do painel:",
+  ru: "Tekushchiy status dashboard:",
+  zh: "Dangqian dashboard zhuangtai:",
+  hi: "Vartaman dashboard sthiti:",
+  ar: "Halat aldashboard alhali:",
+};
+
 function normalizeStandardApplicantType(
   value: ApplicantType
 ): Extract<ApplicantType, "private" | "sme"> {
@@ -1184,6 +1200,7 @@ export default function RegistrationFormStep1({
   const uploadText = getRegistryUploadText(lang);
   const applicantIdText = getDocumentText(lang, "applicant_id");
   const proofOfAddressText = getDocumentText(lang, "proof_of_address");
+  const assetPhotoText = getDocumentText(lang, "asset_overview_photo");
 
   function updateField<K extends keyof RegistrationDraft>(
     key: K,
@@ -1213,6 +1230,26 @@ export default function RegistrationFormStep1({
         [key]: value,
       },
     }));
+  }
+
+  function updateUploadedDocumentField(
+    key: RegistrationDocumentKey,
+    files: StoredUpload[]
+  ) {
+    updateDocumentField(
+      key,
+      files.length > 0
+        ? {
+            status: "uploaded",
+            fileName: files[0]?.originalName ?? "",
+            files,
+          }
+        : {
+            status: "missing",
+            fileName: "",
+            files: [],
+          }
+    );
   }
 
   function handleCategoryChange(value: string) {
@@ -1270,6 +1307,7 @@ export default function RegistrationFormStep1({
   return (
     <div className="space-y-8">
       <form action={saveAction} className="space-y-8">
+        <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="assetName" value={draft.assetName} />
         <input type="hidden" name="category" value={draft.category} />
         <input type="hidden" name="subcategory" value={draft.subcategory} />
@@ -1441,11 +1479,11 @@ export default function RegistrationFormStep1({
               >
                 {text.country}
               </label>
-              <input
+              <SearchableCountrySelect
                 id="country"
-                type="text"
+                lang={lang}
                 value={draft.country ?? ""}
-                onChange={(e) => updateField("country", e.target.value)}
+                onChange={(value) => updateField("country", value)}
                 placeholder={text.countryPlaceholder}
                 className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
               />
@@ -1559,12 +1597,12 @@ export default function RegistrationFormStep1({
                   >
                     {extraText.incidentCountry}
                   </label>
-                  <input
+                  <SearchableCountrySelect
                     id="incidentCountry"
-                    type="text"
+                    lang={lang}
                     value={stolenAssetIntake.country}
-                    onChange={(event) =>
-                      updateStolenAssetIntake("country", event.target.value)
+                    onChange={(value) =>
+                      updateStolenAssetIntake("country", value)
                     }
                     placeholder={extraText.incidentCountryPlaceholder}
                     className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
@@ -1618,6 +1656,31 @@ export default function RegistrationFormStep1({
           onChange={updateDynamicField}
         />
 
+        <section className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <div className="mb-5">
+            <h3 className="text-lg font-semibold text-zinc-900">
+              {assetPhotoText.label}
+            </h3>
+            <p className="mt-1 text-sm text-zinc-600">
+              {assetPhotoText.description}
+            </p>
+            <p className="mt-2 text-xs text-zinc-500">{uploadText.privacyNote}</p>
+          </div>
+
+          <UploadFieldCard
+            lang={lang}
+            inputId="asset-overview-photo-upload"
+            label={assetPhotoText.label}
+            description={assetPhotoText.description}
+            bucket="asset_overview_photo"
+            multiple
+            files={draft.documents.asset_overview_photo?.files ?? []}
+            onChange={(files) =>
+              updateUploadedDocumentField("asset_overview_photo", files)
+            }
+          />
+        </section>
+
         {showProofOfApplicant ? (
           <section className="rounded-2xl border border-zinc-200 bg-white p-6">
             <div className="mb-5">
@@ -1667,6 +1730,7 @@ export default function RegistrationFormStep1({
           category={draft.category}
           documents={draft.documents}
           onChange={updateDocumentField}
+          hiddenKeys={["asset_overview_photo"]}
         />
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -1697,7 +1761,8 @@ export default function RegistrationFormStep1({
                 {text.workflowTitle}
               </h3>
               <p className="mt-1 text-sm text-zinc-600">
-                {text.workflowStatus} <strong>{requestStatus}</strong>
+                {WORKFLOW_STATUS_TEXT[lang]}{" "}
+                <strong>{getLocalizedRequestStatusLabel(requestStatus, lang)}</strong>
               </p>
             </div>
 
@@ -1721,6 +1786,7 @@ export default function RegistrationFormStep1({
       </form>
 
       <form action={submitAction}>
+        <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="assetName" value={draft.assetName} />
         <input type="hidden" name="category" value={draft.category} />
         <input type="hidden" name="subcategory" value={draft.subcategory} />

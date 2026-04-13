@@ -1,6 +1,5 @@
-import nodemailer from "nodemailer";
-
-const DEFAULT_SMTP_PORT = 465;
+import { Resend } from "resend";
+import { MAILBOXES } from "@/lib/email/addresses";
 
 function maskEmailAddress(email: string) {
   const trimmed = email.trim();
@@ -11,41 +10,35 @@ function maskEmailAddress(email: string) {
   return `${trimmed.slice(0, 2)}***${trimmed.slice(atIndex)}`;
 }
 
-function extractEmailAddress(value: string) {
-  const match = value.match(/<([^>]+)>/);
-  return (match?.[1] ?? value).trim().toLowerCase();
+function maskRecipients(to: string | string[]) {
+  const list = Array.isArray(to) ? to : [to];
+  return list.map((email) => maskEmailAddress(email));
 }
 
-function getSmtpConfig() {
-  const host = process.env.SMTP_HOST?.trim();
-  const port = Number(process.env.SMTP_PORT?.trim() || DEFAULT_SMTP_PORT);
-  const user = process.env.SMTP_USER?.trim();
-  const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM?.trim();
-  const isValidPort = Number.isFinite(port) && port > 0;
-  const missingKeys = [
-    !host ? "SMTP_HOST" : null,
-    !isValidPort ? "SMTP_PORT" : null,
-    !user ? "SMTP_USER" : null,
-    !pass ? "SMTP_PASS" : null,
-    !from ? "SMTP_FROM" : null,
-  ].filter((key): key is string => key !== null);
-  const fromAddress = from ? extractEmailAddress(from) : "";
-  const authenticatedAddress = user?.toLowerCase() ?? "";
+function getResendApiKey() {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
 
   return {
-    host,
-    port: isValidPort ? port : DEFAULT_SMTP_PORT,
-    user,
-    pass,
-    from,
-    fromAddress,
-    authenticatedAddress,
-    fromMatchesUser:
-      Boolean(fromAddress) && fromAddress === authenticatedAddress,
-    isConfigured: missingKeys.length === 0,
-    missingKeys,
+    apiKey,
+    isConfigured: Boolean(apiKey),
+    missingKeys: apiKey ? [] : ["RESEND_API_KEY"],
   };
+}
+
+let resendClient: Resend | null = null;
+
+function getResendClient() {
+  const config = getResendApiKey();
+
+  if (!config.apiKey) {
+    return null;
+  }
+
+  if (!resendClient) {
+    resendClient = new Resend(config.apiKey);
+  }
+
+  return resendClient;
 }
 
 export type EmailSendResult =
@@ -66,17 +59,20 @@ export type EmailSendResult =
     };
 
 export async function sendEmail(params: {
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
   text: string;
+  from?: string;
+  replyTo?: string;
 }): Promise<EmailSendResult> {
-  const config = getSmtpConfig();
+  const config = getResendApiKey();
 
   if (!config.isConfigured) {
     console.error("MAIL_CONFIG_INVALID", {
+      provider: "resend",
       missingKeys: config.missingKeys,
-      to: maskEmailAddress(params.to),
+      to: maskRecipients(params.to),
       subject: params.subject,
     });
 
@@ -84,66 +80,90 @@ export async function sendEmail(params: {
       success: false,
       skipped: true,
       reason: "config_invalid",
-      message: `SMTP configuration is incomplete: ${config.missingKeys.join(", ")}`,
+      message: `Resend configuration is incomplete: ${config.missingKeys.join(", ")}`,
       missingKeys: config.missingKeys,
     };
   }
 
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.port === DEFAULT_SMTP_PORT,
-    auth: {
-      user: config.user,
-      pass: config.pass,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 15000,
-  });
+  const resend = getResendClient();
+
+  if (!resend) {
+    return {
+      success: false,
+      skipped: true,
+      reason: "config_invalid",
+      message: "Resend client could not be initialized.",
+      missingKeys: ["RESEND_API_KEY"],
+    };
+  }
+
+  const from = params.from?.trim() || MAILBOXES.transactionalFrom;
 
   try {
-    const info = await transporter.sendMail({
-      from: config.from,
+    const { data, error } = await resend.emails.send({
+      from,
       to: params.to,
+      replyTo: params.replyTo?.trim() || undefined,
       subject: params.subject,
       text: params.text,
       html: params.html,
     });
 
-    return { success: true, skipped: false, messageId: info.messageId };
+    if (error) {
+      console.error("MAIL_SEND_FAILED", {
+        provider: "resend",
+        from,
+        to: maskRecipients(params.to),
+        subject: params.subject,
+        errorCode: error.name,
+        responseCode:
+          "statusCode" in error && typeof error.statusCode === "number"
+            ? error.statusCode
+            : undefined,
+        message: error.message,
+      });
+
+      return {
+        success: false,
+        skipped: true,
+        reason: "send_failed",
+        message: error.message,
+        errorCode: error.name,
+        responseCode:
+          "statusCode" in error && typeof error.statusCode === "number"
+            ? error.statusCode
+            : undefined,
+      };
+    }
+
+    return {
+      success: true,
+      skipped: false,
+      messageId: data?.id ?? "",
+    };
   } catch (error) {
-    const smtpError = error as Error & {
+    const mailError = error as Error & {
       code?: string;
-      command?: string;
-      responseCode?: number;
+      statusCode?: number;
     };
 
     console.error("MAIL_SEND_FAILED", {
-      to: maskEmailAddress(params.to),
+      provider: "resend",
+      from,
+      to: maskRecipients(params.to),
       subject: params.subject,
-      host: config.host,
-      port: config.port,
-      fromAddress: config.fromAddress,
-      authenticatedAddress: config.authenticatedAddress,
-      fromMatchesUser: config.fromMatchesUser,
-      errorCode: smtpError.code,
-      responseCode: smtpError.responseCode,
-      command: smtpError.command,
-      message: smtpError.message,
+      errorCode: mailError.code,
+      responseCode: mailError.statusCode,
+      message: mailError.message,
     });
 
     return {
       success: false,
       skipped: true,
       reason: "send_failed",
-      message: smtpError.message,
-      errorCode: smtpError.code,
-      responseCode: smtpError.responseCode,
-      command: smtpError.command,
+      message: mailError.message,
+      errorCode: mailError.code,
+      responseCode: mailError.statusCode,
     };
   }
 }
