@@ -16,12 +16,14 @@ import { getPassportPageContent } from "@/lib/i18n/passport-page";
 import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import {
   getCategoryByValue,
-  getSubcategoriesByCategory,
+  getSubcategoryByValue,
 } from "@/lib/registry/categories";
 import {
   getPublicDateValue,
   getPublicIncidentLocation,
 } from "@/lib/registry/stolen-case";
+import { getPublicPassportUrl } from "@/lib/passport/public-url";
+import { getOfficialPassportNumber } from "@/lib/registry/reference";
 
 type Props = {
   params: Promise<{
@@ -46,29 +48,6 @@ function getDisplayValue(
 ) {
   const normalized = value?.trim();
   return normalized ? normalized : unavailable;
-}
-
-function getAppOrigin(
-  headerList: Headers,
-  lang: Lang,
-  registryId: string
-) {
-  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim();
-
-  if (configured) {
-    return configured.replace(/\/+$/, "");
-  }
-
-  const forwardedHost = headerList.get("x-forwarded-host");
-  const host = forwardedHost ?? headerList.get("host");
-  const proto =
-    headerList.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
-
-  if (host) {
-    return `${proto}://${host}`.replace(/\/+$/, "");
-  }
-
-  return `/${lang}/passport/${encodeURIComponent(registryId)}`;
 }
 
 export default async function PassportPage({ params }: Props) {
@@ -120,21 +99,28 @@ export default async function PassportPage({ params }: Props) {
     getCategoryByValue(request.category, safeLang)?.label ??
     getDisplayValue(request.category, content.unavailable);
   const localizedSubcategory =
-    getSubcategoriesByCategory(request.category, safeLang).find(
-      (item) => item.value === request.subcategory
+    getSubcategoryByValue(
+      request.category,
+      request.subcategory,
+      safeLang
     )?.label ?? getDisplayValue(request.subcategory, content.unavailable);
-  const appOrigin = getAppOrigin(headerList, safeLang, request.reference);
-  const publicPassportUrl =
-    appOrigin.startsWith("/")
-      ? appOrigin
-      : `${appOrigin}/${safeLang}/passport/${encodeURIComponent(request.reference)}`;
+  const officialPassportNumber = getOfficialPassportNumber(
+    request.reference,
+    request.category,
+    request.subcategory
+  );
+  const publicPassportUrl = getPublicPassportUrl(
+    headerList,
+    safeLang,
+    request.reference
+  );
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?format=svg&size=320x320&margin=0&data=${encodeURIComponent(
     publicPassportUrl
   )}`;
   const passportFields = [
     {
       label: content.fields.passportNumber,
-      value: request.reference,
+      value: officialPassportNumber,
     },
     {
       label: content.fields.assetName,
@@ -229,7 +215,7 @@ export default async function PassportPage({ params }: Props) {
             documentTitle={content.documentTitle}
             publicNote={content.publicNote}
             passportNumberLabel={content.fields.passportNumber}
-            passportNumber={request.reference}
+            passportNumber={officialPassportNumber}
             statusLabel={content.statusLabel}
             statusValue={
               isPubliclyStolen

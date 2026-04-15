@@ -4,7 +4,7 @@ import { RegistrationRequestSummary } from "@/lib/registry/workflow";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import {
   getCategoryByValue,
-  getSubcategoriesByCategory,
+  getSubcategoryByValue,
 } from "@/lib/registry/categories";
 import {
   formatDateForLang,
@@ -59,7 +59,7 @@ const TABLE_TEXT: Record<
       actions: "Actions",
     },
     paymentPaid: "Paid",
-    paymentPending: "Pending",
+    paymentPending: "Not completed",
   },
   es: {
     emptyTitle: "Solicitudes de registro",
@@ -79,7 +79,7 @@ const TABLE_TEXT: Record<
       actions: "Acciones",
     },
     paymentPaid: "Pagado",
-    paymentPending: "Pendiente",
+    paymentPending: "No completado",
   },
   de: {
     emptyTitle: "Registrierungsanfragen",
@@ -99,7 +99,7 @@ const TABLE_TEXT: Record<
       actions: "Aktionen",
     },
     paymentPaid: "Bezahlt",
-    paymentPending: "Ausstehend",
+    paymentPending: "Nicht abgeschlossen",
   },
   fr: {
     emptyTitle: "Demandes d'enregistrement",
@@ -119,7 +119,7 @@ const TABLE_TEXT: Record<
       actions: "Actions",
     },
     paymentPaid: "Paye",
-    paymentPending: "En attente",
+    paymentPending: "Non finalise",
   },
   it: {
     emptyTitle: "Richieste di registrazione",
@@ -139,7 +139,7 @@ const TABLE_TEXT: Record<
       actions: "Azioni",
     },
     paymentPaid: "Pagato",
-    paymentPending: "In attesa",
+    paymentPending: "Non completato",
   },
   nl: {
     emptyTitle: "Registratieaanvragen",
@@ -150,7 +150,7 @@ const TABLE_TEXT: Record<
       "Beoordeel, keur goed, vraag meer informatie op, bevestig betalingen of verwijder registraties direct vanuit het overzicht.",
     columns: {
       reference: "Referentie",
-      asset: "Asset",
+      asset: "Object",
       applicant: "Aanvrager",
       status: "Status",
       payment: "Betaling",
@@ -159,7 +159,7 @@ const TABLE_TEXT: Record<
       actions: "Acties",
     },
     paymentPaid: "Betaald",
-    paymentPending: "In afwachting",
+    paymentPending: "Niet voltooid",
   },
   pt: {
     emptyTitle: "Pedidos de registo",
@@ -179,7 +179,7 @@ const TABLE_TEXT: Record<
       actions: "Acoes",
     },
     paymentPaid: "Pago",
-    paymentPending: "Pendente",
+    paymentPending: "Nao concluido",
   },
   ru: {
     emptyTitle: "Заявки на регистрацию",
@@ -297,8 +297,8 @@ export default function AdminRequestTable({ lang, requests }: Props) {
 
   if (requests.length === 0) {
     return (
-      <section className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-zinc-900">{text.emptyTitle}</h2>
+      <section className="rounded-2xl border border-zinc-200 bg-white p-5">
+        <h2 className="text-base font-semibold text-zinc-900">{text.emptyTitle}</h2>
         <p className="mt-2 text-sm text-zinc-600">{text.emptyDescription}</p>
       </section>
     );
@@ -306,8 +306,8 @@ export default function AdminRequestTable({ lang, requests }: Props) {
 
   return (
     <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-      <div className="border-b border-zinc-200 px-6 py-4">
-        <h2 className="text-lg font-semibold text-zinc-900">{text.sectionTitle}</h2>
+      <div className="border-b border-zinc-200 px-5 py-3.5">
+        <h2 className="text-base font-semibold text-zinc-900">{text.sectionTitle}</h2>
         <p className="mt-1 text-sm text-zinc-600">{text.sectionDescription}</p>
       </div>
 
@@ -315,28 +315,28 @@ export default function AdminRequestTable({ lang, requests }: Props) {
         <table className="min-w-full divide-y divide-zinc-200">
           <thead className="bg-zinc-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.reference}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.asset}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.applicant}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.status}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.payment}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.completeness}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.updated}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
                 {text.columns.actions}
               </th>
             </tr>
@@ -345,29 +345,31 @@ export default function AdminRequestTable({ lang, requests }: Props) {
           <tbody className="divide-y divide-zinc-200 bg-white">
             {requests.map((item) => (
               <tr key={item.id} className="align-top">
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   <div className="font-medium text-zinc-900">{item.reference}</div>
                   <div className="mt-1 text-zinc-600">{item.ownerName}</div>
                   <div className="text-zinc-500">{item.ownerEmail}</div>
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   <div className="font-medium text-zinc-900">{item.assetName}</div>
                   <div className="text-zinc-500">
                     {getCategoryByValue(item.category, safeLang)?.label ??
                       item.category}{" "}
                     /{" "}
-                    {getSubcategoriesByCategory(item.category, safeLang).find(
-                      (subcategory) => subcategory.value === item.subcategory
+                    {getSubcategoryByValue(
+                      item.category,
+                      item.subcategory,
+                      safeLang
                     )?.label ?? item.subcategory}
                   </div>
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   {getLocalizedApplicantTypeLabel(item.applicantType, safeLang)}
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   <div className="flex items-center gap-2">
                     <span
                       className={`inline-block size-2.5 rounded-full ${getStatusDotClass(
@@ -379,21 +381,21 @@ export default function AdminRequestTable({ lang, requests }: Props) {
                   </div>
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   {item.paymentCompleted
                     ? text.paymentPaid
                     : text.paymentPending}
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   {item.completeness.score}%
                 </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
+                <td className="px-4 py-3 text-sm text-zinc-700">
                   {formatDateForLang(item.updatedAt, safeLang)}
                 </td>
 
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   <AdminRequestRowActions
                     registrationId={item.id}
                     lang={lang}

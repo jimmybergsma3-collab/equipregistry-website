@@ -1425,6 +1425,52 @@ const CATEGORY_ORDER: RegistryCategoryKey[] = [
   "other",
 ];
 
+const CATEGORY_ALIASES: Record<string, RegistryCategoryKey> = {
+  industry: "industry",
+  industrial: "industry",
+  vehicle: "vehicles",
+  vehicles: "vehicles",
+  trailer: "vehicles",
+  trailers: "vehicles",
+  machine: "machines",
+  machines: "machines",
+  equipment: "machines",
+  agriculture: "agriculture",
+  construction: "construction",
+  marine: "marine",
+  energy: "energy",
+  bike: "other",
+  bikes: "other",
+  bikelightmobility: "other",
+  light_mobility: "other",
+  medical: "other",
+  other: "other",
+};
+
+function normalizeRegistryValue(value: string | null | undefined) {
+  return value
+    ?.trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "") ?? "";
+}
+
+function resolveCategoryKey(value: string | null | undefined) {
+  const normalized = normalizeRegistryValue(value);
+
+  if (!normalized) {
+    return null;
+  }
+
+  if (normalized in CATEGORY_ALIASES) {
+    return CATEGORY_ALIASES[normalized];
+  }
+
+  return CATEGORY_ORDER.find((category) => category === normalized) ?? null;
+}
+
 function buildCategories(lang: Lang): RegistryCategory[] {
   return CATEGORY_ORDER.map((categoryKey) => {
     const entry = CATEGORY_TEXT[lang]?.[categoryKey] ?? CATEGORY_TEXT.en[categoryKey];
@@ -1445,8 +1491,15 @@ export function getRegistryCategories(lang: Lang): RegistryCategory[] {
 }
 
 export function getCategoryByValue(value: string | null | undefined, lang: Lang) {
-  if (!value) return null;
-  return getRegistryCategories(lang).find((category) => category.value === value) ?? null;
+  const resolvedCategory = resolveCategoryKey(value);
+
+  if (!resolvedCategory) return null;
+
+  return (
+    getRegistryCategories(lang).find(
+      (category) => category.value === resolvedCategory
+    ) ?? null
+  );
 }
 
 export function getSubcategoriesByCategory(
@@ -1454,4 +1507,22 @@ export function getSubcategoriesByCategory(
   lang: Lang
 ) {
   return getCategoryByValue(value, lang)?.subcategories ?? [];
+}
+
+export function getSubcategoryByValue(
+  category: string | null | undefined,
+  subcategory: string | null | undefined,
+  lang: Lang
+) {
+  const normalizedSubcategory = normalizeRegistryValue(subcategory);
+
+  if (!normalizedSubcategory) {
+    return null;
+  }
+
+  return (
+    getSubcategoriesByCategory(category, lang).find(
+      (item) => normalizeRegistryValue(item.value) === normalizedSubcategory
+    ) ?? null
+  );
 }

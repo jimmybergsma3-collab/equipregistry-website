@@ -15,10 +15,17 @@ export default async function ContactAuthoritiesRedirect({
   const { lang } = await params;
   const query = searchParams ? await searchParams : {};
 
-  const registryId = query?.registryId || "";
-  const caseId = query?.caseId || "";
+  const redirectParams = new URLSearchParams({
+    type: "authorities",
+  });
 
-  redirect(
-    `/${lang}/report-sighting?registryId=${registryId}&caseId=${caseId}`
-  );
+  if (query?.registryId) {
+    redirectParams.set("registryId", query.registryId);
+  }
+
+  if (query?.caseId) {
+    redirectParams.set("caseId", query.caseId);
+  }
+
+  redirect(`/${lang}/action?${redirectParams.toString()}`);
 }

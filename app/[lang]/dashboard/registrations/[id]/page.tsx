@@ -20,12 +20,13 @@ import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getStripePaymentText } from "@/lib/i18n/stripe-payment";
 import {
   getCategoryByValue,
-  getSubcategoriesByCategory,
+  getSubcategoryByValue,
 } from "@/lib/registry/categories";
 import {
   formatDateForLang,
   getLocalizedApplicantTypeLabel,
 } from "@/lib/i18n/registry-display";
+import { getOfficialPassportNumber } from "@/lib/registry/reference";
 
 type Props = {
   params: Promise<{
@@ -106,6 +107,16 @@ type DetailDictionary = {
     registrationDetails?: DetailDictionarySection;
     requestDetail?: DetailDictionarySection;
   };
+};
+
+const PAYMENT_PENDING_TEXT: Partial<Record<Lang, string>> = {
+  en: "Not completed",
+  es: "No completado",
+  de: "Nicht abgeschlossen",
+  fr: "Non finalise",
+  it: "Non completato",
+  nl: "Niet voltooid",
+  pt: "Nao concluido",
 };
 
 function parseDynamicFields(value: unknown): DynamicFields {
@@ -191,7 +202,8 @@ function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
     dynamicFieldsTitle: section?.dynamicFieldsTitle ?? "Additional asset data",
     noAdditionalData: section?.noAdditionalData ?? "No additional data available.",
     paymentCompleted: section?.paymentCompleted ?? "Completed / Cleared",
-    paymentPending: section?.paymentPending ?? "Pending",
+    paymentPending:
+      PAYMENT_PENDING_TEXT[lang] ?? section?.paymentPending ?? "Not completed",
     labels: {
       passportNumber: labels?.passportNumber ?? "Passport Number",
       applicantType: labels?.applicantType ?? "Applicant Type",
@@ -298,11 +310,18 @@ function RegistrationDetailsCard({
   lang: Lang;
 }) {
   const dynamicFields = parseDynamicFields(request.dynamicFields);
+  const officialPassportNumber = getOfficialPassportNumber(
+    request.reference,
+    request.category,
+    request.subcategory
+  );
   const localizedCategory =
     getCategoryByValue(request.category, lang)?.label ?? request.category;
   const localizedSubcategory =
-    getSubcategoriesByCategory(request.category, lang).find(
-      (item) => item.value === request.subcategory
+    getSubcategoryByValue(
+      request.category,
+      request.subcategory,
+      lang
     )?.label ?? request.subcategory;
 
   const dynamicFieldEntries: Array<{ label: string; value: string | string[] }> = [
@@ -359,7 +378,10 @@ function RegistrationDetailsCard({
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <DetailItem label={texts.labels.passportNumber} value={request.reference} />
+        <DetailItem
+          label={texts.labels.passportNumber}
+          value={officialPassportNumber}
+        />
         <DetailItem
           label={texts.labels.applicantType}
           value={getLocalizedApplicantTypeLabel(request.applicantType, lang)}

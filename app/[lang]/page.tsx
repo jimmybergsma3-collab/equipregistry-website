@@ -56,12 +56,6 @@ function normalizeLookupSerial(serial: string) {
   return serial.trim().toUpperCase();
 }
 
-function isDemoSerial(serial: string) {
-  return DEMO_SERIALS.includes(
-    normalizeLookupSerial(serial) as (typeof DEMO_SERIALS)[number]
-  );
-}
-
 function getStatusClasses(color: StatusColor) {
   switch (color) {
     case "green":
@@ -382,10 +376,6 @@ async function getStoredStatus(serial: string, lang: Lang): Promise<Status | nul
 }
 
 async function getStatus(serial: string, lang: Lang): Promise<Status> {
-  if (isDemoSerial(serial)) {
-    return getDemoStatus(serial, lang);
-  }
-
   const storedStatus = await getStoredStatus(serial, lang);
   return storedStatus ?? getDemoStatus(serial, lang);
 }

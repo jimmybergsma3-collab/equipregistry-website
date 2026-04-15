@@ -6,6 +6,7 @@ import type { Lang } from "@/lib/i18n/config";
 type Props = {
   lang: Lang;
   registryId?: string;
+  caseId?: string;
 };
 
 type ReportText = {
@@ -159,16 +160,59 @@ const FALLBACK_TEXT: ReportText = {
 export default function ReportSightingClient({
   lang,
   registryId,
+  caseId,
 }: Props) {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const t = TEXT[lang] ?? FALLBACK_TEXT;
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+
+    if (!registryId) {
+      setError("Registry ID missing. This report cannot be submitted.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const noteParts = [location.trim(), notes.trim()].filter(Boolean);
+
+    try {
+      const response = await fetch("/api/sighting", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          registryId,
+          caseId,
+          note: noteParts.join("\n"),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        throw new Error(data?.error || "Could not submit report.");
+      }
+
+      setSubmitted(true);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Could not submit report."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -180,6 +224,12 @@ export default function ReportSightingClient({
           {registryId ? (
             <div style={styles.infoBox}>
               <strong>{t.registryId}:</strong> {registryId}
+            </div>
+          ) : null}
+
+          {caseId ? (
+            <div style={styles.infoBox}>
+              <strong>Case ID:</strong> {caseId}
             </div>
           ) : null}
 
@@ -204,9 +254,11 @@ export default function ReportSightingClient({
             />
           </div>
 
-          <button type="submit" style={styles.button}>
-            {t.submit}
+          <button type="submit" disabled={submitting} style={styles.button}>
+            {submitting ? `${t.submit}...` : t.submit}
           </button>
+
+          {error ? <p style={styles.error}>{error}</p> : null}
         </form>
       ) : (
         <div style={styles.success}>
@@ -284,5 +336,10 @@ const styles: Record<string, CSSProperties> = {
   successText: {
     marginTop: 8,
     marginBottom: 0,
+  },
+  error: {
+    margin: 0,
+    color: "#b91c1c",
+    fontSize: 13,
   },
 };

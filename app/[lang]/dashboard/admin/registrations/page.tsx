@@ -233,13 +233,13 @@ export default async function AdminRegistrationsPage({
         dir={lang === "ar" ? "rtl" : "ltr"}
         className="min-h-screen bg-white"
       >
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.18em] text-zinc-500">
                 {pageText.eyebrow}
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-900">
                 {pageText.title}
               </h1>
               <p className="mt-2 text-sm text-zinc-600">
@@ -265,7 +265,7 @@ export default async function AdminRegistrationsPage({
 
               <Link
                 href={`/${lang}/dashboard/register`}
-                className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                className="inline-flex items-center rounded-xl bg-zinc-900 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
               >
                 {dictionary.pages.dashboard.registrations.newRegistration}
               </Link>

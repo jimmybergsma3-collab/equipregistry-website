@@ -620,7 +620,7 @@ const EXTRA_FORM_TEXT: Record<
       "Add the known theft details, location, and any safe references.",
     supportingDocuments: "Supporting documents",
     supportingDocumentsDescription:
-      "Upload redacted police-report-related files or safe supporting evidence.",
+      "Upload only safe, relevant case files or other supporting evidence.",
   },
   es: {
     applicantTypeOptionLabels: {
@@ -649,7 +649,7 @@ const EXTRA_FORM_TEXT: Record<
       "Anada los detalles conocidos del robo, la ubicacion y referencias seguras.",
     supportingDocuments: "Documentos de soporte",
     supportingDocumentsDescription:
-      "Suba archivos relacionados con la denuncia policial o pruebas de soporte ya redactadas.",
+      "Suba solo archivos del caso seguros y relevantes u otras pruebas de apoyo.",
   },
   de: {
     applicantTypeOptionLabels: {
@@ -678,7 +678,7 @@ const EXTRA_FORM_TEXT: Record<
       "Fugen Sie bekannte Diebstahlangaben, Ort und sichere Referenzen hinzu.",
     supportingDocuments: "Unterstutzende Dokumente",
     supportingDocumentsDescription:
-      "Laden Sie geschwatzte polizeibezogene Dateien oder sichere Nachweise hoch.",
+      "Laden Sie nur sichere, relevante Falldateien oder weitere Nachweise hoch.",
   },
   fr: {
     applicantTypeOptionLabels: {
@@ -707,7 +707,7 @@ const EXTRA_FORM_TEXT: Record<
       "Ajoutez les details connus du vol, le lieu et des references sures.",
     supportingDocuments: "Documents justificatifs",
     supportingDocumentsDescription:
-      "Televersez des fichiers lies au rapport de police ou des preuves deja masquees.",
+      "Televersez uniquement des fichiers de dossier pertinents et surs ou d'autres justificatifs.",
   },
   it: {
     applicantTypeOptionLabels: {
@@ -736,7 +736,7 @@ const EXTRA_FORM_TEXT: Record<
       "Aggiungi i dettagli noti del furto, la localita e riferimenti sicuri.",
     supportingDocuments: "Documenti di supporto",
     supportingDocumentsDescription:
-      "Carica file legati alla denuncia o prove di supporto gia oscurate.",
+      "Carica solo file del caso sicuri e pertinenti o altre prove di supporto.",
   },
   nl: {
     applicantTypeOptionLabels: {
@@ -765,7 +765,7 @@ const EXTRA_FORM_TEXT: Record<
       "Voeg bekende diefstalgegevens, locatie en veilige referenties toe.",
     supportingDocuments: "Ondersteunende documenten",
     supportingDocumentsDescription:
-      "Upload afgeschermde politiedocumenten of veilig ondersteunend bewijs.",
+      "Upload alleen veilige, relevante zaakdocumenten of ander ondersteunend bewijs.",
   },
   pt: {
     applicantTypeOptionLabels: {
@@ -794,7 +794,7 @@ const EXTRA_FORM_TEXT: Record<
       "Adicione detalhes conhecidos do roubo, local e referencias seguras.",
     supportingDocuments: "Documentos de suporte",
     supportingDocumentsDescription:
-      "Carregue ficheiros ligados ao relatorio policial ou provas seguras ja ocultadas.",
+      "Carregue apenas ficheiros de caso seguros e relevantes ou outras provas de suporte.",
   },
   ru: {
     applicantTypeOptionLabels: {

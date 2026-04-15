@@ -116,37 +116,37 @@ const EXTRA_STATUS_LABELS: Record<
 > = {
   en: {
     ready_for_submission: "Ready for submission",
-    payment_required: "Checkout pending",
+    payment_required: "Ready for checkout",
     unknown: "Unknown",
   },
   es: {
     ready_for_submission: "Listo para enviar",
-    payment_required: "Checkout pendiente",
+    payment_required: "Listo para checkout",
     unknown: "Desconocido",
   },
   de: {
     ready_for_submission: "Bereit zur Einreichung",
-    payment_required: "Checkout ausstehend",
+    payment_required: "Bereit fuer Checkout",
     unknown: "Unbekannt",
   },
   fr: {
     ready_for_submission: "Pret pour soumission",
-    payment_required: "Checkout en attente",
+    payment_required: "Pret pour le checkout",
     unknown: "Inconnu",
   },
   it: {
     ready_for_submission: "Pronto per l'invio",
-    payment_required: "Checkout in attesa",
+    payment_required: "Pronto per il checkout",
     unknown: "Sconosciuto",
   },
   nl: {
     ready_for_submission: "Klaar voor indiening",
-    payment_required: "Checkout in afwachting",
+    payment_required: "Klaar voor checkout",
     unknown: "Onbekend",
   },
   pt: {
     ready_for_submission: "Pronto para envio",
-    payment_required: "Checkout pendente",
+    payment_required: "Pronto para checkout",
     unknown: "Desconhecido",
   },
   ru: {
@@ -172,17 +172,17 @@ const EXTRA_STATUS_LABELS: Record<
 };
 
 const PAYMENT_REQUIRED_LABEL_OVERRIDES: Record<Lang, string> = {
-  en: "Checkout pending",
-  es: "Checkout pendiente",
-  de: "Checkout ausstehend",
-  fr: "Checkout en attente",
-  it: "Checkout in attesa",
-  nl: "Checkout in afwachting",
-  pt: "Checkout pendente",
-  ru: "Checkout ozhidayetsya",
-  zh: "Checkout dai queren",
-  hi: "Checkout pending",
-  ar: "Checkout muntazar",
+  en: "Ready for checkout",
+  es: "Listo para checkout",
+  de: "Bereit fuer Checkout",
+  fr: "Pret pour le checkout",
+  it: "Pronto per il checkout",
+  nl: "Klaar voor checkout",
+  pt: "Pronto para checkout",
+  ru: "Gotovo k checkout",
+  zh: "Zhunbei checkout",
+  hi: "Checkout ke liye taiyar",
+  ar: "Jahiz lilcheckout",
 };
 
 export function formatDateForLang(value: Date | string, lang: Lang) {

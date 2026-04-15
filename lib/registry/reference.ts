@@ -4,6 +4,8 @@ type PassportReferenceCategory =
   | "standard_vehicle"
   | "heavy_asset";
 
+const PASSPORT_NUMBER_PATTERN = /^ER-(LM|BK|SV|HA)-\d{6}$/i;
+
 function padNumber(value: number, size: number) {
   return String(value).padStart(size, "0");
 }
@@ -96,4 +98,50 @@ export function generatePassportNumber(
     sequence,
     6
   )}`;
+}
+
+export function isOfficialPassportNumber(value: string | null | undefined) {
+  const normalized = value?.trim();
+
+  if (!normalized) {
+    return false;
+  }
+
+  return PASSPORT_NUMBER_PATTERN.test(normalized);
+}
+
+function getFallbackSequence(reference: string) {
+  const numericGroups = reference.match(/\d+/g);
+  const rawSequence = numericGroups?.at(-1) ?? "";
+  const parsed = Number.parseInt(rawSequence.slice(-6), 10);
+
+  if (Number.isFinite(parsed) && parsed > 0) {
+    return parsed;
+  }
+
+  let checksum = 0;
+
+  for (const char of reference) {
+    checksum = (checksum * 31 + char.charCodeAt(0)) % 999999;
+  }
+
+  return checksum === 0 ? 1 : checksum;
+}
+
+export function getOfficialPassportNumber(
+  reference: string,
+  category: string,
+  subcategory?: string
+) {
+  const normalizedReference = reference.trim().toUpperCase();
+
+  if (isOfficialPassportNumber(normalizedReference)) {
+    return normalizedReference;
+  }
+
+  return generatePassportNumber(
+    getFallbackSequence(normalizedReference),
+    category,
+    subcategory
+  );
 }

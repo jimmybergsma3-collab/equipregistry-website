@@ -60,6 +60,77 @@ async function main() {
     },
   ];
 
+  const demoPassports = [
+    {
+      reference: "ER-REG-001",
+      assetName: "Caterpillar 980 Wheel Loader",
+      category: "machines",
+      subcategory: "wheel_loader",
+      brand: "Caterpillar",
+      model: "980 Wheel Loader",
+      serialNumber: "ER-REG-001",
+      year: "2021",
+      country: "Spain",
+      dynamicFields: {
+        __registryStatus: "registered_verified",
+      },
+    },
+    {
+      reference: "ER-HIS-404",
+      assetName: "Volvo L90H Wheel Loader",
+      category: "machines",
+      subcategory: "wheel_loader",
+      brand: "Volvo",
+      model: "L90H Wheel Loader",
+      serialNumber: "ER-HIS-404",
+      year: "2014",
+      country: "Spain",
+      dynamicFields: {
+        __registryStatus: "history_unknown",
+      },
+    },
+    {
+      reference: "ER-STOL-777",
+      assetName: "Komatsu WA380 Wheel Loader",
+      category: "machines",
+      subcategory: "wheel_loader",
+      brand: "Komatsu",
+      model: "WA380 Wheel Loader",
+      serialNumber: "ER-STOL-777",
+      year: "2019",
+      country: "Spain",
+      dynamicFields: {
+        __registryStatus: "verified_stolen",
+        __stolen: {
+          caseReference: "ER-CASE-2026-00123",
+          assetReference: "ER-STOL-777",
+          registrationReference: "ER-STOL-777",
+          isStolen: true,
+          status: "open",
+          previousRegistryStatus: "registered_verified",
+          previousMachineStatus: "passport_issued",
+          policeReportNumber: "VAL-2026-00123",
+          policeReportDate: "2026-01-14",
+          country: "Spain",
+          cityRegion: "Valencia",
+          incidentDate: "2026-01-13",
+          incidentDescription:
+            "Demo stolen asset record for public verification flow.",
+          supportingDocumentReferences: [],
+          caseNotes: "Demo stolen case",
+          createdBy: user.id,
+          updatedBy: user.id,
+          resolvedBy: null,
+          resolvedAt: null,
+          createdAt: "2026-01-14T09:00:00.000Z",
+          updatedAt: "2026-01-14T09:00:00.000Z",
+          evidenceFiles: [],
+          policeReportFiles: [],
+        },
+      },
+    },
+  ];
+
   for (const m of machines) {
     await prisma.machine.upsert({
       where: { registryId: m.registryId },
@@ -75,6 +146,54 @@ async function main() {
       create: {
         ...m,
         ownerId: user.id,
+      },
+    });
+  }
+
+  for (const passport of demoPassports) {
+    await prisma.registrationRequest.upsert({
+      where: { reference: passport.reference },
+      update: {
+        userId: user.id,
+        assetName: passport.assetName,
+        category: passport.category,
+        subcategory: passport.subcategory,
+        brand: passport.brand,
+        model: passport.model,
+        serialNumber: passport.serialNumber,
+        year: passport.year,
+        country: passport.country,
+        ownerName: user.name,
+        ownerEmail: user.email,
+        applicantType: "private",
+        requestStatus: "passport_issued",
+        paymentCompleted: true,
+        declarationAccepted: true,
+        dynamicFields: passport.dynamicFields,
+        documents: {},
+        completenessScore: 100,
+        deletedAt: null,
+      },
+      create: {
+        reference: passport.reference,
+        userId: user.id,
+        assetName: passport.assetName,
+        category: passport.category,
+        subcategory: passport.subcategory,
+        brand: passport.brand,
+        model: passport.model,
+        serialNumber: passport.serialNumber,
+        year: passport.year,
+        country: passport.country,
+        ownerName: user.name,
+        ownerEmail: user.email,
+        applicantType: "private",
+        requestStatus: "passport_issued",
+        paymentCompleted: true,
+        declarationAccepted: true,
+        dynamicFields: passport.dynamicFields,
+        documents: {},
+        completenessScore: 100,
       },
     });
   }

@@ -7,12 +7,13 @@ import {
 import type { Lang } from "@/lib/i18n/config";
 import {
   getCategoryByValue,
-  getSubcategoriesByCategory,
+  getSubcategoryByValue,
 } from "@/lib/registry/categories";
 import {
   formatDateForLang,
   getLocalizedApplicantTypeLabel,
 } from "@/lib/i18n/registry-display";
+import { getOfficialPassportNumber } from "@/lib/registry/reference";
 
 type Props = {
   lang: string;
@@ -49,7 +50,7 @@ const TABLE_TEXT: Record<
       "Requests become visible in the dashboard once they move beyond draft.",
     columns: {
       passportNumber: "Passport Number",
-      asset: "Asset",
+      asset: "Object",
       applicant: "Applicant",
       status: "Status",
       completeness: "Completeness",
@@ -509,53 +510,68 @@ export default function DashboardRequestTable({
           </thead>
 
           <tbody className="divide-y divide-zinc-200 bg-white">
-            {visibleRequests.map((item) => (
-              <tr key={item.id}>
-                <td className="px-6 py-4 text-sm font-medium text-zinc-900">
-                  {item.reference}
-                </td>
+            {visibleRequests.map((item) => {
+              const officialPassportNumber = getOfficialPassportNumber(
+                item.reference,
+                item.category,
+                item.subcategory
+              );
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
-                  <div className="font-medium text-zinc-900">{item.assetName}</div>
-                  <div className="text-zinc-500">
-                    {getCategoryByValue(item.category, currentLang)?.label ??
-                      item.category}{" "}
-                    /{" "}
-                    {getSubcategoriesByCategory(item.category, currentLang).find(
-                      (subcategory) => subcategory.value === item.subcategory
-                    )?.label ?? item.subcategory}
-                  </div>
-                </td>
+              return (
+                <tr key={item.id}>
+                  <td className="px-6 py-4 text-sm font-medium text-zinc-900">
+                    <div>{officialPassportNumber}</div>
+                    {officialPassportNumber !== item.reference ? (
+                      <div className="mt-1 text-xs font-normal text-zinc-500">
+                        {item.reference}
+                      </div>
+                    ) : null}
+                  </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
-                  {getLocalizedApplicantTypeLabel(
-                    item.applicantType,
-                    currentLang
-                  )}
-                </td>
+                  <td className="px-6 py-4 text-sm text-zinc-700">
+                    <div className="font-medium text-zinc-900">{item.assetName}</div>
+                    <div className="text-zinc-500">
+                      {getCategoryByValue(item.category, currentLang)?.label ??
+                        item.category}{" "}
+                      /{" "}
+                      {getSubcategoryByValue(
+                        item.category,
+                        item.subcategory,
+                        currentLang
+                      )?.label ?? item.subcategory}
+                    </div>
+                  </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
-                  <RequestStatusBadge status={item.requestStatus} lang={lang} />
-                </td>
+                  <td className="px-6 py-4 text-sm text-zinc-700">
+                    {getLocalizedApplicantTypeLabel(
+                      item.applicantType,
+                      currentLang
+                    )}
+                  </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
-                  {item.completeness.score}%
-                </td>
+                  <td className="px-6 py-4 text-sm text-zinc-700">
+                    <RequestStatusBadge status={item.requestStatus} lang={lang} />
+                  </td>
 
-                <td className="px-6 py-4 text-sm text-zinc-700">
-                  {formatDateForLang(item.updatedAt, currentLang)}
-                </td>
+                  <td className="px-6 py-4 text-sm text-zinc-700">
+                    {item.completeness.score}%
+                  </td>
 
-                <td className="px-6 py-4 text-right text-sm">
-                  <Link
-                    href={`${detailPath}/${item.id}`}
-                    className="font-medium text-zinc-900 underline underline-offset-4"
-                  >
-                    {text.open}
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                  <td className="px-6 py-4 text-sm text-zinc-700">
+                    {formatDateForLang(item.updatedAt, currentLang)}
+                  </td>
+
+                  <td className="px-6 py-4 text-right text-sm">
+                    <Link
+                      href={`${detailPath}/${item.id}`}
+                      className="font-medium text-zinc-900 underline underline-offset-4"
+                    >
+                      {text.open}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

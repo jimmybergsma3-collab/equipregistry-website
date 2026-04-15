@@ -282,7 +282,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "Checkout is confirmed or not required for this applicant type.",
     paymentPending: "Checkout has not been completed yet.",
     paid: "Confirmed",
-    pending: "Awaiting checkout",
+    pending: "Ready for checkout",
   },
   es: {
     nextSteps: {
@@ -293,7 +293,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "El checkout esta confirmado o no es necesario para este tipo de solicitante.",
     paymentPending: "El checkout aun no se ha completado.",
     paid: "Confirmado",
-    pending: "En espera de checkout",
+    pending: "Listo para checkout",
   },
   de: {
     nextSteps: {
@@ -304,7 +304,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "Checkout ist bestaetigt oder fuer diesen Antragstyp nicht erforderlich.",
     paymentPending: "Checkout wurde noch nicht abgeschlossen.",
     paid: "Bestaetigt",
-    pending: "Checkout ausstehend",
+    pending: "Bereit fuer Checkout",
   },
   fr: {
     nextSteps: {
@@ -315,7 +315,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "Le checkout est confirme ou non requis pour ce type de demandeur.",
     paymentPending: "Le checkout n'a pas encore ete finalise.",
     paid: "Confirme",
-    pending: "Checkout en attente",
+    pending: "Pret pour le checkout",
   },
   it: {
     nextSteps: {
@@ -326,7 +326,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "Il checkout e confermato o non richiesto per questo tipo di richiedente.",
     paymentPending: "Il checkout non e ancora stato completato.",
     paid: "Confermato",
-    pending: "Checkout in attesa",
+    pending: "Pronto per il checkout",
   },
   nl: {
     nextSteps: {
@@ -337,7 +337,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "Checkout is bevestigd of niet vereist voor dit type aanvrager.",
     paymentPending: "Checkout is nog niet voltooid.",
     paid: "Bevestigd",
-    pending: "Wacht op checkout",
+    pending: "Klaar voor checkout",
   },
   pt: {
     nextSteps: {
@@ -348,7 +348,7 @@ const STATUS_COPY_OVERRIDES: Record<
     paymentDone: "O checkout esta confirmado ou nao e necessario para este tipo de requerente.",
     paymentPending: "O checkout ainda nao foi concluido.",
     paid: "Confirmado",
-    pending: "Aguardar checkout",
+    pending: "Pronto para checkout",
   },
   ru: {
     nextSteps: {

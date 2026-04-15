@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import PageHero from "@/components/page-hero";
-import ReportSightingClient from "@/components/report/report-sighting-client";
+import ReportSightingClient from "../action/ReportSightingClient";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 
 type Props = {
@@ -194,7 +194,11 @@ export default async function ReportSightingPage({
             </div>
           )}
 
-          <ReportSightingClient lang={lang} />
+          <ReportSightingClient
+            lang={lang}
+            registryId={registryId || undefined}
+            caseId={caseId || undefined}
+          />
 
           <div className="rounded-2xl border p-6 bg-white">
             <h3 className="font-semibold mb-3">{t.whatToDo}</h3>

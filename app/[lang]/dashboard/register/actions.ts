@@ -306,7 +306,7 @@ export async function submitRegistrationRequest(
     success: true,
     message: partner
       ? `Registration submitted successfully under passport number ${passportNumber}.`
-      : `Registration created under passport number ${passportNumber}. Payment is required before processing continues.`,
+      : `Registration created under passport number ${passportNumber}. Continue to checkout to complete the submission.`,
     requestId: request.id,
     requestStatus: finalStatus,
     passportNumber,

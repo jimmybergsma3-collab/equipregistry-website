@@ -154,7 +154,7 @@ export default function RequestStatusFilter({
           id="statusFilter"
           value={currentStatus || "all"}
           onChange={(e) => handleChange(e.target.value)}
-          className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[240px]"
+          className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[220px]"
         >
           <option value="all">{text.all}</option>
           {FILTER_VALUES.map((value) => (
@@ -177,7 +177,7 @@ export default function RequestStatusFilter({
           id="reviewFilter"
           value={currentReview || "all"}
           onChange={(e) => handleReviewChange(e.target.value)}
-          className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[220px]"
+          className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[200px]"
         >
           <option value="all">{text.all}</option>
           <option value="reviewed">{text.reviewed}</option>

@@ -716,7 +716,11 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
             </ul>
           </div>
 
-          <ReportSightingClient lang={safeLang} registryId={registryId} />
+          <ReportSightingClient
+            lang={safeLang}
+            registryId={registryId}
+            caseId={caseId}
+          />
 
           <div style={styles.actions}>
             <Link href={backToSearchHref} style={styles.secondaryButton}>
@@ -729,7 +733,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
   }
 
   if (type === "authorities") {
-    const resolvedCaseId = caseId ?? "ER-CASE-2026-00123";
+    const resolvedCaseId = caseId?.trim() || "";
 
     return (
       <main style={styles.page}>

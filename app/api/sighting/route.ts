@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const registryId = String(body.registryId ?? "").trim();
+    const reportedCaseId = String(body.caseId ?? "").trim();
     const note = String(body.note ?? "").slice(0, 500);
     const coords = body.coords ?? null;
 
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Missing registryId" }, { status: 400 });
     }
 
-    const caseId = makeCaseId();
+    const caseId = reportedCaseId || makeCaseId();
 
     // DEMO logging (later: save to DB / notify team)
     console.log("[EquipRegistry DEMO] Sighting report received", {

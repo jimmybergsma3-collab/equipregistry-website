@@ -7,6 +7,7 @@ import DeleteRequestButton from "@/components/registry/delete-request-button";
 import {
   approveRegistration,
   issuePassport,
+  markRegistrationAsPaid,
   moveRegistrationToReview,
   rejectRegistration,
   requestMoreInformation,
@@ -293,6 +294,8 @@ export default function AdminRequestRowActions({
 
   const canMarkReviewed =
     requestStatus === "submitted" || requestStatus === "more_info_required";
+  const canMarkPaid =
+    requestStatus === "payment_required" && !paymentCompleted;
   const canApprove = requestStatus === "under_review";
   const canRequestInfo =
     requestStatus === "submitted" || requestStatus === "under_review";
@@ -302,14 +305,23 @@ export default function AdminRequestRowActions({
   const canIssuePassport = requestStatus === "approved";
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-1.5">
+      <div className="flex flex-wrap gap-1.5">
         <Link
           href={`/${lang}/dashboard/registrations/${registrationId}`}
           className="inline-flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50"
         >
           {text.open}
         </Link>
+
+        {canMarkPaid ? (
+          <ActionButton
+            label={isPending ? text.processing : text.markPaid}
+            tone="primary"
+            disabled={isPending}
+            onClick={() => handleAction(markRegistrationAsPaid)}
+          />
+        ) : null}
 
         {canMarkReviewed ? (
           <ActionButton
