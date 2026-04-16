@@ -3,6 +3,7 @@ import {
   type RegistryAssetStatus,
   type StolenCaseRecord,
 } from "@/lib/registry/request-meta";
+import type { StoredUpload } from "@/lib/registry/upload-types";
 
 type NonStolenRegistryAssetStatus =
   | "history_unknown"
@@ -133,6 +134,9 @@ export function createOrUpdateStolenCaseRecord({
   previousMachineStatus,
   actorUserId,
   input,
+  nextStatus = "open",
+  evidenceFiles,
+  policeReportFiles,
   now = new Date(),
 }: {
   existingCase: StolenCaseRecord | null;
@@ -141,6 +145,9 @@ export function createOrUpdateStolenCaseRecord({
   previousMachineStatus: string | null;
   actorUserId: string;
   input: StolenCaseInput;
+  nextStatus?: StolenCaseRecord["status"];
+  evidenceFiles?: StoredUpload[];
+  policeReportFiles?: StoredUpload[];
   now?: Date;
 }): StolenCaseRecord {
   const timestamp = now.toISOString();
@@ -151,8 +158,8 @@ export function createOrUpdateStolenCaseRecord({
       buildStolenCaseReference(registrationReference, now),
     assetReference: existingCase?.assetReference ?? registrationReference,
     registrationReference,
-    isStolen: true,
-    status: "open",
+    isStolen: nextStatus !== "resolved",
+    status: nextStatus,
     previousRegistryStatus:
       existingCase?.previousRegistryStatus ?? previousRegistryStatus,
     previousMachineStatus:
@@ -171,10 +178,9 @@ export function createOrUpdateStolenCaseRecord({
     resolvedAt: null,
     createdAt: existingCase?.createdAt ?? timestamp,
     updatedAt: timestamp,
-    // TODO: Preserve the shape for future upload wiring without exposing
-    // a partial or misleading upload UI in this first release.
-    evidenceFiles: existingCase?.evidenceFiles ?? [],
-    policeReportFiles: existingCase?.policeReportFiles ?? [],
+    evidenceFiles: evidenceFiles ?? existingCase?.evidenceFiles ?? [],
+    policeReportFiles:
+      policeReportFiles ?? existingCase?.policeReportFiles ?? [],
   };
 }
 

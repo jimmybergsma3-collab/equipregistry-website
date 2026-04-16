@@ -3,7 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
-import OwnerStolenReportButton from "@/components/registry/owner-stolen-report-button";
+import OwnerStolenReportPanel from "@/components/registry/owner-stolen-report-panel";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
 import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import StolenCasePanel from "@/components/registry/stolen-case-panel";
@@ -590,6 +590,7 @@ export default async function RegistrationRequestDetailPage({
   );
   const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
   const ownStolenCase = getStolenCaseRecord(ownRequest.dynamicFields);
+  const ownerReportPending = ownStolenCase?.status === "pending_review";
   const ownerReportedStolen =
     ownStolenCase?.isStolen && ownStolenCase.status === "open";
   const paymentBannerTone =
@@ -625,6 +626,12 @@ export default async function RegistrationRequestDetailPage({
             <div className="mt-4 flex flex-wrap gap-3">
               <RequestStatusBadge status={ownRequest.requestStatus} lang={lang} />
 
+              {ownerReportPending ? (
+                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
+                  {customerStolenReportText.pendingBadge}
+                </span>
+              ) : null}
+
               {ownerReportedStolen ? (
                 <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
                   {customerStolenReportText.activeBadge}
@@ -645,26 +652,36 @@ export default async function RegistrationRequestDetailPage({
           </div>
 
           {ownRequest.requestStatus === "passport_issued" ? (
-            <section className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="max-w-2xl">
-                  <h2 className="text-lg font-semibold text-zinc-900">
-                    {customerStolenReportText.title}
-                  </h2>
-                  <p className="mt-1 text-sm text-zinc-600">
-                    {ownerReportedStolen
-                      ? customerStolenReportText.activeDescription
-                      : customerStolenReportText.description}
-                  </p>
-                </div>
+            <section
+              id="owner-incident-report"
+              className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6"
+            >
+              <div className="max-w-2xl">
+                <h2 className="text-lg font-semibold text-zinc-900">
+                  {customerStolenReportText.title}
+                </h2>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {customerStolenReportText.description}
+                </p>
+              </div>
 
-                {!ownerReportedStolen ? (
-                  <OwnerStolenReportButton
+              {ownerReportPending ? (
+                <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                  {customerStolenReportText.pendingDescription}
+                </div>
+              ) : ownerReportedStolen ? (
+                <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {customerStolenReportText.activeDescription}
+                </div>
+              ) : (
+                <div className="mt-5">
+                  <OwnerStolenReportPanel
                     registrationId={ownRequest.id}
                     lang={lang}
+                    existingCase={ownStolenCase}
                   />
-                ) : null}
-              </div>
+                </div>
+              )}
             </section>
           ) : null}
 

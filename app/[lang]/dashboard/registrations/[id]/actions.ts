@@ -7,10 +7,12 @@ import { assertAdminAction } from "@/lib/auth/assert-admin-action";
 import { getSession } from "@/lib/auth/getSession";
 import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
+import { getStolenReviewText } from "@/lib/i18n/stolen-review";
 import {
   getStolenCaseRecord,
   setRegistryAssetStatus,
   setStolenCaseRecord,
+  type StolenCaseRecord,
 } from "@/lib/registry/request-meta";
 import {
   canManageStolenCase,
@@ -21,6 +23,7 @@ import {
   parseStolenCaseInput,
   resolveStolenCaseRecord,
 } from "@/lib/registry/stolen-case";
+import type { StoredUpload } from "@/lib/registry/upload-types";
 
 type ActionResult = {
   success: boolean;
@@ -84,6 +87,45 @@ function normalizeOptionalValue(value: string | null | undefined) {
   const normalized = value?.trim();
   return normalized ? normalized : null;
 }
+
+function normalizeOptionalDate(value: string | null | undefined) {
+  const normalized = normalizeOptionalValue(value);
+
+  if (!normalized) {
+    return null;
+  }
+
+  return /^\d{4}-\d{2}-\d{2}$/.test(normalized) ? normalized : null;
+}
+
+function hasCaseReviewEvidence(
+  caseRecord:
+    | Pick<
+        StolenCaseRecord,
+        | "evidenceFiles"
+        | "policeReportFiles"
+        | "supportingDocumentReferences"
+      >
+    | null
+) {
+  if (!caseRecord) {
+    return false;
+  }
+
+  return (
+    caseRecord.evidenceFiles.length > 0 ||
+    caseRecord.policeReportFiles.length > 0 ||
+    caseRecord.supportingDocumentReferences.length > 0
+  );
+}
+
+type OwnerStolenReportPayload = {
+  policeReportNumber?: string;
+  incidentDate?: string;
+  incidentCountry?: string;
+  incidentDescription?: string;
+  evidenceFiles?: StoredUpload[];
+};
 
 function getMachineStatusForIssuedRequest(
   dynamicFields: unknown,
@@ -717,6 +759,7 @@ export async function saveStolenCase(
   }
 
   const text = getStolenCaseText(lang);
+  const reviewText = getStolenReviewText(lang);
   const request = await getRequestById(registrationId);
 
   if (!request) {
@@ -758,6 +801,8 @@ export async function saveStolenCase(
           },
         })
       : null;
+  const nextStatus =
+    existingCase?.status === "open" ? "open" : "pending_review";
   const nextCase = createOrUpdateStolenCaseRecord({
     existingCase,
     registrationReference: request.reference,
@@ -767,10 +812,13 @@ export async function saveStolenCase(
     ),
     actorUserId: auth.session.user.id,
     input,
+    nextStatus,
   });
   const updatedDynamicFields = setRegistryAssetStatus(
     setStolenCaseRecord(request.dynamicFields, nextCase),
-    getStolenRegistryStatus(previousRegistryStatus)
+    nextStatus === "open"
+      ? getStolenRegistryStatus(previousRegistryStatus)
+      : previousRegistryStatus
   );
 
   await prisma.$transaction(async (tx) => {
@@ -783,7 +831,7 @@ export async function saveStolenCase(
       },
     });
 
-    if (machine) {
+    if (machine && nextStatus === "open") {
       await tx.machine.update({
         where: {
           id: machine.id,
@@ -804,15 +852,19 @@ export async function saveStolenCase(
 
   return {
     success: true,
-    message: text.admin.messages.saved,
+    message:
+      nextStatus === "open"
+        ? text.admin.messages.saved
+        : reviewText.messages.pendingSaved,
     tone: "success",
     refresh: true,
   };
 }
 
-export async function reportOwnAssetAsStolenOrMissing(
+export async function submitOwnerStolenReport(
   registrationId: string,
-  lang: string
+  lang: string,
+  payload: OwnerStolenReportPayload
 ): Promise<ActionResult> {
   const session = await getSession();
   const text = getCustomerStolenReportText(lang);
@@ -820,7 +872,7 @@ export async function reportOwnAssetAsStolenOrMissing(
   if (!session.isAuthenticated) {
     return {
       success: false,
-      message: text.authRequired,
+      message: text.messages.authRequired,
       tone: "error",
     };
   }
@@ -836,7 +888,7 @@ export async function reportOwnAssetAsStolenOrMissing(
   if (!request) {
     return {
       success: false,
-      message: text.requestMissing,
+      message: text.messages.requestMissing,
       tone: "error",
     };
   }
@@ -844,18 +896,56 @@ export async function reportOwnAssetAsStolenOrMissing(
   if (request.requestStatus !== "passport_issued") {
     return {
       success: false,
-      message: text.notEligible,
+      message: text.messages.notEligible,
       tone: "error",
     };
   }
 
   const existingCase = getStolenCaseRecord(request.dynamicFields);
 
+  if (existingCase?.status === "pending_review") {
+    return {
+      success: false,
+      message: text.messages.alreadyPending,
+      tone: "warning",
+    };
+  }
+
   if (existingCase?.isStolen && existingCase.status === "open") {
     return {
       success: false,
-      message: text.alreadyReported,
+      message: text.messages.alreadyActive,
       tone: "warning",
+    };
+  }
+
+  const incidentDescription = payload.incidentDescription?.trim() ?? "";
+
+  if (!incidentDescription) {
+    return {
+      success: false,
+      message: text.validation.descriptionRequired,
+      tone: "error",
+    };
+  }
+
+  const evidenceFiles = Array.isArray(payload.evidenceFiles)
+    ? payload.evidenceFiles.filter(
+        (file): file is StoredUpload =>
+          Boolean(
+            file &&
+              typeof file.id === "string" &&
+              typeof file.originalName === "string" &&
+              typeof file.relativePath === "string"
+          )
+      )
+    : [];
+
+  if (evidenceFiles.length === 0) {
+    return {
+      success: false,
+      message: text.validation.uploadsRequired,
+      tone: "error",
     };
   }
 
@@ -867,28 +957,158 @@ export async function reportOwnAssetAsStolenOrMissing(
       registryId: request.reference,
     },
   });
+  const supportingDocumentReferences = Array.from(
+    new Set(
+      evidenceFiles
+        .map((file) => file.originalName.trim())
+        .filter(Boolean)
+    )
+  );
+  const reusableCase = existingCase?.status === "resolved" ? null : existingCase;
   const nextCase = createOrUpdateStolenCaseRecord({
-    existingCase,
+    existingCase: reusableCase,
     registrationReference: request.reference,
     previousRegistryStatus,
     previousMachineStatus: normalizeOptionalValue(
-      existingCase?.previousMachineStatus ?? machine?.status
+      reusableCase?.previousMachineStatus ?? machine?.status
     ),
     actorUserId: session.user.id,
     input: {
-      policeReportNumber: null,
+      policeReportNumber: normalizeOptionalValue(payload.policeReportNumber),
       policeReportDate: null,
-      country: null,
+      country: normalizeOptionalValue(payload.incidentCountry),
       cityRegion: null,
-      incidentDate: null,
-      incidentDescription: text.defaultIncidentDescription,
-      supportingDocumentReferences: [],
+      incidentDate: normalizeOptionalDate(payload.incidentDate),
+      incidentDescription,
+      supportingDocumentReferences,
       caseNotes: null,
     },
+    nextStatus: "pending_review",
+    evidenceFiles,
   });
   const updatedDynamicFields = setRegistryAssetStatus(
     setStolenCaseRecord(request.dynamicFields, nextCase),
-    getStolenRegistryStatus(previousRegistryStatus)
+    previousRegistryStatus
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.registrationRequest.update({
+      where: {
+        id: request.id,
+      },
+      data: {
+        dynamicFields: updatedDynamicFields as Prisma.InputJsonObject,
+      },
+    });
+  });
+
+  revalidateRegistrationPaths(
+    lang,
+    registrationId,
+    request.reference,
+    machine?.id
+  );
+
+  return {
+    success: true,
+    message: text.messages.success,
+    tone: "success",
+    refresh: true,
+  };
+}
+
+export async function activateStolenCase(
+  registrationId: string,
+  lang: string
+): Promise<ActionResult> {
+  const auth = await assertAdminAction();
+
+  if (!auth.ok) {
+    return { success: false, message: auth.message, tone: "error" };
+  }
+
+  const text = getStolenCaseText(lang);
+  const reviewText = getStolenReviewText(lang);
+  const request = await getRequestById(registrationId);
+
+  if (!request) {
+    return {
+      success: false,
+      message: reviewText.messages.caseMissing,
+      tone: "error",
+    };
+  }
+
+  const existingCase = getStolenCaseRecord(request.dynamicFields);
+
+  if (!existingCase) {
+    return {
+      success: false,
+      message: reviewText.messages.caseMissing,
+      tone: "error",
+    };
+  }
+
+  if (existingCase.status !== "pending_review") {
+    return {
+      success: false,
+      message: reviewText.messages.notPending,
+      tone: "warning",
+    };
+  }
+
+  if (request.requestStatus !== "passport_issued") {
+    return {
+      success: false,
+      message: text.admin.messages.notEligible,
+      tone: "error",
+    };
+  }
+
+  if (!hasCaseReviewEvidence(existingCase)) {
+    return {
+      success: false,
+      message: reviewText.messages.missingEvidence,
+      tone: "error",
+    };
+  }
+
+  const machine =
+    request.requestStatus === "passport_issued"
+      ? await prisma.machine.findUnique({
+          where: {
+            registryId: request.reference,
+          },
+        })
+      : null;
+  const activatedCase = createOrUpdateStolenCaseRecord({
+    existingCase,
+    registrationReference: request.reference,
+    previousRegistryStatus: existingCase.previousRegistryStatus,
+    previousMachineStatus: normalizeOptionalValue(
+      existingCase.previousMachineStatus ?? machine?.status
+    ),
+    actorUserId: auth.session.user.id,
+    input: {
+      policeReportNumber: existingCase.policeReportNumber,
+      policeReportDate: existingCase.policeReportDate,
+      country: existingCase.country,
+      cityRegion: existingCase.cityRegion,
+      incidentDate: existingCase.incidentDate,
+      incidentDescription: existingCase.incidentDescription,
+      supportingDocumentReferences: existingCase.supportingDocumentReferences,
+      caseNotes: existingCase.caseNotes,
+    },
+    nextStatus: "open",
+    evidenceFiles: existingCase.evidenceFiles,
+    policeReportFiles: existingCase.policeReportFiles,
+  });
+  const stolenRegistryStatus = getStolenRegistryStatus(
+    activatedCase.previousRegistryStatus
+  );
+  const updatedDynamicFields = setRegistryAssetStatus(
+    setStolenCaseRecord(request.dynamicFields, activatedCase),
+    stolenRegistryStatus
   );
 
   await prisma.$transaction(async (tx) => {
@@ -907,7 +1127,7 @@ export async function reportOwnAssetAsStolenOrMissing(
           id: machine.id,
         },
         data: {
-          status: getStolenRegistryStatus(nextCase.previousRegistryStatus),
+          status: stolenRegistryStatus,
         },
       });
     }
@@ -922,7 +1142,7 @@ export async function reportOwnAssetAsStolenOrMissing(
 
   return {
     success: true,
-    message: text.success,
+    message: reviewText.messages.activated,
     tone: "success",
     refresh: true,
   };

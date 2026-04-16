@@ -28,7 +28,7 @@ export type StolenAssetMeta = {
   policeReportFiles: StoredUpload[];
 };
 
-export type StolenCaseStatus = "open" | "resolved";
+export type StolenCaseStatus = "pending_review" | "open" | "resolved";
 
 export type StolenCaseRecord = {
   caseReference: string;
@@ -277,7 +277,12 @@ export function getStolenCaseRecord(value: unknown): StolenCaseRecord | null {
           : stolen.registrationReference,
       registrationReference: stolen.registrationReference,
       isStolen: stolen.isStolen !== false,
-      status: stolen.status === "resolved" ? "resolved" : "open",
+      status:
+        stolen.status === "resolved"
+          ? "resolved"
+          : stolen.status === "pending_review"
+          ? "pending_review"
+          : "open",
       previousRegistryStatus:
         stolen.previousRegistryStatus === "history_unknown"
           ? "history_unknown"

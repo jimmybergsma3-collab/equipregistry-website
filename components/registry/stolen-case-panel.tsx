@@ -3,11 +3,13 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
+  activateStolenCase,
   resolveStolenCase,
   saveStolenCase,
 } from "@/app/[lang]/dashboard/registrations/[id]/actions";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
+import { getStolenReviewText } from "@/lib/i18n/stolen-review";
 import { formatDateForLang } from "@/lib/i18n/registry-display";
 import type { StolenCaseRecord } from "@/lib/registry/request-meta";
 import { formatSupportingDocumentReferences } from "@/lib/registry/stolen-case";
@@ -41,6 +43,37 @@ function SummaryItem({
   );
 }
 
+function UploadedFileList({
+  title,
+  emptyText,
+  files,
+}: {
+  title: string;
+  emptyText: string;
+  files: Array<{ id: string; originalName: string }>;
+}) {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+      <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">{title}</p>
+
+      {files.length > 0 ? (
+        <ul className="mt-3 space-y-2">
+          {files.map((file) => (
+            <li
+              key={file.id}
+              className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+            >
+              {file.originalName}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-3 text-sm text-zinc-500">{emptyText}</p>
+      )}
+    </div>
+  );
+}
+
 export default function StolenCasePanel({
   registrationId,
   lang,
@@ -48,6 +81,7 @@ export default function StolenCasePanel({
 }: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const text = getStolenCaseText(safeLang);
+  const reviewText = getStolenReviewText(safeLang);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
@@ -81,6 +115,15 @@ export default function StolenCasePanel({
     });
   }
 
+  function handleActivate() {
+    setMessage("");
+
+    startTransition(async () => {
+      const result = await activateStolenCase(registrationId, lang);
+      applyResult(result);
+    });
+  }
+
   const summaryValues = existingCase
     ? [
         {
@@ -90,7 +133,11 @@ export default function StolenCasePanel({
         {
           label: text.admin.statusLabel,
           value:
-            existingCase.status === "open" ? text.admin.open : text.admin.resolved,
+            existingCase.status === "pending_review"
+              ? reviewText.pendingReview
+              : existingCase.status === "open"
+              ? text.admin.open
+              : text.admin.resolved,
         },
         {
           label: text.admin.fields.createdAt,
@@ -133,6 +180,32 @@ export default function StolenCasePanel({
       ) : null}
 
       <form action={handleSubmit} className="space-y-5">
+        {existingCase ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <UploadedFileList
+              title={reviewText.evidenceFiles}
+              emptyText={reviewText.noEvidenceFiles}
+              files={existingCase.evidenceFiles}
+            />
+            <UploadedFileList
+              title={reviewText.policeReportFiles}
+              emptyText={reviewText.noPoliceReportFiles}
+              files={existingCase.policeReportFiles}
+            />
+          </div>
+        ) : null}
+
+        {existingCase?.status === "pending_review" ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
+            <h3 className="text-sm font-semibold text-amber-900">
+              {reviewText.activateTitle}
+            </h3>
+            <p className="mt-1 text-sm text-amber-800">
+              {reviewText.activateDescription}
+            </p>
+          </div>
+        ) : null}
+
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="block">
             <span className="text-sm font-medium text-zinc-700">
@@ -249,6 +322,17 @@ export default function StolenCasePanel({
               ? text.admin.update
               : text.admin.save}
           </button>
+
+          {existingCase?.status === "pending_review" ? (
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={handleActivate}
+              className="inline-flex items-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isPending ? reviewText.activating : reviewText.activate}
+            </button>
+          ) : null}
 
           {existingCase?.status === "open" ? (
             <button

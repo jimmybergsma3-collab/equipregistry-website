@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
-import OwnerStolenReportButton from "@/components/registry/owner-stolen-report-button";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
 import { getSession } from "@/lib/auth/getSession";
 import { prisma } from "@/lib/db";
@@ -82,6 +81,7 @@ export default async function DashboardPassportsPage({ params }: Props) {
             <div className="grid gap-5">
               {passports.map((passport) => {
                 const stolenCase = getStolenCaseRecord(passport.dynamicFields);
+                const ownerReportPending = stolenCase?.status === "pending_review";
                 const isReportedStolen =
                   stolenCase?.isStolen && stolenCase.status === "open";
                 const localizedCategory =
@@ -116,6 +116,12 @@ export default async function DashboardPassportsPage({ params }: Props) {
                       <div className="flex flex-wrap gap-3">
                         <RequestStatusBadge status="passport_issued" lang={lang} />
 
+                        {ownerReportPending ? (
+                          <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
+                            {stolenReportText.pendingBadge}
+                          </span>
+                        ) : null}
+
                         {isReportedStolen ? (
                           <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
                             {stolenReportText.activeBadge}
@@ -135,14 +141,22 @@ export default async function DashboardPassportsPage({ params }: Props) {
                           {text.openRequest}
                         </Link>
 
-                        {!isReportedStolen ? (
-                          <OwnerStolenReportButton
-                            registrationId={passport.id}
-                            lang={lang}
-                          />
+                        {!ownerReportPending && !isReportedStolen ? (
+                          <Link
+                            href={`/${lang}/dashboard/registrations/${passport.id}#owner-incident-report`}
+                            className="inline-flex items-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                          >
+                            {stolenReportText.reportAction}
+                          </Link>
                         ) : null}
                       </div>
                     </div>
+
+                    {ownerReportPending ? (
+                      <p className="mt-4 text-sm text-amber-700">
+                        {stolenReportText.pendingDescription}
+                      </p>
+                    ) : null}
 
                     {isReportedStolen ? (
                       <p className="mt-4 text-sm text-red-700">
