@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { assertAdminAction } from "@/lib/auth/assert-admin-action";
+import { getSession } from "@/lib/auth/getSession";
+import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import {
   getStolenCaseRecord,
@@ -61,8 +63,10 @@ function revalidateRegistrationPaths(
   reference?: string,
   machineId?: string
 ) {
+  revalidatePath(`/${lang}`);
   revalidatePath(`/${lang}/admin`);
   revalidatePath(`/${lang}/dashboard/admin/registrations`);
+  revalidatePath(`/${lang}/dashboard/passports`);
   revalidatePath(`/${lang}/dashboard/registrations`);
   revalidatePath(`/${lang}/dashboard/registrations/${registrationId}`);
   revalidatePath(`/${lang}/dashboard/machines`);
@@ -801,6 +805,124 @@ export async function saveStolenCase(
   return {
     success: true,
     message: text.admin.messages.saved,
+    tone: "success",
+    refresh: true,
+  };
+}
+
+export async function reportOwnAssetAsStolenOrMissing(
+  registrationId: string,
+  lang: string
+): Promise<ActionResult> {
+  const session = await getSession();
+  const text = getCustomerStolenReportText(lang);
+
+  if (!session.isAuthenticated) {
+    return {
+      success: false,
+      message: text.authRequired,
+      tone: "error",
+    };
+  }
+
+  const request = await prisma.registrationRequest.findFirst({
+    where: {
+      id: registrationId,
+      userId: session.user.id,
+      deletedAt: null,
+    },
+  });
+
+  if (!request) {
+    return {
+      success: false,
+      message: text.requestMissing,
+      tone: "error",
+    };
+  }
+
+  if (request.requestStatus !== "passport_issued") {
+    return {
+      success: false,
+      message: text.notEligible,
+      tone: "error",
+    };
+  }
+
+  const existingCase = getStolenCaseRecord(request.dynamicFields);
+
+  if (existingCase?.isStolen && existingCase.status === "open") {
+    return {
+      success: false,
+      message: text.alreadyReported,
+      tone: "warning",
+    };
+  }
+
+  const previousRegistryStatus =
+    existingCase?.previousRegistryStatus ??
+    getPreviousRegistryStatus(request.dynamicFields, request.requestStatus);
+  const machine = await prisma.machine.findUnique({
+    where: {
+      registryId: request.reference,
+    },
+  });
+  const nextCase = createOrUpdateStolenCaseRecord({
+    existingCase,
+    registrationReference: request.reference,
+    previousRegistryStatus,
+    previousMachineStatus: normalizeOptionalValue(
+      existingCase?.previousMachineStatus ?? machine?.status
+    ),
+    actorUserId: session.user.id,
+    input: {
+      policeReportNumber: null,
+      policeReportDate: null,
+      country: null,
+      cityRegion: null,
+      incidentDate: null,
+      incidentDescription: text.defaultIncidentDescription,
+      supportingDocumentReferences: [],
+      caseNotes: null,
+    },
+  });
+  const updatedDynamicFields = setRegistryAssetStatus(
+    setStolenCaseRecord(request.dynamicFields, nextCase),
+    getStolenRegistryStatus(previousRegistryStatus)
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.registrationRequest.update({
+      where: {
+        id: request.id,
+      },
+      data: {
+        dynamicFields: updatedDynamicFields as Prisma.InputJsonObject,
+      },
+    });
+
+    if (machine) {
+      await tx.machine.update({
+        where: {
+          id: machine.id,
+        },
+        data: {
+          status: getStolenRegistryStatus(nextCase.previousRegistryStatus),
+        },
+      });
+    }
+  });
+
+  revalidateRegistrationPaths(
+    lang,
+    registrationId,
+    request.reference,
+    machine?.id
+  );
+
+  return {
+    success: true,
+    message: text.success,
     tone: "success",
     refresh: true,
   };

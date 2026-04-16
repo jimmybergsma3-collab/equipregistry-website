@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
+import OwnerStolenReportButton from "@/components/registry/owner-stolen-report-button";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
 import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import StolenCasePanel from "@/components/registry/stolen-case-panel";
@@ -14,6 +15,7 @@ import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import { canManageStolenCase } from "@/lib/registry/stolen-case";
 import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
 import { getPricingCategoryContent } from "@/lib/i18n/pricing-categories";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
@@ -451,6 +453,7 @@ export default async function RegistrationRequestDetailPage({
 
   const dictionary = await getDictionary(lang as Lang);
   const customerDashboardText = getCustomerDashboardText(lang as Lang);
+  const customerStolenReportText = getCustomerStolenReportText(lang as Lang);
   const texts = getDetailTexts(lang as Lang, dictionary);
   const stripeText = getStripePaymentText(lang as Lang);
   const paymentReturnState = Array.isArray(query.payment)
@@ -586,6 +589,9 @@ export default async function RegistrationRequestDetailPage({
     pricingCategory
   );
   const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
+  const ownStolenCase = getStolenCaseRecord(ownRequest.dynamicFields);
+  const ownerReportedStolen =
+    ownStolenCase?.isStolen && ownStolenCase.status === "open";
   const paymentBannerTone =
     paymentReturnState === "stripe_success"
       ? "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -616,8 +622,14 @@ export default async function RegistrationRequestDetailPage({
               {ownRequest.reference}
             </h1>
 
-            <div className="mt-4">
+            <div className="mt-4 flex flex-wrap gap-3">
               <RequestStatusBadge status={ownRequest.requestStatus} lang={lang} />
+
+              {ownerReportedStolen ? (
+                <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
+                  {customerStolenReportText.activeBadge}
+                </span>
+              ) : null}
             </div>
 
             {ownRequest.requestStatus === "passport_issued" ? (
@@ -631,6 +643,30 @@ export default async function RegistrationRequestDetailPage({
               </div>
             ) : null}
           </div>
+
+          {ownRequest.requestStatus === "passport_issued" ? (
+            <section className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="max-w-2xl">
+                  <h2 className="text-lg font-semibold text-zinc-900">
+                    {customerStolenReportText.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-zinc-600">
+                    {ownerReportedStolen
+                      ? customerStolenReportText.activeDescription
+                      : customerStolenReportText.description}
+                  </p>
+                </div>
+
+                {!ownerReportedStolen ? (
+                  <OwnerStolenReportButton
+                    registrationId={ownRequest.id}
+                    lang={lang}
+                  />
+                ) : null}
+              </div>
+            </section>
+          ) : null}
 
           {paymentReturnState === "stripe_success" ||
           paymentReturnState === "stripe_cancel" ? (

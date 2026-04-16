@@ -3,11 +3,14 @@ import { notFound, redirect } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
+import OwnerStolenReportButton from "@/components/registry/owner-stolen-report-button";
 import RequestStatusBadge from "@/components/registry/request-status-badge";
 import { getSession } from "@/lib/auth/getSession";
 import { prisma } from "@/lib/db";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
+import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import { getCategoryByValue, getSubcategoriesByCategory } from "@/lib/registry/categories";
 import { formatDateForLang } from "@/lib/i18n/registry-display";
 
@@ -46,6 +49,7 @@ export default async function DashboardPassportsPage({ params }: Props) {
   });
 
   const text = getCustomerDashboardText(lang as Lang);
+  const stolenReportText = getCustomerStolenReportText(lang as Lang);
 
   return (
     <>
@@ -77,6 +81,9 @@ export default async function DashboardPassportsPage({ params }: Props) {
           ) : (
             <div className="grid gap-5">
               {passports.map((passport) => {
+                const stolenCase = getStolenCaseRecord(passport.dynamicFields);
+                const isReportedStolen =
+                  stolenCase?.isStolen && stolenCase.status === "open";
                 const localizedCategory =
                   getCategoryByValue(passport.category, lang as Lang)?.label ??
                   passport.category;
@@ -108,6 +115,13 @@ export default async function DashboardPassportsPage({ params }: Props) {
 
                       <div className="flex flex-wrap gap-3">
                         <RequestStatusBadge status="passport_issued" lang={lang} />
+
+                        {isReportedStolen ? (
+                          <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
+                            {stolenReportText.activeBadge}
+                          </span>
+                        ) : null}
+
                         <Link
                           href={`/${lang}/passport/${passport.reference}`}
                           className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
@@ -120,8 +134,21 @@ export default async function DashboardPassportsPage({ params }: Props) {
                         >
                           {text.openRequest}
                         </Link>
+
+                        {!isReportedStolen ? (
+                          <OwnerStolenReportButton
+                            registrationId={passport.id}
+                            lang={lang}
+                          />
+                        ) : null}
                       </div>
                     </div>
+
+                    {isReportedStolen ? (
+                      <p className="mt-4 text-sm text-red-700">
+                        {stolenReportText.activeDescription}
+                      </p>
+                    ) : null}
                   </section>
                 );
               })}
