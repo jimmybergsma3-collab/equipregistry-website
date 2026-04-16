@@ -8,16 +8,23 @@ import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 type Props = {
   status: RegistrationRequestStatus;
   lang: string;
+  compact?: boolean;
 };
 
-export default function RequestStatusBadge({ status, lang }: Props) {
+export default function RequestStatusBadge({
+  status,
+  lang,
+  compact = false,
+}: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const label = getLocalizedRequestStatusLabel(status, safeLang);
 
   return (
     <span
       className={[
-        "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium",
+        compact
+          ? "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium"
+          : "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium",
         getRequestStatusClasses(status),
       ].join(" ")}
     >

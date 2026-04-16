@@ -233,7 +233,7 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "inline-flex items-center rounded-lg border px-3 py-1.5 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-medium leading-4 transition disabled:cursor-not-allowed disabled:opacity-60",
         actionButtonClassName(tone),
       ].join(" ")}
     >
@@ -305,11 +305,11 @@ export default function AdminRequestRowActions({
   const canIssuePassport = requestStatus === "approved";
 
   return (
-    <div className="space-y-1.5">
-      <div className="flex flex-wrap gap-1.5">
+    <div className="space-y-1">
+      <div className="flex flex-wrap gap-1">
         <Link
           href={`/${lang}/dashboard/registrations/${registrationId}`}
-          className="inline-flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50"
+          className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-medium leading-4 text-zinc-700 transition hover:bg-zinc-50"
         >
           {text.open}
         </Link>
@@ -380,7 +380,9 @@ export default function AdminRequestRowActions({
       </div>
 
       {message ? (
-        <p className={`text-xs font-medium ${messageClassName()}`}>{message}</p>
+        <p className={`text-[11px] font-medium ${messageClassName()}`}>
+          {message}
+        </p>
       ) : null}
     </div>
   );

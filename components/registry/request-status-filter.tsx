@@ -141,11 +141,11 @@ export default function RequestStatusFilter({
   }
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="flex flex-col gap-1">
         <label
           htmlFor="statusFilter"
-          className="text-sm font-medium text-zinc-700"
+          className="text-xs font-medium text-zinc-700"
         >
           {text.status}
         </label>
@@ -154,7 +154,7 @@ export default function RequestStatusFilter({
           id="statusFilter"
           value={currentStatus || "all"}
           onChange={(e) => handleChange(e.target.value)}
-          className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[220px]"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[200px]"
         >
           <option value="all">{text.all}</option>
           {FILTER_VALUES.map((value) => (
@@ -165,10 +165,10 @@ export default function RequestStatusFilter({
         </select>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <label
           htmlFor="reviewFilter"
-          className="text-sm font-medium text-zinc-700"
+          className="text-xs font-medium text-zinc-700"
         >
           {text.review}
         </label>
@@ -177,7 +177,7 @@ export default function RequestStatusFilter({
           id="reviewFilter"
           value={currentReview || "all"}
           onChange={(e) => handleReviewChange(e.target.value)}
-          className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[200px]"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[180px]"
         >
           <option value="all">{text.all}</option>
           <option value="reviewed">{text.reviewed}</option>

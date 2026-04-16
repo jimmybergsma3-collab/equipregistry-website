@@ -65,7 +65,7 @@ export default function DeleteRequestButton({
       type="button"
       onClick={handleDelete}
       disabled={isDeleting}
-      className="inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-[11px] font-medium leading-4 text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
       aria-label={`${label} ${id}`}
       data-lang={lang}
     >

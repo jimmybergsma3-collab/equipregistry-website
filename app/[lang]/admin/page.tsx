@@ -236,33 +236,33 @@ export default async function AdminPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-neutral-50">
-      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-7">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <section className="mx-auto max-w-[1400px] px-3 py-4 sm:px-4 lg:px-5">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
+          <div className="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
                 {text.eyebrow}
               </p>
 
-              <h1 className="mt-2 text-2xl font-semibold text-neutral-900">
+              <h1 className="mt-1.5 text-xl font-semibold text-neutral-900 sm:text-2xl">
                 {text.title}
               </h1>
 
-              <p className="mt-2 text-sm text-neutral-600">{text.subtitle}</p>
-              <p className="mt-2 text-sm text-neutral-600">{user.email}</p>
+              <p className="mt-1.5 text-sm text-neutral-600">{text.subtitle}</p>
+              <p className="mt-1 text-xs text-neutral-500">{user.email}</p>
             </div>
 
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2">
               <Link
                 href={`/${lang}/dashboard`}
-                className="inline-flex rounded-xl border border-neutral-300 px-3.5 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100"
+                className="inline-flex rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-800 hover:bg-neutral-100 sm:text-sm"
               >
                 {text.links.userDashboard}
               </Link>
 
               <Link
                 href={`/${lang}/`}
-                className="inline-flex rounded-xl border border-neutral-300 px-3.5 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100"
+                className="inline-flex rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-800 hover:bg-neutral-100 sm:text-sm"
               >
                 {text.links.website}
               </Link>
@@ -271,37 +271,37 @@ export default async function AdminPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-              <p className="text-sm text-neutral-500">{text.cards.total}</p>
-              <p className="mt-1.5 text-2xl font-semibold text-neutral-900">
+          <div className="mt-4 grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+              <p className="text-xs text-neutral-500">{text.cards.total}</p>
+              <p className="mt-1 text-xl font-semibold text-neutral-900">
                 {totalCount}
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-              <p className="text-sm text-neutral-500">{text.cards.open}</p>
-              <p className="mt-1.5 text-2xl font-semibold text-neutral-900">
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+              <p className="text-xs text-neutral-500">{text.cards.open}</p>
+              <p className="mt-1 text-xl font-semibold text-neutral-900">
                 {openCount}
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-              <p className="text-sm text-neutral-500">{text.cards.approved}</p>
-              <p className="mt-1.5 text-2xl font-semibold text-neutral-900">
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+              <p className="text-xs text-neutral-500">{text.cards.approved}</p>
+              <p className="mt-1 text-xl font-semibold text-neutral-900">
                 {approvedCount}
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-              <p className="text-sm text-neutral-500">{text.cards.issued}</p>
-              <p className="mt-1.5 text-2xl font-semibold text-neutral-900">
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+              <p className="text-xs text-neutral-500">{text.cards.issued}</p>
+              <p className="mt-1 text-xl font-semibold text-neutral-900">
                 {issuedCount}
               </p>
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4">
             <AdminRequestTable lang={lang} requests={mappedRequests} />
           </div>
         </div>

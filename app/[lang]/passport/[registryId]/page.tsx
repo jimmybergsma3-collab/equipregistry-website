@@ -32,16 +32,6 @@ type Props = {
   }>;
 };
 
-function maskSerial(serial: string | null, unavailable: string) {
-  if (!serial) return unavailable;
-
-  if (serial.length <= 6) {
-    return `${serial.slice(0, 2)}***`;
-  }
-
-  return `${serial.slice(0, 4)}*****${serial.slice(-2)}`;
-}
-
 function getDisplayValue(
   value: string | null | undefined,
   unavailable: string
@@ -152,7 +142,7 @@ export default async function PassportPage({ params }: Props) {
     },
     {
       label: content.fields.serialNumber,
-      value: maskSerial(request.serialNumber, content.unavailable),
+      value: getDisplayValue(request.serialNumber, content.unavailable),
     },
   ];
   const publicCaseReference = isPubliclyStolen
