@@ -7,7 +7,6 @@ import DeleteRequestButton from "@/components/registry/delete-request-button";
 import {
   approveRegistration,
   issuePassport,
-  markRegistrationAsPaid,
   moveRegistrationToReview,
   rejectRegistration,
   requestMoreInformation,
@@ -19,7 +18,6 @@ type Props = {
   registrationId: string;
   lang: string;
   requestStatus: RegistrationRequestStatus;
-  paymentCompleted: boolean;
 };
 
 type ActionHandler = (
@@ -233,7 +231,7 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-medium leading-4 transition disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-medium leading-4 transition disabled:cursor-not-allowed disabled:opacity-60",
         actionButtonClassName(tone),
       ].join(" ")}
     >
@@ -246,7 +244,6 @@ export default function AdminRequestRowActions({
   registrationId,
   lang,
   requestStatus,
-  paymentCompleted,
 }: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const text = TEXT[safeLang];
@@ -294,8 +291,6 @@ export default function AdminRequestRowActions({
 
   const canMarkReviewed =
     requestStatus === "submitted" || requestStatus === "more_info_required";
-  const canMarkPaid =
-    requestStatus === "payment_required" && !paymentCompleted;
   const canApprove = requestStatus === "under_review";
   const canRequestInfo =
     requestStatus === "submitted" || requestStatus === "under_review";
@@ -305,23 +300,14 @@ export default function AdminRequestRowActions({
   const canIssuePassport = requestStatus === "approved";
 
   return (
-    <div className="space-y-1">
-      <div className="flex flex-wrap gap-1">
+    <div className="space-y-0.5">
+      <div className="flex max-w-[17rem] flex-wrap gap-0.5">
         <Link
           href={`/${lang}/dashboard/registrations/${registrationId}`}
-          className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-2.5 py-1 text-[11px] font-medium leading-4 text-zinc-700 transition hover:bg-zinc-50"
+          className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-2 py-0.5 text-[10px] font-semibold leading-4 text-zinc-800 transition hover:bg-zinc-50"
         >
           {text.open}
         </Link>
-
-        {canMarkPaid ? (
-          <ActionButton
-            label={isPending ? text.processing : text.markPaid}
-            tone="primary"
-            disabled={isPending}
-            onClick={() => handleAction(markRegistrationAsPaid)}
-          />
-        ) : null}
 
         {canMarkReviewed ? (
           <ActionButton
@@ -368,19 +354,21 @@ export default function AdminRequestRowActions({
           />
         ) : null}
 
-        <DeleteRequestButton
-          id={registrationId}
-          lang={lang}
-          admin
-          label={text.delete}
-          deletingText={text.deleting}
-          confirmText={text.confirmDelete}
-          errorText={text.deleteError}
-        />
+        <span className="[&_button]:border-zinc-200 [&_button]:bg-white [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[10px] [&_button]:font-medium [&_button]:text-red-600 [&_button]:hover:bg-red-50">
+          <DeleteRequestButton
+            id={registrationId}
+            lang={lang}
+            admin
+            label={text.delete}
+            deletingText={text.deleting}
+            confirmText={text.confirmDelete}
+            errorText={text.deleteError}
+          />
+        </span>
       </div>
 
       {message ? (
-        <p className={`text-[11px] font-medium ${messageClassName()}`}>
+        <p className={`text-[10px] font-medium ${messageClassName()}`}>
           {message}
         </p>
       ) : null}
