@@ -22,6 +22,8 @@ type Dictionary = {
     publicVerification: string;
     whySightingsMatter: string;
     contactEquipRegistry: string;
+    print: string;
+    downloadPdf: string;
   };
   pages: {
   verify: {
@@ -287,6 +289,8 @@ const en: Dictionary = {
     publicVerification: "Public verification",
     whySightingsMatter: "Why sightings matter",
     contactEquipRegistry: "Contact EquipRegistry",
+    print: "Print",
+    downloadPdf: "Download PDF",
   },
   pages: {
     dashboard: {
@@ -608,6 +612,8 @@ const es: Dictionary = {
     publicVerification: "Verificación pública",
     whySightingsMatter: "Por qué los avistamientos importan",
     contactEquipRegistry: "Contactar con EquipRegistry",
+    print: "Imprimir",
+    downloadPdf: "Descargar PDF",
   },
   pages: {
     dashboard: {
@@ -931,6 +937,8 @@ const de: Dictionary = {
     publicVerification: "Öffentliche Verifizierung",
     whySightingsMatter: "Warum Sichtungen wichtig sind",
     contactEquipRegistry: "EquipRegistry kontaktieren",
+    print: "Drucken",
+    downloadPdf: "PDF herunterladen",
   },
   pages: {
     dashboard: {
@@ -1253,6 +1261,8 @@ const fr: Dictionary = {
     publicVerification: "Vérification publique",
     whySightingsMatter: "Pourquoi les repérages comptent",
     contactEquipRegistry: "Contacter EquipRegistry",
+    print: "Imprimer",
+    downloadPdf: "Télécharger PDF",
   },
   pages: {
     dashboard: {
@@ -1576,6 +1586,8 @@ const it: Dictionary = {
     publicVerification: "Verifica pubblica",
     whySightingsMatter: "Perché gli avvistamenti contano",
     contactEquipRegistry: "Contatta EquipRegistry",
+    print: "Stampa",
+    downloadPdf: "Scarica PDF",
   },
   pages: {
     dashboard: {
@@ -1899,6 +1911,8 @@ const nl: Dictionary = {
     publicVerification: "Publieke verificatie",
     whySightingsMatter: "Waarom meldingen belangrijk zijn",
     contactEquipRegistry: "Neem contact op met EquipRegistry",
+    print: "Printen",
+    downloadPdf: "PDF downloaden",
   },
   pages: {
     dashboard: {
@@ -2221,6 +2235,8 @@ const pt: Dictionary = {
     publicVerification: "Verificação pública",
     whySightingsMatter: "Porque os avistamentos importam",
     contactEquipRegistry: "Contactar EquipRegistry",
+    print: "Imprimir",
+    downloadPdf: "Transferir PDF",
   },
   pages: {
     dashboard: {
@@ -2544,6 +2560,8 @@ const ru: Dictionary = {
     publicVerification: "Публичная проверка",
     whySightingsMatter: "Почему сообщения о наблюдении важны",
     contactEquipRegistry: "Связаться с EquipRegistry",
+    print: "Печать",
+    downloadPdf: "Скачать PDF",
   },
   pages: {
     dashboard: {
@@ -2866,6 +2884,8 @@ const zh: Dictionary = {
     publicVerification: "公开验证",
     whySightingsMatter: "为什么发现报告很重要",
     contactEquipRegistry: "联系 EquipRegistry",
+    print: "打印",
+    downloadPdf: "下载 PDF",
   },
   pages: {
     dashboard: {
@@ -3187,6 +3207,8 @@ const hi: Dictionary = {
     publicVerification: "सार्वजनिक सत्यापन",
     whySightingsMatter: "देखे जाने की रिपोर्ट क्यों महत्वपूर्ण है",
     contactEquipRegistry: "EquipRegistry से संपर्क करें",
+    print: "प्रिंट",
+    downloadPdf: "PDF डाउनलोड करें",
   },
   pages: {
     dashboard: {
@@ -3509,6 +3531,8 @@ const ar: Dictionary = {
     publicVerification: "تحقق عام",
     whySightingsMatter: "لماذا تعتبر المشاهدات مهمة",
     contactEquipRegistry: "الاتصال بـ EquipRegistry",
+    print: "طباعة",
+    downloadPdf: "تنزيل PDF",
   },
   pages: {
     dashboard: {

@@ -1,4 +1,6 @@
 import type { CSSProperties } from "react";
+import PassportExportActions from "@/components/passport/passport-export-actions";
+import type { Lang } from "@/lib/i18n/config";
 
 type PassportField = {
   label: string;
@@ -6,6 +8,7 @@ type PassportField = {
 };
 
 type Props = {
+  lang: Lang;
   direction: "ltr" | "rtl";
   alignClassName: string;
   eyebrow: string;
@@ -53,6 +56,7 @@ function DetailCard({
 }
 
 export default function OfficialPassport({
+  lang,
   direction,
   alignClassName,
   eyebrow,
@@ -124,6 +128,8 @@ export default function OfficialPassport({
             >
               {statusLabel}: {statusValue}
             </div>
+
+            <PassportExportActions lang={lang} />
           </div>
         </div>
       </div>
