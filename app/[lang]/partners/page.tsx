@@ -57,15 +57,6 @@ export default async function PartnersPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="mb-6 text-3xl font-semibold text-slate-900">
-            {p.title}
-          </h2>
-          <p className="text-lg leading-8 text-slate-700">{p.subtitle}</p>
-        </div>
-      </section>
-
       <section
         id="insurers"
         className="scroll-mt-32 border-b border-slate-200 bg-white py-20"
@@ -82,10 +73,10 @@ export default async function PartnersPage({ params }: Props) {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <h4 className="mb-3 text-lg font-semibold text-slate-900">
-                {p.insurersTitle}
+                {t.statuses.registeredVerified.label}
               </h4>
               <p className="text-sm leading-6 text-slate-600">
-                {p.insurersText}
+                {t.statuses.registeredVerified.why}
               </p>
             </div>
 

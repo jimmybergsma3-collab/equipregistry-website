@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
@@ -29,6 +30,11 @@ import {
   getLocalizedApplicantTypeLabel,
 } from "@/lib/i18n/registry-display";
 import { getOfficialPassportNumber } from "@/lib/registry/reference";
+import {
+  formatLocalizedPricingAmount,
+  getLocalizedPricingDisplay,
+  getVisitorCountryCodeFromHeaders,
+} from "@/lib/registry/display-pricing";
 
 type Props = {
   params: Promise<{
@@ -461,6 +467,7 @@ export default async function RegistrationRequestDetailPage({
   const customerStolenReportText = getCustomerStolenReportText(lang as Lang);
   const texts = getDetailTexts(lang as Lang, dictionary);
   const stripeText = getStripePaymentText(lang as Lang);
+  const headerList = await headers();
   const paymentReturnState = Array.isArray(query.payment)
     ? query.payment[0]
     : query.payment;
@@ -594,6 +601,11 @@ export default async function RegistrationRequestDetailPage({
     pricingCategory
   );
   const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
+  const pricingDisplay = await getLocalizedPricingDisplay({
+    lang: lang as Lang,
+    acceptLanguage: headerList.get("accept-language"),
+    countryCode: getVisitorCountryCodeFromHeaders(headerList),
+  });
   const ownStolenCase = getStolenCaseRecord(ownRequest.dynamicFields);
   const ownerReportPending = ownStolenCase?.status === "pending_review";
   const ownerReportedStolen =
@@ -724,12 +736,10 @@ export default async function RegistrationRequestDetailPage({
                     {stripeText.amountLabel}
                   </p>
                   <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {new Intl.NumberFormat(lang, {
-                      style: "currency",
-                      currency: "EUR",
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }).format(pricing.registration)}
+                    {formatLocalizedPricingAmount(
+                      pricing.registration,
+                      pricingDisplay
+                    )}
                   </p>
                 </div>
 

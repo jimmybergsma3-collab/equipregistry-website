@@ -8,79 +8,57 @@ const GEO_COUNTRY_HEADERS = [
   "x-country-code",
 ] as const;
 
-const EUROZONE_COUNTRIES = new Set([
-  "AT",
-  "BE",
-  "CY",
-  "DE",
-  "EE",
-  "ES",
-  "FI",
-  "FR",
-  "GR",
-  "HR",
-  "IE",
-  "IT",
-  "LT",
-  "LU",
-  "LV",
-  "MT",
-  "NL",
-  "PT",
-  "SI",
-  "SK",
-]);
+const LANGUAGE_COUNTRY_FALLBACKS: Record<string, string> = {
+  da: "DK",
+  de: "DE",
+  es: "ES",
+  fr: "FR",
+  nl: "NL",
+  no: "NO",
+  pl: "PL",
+  sv: "SE",
+};
 
-const COUNTRY_CURRENCY_MAP: Record<string, string> = {
-  AE: "AED",
-  AR: "ARS",
-  AU: "AUD",
-  BG: "BGN",
-  BR: "BRL",
-  CA: "CAD",
-  CH: "CHF",
-  CL: "CLP",
-  CN: "CNY",
-  CO: "COP",
-  CZ: "CZK",
+type SupportedCurrency = "DKK" | "EUR" | "NOK" | "PLN" | "SEK" | "USD";
+
+const COUNTRY_CURRENCY_MAP: Record<string, SupportedCurrency> = {
+  DE: "EUR",
   DK: "DKK",
-  EG: "EGP",
-  GB: "GBP",
-  HK: "HKD",
-  HU: "HUF",
-  ID: "IDR",
-  IL: "ILS",
-  IN: "INR",
-  JP: "JPY",
-  KE: "KES",
-  KR: "KRW",
-  KW: "KWD",
-  MX: "MXN",
-  MY: "MYR",
-  NG: "NGN",
+  ES: "EUR",
+  FR: "EUR",
+  NL: "EUR",
   NO: "NOK",
-  NZ: "NZD",
-  PE: "PEN",
-  PH: "PHP",
   PL: "PLN",
-  QA: "QAR",
-  RO: "RON",
-  RU: "RUB",
-  SA: "SAR",
   SE: "SEK",
-  SG: "SGD",
-  TH: "THB",
-  TR: "TRY",
-  UA: "UAH",
   US: "USD",
-  VN: "VND",
-  ZA: "ZAR",
+};
+
+const COUNTRY_LOCALE_MAP: Record<string, string> = {
+  DE: "de-DE",
+  DK: "da-DK",
+  ES: "es-ES",
+  FR: "fr-FR",
+  NL: "nl-NL",
+  NO: "nb-NO",
+  PL: "pl-PL",
+  SE: "sv-SE",
+  US: "en-US",
+};
+
+const FIXED_EUR_EXCHANGE_RATES: Record<SupportedCurrency, number> = {
+  DKK: 7.46,
+  EUR: 1,
+  NOK: 11.72,
+  PLN: 4.31,
+  SEK: 11.45,
+  USD: 1.09,
 };
 
 export type LocalizedPricingDisplay = {
-  currency: string;
+  currency: SupportedCurrency;
   locale: string;
   exchangeRate: number;
+  countryCode: string | null;
   usedFallback: boolean;
 };
 
@@ -126,52 +104,35 @@ function getCountryCodeFromAcceptLanguage(acceptLanguage: string | null) {
         return countryCode;
       }
     }
+
+    const languageCode = locale.split("-")[0]?.trim().toLowerCase();
+
+    if (languageCode && LANGUAGE_COUNTRY_FALLBACKS[languageCode]) {
+      return LANGUAGE_COUNTRY_FALLBACKS[languageCode];
+    }
   }
 
   return null;
 }
 
 function getCurrencyForCountry(countryCode: string | null) {
-  if (!countryCode) {
-    return "EUR";
-  }
-
-  if (EUROZONE_COUNTRIES.has(countryCode)) {
-    return "EUR";
-  }
-
-  return COUNTRY_CURRENCY_MAP[countryCode] ?? "EUR";
+  return countryCode ? COUNTRY_CURRENCY_MAP[countryCode] ?? "EUR" : "EUR";
 }
 
-async function getExchangeRate(currency: string) {
-  if (currency === "EUR") {
-    return 1;
+function getDisplayLocale(
+  countryCode: string | null,
+  acceptLanguage: string | null,
+  lang: Lang
+) {
+  if (countryCode && COUNTRY_LOCALE_MAP[countryCode]) {
+    return COUNTRY_LOCALE_MAP[countryCode];
   }
 
-  try {
-    const response = await fetch(
-      `https://api.frankfurter.dev/v2/rate/EUR/${currency}`,
-      {
-        cache: "force-cache",
-        next: {
-          revalidate: 60 * 60 * 6,
-        },
-        signal: AbortSignal.timeout(1500),
-      }
-    );
+  return getPrimaryLocale(acceptLanguage, lang);
+}
 
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = (await response.json()) as { rate?: number };
-
-    return typeof data.rate === "number" && Number.isFinite(data.rate) && data.rate > 0
-      ? data.rate
-      : null;
-  } catch {
-    return null;
-  }
+function getExchangeRate(currency: SupportedCurrency) {
+  return FIXED_EUR_EXCHANGE_RATES[currency] ?? 1;
 }
 
 export function getVisitorCountryCodeFromHeaders(headerList: Headers) {
@@ -194,23 +155,36 @@ export async function getLocalizedPricingDisplay(
     normalizeCountryCode(options.countryCode) ??
     getCountryCodeFromAcceptLanguage(options.acceptLanguage);
   const currency = getCurrencyForCountry(countryCode);
-  const exchangeRate = await getExchangeRate(currency);
-
-  if (exchangeRate === null) {
-    return {
-      currency: "EUR",
-      locale,
-      exchangeRate: 1,
-      usedFallback: true,
-    };
-  }
+  const resolvedLocale = getDisplayLocale(
+    countryCode,
+    options.acceptLanguage,
+    options.lang
+  );
+  const exchangeRate = getExchangeRate(currency);
+  const hasMappedCountry = Boolean(countryCode && COUNTRY_CURRENCY_MAP[countryCode]);
 
   return {
     currency,
-    locale,
+    locale: resolvedLocale || locale,
     exchangeRate,
-    usedFallback: false,
+    countryCode,
+    usedFallback: !hasMappedCountry,
   };
+}
+
+export function getLocalizedPricingAmount(
+  amountInEur: number,
+  display: LocalizedPricingDisplay
+) {
+  const amountInMinorUnits = Math.round(amountInEur * display.exchangeRate * 100);
+  return amountInMinorUnits / 100;
+}
+
+export function getLocalizedPricingMinorUnitAmount(
+  amountInEur: number,
+  display: LocalizedPricingDisplay
+) {
+  return Math.round(amountInEur * display.exchangeRate * 100);
 }
 
 export function formatLocalizedPricingAmount(
@@ -221,8 +195,12 @@ export function formatLocalizedPricingAmount(
     return formatPricingAmount(amountInEur, display.locale);
   }
 
+  const localizedAmount = getLocalizedPricingAmount(amountInEur, display);
+
   return new Intl.NumberFormat(display.locale, {
     style: "currency",
     currency: display.currency,
-  }).format(amountInEur * display.exchangeRate);
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(localizedAmount);
 }

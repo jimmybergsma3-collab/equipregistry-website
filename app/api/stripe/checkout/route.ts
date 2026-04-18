@@ -10,6 +10,11 @@ import {
   getPricingCategory,
 } from "@/lib/registry/pricing";
 import {
+  getLocalizedPricingDisplay,
+  getLocalizedPricingMinorUnitAmount,
+  getVisitorCountryCodeFromHeaders,
+} from "@/lib/registry/display-pricing";
+import {
   setStripePaymentMeta,
 } from "@/lib/registry/request-meta";
 import { getAppBaseUrl, getStripeClient } from "@/lib/stripe/server";
@@ -97,9 +102,19 @@ export async function POST(request: Request) {
     registrationRequest.category,
     registrationRequest.subcategory
   );
+  const pricingDisplay = await getLocalizedPricingDisplay({
+    lang: safeLang,
+    acceptLanguage: request.headers.get("accept-language"),
+    countryCode: getVisitorCountryCodeFromHeaders(request.headers),
+  });
   const categoryContent = getPricingCategoryContent(safeLang, pricingCategory);
   const baseUrl = getAppBaseUrl(request);
   const stripe = getStripeClient();
+  const checkoutCurrency = pricingDisplay.currency.toLowerCase();
+  const checkoutAmount = getLocalizedPricingMinorUnitAmount(
+    pricing.registration,
+    pricingDisplay
+  );
   const metadata = {
     referenceNumber: registrationRequest.reference,
     requestId: registrationRequest.id,
@@ -134,8 +149,8 @@ export async function POST(request: Request) {
       {
         quantity: 1,
         price_data: {
-          currency: "eur",
-          unit_amount: Math.round(pricing.registration * 100),
+          currency: checkoutCurrency,
+          unit_amount: checkoutAmount,
           product_data: {
             name: categoryContent.name,
             description: categoryContent.description,
@@ -158,8 +173,8 @@ export async function POST(request: Request) {
       provider: "stripe",
       status: "pending",
       checkoutSessionId: checkoutSession.id,
-      amountTotal: Math.round(pricing.registration * 100),
-      currency: "eur",
+      amountTotal: checkoutAmount,
+      currency: checkoutCurrency,
     }
   );
 
