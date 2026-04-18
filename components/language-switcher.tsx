@@ -44,6 +44,10 @@ export default function LanguageSwitcher({ currentLang }: Props) {
   const dir = getLangDir(activeLang);
   const isRtl = dir === "rtl";
   const rest = hasLang ? segments.slice(1) : segments;
+  const sortedLanguages = LANGUAGES.map((lang) => ({
+    code: lang,
+    label: LABELS[lang],
+  })).sort((a, b) => a.label.localeCompare(b.label));
 
   function changeLanguage(nextLang: Lang) {
     setOpen(false);
@@ -101,7 +105,8 @@ export default function LanguageSwitcher({ currentLang }: Props) {
           }`}
         >
           <ul role="listbox" className="py-1">
-            {LANGUAGES.map((lang) => {
+            {sortedLanguages.map(({ code, label }) => {
+              const lang = code;
               const isActive = lang === activeLang;
 
               return (
@@ -117,7 +122,7 @@ export default function LanguageSwitcher({ currentLang }: Props) {
                     role="option"
                     aria-selected={isActive}
                   >
-                    {LABELS[lang]}
+                    {label}
                   </button>
                 </li>
               );
