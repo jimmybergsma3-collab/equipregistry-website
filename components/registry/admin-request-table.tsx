@@ -259,7 +259,83 @@ const TABLE_TEXT: Record<
     paymentPaid: "مدفوع",
     paymentPending: "قيد الانتظار",
   },
-};
+
+  pl: {
+    emptyTitle: "Wnioski rejestracyjne",
+    emptyDescription: "Brak rejestracji pasujacych do biezacego widoku administratora.",
+    sectionTitle: "Wnioski rejestracyjne",
+    sectionDescription:
+      "Weryfikuj, zatwierdzaj, pros o dodatkowe informacje, potwierdzaj platnosc lub usuwaj rejestracje bezposrednio z przegladu.",
+    columns: {
+      reference: "Referencja",
+      asset: "Aktywo",
+      applicant: "Wnioskodawca",
+      status: "Status",
+      payment: "Platnosc",
+      completeness: "Kompletnosc",
+      updated: "Zaktualizowano",
+      actions: "Akcje",
+    },
+    paymentPaid: "Oplacono",
+    paymentPending: "Nie zakonczono",
+  },
+  sv: {
+    emptyTitle: "Registreringsforfragningar",
+    emptyDescription: "Inga registreringar matchar den aktuella adminvyn.",
+    sectionTitle: "Registreringsforfragningar",
+    sectionDescription:
+      "Granska, godkann, begar mer information, bekrafta betalningar eller radera registreringar direkt fran oversikten.",
+    columns: {
+      reference: "Referens",
+      asset: "Tillgang",
+      applicant: "Sokande",
+      status: "Status",
+      payment: "Betalning",
+      completeness: "Komplettering",
+      updated: "Uppdaterad",
+      actions: "Atgarder",
+    },
+    paymentPaid: "Betald",
+    paymentPending: "Inte slutford",
+  },
+  da: {
+    emptyTitle: "Registreringsanmodninger",
+    emptyDescription: "Ingen registreringer matcher den aktuelle adminvisning.",
+    sectionTitle: "Registreringsanmodninger",
+    sectionDescription:
+      "Gennemga, godkend, anmod om flere oplysninger, bekraeft betalinger eller slet registreringer direkte fra oversigten.",
+    columns: {
+      reference: "Reference",
+      asset: "Aktiv",
+      applicant: "Ansoger",
+      status: "Status",
+      payment: "Betaling",
+      completeness: "Fuldstaendighed",
+      updated: "Opdateret",
+      actions: "Handlinger",
+    },
+    paymentPaid: "Betalt",
+    paymentPending: "Ikke afsluttet",
+  },
+  no: {
+    emptyTitle: "Registreringsforesporsler",
+    emptyDescription: "Ingen registreringer samsvarer med den gjeldende adminvisningen.",
+    sectionTitle: "Registreringsforesporsler",
+    sectionDescription:
+      "Gjennomga, godkjenn, be om mer informasjon, bekreft betalinger eller slett registreringer direkte fra oversikten.",
+    columns: {
+      reference: "Referanse",
+      asset: "Aktiv",
+      applicant: "Soker",
+      status: "Status",
+      payment: "Betaling",
+      completeness: "Fullstendighet",
+      updated: "Oppdatert",
+      actions: "Handlinger",
+    },
+    paymentPaid: "Betalt",
+    paymentPending: "Ikke fullfort",
+  },};
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);

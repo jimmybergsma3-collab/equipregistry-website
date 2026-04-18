@@ -258,6 +258,95 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     notPayable: "هذا التسجيل لا ينتظر الدفع.",
     sessionUnavailable: "تعذر إنشاء Stripe Checkout الآن.",
   },
+
+  pl: {
+    checkoutTitle: "Dokoncz platnosc",
+    checkoutDescription:
+      "Kontynuuj te rejestracje przez bezpieczny Stripe Checkout.",
+    amountLabel: "Oplata rejestracyjna",
+    webhookNote:
+      "Platnosc jest potwierdzana automatycznie po potwierdzeniu webhooka Stripe.",
+    payButton: "Zaplac przez Stripe",
+    processing: "Przekierowywanie...",
+    genericError: "Nie mozna teraz uruchomic Stripe Checkout.",
+    returnSuccessTitle: "Platnosc Stripe zakonczona",
+    returnSuccessText:
+      "Odebrano powrot po platnosci. Ostateczne potwierdzenie nastapi automatycznie po potwierdzeniu platnosci przez Stripe.",
+    returnCancelTitle: "Platnosc Stripe anulowana",
+    returnCancelText:
+      "Nie zakonczono zadnej platnosci. Mozesz wrocic do tej rejestracji i sprobowac ponownie, gdy bedziesz gotowy.",
+    authRequired: "Musisz byc zalogowany, aby przejsc do platnosci.",
+    requestMissing: "Nie znaleziono rejestracji.",
+    alreadyPaid: "Ta rejestracja zostala juz oplacona.",
+    notPayable: "Ta rejestracja nie oczekuje na platnosc.",
+    sessionUnavailable: "Nie mozna teraz utworzyc Stripe Checkout.",
+  },
+  sv: {
+    checkoutTitle: "Slutfor betalning",
+    checkoutDescription:
+      "Fortsatt denna registrering via sakert Stripe Checkout.",
+    amountLabel: "Registreringsavgift",
+    webhookNote:
+      "Betalningen bekraftas automatiskt efter Stripe-webhookbekraftelse.",
+    payButton: "Pay with Stripe",
+    processing: "Omdirigerar...",
+    genericError: "Det gar inte att starta Stripe Checkout just nu.",
+    returnSuccessTitle: "Stripe Checkout slutford",
+    returnSuccessText:
+      "Din betalningsaterkomst togs emot. Slutlig bekraftelse genomfors automatiskt nar Stripe bekraftar betalningen.",
+    returnCancelTitle: "Stripe Checkout avbruten",
+    returnCancelText:
+      "Ingen betalning genomfordes. Du kan ga tillbaka till denna registrering och forsoka igen nar du ar redo.",
+    authRequired: "Du maste vara inloggad for att fortsatta till betalning.",
+    requestMissing: "Registreringen hittades inte.",
+    alreadyPaid: "Denna registrering ar redan betald.",
+    notPayable: "Denna registrering vantar inte pa betalning.",
+    sessionUnavailable: "Stripe Checkout kunde inte skapas just nu.",
+  },
+  da: {
+    checkoutTitle: "Gennemfor betaling",
+    checkoutDescription:
+      "Fortsat denne registrering via sikker Stripe Checkout.",
+    amountLabel: "Registreringsgebyr",
+    webhookNote:
+      "Betalingen bekraeftes automatisk efter Stripe-webhookbekraeftelse.",
+    payButton: "Betal med Stripe",
+    processing: "Omdirigerer...",
+    genericError: "Stripe Checkout kan ikke startes lige nu.",
+    returnSuccessTitle: "Stripe Checkout gennemfort",
+    returnSuccessText:
+      "Din betalingsretur blev modtaget. Endelig bekraeftelse gennemfores automatisk, nar Stripe bekraefter betalingen.",
+    returnCancelTitle: "Stripe Checkout annulleret",
+    returnCancelText:
+      "Ingen betaling blev gennemfort. Du kan vende tilbage til denne registrering og prove igen, nar du er klar.",
+    authRequired: "Du skal vaere logget ind for at fortsaette til betaling.",
+    requestMissing: "Registreringen blev ikke fundet.",
+    alreadyPaid: "Denne registrering er allerede betalt.",
+    notPayable: "Denne registrering afventer ikke betaling.",
+    sessionUnavailable: "Stripe Checkout kunne ikke oprettes lige nu.",
+  },
+  no: {
+    checkoutTitle: "Fullfor betaling",
+    checkoutDescription:
+      "Fortsett denne registreringen via sikker Stripe Checkout.",
+    amountLabel: "Registreringsgebyr",
+    webhookNote:
+      "Betalingen bekreftes automatisk etter Stripe-webhookbekreftelse.",
+    payButton: "Betal med Stripe",
+    processing: "Omdirigerer...",
+    genericError: "Kan ikke starte Stripe Checkout akkurat na.",
+    returnSuccessTitle: "Stripe Checkout fullfort",
+    returnSuccessText:
+      "Betalingsreturen din ble mottatt. Endelig bekreftelse fullfores automatisk nar Stripe bekrefter betalingen.",
+    returnCancelTitle: "Stripe Checkout avbrutt",
+    returnCancelText:
+      "Ingen betaling ble fullfort. Du kan ga tilbake til denne registreringen og prove igjen nar du er klar.",
+    authRequired: "Du ma vaere logget inn for a fortsette til betaling.",
+    requestMissing: "Registreringen ble ikke funnet.",
+    alreadyPaid: "Denne registreringen er allerede betalt.",
+    notPayable: "Denne registreringen venter ikke pa betaling.",
+    sessionUnavailable: "Stripe Checkout kunne ikke opprettes akkurat na.",
+  },
 };
 
 export function getStripePaymentText(lang: Lang) {

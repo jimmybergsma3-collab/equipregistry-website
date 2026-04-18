@@ -67,6 +67,35 @@ const TEXT: Partial<Record<Lang, AuthoritiesText>> = {
     caseId: "ID do caso",
     note: "Tenha pronta qualquer informação de apoio, como localização, hora, fotos, dados de transporte e documentos relevantes.",
   },
+
+  pl: {
+    title: "Zalecany kolejny krok",
+    text: "Skontaktuj sie z odpowiednia policja, urzedem celnym lub organem transgranicznym i podaj ponizsze dane referencyjne podczas zglaszania tej sprawy.",
+    registryId: "ID rejestru",
+    caseId: "ID sprawy",
+    note: "Przygotuj wszelkie informacje pomocnicze, takie jak lokalizacja, czas, zdjecia, dane transportowe i odpowiednie dokumenty.",
+  },
+  sv: {
+    title: "Rekommenderat nasta steg",
+    text: "Kontakta relevant polis, tull eller graensoverskridande myndighet och ange referensuppgifterna nedan nar du rapporterar detta arende.",
+    registryId: "Register-ID",
+    caseId: "Arende-ID",
+    note: "Ha all relevant information redo, till exempel plats, tid, bilder, transportuppgifter och eventuella relevanta dokument.",
+  },
+  da: {
+    title: "Anbefalet naeste skridt",
+    text: "Kontakt det relevante politi, toldvaesen eller den graenseoverskridende myndighed, og oplys referenceoplysningerne nedenfor, nar du anmelder denne sag.",
+    registryId: "Register-ID",
+    caseId: "Sags-ID",
+    note: "Hav alle relevante oplysninger klar, saasom sted, tidspunkt, billeder, transportoplysninger og eventuelle relevante dokumenter.",
+  },
+  no: {
+    title: "Anbefalt neste steg",
+    text: "Kontakt relevant politi, tollmyndighet eller grenseoverskridende myndighet, og oppgi referanseopplysningene nedenfor nar du rapporterer denne saken.",
+    registryId: "Register-ID",
+    caseId: "Saks-ID",
+    note: "Ha stotteinformasjon klar, for eksempel sted, tidspunkt, bilder, transportdetaljer og relevante dokumenter.",
+  },
 };
 
 const FALLBACK_TEXT: AuthoritiesText = {

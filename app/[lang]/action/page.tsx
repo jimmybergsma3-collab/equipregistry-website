@@ -575,6 +575,279 @@ const ACTION_TEXT: Partial<Record<Lang, ActionText>> = {
       back: "Voltar",
     },
   },
+
+  pl: {
+    verify: {
+      title: "Zweryfikuj rejestracje",
+      intro: "Sprawdz aktualny status EquipRegistry tego assetu.",
+      registryId: "Registry ID",
+      nextTitle: "Co dalej",
+      steps: [
+        "Sprawdz aktualny status rejestracji.",
+        "Sprawdz, czy po zalogowaniu beda dostepne dodatkowe szczegoly.",
+        "Wykorzystaj informacje, aby zdecydowac o kolejnym kroku.",
+      ],
+      login: "Zaloguj sie, aby kontynuowac",
+      back: "Wroc",
+    },
+    register: {
+      title: "Zarejestruj asset",
+      intro: "Utworz zgloszenie rejestracji dla tego assetu.",
+      whoTitle: "Kto moze zarejestrowac",
+      who: ["Prywatni wlasciciele", "Firmy", "Ubezpieczyciele", "Partnerzy"],
+      includesTitle: "Co obejmuje",
+      includes: [
+        "Podstawowa identyfikacja assetu",
+        "Dane wlasnosci",
+        "Dokumenty potwierdzajace",
+      ],
+      login: "Zaloguj sie, aby kontynuowac",
+      back: "Wroc",
+    },
+    report: {
+      title: "Zglos obserwacje",
+      intro: "Przeslij obserwacje dotyczaca tego assetu.",
+      registryId: "Registry ID",
+      whyTitle: "Dlaczego to wazne",
+      why: [
+        "Obserwacja moze pomoc odzyskac skradziony asset.",
+        "Wladze i odpowiednie strony moga wykorzystac te informacje.",
+      ],
+      important: "Wazne",
+      importantText:
+        "Przesylaj tylko dokladne i istotne informacje. W sytuacjach pilnych najpierw skontaktuj sie z odpowiednimi sluzbami.",
+      nextTitle: "Co dalej",
+      next: [
+        "Przeslij dostepne szczegoly dotyczace obserwacji.",
+        "EquipRegistry moze przekazac informacje odpowiednim stronom, jesli ma to zastosowanie.",
+        "Zachowaj zdjecia, lokalizacje lub informacje o czasie na wypadek pozniejszej prosby.",
+      ],
+      back: "Wroc",
+    },
+    authorities: {
+      title: "Skontaktuj sie z wladzami",
+      intro:
+        "Jesli ten asset moze byc skradziony lub podejrzany, najpierw skontaktuj sie z odpowiednimi wladzami.",
+      registryId: "Registry ID",
+      caseId: "Case ID",
+      emergencyTitle: "Nagly przypadek",
+      emergencyText:
+        "Jesli istnieje bezposrednie zagrozenie lub przestepstwo trwa, natychmiast zadzwon pod lokalny numer alarmowy.",
+      important: "Wazne",
+      importantText:
+        "EquipRegistry nie zastepuje organow scigania. W sytuacjach naglych lub kryminalnych zawsze najpierw kontaktuj sie z oficjalnymi sluzbami.",
+      back: "Wroc",
+    },
+    fallback: {
+      title: "Akcja niedostepna",
+      text: "Ta akcja jest obecnie niedostepna.",
+      back: "Wroc",
+    },
+  },
+  sv: {
+    verify: {
+      title: "Verifiera registrering",
+      intro: "Kontrollera aktuell EquipRegistry-status for denna asset.",
+      registryId: "Registry ID",
+      nextTitle: "Vad hander nu",
+      steps: [
+        "Granska den aktuella registreringsstatusen.",
+        "Kontrollera om fler detaljer blir tillgangliga efter inloggning.",
+        "Anvand informationen for att avgora ditt nasta steg.",
+      ],
+      login: "Logga in for att fortsatta",
+      back: "Tillbaka",
+    },
+    register: {
+      title: "Registrera asset",
+      intro: "Skapa ett registreringsarende for denna asset.",
+      whoTitle: "Vem kan registrera",
+      who: ["Privata agare", "Foretag", "Forsakrare", "Partner"],
+      includesTitle: "Detta ingar",
+      includes: [
+        "Grundlaggande identifikation av asseten",
+        "Agaruppgifter",
+        "Stodjande dokument",
+      ],
+      login: "Logga in for att fortsatta",
+      back: "Tillbaka",
+    },
+    report: {
+      title: "Rapportera observation",
+      intro: "Skicka in en observation som galler denna asset.",
+      registryId: "Registry ID",
+      whyTitle: "Varfor detta ar viktigt",
+      why: [
+        "En observation kan hjalpa till att aterfa en stulen asset.",
+        "Myndigheter och relevanta parter kan anvanda denna information.",
+      ],
+      important: "Viktigt",
+      importantText:
+        "Skicka bara in information som ar korrekt och relevant. Vid akuta situationer ska du kontakta myndigheterna forst.",
+      nextTitle: "Vad hander nu",
+      next: [
+        "Skicka in de tillgangliga detaljerna om observationen.",
+        "EquipRegistry kan vidarebefordra informationen till relevanta parter dar det ar tillampligt.",
+        "Ha foto, plats eller tidsuppgifter redo om de efterfragas senare.",
+      ],
+      back: "Tillbaka",
+    },
+    authorities: {
+      title: "Kontakta myndigheter",
+      intro:
+        "Om denna asset kan vara stulen eller misstankt ska du forst kontakta relevanta myndigheter.",
+      registryId: "Registry ID",
+      caseId: "Case ID",
+      emergencyTitle: "Nodsituation",
+      emergencyText:
+        "Om det finns omedelbar fara eller ett brott pagar ska du omedelbart ringa det lokala nodnumret.",
+      important: "Viktigt",
+      importantText:
+        "EquipRegistry ersatter inte brottsbekampande myndigheter. Kontakta alltid officiella myndigheter forst vid akuta eller brottsliga situationer.",
+      back: "Tillbaka",
+    },
+    fallback: {
+      title: "Atgarden ar inte tillganglig",
+      text: "Denna atgard ar for narvarande inte tillganglig.",
+      back: "Tillbaka",
+    },
+  },
+  da: {
+    verify: {
+      title: "Verificer registrering",
+      intro: "Kontroller den aktuelle EquipRegistry-status for dette asset.",
+      registryId: "Registry ID",
+      nextTitle: "Hvad sker der nu",
+      steps: [
+        "Gennemga den aktuelle registreringsstatus.",
+        "Kontroller om flere detaljer bliver tilgaengelige efter login.",
+        "Brug oplysningerne til at beslutte dit naeste skridt.",
+      ],
+      login: "Log ind for at fortsaette",
+      back: "Tilbage",
+    },
+    register: {
+      title: "Registrer asset",
+      intro: "Opret en registreringsanmodning for dette asset.",
+      whoTitle: "Hvem kan registrere",
+      who: ["Private ejere", "Virksomheder", "Forsikringsselskaber", "Partnere"],
+      includesTitle: "Dette omfatter",
+      includes: [
+        "Grundlaeggende assetidentifikation",
+        "Ejerskabsoplysninger",
+        "Stottedokumenter",
+      ],
+      login: "Log ind for at fortsaette",
+      back: "Tilbage",
+    },
+    report: {
+      title: "Rapporter observation",
+      intro: "Indsend en observation relateret til dette asset.",
+      registryId: "Registry ID",
+      whyTitle: "Hvorfor det betyder noget",
+      why: [
+        "En observation kan hjaelpe med at genfinde et stjalet asset.",
+        "Myndigheder og relevante parter kan bruge disse oplysninger.",
+      ],
+      important: "Vigtigt",
+      importantText:
+        "Indsend kun oplysninger, der er korrekte og relevante. I hastesituationer skal du kontakte myndighederne forst.",
+      nextTitle: "Hvad sker der nu",
+      next: [
+        "Indsend de tilgaengelige detaljer om observationen.",
+        "EquipRegistry kan videregive oplysningerne til relevante parter, hvor det er relevant.",
+        "Hav foto-, lokations- eller tidsoplysninger klar, hvis de eftersporges senere.",
+      ],
+      back: "Tilbage",
+    },
+    authorities: {
+      title: "Kontakt myndigheder",
+      intro:
+        "Hvis dette asset kan vaere stjalet eller mistankeligt, skal du forst kontakte de relevante myndigheder.",
+      registryId: "Registry ID",
+      caseId: "Case ID",
+      emergencyTitle: "Nodsituation",
+      emergencyText:
+        "Hvis der er umiddelbar fare eller en forbrydelse i gang, skal du straks ringe til det lokale alarmnummer.",
+      important: "Vigtigt",
+      importantText:
+        "EquipRegistry erstatter ikke retshandhaevelse. Kontakt altid officielle myndigheder forst i hastende eller kriminelle situationer.",
+      back: "Tilbage",
+    },
+    fallback: {
+      title: "Handling ikke tilgaengelig",
+      text: "Denne handling er i ojeblikket ikke tilgaengelig.",
+      back: "Tilbage",
+    },
+  },
+  no: {
+    verify: {
+      title: "Verifiser registrering",
+      intro: "Kontroller gjeldende EquipRegistry-status for denne asseten.",
+      registryId: "Registry ID",
+      nextTitle: "Hva skjer na",
+      steps: [
+        "Ga gjennom gjeldende registreringsstatus.",
+        "Kontroller om flere detaljer blir tilgjengelige etter innlogging.",
+        "Bruk informasjonen til a bestemme neste steg.",
+      ],
+      login: "Logg inn for a fortsette",
+      back: "Tilbake",
+    },
+    register: {
+      title: "Registrer asset",
+      intro: "Opprett en registreringsforesporsel for denne asseten.",
+      whoTitle: "Hvem kan registrere",
+      who: ["Private eiere", "Selskaper", "Forsikrere", "Partnere"],
+      includesTitle: "Dette inkluderer",
+      includes: [
+        "Grunnleggende identifikasjon av asseten",
+        "Eierskapsdetaljer",
+        "Stottedokumenter",
+      ],
+      login: "Logg inn for a fortsette",
+      back: "Tilbake",
+    },
+    report: {
+      title: "Rapporter observasjon",
+      intro: "Send inn en observasjon knyttet til denne asseten.",
+      registryId: "Registry ID",
+      whyTitle: "Hvorfor dette er viktig",
+      why: [
+        "En observasjon kan bidra til a fa tilbake en stjalet asset.",
+        "Myndigheter og relevante parter kan bruke denne informasjonen.",
+      ],
+      important: "Viktig",
+      importantText:
+        "Send bare inn informasjon som er korrekt og relevant. I akutte situasjoner skal du kontakte myndighetene forst.",
+      nextTitle: "Hva skjer na",
+      next: [
+        "Send inn de tilgjengelige detaljene om observasjonen.",
+        "EquipRegistry kan videreformidle informasjonen til relevante parter der det er aktuelt.",
+        "Ha foto, lokasjon eller tidsdetaljer klare hvis de etterspors senere.",
+      ],
+      back: "Tilbake",
+    },
+    authorities: {
+      title: "Kontakt myndigheter",
+      intro:
+        "Hvis denne asseten kan vaere stjalet eller mistenkelig, skal du forst kontakte relevante myndigheter.",
+      registryId: "Registry ID",
+      caseId: "Case ID",
+      emergencyTitle: "Nodsituasjon",
+      emergencyText:
+        "Hvis det er umiddelbar fare eller en forbrytelse pagar, ring det lokale nodnummeret med en gang.",
+      important: "Viktig",
+      importantText:
+        "EquipRegistry erstatter ikke politi eller andre myndigheter. Kontakt alltid offisielle myndigheter forst i akutte eller kriminelle situasjoner.",
+      back: "Tilbake",
+    },
+    fallback: {
+      title: "Handling ikke tilgjengelig",
+      text: "Denne handlingen er for oyeblikket ikke tilgjengelig.",
+      back: "Tilbake",
+    },
+  },
 };
 
 const EN_FALLBACK = ACTION_TEXT.en!;

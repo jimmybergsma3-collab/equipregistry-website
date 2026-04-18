@@ -280,6 +280,91 @@ const TEXT: Record<Lang, StolenReviewText> = {
         "Lam yutam aleuthur ala taqrir almalik lihatha altasjil.",
     },
   },
+
+  pl: {
+    pendingReview: "Oczekuje na weryfikacje administratora",
+    activateTitle: "Aktywuj publiczne ostrzezenie",
+    activateDescription:
+      "Sprawdz zgloszenie wlasciciela i zalaczone dowody, zanim zamienisz je w publiczne ostrzezenie typu red flag w paszporcie.",
+    activate: "Aktywuj publiczna czerwona flage",
+    activating: "Aktywowanie...",
+    evidenceFiles: "Pliki dowodowe wlasciciela",
+    policeReportFiles: "Pliki zgloszenia policyjnego",
+    noEvidenceFiles: "Nie przeslano jeszcze plikow dowodowych wlasciciela.",
+    noPoliceReportFiles: "Nie przeslano jeszcze plikow zgloszenia policyjnego.",
+    messages: {
+      pendingSaved: "Sprawa kradziezy zostala zapisana do weryfikacji. Publiczne ostrzezenie jest nadal nieaktywne.",
+      activated: "Publiczne ostrzezenie o kradziezy zostalo aktywowane dla tego paszportu.",
+      notPending:
+        "Tylko zgloszenia oczekujace na weryfikacje mozna aktywowac jako publiczne ostrzezenie o kradziezy.",
+      missingEvidence:
+        "Przed aktywacja wymagany jest co najmniej jeden dokument potwierdzajacy lub plik dowodowy.",
+      caseMissing: "Nie znaleziono zgloszenia wlasciciela dla tej rejestracji.",
+    },
+  },
+  sv: {
+    pendingReview: "Admin-granskning vantar",
+    activateTitle: "Aktivera publik varning",
+    activateDescription:
+      "Granska agarrapporten och bifogade bevis innan detta forvandlas till en publik red-flag-varning i passet.",
+    activate: "Aktivera publik rod flagga",
+    activating: "Aktiverar...",
+    evidenceFiles: "Agarens bevisfiler",
+    policeReportFiles: "Polisrapportfiler",
+    noEvidenceFiles: "Inga bevisfiler fran agaren har laddats upp an.",
+    noPoliceReportFiles: "Inga polisrapportfiler har laddats upp an.",
+    messages: {
+      pendingSaved: "Stoldarendet sparades for granskning. Den publika varningen ar fortfarande inaktiv.",
+      activated: "Publik stoldvarning aktiverad for detta pass.",
+      notPending:
+        "Endast rapporter som vantar pa granskning kan aktiveras som publik stoldvarning.",
+      missingEvidence:
+        "Minst ett stodjande dokument eller en bevisfil kravs fore aktivering.",
+      caseMissing: "Ingen agarrapport hittades for denna registrering.",
+    },
+  },
+  da: {
+    pendingReview: "Admin-gennemgang afventer",
+    activateTitle: "Aktiver offentlig advarsel",
+    activateDescription:
+      "Gennemga ejerrapporten og vedhaeftede beviser, for dette omdannes til en offentlig red-flag-advarsel i passet.",
+    activate: "Aktiver offentlig rod markering",
+    activating: "Aktiverer...",
+    evidenceFiles: "Ejerens bevisfiler",
+    policeReportFiles: "Politirapportfiler",
+    noEvidenceFiles: "Der er endnu ikke uploadet bevisfiler fra ejeren.",
+    noPoliceReportFiles: "Der er endnu ikke uploadet politirapportfiler.",
+    messages: {
+      pendingSaved: "Sagen om stjalet asset blev gemt til gennemgang. Den offentlige advarsel er stadig inaktiv.",
+      activated: "Offentlig stjalet-advarsel aktiveret for dette pas.",
+      notPending:
+        "Kun rapporter, der afventer gennemgang, kan aktiveres som offentlig stjalet-advarsel.",
+      missingEvidence:
+        "Mindst et stottedokument eller en bevisfil er paakraevet for aktivering.",
+      caseMissing: "Der blev ikke fundet nogen ejerrapport for denne registrering.",
+    },
+  },
+  no: {
+    pendingReview: "Admin-gjennomgang venter",
+    activateTitle: "Aktiver offentlig advarsel",
+    activateDescription:
+      "Ga gjennom eierrapporten og vedlagte bevis for dette blir en offentlig red-flag-advarsel i passet.",
+    activate: "Aktiver offentlig rod markering",
+    activating: "Aktiverer...",
+    evidenceFiles: "Eierens bevisfiler",
+    policeReportFiles: "Politirapportfiler",
+    noEvidenceFiles: "Ingen bevisfiler fra eieren er lastet opp enn.",
+    noPoliceReportFiles: "Ingen politirapportfiler er lastet opp enn.",
+    messages: {
+      pendingSaved: "Tyverisaken ble lagret for gjennomgang. Den offentlige advarselen er fortsatt inaktiv.",
+      activated: "Offentlig stjalet-advarsel aktivert for dette passet.",
+      notPending:
+        "Bare rapporter som venter pa gjennomgang kan aktiveres som offentlig stjalet-advarsel.",
+      missingEvidence:
+        "Minst ett stottedokument eller en bevisfil er paakrevd for aktivering.",
+      caseMissing: "Det ble ikke funnet noen eierrapport for denne registreringen.",
+    },
+  },
 };
 
 export function getStolenReviewText(lang: string | Lang): StolenReviewText {

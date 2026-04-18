@@ -23,7 +23,7 @@ export default function RequestStatusBadge({
     <span
       className={[
         compact
-          ? "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium"
+          ? "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium leading-4"
           : "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium",
         getRequestStatusClasses(status),
       ].join(" ")}

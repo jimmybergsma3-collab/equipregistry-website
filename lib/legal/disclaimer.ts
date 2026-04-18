@@ -903,4 +903,313 @@ export const disclaimerContent: Record<Lang, DisclaimerContent> = {
     closing:
       "随着 EquipRegistry 的进一步发展，包括未来在商业、技术和法律层面的扩展，本免责声明可能会不时更新。",
   },
+
+  pl: {
+    title: "Zastrzezenie prawne",
+    intro:
+      "Niniejsze Zastrzezenie prawne dotyczy korzystania ze strony internetowej EquipRegistry, uslug, publicznych stron weryfikacyjnych, cyfrowych paszportow, wnioskow rejestracyjnych oraz powiazanych informacji udostepnianych za posrednictwem platformy.",
+    operatorTitle: "Obslugiwane przez",
+    sections: {
+      general: {
+        title: "1. Informacje ogolne",
+        body: [
+          "EquipRegistry ma na celu zapewnienie cyfrowej platformy rejestracji, weryfikacji i informacji o statusie dla sprzetu, pojazdow, przyczep, rowerow, e-bike'ow, hulajnog elektrycznych, maszyn, narzedzi, assetow przemyslowych, assetow zwiazanych z energia oraz innego kwalifikujacego sie mienia.",
+          "Wszystkie informacje na tej stronie internetowej sa udostepniane wylacznie do ogolnych celow informacyjnych.",
+          "Chociaz EquipRegistry doklada staran, aby prezentowac informacje z nalezyta starannoscia i utrzymywac platforme mozliwie dokladna i uzyteczna, nie udziela gwarancji, ze wszystkie informacje sa kompletne, dokladne, aktualne lub wolne od bledow.",
+        ],
+      },
+      noGuarantee: {
+        title: "2. Brak gwarancji prawnej wlasnosci",
+        body: [
+          "EquipRegistry nie jest organem panstwowym, rejestrem publicznym, organem policyjnym, ubezpieczycielem, notariuszem ani oficjalnym urzedem rejestrujacym tytuly.",
+          "Rejestracja, paszport, wynik wyszukiwania, wynik weryfikacji, etykieta statusu, referencja sprawy, przeslany dokument lub wpis konta w EquipRegistry nie stanowi sam w sobie ostatecznego dowodu prawnego wlasnosci, posiadania, tytulu, pochodzenia ani braku obciazen.",
+          "Uzytkownicy, kupujacy, sprzedajacy, ubezpieczyciele, firmy wynajmujace, banki, organy i inne strony trzecie musza zawsze przeprowadzac wlasne kontrole prawne, handlowe i faktyczne.",
+        ],
+      },
+      userResponsibility: {
+        title: "3. Odpowiedzialnosc uzytkownika",
+        body: [
+          "Uzytkownik ponosi wylaczna odpowiedzialnosc za wszystkie informacje, dokumenty, roszczenia i dane przesylane do EquipRegistry.",
+          "Przesylajac informacje, uzytkownik oswiadcza, ze ma prawo je dostarczyc oraz ze nie sa one falszywe, wprowadzajace w blad, oszukancze, bezprawne ani naruszajace prawa innych osob.",
+          "EquipRegistry moze zawiesic, odmowic, usunac lub oznaczyc rejestracje, konta, zgloszenia lub dokumenty w przypadku stwierdzenia naduzyc, niespojnosci, wskaznikow ryzyka lub podejrzenia oszustwa.",
+        ],
+      },
+      thirdParties: {
+        title: "4. Korzystanie przez strony trzecie",
+        body: [
+          "Strony trzecie, w tym ubezpieczyciele, dostawcy finansowania, firmy wynajmujace, dealerzy, podmioty logistyczne i organy, moga zapoznawac sie z informacjami udostepnianymi za posrednictwem EquipRegistry.",
+          "EquipRegistry nie gwarantuje, ze strony trzecie beda interpretowac, wykorzystywac, akceptowac, odrzucac lub polegac na informacjach w jakikolwiek okreslony sposob.",
+          "Wszelkie decyzje podejmowane przez strony trzecie pozostaja ich wlasna odpowiedzialnoscia.",
+        ],
+      },
+      stolenReports: {
+        title: "5. Zgloszenia kradziezy i red flags",
+        body: [
+          "Wskazniki statusu kradziezy, red flags, ostrzezenia, referencje spraw i podobne alerty moga opierac sie na przeslanych zgloszeniach, dokumentacji, przegladzie wewnetrznym, informacjach partnerskich lub przyszlych zintegrowanych workflow raportowania.",
+          "Takie wskazniki moga miec charakter tymczasowy, byc w trakcie przegladu, sporne, aktualizowane, ograniczane lub usuwane, gdy pojawiaja sie nowe informacje.",
+          "EquipRegistry nie zastepuje rejestrow policyjnych, orzeczen sadowych, ustalen ubezpieczeniowych ani oficjalnych procedur karnych lub cywilnych.",
+        ],
+      },
+      availability: {
+        title: "6. Dostepnosc i ciaglosc",
+        body: [
+          "EquipRegistry nie gwarantuje nieprzerwanej dostepnosci, ciaglego czasu dzialania ani bezblednego funkcjonowania strony internetowej lub jakiejkolwiek czesci uslugi.",
+          "Strony, funkcje, statusy, dostep do konta i wyniki weryfikacji moga byc modyfikowane, ograniczane, zawieszane lub wycofywane w dowolnym czasie.",
+        ],
+      },
+      futureServices: {
+        title: "7. Przyszle uslugi i rozwoj",
+        body: [
+          "EquipRegistry moze w przyszlosci wprowadzic dodatkowe uslugi, w tym miedzy innymi integracje platnosci, warstwy dostepu partnerskiego, workflow ubezpieczycieli, workflow przeniesienia wlasnosci, przypomnienia, logike wygasania, odnowienia walidacji, polaczenia API, narzedzia panelowe i inne funkcje weryfikacji lub monitorowania.",
+          "Takie przyszle uslugi moga podlegac odrebnym warunkom, ograniczeniom technicznym, ograniczeniom jurysdykcyjnym, wymogom operacyjnym i dodatkowym procedurom przegladu.",
+        ],
+      },
+      liability: {
+        title: "8. Ograniczenie odpowiedzialnosci",
+        body: [
+          "W maksymalnym zakresie dopuszczonym przez obowiazujace prawo EquipRegistry i jego operator nie ponosza odpowiedzialnosci za szkody bezposrednie, posrednie, przypadkowe, nastpcze, handlowe, reputacyjne, prawne lub finansowe wynikajace z korzystania z platformy, braku mozliwosci korzystania z niej, polegania na niej lub interpretacji platformy albo jakichkolwiek informacji za jej posrednictwem udostepnianych.",
+          "Korzystanie z EquipRegistry odbywa sie na wlasne ryzyko uzytkownika.",
+        ],
+      },
+      contact: {
+        title: "9. Dane kontaktowe",
+        body: [
+          "W sprawach dotyczacych niniejszego Zastrzezenia prawnego lub platformy mozesz skontaktowac sie z EquipRegistry, korzystajac z ponizszych danych.",
+        ],
+      },
+    },
+    closing:
+      "Niniejsze Zastrzezenie prawne moze byc od czasu do czasu aktualizowane wraz z dalszym rozwojem EquipRegistry, w tym przyszla ekspansja handlowa, techniczna i prawna platformy.",
+  },
+  sv: {
+    title: "Ansvarsfriskrivning",
+    intro:
+      "Denna ansvarsfriskrivning galler anvandningen av EquipRegistrys webbplats, tjanster, publika verifieringssidor, digitala pass, registreringsansokningar och relaterad information som goras tillganglig via plattformen.",
+    operatorTitle: "Drivs av",
+    sections: {
+      general: {
+        title: "1. Allman information",
+        body: [
+          "EquipRegistry syftar till att tillhandahalla en digital plattform for registrering, verifiering och statusinformation for utrustning, fordon, slap, cyklar, e-bikes, elsparkcyklar, maskiner, verktyg, industriella assets, energirelaterade assets och annan kvalificerad egendom.",
+          "All information pa denna webbplats tillhandahalls endast for allmanna informationssyften.",
+          "Aven om EquipRegistry stravar efter att presentera information noggrant och halla plattformen sa korrekt och anvandbar som mojligt, lamnas ingen garanti for att all information ar fullstandig, korrekt, aktuell eller fri fran fel.",
+        ],
+      },
+      noGuarantee: {
+        title: "2. Ingen juridisk garanti for agande",
+        body: [
+          "EquipRegistry ar inte en statlig myndighet, ett offentligt register, en polismyndighet, en forsakrare, en notarie eller ett officiellt registerkontor for titlar.",
+          "En registrering, ett pass, ett sokresultat, ett verifieringsresultat, en statusetikett, en arendereferens, ett uppladdat dokument eller en kontopost pa EquipRegistry utgor inte i sig slutgiltigt juridiskt bevis for agande, besittning, titel, ursprung eller frihet fran belastningar.",
+          "Anvandare, kopare, saljare, forsakrare, uthyrningsforetag, banker, myndigheter och andra tredje parter maste alltid genomfora egna juridiska, kommersiella och faktiska kontroller.",
+        ],
+      },
+      userResponsibility: {
+        title: "3. Anvandaransvar",
+        body: [
+          "Anvandaren ar ensam ansvarig for all information, alla dokument, ansprak och data som skickas in till EquipRegistry.",
+          "Genom att skicka in information forsakrar anvandaren att denne har ratt att tillhandahalla den och att den inte ar falsk, vilseledande, bedraglig, olaglig eller inkraktar pa andras rattigheter.",
+          "EquipRegistry kan stanga av, neka, ta bort eller markera registreringar, konton, rapporter eller dokument dar missbruk, inkonsekvenser, riskindikatorer eller misstankt bedrageri identifieras.",
+        ],
+      },
+      thirdParties: {
+        title: "4. Anvandning av tredje part",
+        body: [
+          "Tredje parter, inklusive forsakrare, finansieringsgivare, uthyrningsforetag, handlare, logistikparter och myndigheter, kan ta del av information som gors tillganglig via EquipRegistry.",
+          "EquipRegistry garanterar inte att tredje parter kommer att tolka, anvanda, acceptera, avvisa eller forlita sig pa information pa nagot visst satt.",
+          "Alla beslut som fattas av tredje parter forblir deras eget ansvar.",
+        ],
+      },
+      stolenReports: {
+        title: "5. Stoldrapporter och red flags",
+        body: [
+          "Stoldstatusindikatorer, red flags, varningsmeddelanden, arendereferenser och liknande varningar kan baseras pa inskickade rapporter, dokumentation, intern granskning, partnerinformation eller framtida integrerade rapporteringsfloden.",
+          "Sadan indikatorer kan vara preliminara, under granskning, tvistiga, uppdaterade, begransade eller borttagna om ny information blir tillganglig.",
+          "EquipRegistry ersatter inte polisregister, domstolsbeslut, forsakringsbedomningar eller officiella straff- eller civilrattsliga processer.",
+        ],
+      },
+      availability: {
+        title: "6. Tillganglighet och kontinuitet",
+        body: [
+          "EquipRegistry garanterar inte oavbruten tillganglighet, kontinuerlig upptid eller felfri drift av webbplatsen eller nagon del av tjansten.",
+          "Sidor, funktioner, statusar, kontotillgang och verifieringsresultat kan andras, begransas, stangas av eller dras tillbaka nar som helst.",
+        ],
+      },
+      futureServices: {
+        title: "7. Framtida tjanster och utveckling",
+        body: [
+          "EquipRegistry kan i framtiden infora ytterligare tjanster, inklusive men inte begransat till betalningsintegrationer, lager for partnertillgang, floden for forsakrare, floden for agaroverforing, paminnelser, utgangslogik, valideringsfornyelser, API-anslutningar, dashboardverktyg och andra verifierings- eller overvagningsfunktioner.",
+          "Sadan framtida tjanster kan omfattas av separata villkor, tekniska begransningar, jurisdiktionsrestriktioner, operativa krav och ytterligare granskningsforfaranden.",
+        ],
+      },
+      liability: {
+        title: "8. Ansvarsbegransning",
+        body: [
+          "I den storsta utstrackning som tillamplig lag medger ska EquipRegistry och dess operator inte vara ansvariga for direkta, indirekta, tillfalliga, foljdskador, kommersiella, renommemassiga, juridiska eller finansiella forluster som uppstar genom anvandning av, oformaga att anvanda, tillit till eller tolkning av plattformen eller nagon information som goras tillganglig genom den.",
+          "Anvandning av EquipRegistry sker pa anvandarens egen risk.",
+        ],
+      },
+      contact: {
+        title: "9. Kontaktuppgifter",
+        body: [
+          "Vid fragor om denna ansvarsfriskrivning eller plattformen kan du kontakta EquipRegistry med uppgifterna nedan.",
+        ],
+      },
+    },
+    closing:
+      "Denna ansvarsfriskrivning kan uppdateras fran tid till annan i takt med att EquipRegistry utvecklas vidare, inklusive framtida kommersiell, teknisk och juridisk expansion av plattformen.",
+  },
+  da: {
+    title: "Ansvarsfraskrivelse",
+    intro:
+      "Denne ansvarsfraskrivelse gaelder brugen af EquipRegistrys hjemmeside, tjenester, offentlige verificeringssider, digitale pas, registreringsanmodninger og relaterede oplysninger, der stilles til raadighed via platformen.",
+    operatorTitle: "Drevet af",
+    sections: {
+      general: {
+        title: "1. Generel information",
+        body: [
+          "EquipRegistry har til formal at levere en digital platform for registrering, verificering og statusinformation for udstyr, koretojer, trailere, cykler, e-bikes, elektriske lobehjul, maskiner, vaerktoj, industrielle assets, energirelaterede assets og anden kvalificeret ejendom.",
+          "Alle oplysninger pa denne hjemmeside stilles kun til raadighed til generelle informationsformal.",
+          "Selv om EquipRegistry bestraber sig pa at praesentere oplysninger omhyggeligt og holde platformen sa korrekt og nyttig som muligt, gives der ingen garanti for, at alle oplysninger er fuldstaendige, korrekte, aktuelle eller fejlfrie.",
+        ],
+      },
+      noGuarantee: {
+        title: "2. Ingen juridisk garanti for ejerskab",
+        body: [
+          "EquipRegistry er ikke en myndighed, et offentligt register, en politimyndighed, et forsikringsselskab, en notar eller et officielt registerkontor for titler.",
+          "En registrering, et pas, et sogeresultat, et verificeringsresultat, en statusetiket, en sagsreference, et uploadet dokument eller en kontopost pa EquipRegistry udgor ikke i sig selv endeligt juridisk bevis for ejerskab, besiddelse, titel, oprindelse eller frihed for haeftelser.",
+          "Brugere, kobere, saelgere, forsikringsselskaber, udlejningsfirmaer, banker, myndigheder og andre tredjeparter skal altid foretage deres egne juridiske, kommercielle og faktiske kontroller.",
+        ],
+      },
+      userResponsibility: {
+        title: "3. Brugeransvar",
+        body: [
+          "Brugeren er alene ansvarlig for alle oplysninger, dokumenter, krav og data, der indsendes til EquipRegistry.",
+          "Ved at indsende oplysninger erklrer brugeren, at vedkommende er berettiget til at levere dem, og at de ikke er falske, vildledende, svigagtige, ulovlige eller kraenker andres rettigheder.",
+          "EquipRegistry kan suspendere, afvise, fjerne eller markere registreringer, konti, rapporter eller dokumenter, hvor misbrug, uoverensstemmelser, risikoindikatorer eller mistanke om svig identificeres.",
+        ],
+      },
+      thirdParties: {
+        title: "4. Brug af tredjeparter",
+        body: [
+          "Tredjeparter, herunder forsikringsselskaber, finansieringsudbydere, udlejningsfirmaer, forhandlere, logistikparter og myndigheder, kan konsultere oplysninger, der gors tilgaengelige via EquipRegistry.",
+          "EquipRegistry garanterer ikke, at tredjeparter vil fortolke, bruge, acceptere, afvise eller stole pa oplysninger pa nogen bestemt made.",
+          "Alle beslutninger, der traeffes af tredjeparter, forbliver deres eget ansvar.",
+        ],
+      },
+      stolenReports: {
+        title: "5. Tyverirapporter og red flags",
+        body: [
+          "Indikatorer for stjalen-status, red flags, advarsler, sagsreferencer og lignende alarmer kan baseres pa indsendte rapporter, dokumentation, intern gennemgang, partnerinformation eller fremtidige integrerede rapporteringsflows.",
+          "Sadanne indikatorer kan vaere forelobige, under gennemgang, omstridte, opdaterede, begraensede eller fjernede, hvis nye oplysninger bliver tilgaengelige.",
+          "EquipRegistry erstatter ikke politiregistre, retsafgorelser, forsikringsvurderinger eller officielle straffe- eller civilretlige procedurer.",
+        ],
+      },
+      availability: {
+        title: "6. Tilgaengelighed og kontinuitet",
+        body: [
+          "EquipRegistry garanterer ikke uafbrudt tilgaengelighed, kontinuerlig oppetid eller fejlfri drift af hjemmesiden eller nogen del af tjenesten.",
+          "Sider, funktioner, statusser, kontoadgang og verificeringsresultater kan aendres, begraenses, suspenderes eller traekkes tilbage til enhver tid.",
+        ],
+      },
+      futureServices: {
+        title: "7. Fremtidige tjenester og udvikling",
+        body: [
+          "EquipRegistry kan i fremtiden indfore yderligere tjenester, herunder men ikke begraenset til betalingsintegrationer, lag for partnertilgang, flows for forsikringsselskaber, flows for ejerskabsoverdragelse, pamindelser, udlobslogik, valideringsfornyelser, API-forbindelser, dashboardvaerktojer og andre funktioner til verificering eller overvagning.",
+          "Sadanne fremtidige tjenester kan vaere underlagt separate vilkar, tekniske begransninger, jurisdiktionsmaessige restriktioner, operationelle krav og yderligere gennemgangsprocedurer.",
+        ],
+      },
+      liability: {
+        title: "8. Ansvarsbegransning",
+        body: [
+          "I det maksimale omfang, der er tilladt efter gaeldende lov, er EquipRegistry og dets operator ikke ansvarlige for direkte, indirekte, tilfaldige, afledte, kommercielle, omdommemassige, juridiske eller finansielle tab, der opstar som folge af brugen af, manglende evne til at bruge, tillid til eller fortolkning af platformen eller oplysninger, der stilles til raadighed gennem den.",
+          "Brugen af EquipRegistry sker pa brugerens egen risiko.",
+        ],
+      },
+      contact: {
+        title: "9. Kontaktoplysninger",
+        body: [
+          "Hvis du har sporgsmal vedrorende denne ansvarsfraskrivelse eller platformen, kan du kontakte EquipRegistry ved hjaelp af nedenstaende oplysninger.",
+        ],
+      },
+    },
+    closing:
+      "Denne ansvarsfraskrivelse kan opdateres fra tid til anden, efterhanden som EquipRegistry udvikler sig yderligere, herunder fremtidig kommerciel, teknisk og juridisk udvidelse af platformen.",
+  },
+  no: {
+    title: "Ansvarsfraskrivelse",
+    intro:
+      "Denne ansvarsfraskrivelsen gjelder bruken av EquipRegistry-nettstedet, tjenestene, offentlige verifiseringssider, digitale pass, registreringsforesporsler og relatert informasjon som gjores tilgjengelig gjennom plattformen.",
+    operatorTitle: "Drevet av",
+    sections: {
+      general: {
+        title: "1. Generell informasjon",
+        body: [
+          "EquipRegistry har som mal a tilby en digital plattform for registrering, verifisering og statusinformasjon for utstyr, kjoretoy, tilhengere, sykler, e-bikes, elektriske sparkesykler, maskiner, verktoy, industrielle assets, energirelaterte assets og annen kvalifisert eiendom.",
+          "All informasjon pa dette nettstedet gis kun for generelle informasjonsformal.",
+          "Selv om EquipRegistry forsoker a presentere informasjon med omhu og holde plattformen sa korrekt og nyttig som mulig, gis det ingen garanti for at all informasjon er fullstendig, korrekt, oppdatert eller fri for feil.",
+        ],
+      },
+      noGuarantee: {
+        title: "2. Ingen juridisk garanti for eierskap",
+        body: [
+          "EquipRegistry er ikke en offentlig myndighet, et offentlig register, en politimyndighet, en forsikrer, en notarius publicus eller et offisielt registerkontor for titler.",
+          "En registrering, et pass, et sokeresultat, et verifiseringsresultat, en statusetikett, en saksreferanse, et opplastet dokument eller en kontopost pa EquipRegistry utgor ikke i seg selv endelig juridisk bevis for eierskap, besittelse, tittel, opprinnelse eller frihet fra heftelser.",
+          "Brukere, kjopere, selgere, forsikrere, utleieselskaper, banker, myndigheter og andre tredjeparter ma alltid gjennomfore sine egne juridiske, kommersielle og faktiske kontroller.",
+        ],
+      },
+      userResponsibility: {
+        title: "3. Brukeransvar",
+        body: [
+          "Brukeren er eneansvarlig for all informasjon, alle dokumenter, krav og data som sendes inn til EquipRegistry.",
+          "Ved a sende inn informasjon erklaerer brukeren at vedkommende har rett til a gi den, og at den ikke er falsk, villedende, uredelig, ulovlig eller krenker andres rettigheter.",
+          "EquipRegistry kan suspendere, avvise, fjerne eller merke registreringer, kontoer, rapporter eller dokumenter der misbruk, inkonsekvenser, risikoindikatorer eller mistanke om svindel identifiseres.",
+        ],
+      },
+      thirdParties: {
+        title: "4. Bruk av tredjeparter",
+        body: [
+          "Tredjeparter, inkludert forsikrere, finansieringsleverandorer, utleieselskaper, forhandlere, logistikkparter og myndigheter, kan konsultere informasjon som gjores tilgjengelig gjennom EquipRegistry.",
+          "EquipRegistry garanterer ikke at tredjeparter vil tolke, bruke, akseptere, avvise eller stole pa informasjon pa noen bestemt mate.",
+          "Alle beslutninger som tas av tredjeparter forblir deres eget ansvar.",
+        ],
+      },
+      stolenReports: {
+        title: "5. Tyverirapporter og red flags",
+        body: [
+          "Indikatorer for tyveristatus, red flags, advarsler, saksreferanser og lignende varsler kan bygge pa innsendte rapporter, dokumentasjon, intern gjennomgang, partnerinformasjon eller fremtidige integrerte rapporteringsflyter.",
+          "Slike indikatorer kan vaere forelopige, under gjennomgang, omstridte, oppdaterte, begrensede eller fjernet dersom ny informasjon blir tilgjengelig.",
+          "EquipRegistry erstatter ikke politiregistre, domstolsavgjorelser, forsikringsvurderinger eller offisielle straffe- eller sivilrettslige prosedyrer.",
+        ],
+      },
+      availability: {
+        title: "6. Tilgjengelighet og kontinuitet",
+        body: [
+          "EquipRegistry garanterer ikke uavbrutt tilgjengelighet, kontinuerlig oppetid eller feilfri drift av nettstedet eller noen del av tjenesten.",
+          "Sider, funksjoner, statuser, kontotilgang og verifiseringsresultater kan endres, begrenses, suspenderes eller trekkes tilbake nar som helst.",
+        ],
+      },
+      futureServices: {
+        title: "7. Fremtidige tjenester og utvikling",
+        body: [
+          "EquipRegistry kan i fremtiden innfore ytterligere tjenester, inkludert men ikke begrenset til betalingsintegrasjoner, lag for partnertilgang, flyter for forsikrere, flyter for overforing av eierskap, paminnelser, utlopslogikk, fornyelser av validering, API-tilkoblinger, dashboardverktoy og andre funksjoner for verifisering eller overvaking.",
+          "Slike fremtidige tjenester kan vaere underlagt separate vilkar, tekniske begrensninger, jurisdiksjonsmessige restriksjoner, operative krav og ytterligere gjennomgangsprosedyrer.",
+        ],
+      },
+      liability: {
+        title: "8. Ansvarsbegrensning",
+        body: [
+          "I den storste utstrekning gjeldende lov tillater det, skal EquipRegistry og dets operator ikke vaere ansvarlige for direkte, indirekte, tilfeldige, avledede, kommersielle, omdommemessige, juridiske eller finansielle tap som oppstar som folge av bruk av, manglende evne til a bruke, tillit til eller tolkning av plattformen eller informasjon som gjores tilgjengelig gjennom den.",
+          "Bruk av EquipRegistry skjer pa brukerens egen risiko.",
+        ],
+      },
+      contact: {
+        title: "9. Kontaktopplysninger",
+        body: [
+          "Hvis du har sporsmal om denne ansvarsfraskrivelsen eller plattformen, kan du kontakte EquipRegistry ved hjelp av opplysningene nedenfor.",
+        ],
+      },
+    },
+    closing:
+      "Denne ansvarsfraskrivelsen kan oppdateres fra tid til annen etter hvert som EquipRegistry utvikler seg videre, inkludert fremtidig kommersiell, teknisk og juridisk utvidelse av plattformen.",
+  },
 };

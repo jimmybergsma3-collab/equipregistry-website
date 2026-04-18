@@ -17,6 +17,11 @@ const LOCALE_BY_LANG: Record<Lang, string> = {
   zh: "zh-CN",
   hi: "hi-IN",
   ar: "ar-SA",
+
+  pl: "pl-PL",
+  sv: "sv-SE",
+  da: "da-DK",
+  no: "nb-NO",
 };
 
 const APPLICANT_TYPE_LABELS: Record<Lang, Record<ApplicantType, string>> = {
@@ -108,6 +113,39 @@ const APPLICANT_TYPE_LABELS: Record<Lang, Record<ApplicantType, string>> = {
     dealer_partner: "تاجر",
     rental_partner: "شركة تأجير",
   },
+
+  pl: {
+    private: "Osoba prywatna",
+    sme: "MSP",
+    insurer_partner: "Ubezpieczyciel",
+    bank_partner: "Bank",
+    dealer_partner: "Dealer",
+    rental_partner: "Firma wynajmujaca",
+  },
+  sv: {
+    private: "Privat",
+    sme: "SMF",
+    insurer_partner: "Forsakringsgivare",
+    bank_partner: "Bank",
+    dealer_partner: "Aterforsaljare",
+    rental_partner: "Uthyrningsforetag",
+  },
+  da: {
+    private: "Privat",
+    sme: "SMV",
+    insurer_partner: "Forsikringsselskab",
+    bank_partner: "Bank",
+    dealer_partner: "Forhandler",
+    rental_partner: "Udlejningsfirma",
+  },
+  no: {
+    private: "Privat",
+    sme: "SMB",
+    insurer_partner: "Forsikringsselskap",
+    bank_partner: "Bank",
+    dealer_partner: "Forhandler",
+    rental_partner: "Utleieselskap",
+  },
 };
 
 const EXTRA_STATUS_LABELS: Record<
@@ -169,6 +207,27 @@ const EXTRA_STATUS_LABELS: Record<
     payment_required: "الدفع مطلوب",
     unknown: "غير معروف",
   },
+
+  pl: {
+    ready_for_submission: "Gotowe do wyslania",
+    payment_required: "Gotowe do platnosci",
+    unknown: "Nieznane",
+  },
+  sv: {
+    ready_for_submission: "Klar for inskickning",
+    payment_required: "Klar for betalning",
+    unknown: "Okand",
+  },
+  da: {
+    ready_for_submission: "Klar til indsendelse",
+    payment_required: "Klar til betaling",
+    unknown: "Ukendt",
+  },
+  no: {
+    ready_for_submission: "Klar for innsending",
+    payment_required: "Klar for betaling",
+    unknown: "Ukjent",
+  },
 };
 
 const PAYMENT_REQUIRED_LABEL_OVERRIDES: Record<Lang, string> = {
@@ -183,6 +242,11 @@ const PAYMENT_REQUIRED_LABEL_OVERRIDES: Record<Lang, string> = {
   zh: "Zhunbei checkout",
   hi: "Checkout ke liye taiyar",
   ar: "Jahiz lilcheckout",
+
+  pl: "Gotowe do platnosci",
+  sv: "Klar for betalning",
+  da: "Klar til betaling",
+  no: "Klar for betaling",
 };
 
 export function formatDateForLang(value: Date | string, lang: Lang) {

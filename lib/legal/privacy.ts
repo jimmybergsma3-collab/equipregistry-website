@@ -2423,6 +2423,11 @@ export const PRIVACY_TEXT: Record<Lang, PrivacyText> = {
       taxLabel: "الرقم الضريبي / رقم الهوية",
     },
   },
+
+  pl: BASE_EN,
+  sv: BASE_EN,
+  da: BASE_EN,
+  no: BASE_EN,
 };
 
 export function getPrivacyText(lang: Lang): PrivacyText {

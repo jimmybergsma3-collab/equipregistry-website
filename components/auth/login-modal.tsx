@@ -75,7 +75,31 @@ const LOGIN_ERROR_TEXT: Record<
     EMAIL_NOT_VERIFIED: "يرجى تاكيد بريدك الالكتروني قبل تسجيل الدخول.",
     SERVER_ERROR: "حدث خطا في الخادم اثناء تسجيل الدخول.",
   },
-};
+
+  pl: {
+    REQUIRED_FIELDS_MISSING: "Uzupelnij wymagane pola.",
+    INVALID_CREDENTIALS: "Nieprawidlowy adres e-mail lub haslo.",
+    EMAIL_NOT_VERIFIED: "Zweryfikuj swoj adres e-mail przed zalogowaniem.",
+    SERVER_ERROR: "Blad serwera podczas logowania.",
+  },
+  sv: {
+    REQUIRED_FIELDS_MISSING: "Fyll i de obligatoriska falten.",
+    INVALID_CREDENTIALS: "Fel e-postadress eller losenord.",
+    EMAIL_NOT_VERIFIED: "Verifiera din e-postadress innan du loggar in.",
+    SERVER_ERROR: "Serverfel vid inloggning.",
+  },
+  da: {
+    REQUIRED_FIELDS_MISSING: "Udfyld de obligatoriske felter.",
+    INVALID_CREDENTIALS: "Forkert e-mail eller adgangskode.",
+    EMAIL_NOT_VERIFIED: "Bekraeft din e-mailadresse, for du logger ind.",
+    SERVER_ERROR: "Serverfejl under login.",
+  },
+  no: {
+    REQUIRED_FIELDS_MISSING: "Fyll ut de obligatoriske feltene.",
+    INVALID_CREDENTIALS: "Feil e-postadresse eller passord.",
+    EMAIL_NOT_VERIFIED: "Verifiser e-postadressen din for du logger inn.",
+    SERVER_ERROR: "Serverfeil under innlogging.",
+  },};
 
 type Props = {
   lang: Lang;
@@ -103,19 +127,19 @@ const TEXT: Record<
   }
 > = {
   en: {
-    title: "Login",
-    subtitle: "Log in to continue.",
-    email: "Email",
+    title: "Logowanie",
+    subtitle: "Zaloguj sie, aby kontynuowac.",
+    email: "E-mail",
     emailPlaceholder: "name@company.com",
-    password: "Password",
+    password: "Haslo",
     passwordPlaceholder: "••••••••",
-    login: "Login",
-    loading: "Loading...",
-    loginFailed: "Login failed.",
-    serverError: "Server error during login.",
-    cancel: "Cancel",
-    forgotPassword: "Forgot password?",
-    noAccount: "No account yet? Register here",
+    login: "Zaloguj sie",
+    loading: "Ladowanie...",
+    loginFailed: "Logowanie nie powiodlo sie.",
+    serverError: "Blad serwera podczas logowania.",
+    cancel: "Anuluj",
+    forgotPassword: "Nie pamietasz hasla?",
+    noAccount: "Nie masz jeszcze konta? Zarejestruj sie tutaj",
   },
   es: {
     title: "Iniciar sesión",
@@ -269,7 +293,67 @@ const TEXT: Record<
     forgotPassword: "هل نسيت كلمة المرور؟",
     noAccount: "ليس لديك حساب؟ سجل الآن",
   },
-};
+
+  pl: {
+    title: "Logga in",
+    subtitle: "Logga in for att fortsatta.",
+    email: "E-post",
+    emailPlaceholder: "name@company.com",
+    password: "Losenord",
+    passwordPlaceholder: "••••••••",
+    login: "Logga in",
+    loading: "Laddar...",
+    loginFailed: "Inloggningen misslyckades.",
+    serverError: "Serverfel vid inloggning.",
+    cancel: "Avbryt",
+    forgotPassword: "Glomt losenordet?",
+    noAccount: "Inget konto annu? Registrera dig har",
+  },
+  sv: {
+    title: "Log ind",
+    subtitle: "Log ind for at fortsaette.",
+    email: "E-mail",
+    emailPlaceholder: "name@company.com",
+    password: "Adgangskode",
+    passwordPlaceholder: "••••••••",
+    login: "Log ind",
+    loading: "Indlaeser...",
+    loginFailed: "Login mislykkedes.",
+    serverError: "Serverfejl under login.",
+    cancel: "Annuller",
+    forgotPassword: "Glemt adgangskoden?",
+    noAccount: "Ingen konto endnu? Registrer dig her",
+  },
+  da: {
+    title: "Logg inn",
+    subtitle: "Logg inn for a fortsette.",
+    email: "E-post",
+    emailPlaceholder: "name@company.com",
+    password: "Passord",
+    passwordPlaceholder: "••••••••",
+    login: "Logg inn",
+    loading: "Laster...",
+    loginFailed: "Innlogging mislyktes.",
+    serverError: "Serverfeil under innlogging.",
+    cancel: "Avbryt",
+    forgotPassword: "Glemt passordet?",
+    noAccount: "Ingen konto enna? Registrer deg her",
+  },
+  no: {
+    title: "Login",
+    subtitle: "Log in to continue.",
+    email: "Email",
+    emailPlaceholder: "name@company.com",
+    password: "Password",
+    passwordPlaceholder: "••••••••",
+    login: "Login",
+    loading: "Loading...",
+    loginFailed: "Login failed.",
+    serverError: "Server error during login.",
+    cancel: "Cancel",
+    forgotPassword: "Forgot password?",
+    noAccount: "No account yet? Register here",
+  },};
 
 export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const router = useRouter();

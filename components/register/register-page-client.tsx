@@ -733,7 +733,11 @@ const textsByLang: Record<string, Texts> = {
     ...baseEnglish,
     pageTitle: "Register asset",
   },
-};
+
+  pl: baseEnglish,
+  sv: baseEnglish,
+  da: baseEnglish,
+  no: baseEnglish,};
 
 function getRiskKey(category: Category): keyof Texts["riskLabels"] {
   switch (category) {

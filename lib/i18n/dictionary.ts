@@ -3845,6 +3845,11 @@ export const dictionary: Record<Lang, Dictionary> = {
   zh,
   hi,
   ar,
+
+  pl: en,
+  sv: en,
+  da: en,
+  no: en,
 };
 
 export function getDictionary(lang: string) {

@@ -91,7 +91,31 @@ const TEXT: Record<
     approveRegistration: "الموافقة على التسجيل",
     issuePassport: "إصدار الجواز",
   },
-};
+
+  pl: {
+    processing: "Przetwarzanie...",
+    moveToReview: "Przenies do weryfikacji",
+    approveRegistration: "Zatwierdz rejestracje",
+    issuePassport: "Wydaj paszport",
+  },
+  sv: {
+    processing: "Bearbetar...",
+    moveToReview: "Flytta till granskning",
+    approveRegistration: "Godkann registrering",
+    issuePassport: "Utfarda pass",
+  },
+  da: {
+    processing: "Behandler...",
+    moveToReview: "Flyt til gennemgang",
+    approveRegistration: "Godkend registrering",
+    issuePassport: "Udsted pas",
+  },
+  no: {
+    processing: "Behandler...",
+    moveToReview: "Flytt til gjennomgang",
+    approveRegistration: "Godkjenn registrering",
+    issuePassport: "Utsted pass",
+  },};
 
 export default function ReviewFlowActions({
   registrationId,

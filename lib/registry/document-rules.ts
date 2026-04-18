@@ -565,6 +565,191 @@ const DOCUMENT_TEXT: Record<Lang, Record<RegistrationDocumentKey, DocumentText>>
       description: "أي ملف إضافي مطلوب للتحقق.",
     },
   },
+
+  pl: {
+    proof_of_ownership: {
+      label: "Dowod wlasnosci",
+      description: "Certyfikat wlasnosci, tytul lub rownowazny dowod prawny.",
+    },
+    applicant_id: {
+      label: "Dokument tozsamosci wnioskodawcy",
+      description: "Paszport, dowod osobisty lub inny dokument potwierdzajacy tozsamosc.",
+    },
+    invoice_purchase_proof: {
+      label: "Faktura / dowod zakupu",
+      description: "Faktura, umowa sprzedazy lub potwierdzenie zakupu.",
+    },
+    asset_overview_photo: {
+      label: "Zdjecie pogladowe assetu",
+      description: "Zdjecie wyraznie pokazujace asset.",
+    },
+    serial_plate_photo: {
+      label: "Zdjecie tabliczki znamionowej",
+      description: "Zdjecie tabliczki znamionowej lub identyfikacyjnej.",
+    },
+    vin_chassis_photo: {
+      label: "Zdjecie VIN / podwozia",
+      description: "Wyrazne zdjecie numeru VIN lub identyfikatora podwozia.",
+    },
+    registration_document: {
+      label: "Dokument rejestracyjny",
+      description: "Oficjalny dokument rejestracyjny, jesli jest dostepny.",
+    },
+    hull_id_photo: {
+      label: "Zdjecie numeru kadluba / HIN",
+      description: "Zdjecie oznaczenia numeru kadluba lub HIN.",
+    },
+    engine_serial_photo: {
+      label: "Zdjecie numeru silnika",
+      description: "Zdjecie numeru seryjnego silnika, jesli dotyczy.",
+    },
+    proof_of_address: {
+      label: "Potwierdzenie adresu",
+      description: "Aktualne potwierdzenie adresu zamieszkania lub firmy.",
+    },
+    additional_supporting_document: {
+      label: "Dodatkowy dokument pomocniczy",
+      description: "Dowolny dodatkowy plik potrzebny do weryfikacji.",
+    },
+  },
+  sv: {
+    proof_of_ownership: {
+      label: "Bevis pa agande",
+      description: "Agarbevis, titelhandling eller motsvarande juridiskt bevis.",
+    },
+    applicant_id: {
+      label: "Sokandens ID",
+      description: "Pass, ID-kort eller juridisk identitetshandling.",
+    },
+    invoice_purchase_proof: {
+      label: "Faktura / kopbevis",
+      description: "Faktura, saljavtal eller kvitto pa kop.",
+    },
+    asset_overview_photo: {
+      label: "Oversiktsbild av asset",
+      description: "Foto som tydligt visar asseten.",
+    },
+    serial_plate_photo: {
+      label: "Foto av serienummerplatta",
+      description: "Foto av serienummerplatta eller identifieringsplatta.",
+    },
+    vin_chassis_photo: {
+      label: "Foto av VIN / chassi",
+      description: "Tydligt foto av VIN eller chassiidentifierare.",
+    },
+    registration_document: {
+      label: "Registreringsdokument",
+      description: "Officiellt registreringsdokument om det finns.",
+    },
+    hull_id_photo: {
+      label: "Foto av skrov-ID / HIN",
+      description: "Foto av skrov-ID eller HIN-markering.",
+    },
+    engine_serial_photo: {
+      label: "Foto av motorns serienummer",
+      description: "Foto av motorns serienummer om tillampligt.",
+    },
+    proof_of_address: {
+      label: "Adressbevis",
+      description: "Nyligt bevis pa bostads- eller foretagsadress.",
+    },
+    additional_supporting_document: {
+      label: "Ytterligare underlag",
+      description: "Valfri kompletterande fil som behovs for verifiering.",
+    },
+  },
+  da: {
+    proof_of_ownership: {
+      label: "Bevis for ejerskab",
+      description: "Ejerskabsbevis, titel eller tilsvarende juridisk dokumentation.",
+    },
+    applicant_id: {
+      label: "Ansoger-ID",
+      description: "Pas, ID-kort eller juridisk identitetsdokument.",
+    },
+    invoice_purchase_proof: {
+      label: "Faktura / kobsbevis",
+      description: "Faktura, salgskontrakt eller kvittering for kob.",
+    },
+    asset_overview_photo: {
+      label: "Oversigtsfoto af asset",
+      description: "Foto der tydeligt viser assetet.",
+    },
+    serial_plate_photo: {
+      label: "Foto af typeskilt",
+      description: "Foto af typeskilt eller identifikationsplade.",
+    },
+    vin_chassis_photo: {
+      label: "Foto af VIN / chassis",
+      description: "Tydeligt foto af VIN eller chassisidentifikator.",
+    },
+    registration_document: {
+      label: "Registreringsdokument",
+      description: "Officielt registreringsdokument hvis tilgaengeligt.",
+    },
+    hull_id_photo: {
+      label: "Foto af skrog-ID / HIN",
+      description: "Foto af skrog-ID eller HIN-markering.",
+    },
+    engine_serial_photo: {
+      label: "Foto af motorens serienummer",
+      description: "Foto af motorens serienummer hvis relevant.",
+    },
+    proof_of_address: {
+      label: "Adressebevis",
+      description: "Nyligt bevis for bolig- eller virksomhedsadresse.",
+    },
+    additional_supporting_document: {
+      label: "Yderligere stottedokument",
+      description: "Enhver supplerende fil der er nodvendig for verificering.",
+    },
+  },
+  no: {
+    proof_of_ownership: {
+      label: "Bevis pa eierskap",
+      description: "Eierskapsbevis, tittel eller tilsvarende juridisk dokumentasjon.",
+    },
+    applicant_id: {
+      label: "Soker-ID",
+      description: "Pass, ID-kort eller juridisk identitetsdokument.",
+    },
+    invoice_purchase_proof: {
+      label: "Faktura / kjopsbevis",
+      description: "Faktura, salgskontrakt eller kjopskvittering.",
+    },
+    asset_overview_photo: {
+      label: "Oversiktsfoto av asset",
+      description: "Foto som tydelig viser assetet.",
+    },
+    serial_plate_photo: {
+      label: "Foto av serienummerplate",
+      description: "Foto av serienummerplate eller identifikasjonsplate.",
+    },
+    vin_chassis_photo: {
+      label: "Foto av VIN / chassis",
+      description: "Tydelig foto av VIN eller chassisidentifikator.",
+    },
+    registration_document: {
+      label: "Registreringsdokument",
+      description: "Offisielt registreringsdokument hvis tilgjengelig.",
+    },
+    hull_id_photo: {
+      label: "Foto av skrog-ID / HIN",
+      description: "Foto av skrog-ID eller HIN-merking.",
+    },
+    engine_serial_photo: {
+      label: "Foto av motorens serienummer",
+      description: "Foto av motorens serienummer hvis aktuelt.",
+    },
+    proof_of_address: {
+      label: "Adressebevis",
+      description: "Nylig bevis pa bosteds- eller firmaadresse.",
+    },
+    additional_supporting_document: {
+      label: "Tilleggsdokument",
+      description: "Enhver stottefil som trengs for verifisering.",
+    },
+  },
 };
 
 function t(lang: Lang, key: RegistrationDocumentKey): DocumentText {

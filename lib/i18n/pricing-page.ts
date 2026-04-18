@@ -800,6 +800,303 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
       contact: "اتصل بنا",
     },
   },
+
+  pl: {
+    eyebrow: "EquipRegistry",
+    title: "Cennik",
+    subtitle:
+      "Cennik jest uporzadkowany wedlug kategorii assetu i obejmuje jednorazowa oplata rejestracyjna oraz roczna oplata walidacyjna w jednym centralnym modelu cenowym.",
+    labels: {
+      registration: "Rejestracja",
+      yearly: "Rocznie",
+      examples: "Przyklady",
+      estimatedLocalCurrency:
+        "Szacunkowo w Twojej lokalnej walucie. Ostateczna kwota zostanie pokazana przy checkout.",
+    },
+    sections: {
+      light_mobility_step: {
+        title: "Lekka mobilnosc / step",
+        description:
+          "Dla kompaktowych assetow mobilnosci osobistej, ktore naleza do taryfy lekkiej mobilnosci.",
+        examples: ["Hulajnoga elektryczna", "Motorower / lekka mobilnosc"],
+      },
+      bike: {
+        title: "Rower",
+        description:
+          "Dla rejestracji rowerow, ktore korzystaja z osobnej taryfy rowerowej zamiast taryfy lekkiej mobilnosci.",
+        examples: ["Rower", "E-bike", "Rower cargo"],
+      },
+      standard_vehicle: {
+        title: "Standardowy pojazd",
+        description:
+          "Dla pojazdow drogowych i assetow opartych na przyczepie, ktore naleza do standardowej taryfy pojazdow.",
+        examples: [
+          "Samochod osobowy",
+          "Van",
+          "Ciezarowka",
+          "Przyczepa",
+          "Przyczepa kempingowa",
+        ],
+      },
+      heavy_asset: {
+        title: "Ciezki asset",
+        description:
+          "Dla kategorii assetow przemyslowych, maszynowych, rolniczych, medycznych, energetycznych i innych ciezszych typow assetow.",
+        examples: [
+          "Koparka",
+          "Generator",
+          "Magazyn energii",
+          "Traktor",
+          "MRI",
+          "Wyposazenie warsztatu",
+        ],
+      },
+    },
+    info: {
+      afterPayment: {
+        title: "Co dzieje sie po platnosci",
+        text: "Po potwierdzeniu platnosci zgloszenie rejestracyjne przechodzi do przegladu. Przeslane dokumenty pozostaja widoczne w panelu podczas walidacji.",
+      },
+      passport: {
+        title: "Wyjasnienie paszportu",
+        text: "Paszport EquipRegistry to rekord rejestrowy wydawany po zatwierdzeniu. Laczy referencje rejestracji, podstawowe dane assetu i zweryfikowany status w jednym rekordzie operacyjnym.",
+      },
+      historyUnknown: {
+        title: "Historia nieznana",
+        text: "Ten status oznacza, ze asset istnieje w rejestrze, ale nie ustalono jeszcze zweryfikowanej historii wlasnosci. Oznacza ograniczona pewnosc historyczna, a nie automatyczna odmowe.",
+      },
+      annualValidation: {
+        title: "Roczna walidacja",
+        text: "Roczna walidacja utrzymuje paszport rejestrowy na biezaco i wspiera odswiezanie dokumentow, ciaglosc wlasnosci oraz dlugoterminowa wiarygodnosc statusu.",
+      },
+    },
+    actions: {
+      startRegistration: "Rozpocznij rejestracje",
+      contact: "Kontakt",
+    },
+  },
+  sv: {
+    eyebrow: "EquipRegistry",
+    title: "Priser",
+    subtitle:
+      "Prissattningen ar strukturerad efter assetkategori med en engangsavgift for registrering och en arlig valideringsavgift i en central prismodell.",
+    labels: {
+      registration: "Registrering",
+      yearly: "Arlig",
+      examples: "Exempel",
+      estimatedLocalCurrency:
+        "Beraknat i din lokala valuta. Slutligt belopp visas vid checkout.",
+    },
+    sections: {
+      light_mobility_step: {
+        title: "Latt mobilitet / step",
+        description:
+          "For kompakta assets for personlig mobilitet som tillhor prisnivan for latt mobilitet.",
+        examples: ["Elsparkcykel", "Moped / latt mobilitet"],
+      },
+      bike: {
+        title: "Cykel",
+        description:
+          "For cykelregistreringar som anvander den sarskilda cykelprissattningen i stallet for prisnivan for latt mobilitet.",
+        examples: ["Cykel", "E-bike", "Lastcykel"],
+      },
+      standard_vehicle: {
+        title: "Standardfordon",
+        description:
+          "For vaggaende fordon och trailerbaserade assets som tillhor den vanliga fordonsprissattningen.",
+        examples: [
+          "Personbil",
+          "Van",
+          "Lastbil",
+          "Slap",
+          "Husvagn",
+        ],
+      },
+      heavy_asset: {
+        title: "Tungt asset",
+        description:
+          "For industriella, maskinella, jordbruksrelaterade, medicinska, energianknutna och andra tyngre assetkategorier.",
+        examples: [
+          "Gravmaskin",
+          "Generator",
+          "Batterilager",
+          "Traktor",
+          "MRI",
+          "Verkstadsutrustning",
+        ],
+      },
+    },
+    info: {
+      afterPayment: {
+        title: "Vad hander efter betalning",
+        text: "Nar betalningen har bekraftats gar registreringsarendet vidare till granskning. Insandda dokument forblir synliga i instrumentpanelen medan valideringen pagar.",
+      },
+      passport: {
+        title: "Forklaring av passet",
+        text: "EquipRegistry-passet ar den registerpost som utfardas efter godkannande. Det sammanfor registreringsreferensen, grundlaggande assetdata och validerad status i en operativ post.",
+      },
+      historyUnknown: {
+        title: "Historik okand",
+        text: "Denna status betyder att asseten finns i registret, men att en verifierad agarhistorik annu inte har faststallts. Den signalerar begransad historisk sakerhet, inte ett automatiskt avslag.",
+      },
+      annualValidation: {
+        title: "Arlig validering",
+        text: "Arlig validering haller registerpasset aktuellt och stoder uppdatering av dokument, agarfortsattning och langsiktig tilltro till statusen.",
+      },
+    },
+    actions: {
+      startRegistration: "Starta registrering",
+      contact: "Kontakt",
+    },
+  },
+  da: {
+    eyebrow: "EquipRegistry",
+    title: "Priser",
+    subtitle:
+      "Priserne er struktureret efter assetkategori med et engangsregistreringsgebyr og et arligt valideringsgebyr i en central prismodel.",
+    labels: {
+      registration: "Registrering",
+      yearly: "Arlig",
+      examples: "Eksempler",
+      estimatedLocalCurrency:
+        "Anslat i din lokale valuta. Det endelige belob vises ved checkout.",
+    },
+    sections: {
+      light_mobility_step: {
+        title: "Let mobilitet / step",
+        description:
+          "For kompakte assets til personlig mobilitet, der falder inden for prisnivaet for let mobilitet.",
+        examples: ["Elektrisk lobehjul", "Moped / let mobilitet"],
+      },
+      bike: {
+        title: "Cykel",
+        description:
+          "For cykelregistreringer, der bruger den dedikerede cykelpris i stedet for prisnivaet for let mobilitet.",
+        examples: ["Cykel", "E-bike", "Ladcykel"],
+      },
+      standard_vehicle: {
+        title: "Standardkoretoj",
+        description:
+          "For vejgaende koretojer og trailerbaserede assets, der tilhorer standardprisen for koretojer.",
+        examples: [
+          "Personbil",
+          "Van",
+          "Lastbil",
+          "Trailer",
+          "Campingvogn",
+        ],
+      },
+      heavy_asset: {
+        title: "Tungt asset",
+        description:
+          "For industrielle, maskinelle, landbrugsmassige, medicinske, energirelaterede og andre tungere assetkategorier.",
+        examples: [
+          "Gravemaskine",
+          "Generator",
+          "Batterilager",
+          "Traktor",
+          "MRI",
+          "Vaerkstedsudstyr",
+        ],
+      },
+    },
+    info: {
+      afterPayment: {
+        title: "Hvad sker der efter betaling",
+        text: "Nar betalingen er bekraeftet, gar registreringsanmodningen videre til gennemgang. Indsendte dokumenter forbliver synlige i dashboardet, mens valideringen er i gang.",
+      },
+      passport: {
+        title: "Forklaring af passet",
+        text: "EquipRegistry-passet er den registerpost, der udstedes efter godkendelse. Det forbinder registreringsreferencen, de centrale assetdata og den validerede status i en operationel post.",
+      },
+      historyUnknown: {
+        title: "Historik ukendt",
+        text: "Denne status betyder, at assetet findes i registret, men at en verificeret ejerskabshistorik endnu ikke er fastlagt. Den signalerer begraenset historisk sikkerhed, ikke et automatisk afslag.",
+      },
+      annualValidation: {
+        title: "Arlig validering",
+        text: "Arlig validering holder registerpasset opdateret og understotter dokumentfornyelse, ejerskabskontinuitet og langsigtet tillid til statusen.",
+      },
+    },
+    actions: {
+      startRegistration: "Start registrering",
+      contact: "Kontakt",
+    },
+  },
+  no: {
+    eyebrow: "EquipRegistry",
+    title: "Priser",
+    subtitle:
+      "Prisene er strukturert etter assetkategori med et engangsgebyr for registrering og et arlig gebyr for validering i en sentral prismodell.",
+    labels: {
+      registration: "Registrering",
+      yearly: "Arlig",
+      examples: "Eksempler",
+      estimatedLocalCurrency:
+        "Anslatt i din lokale valuta. Endelig belop vises ved checkout.",
+    },
+    sections: {
+      light_mobility_step: {
+        title: "Lett mobilitet / step",
+        description:
+          "For kompakte assets for personlig mobilitet som faller innenfor prisnivaet for lett mobilitet.",
+        examples: ["Elektrisk sparkesykkel", "Moped / lett mobilitet"],
+      },
+      bike: {
+        title: "Sykkel",
+        description:
+          "For sykkelregistreringer som bruker den dedikerte sykkelprisen i stedet for prisnivaet for lett mobilitet.",
+        examples: ["Sykkel", "E-bike", "Lastesykkel"],
+      },
+      standard_vehicle: {
+        title: "Standardkjoretoy",
+        description:
+          "For veggaende kjoretoy og trailerbaserte assets som tilhorer standardprisen for kjoretoy.",
+        examples: [
+          "Personbil",
+          "Van",
+          "Lastebil",
+          "Tilhenger",
+          "Campingvogn",
+        ],
+      },
+      heavy_asset: {
+        title: "Tungt asset",
+        description:
+          "For industrielle, maskinelle, landbruksrelaterte, medisinske, energirelaterte og andre tyngre assetkategorier.",
+        examples: [
+          "Gravemaskin",
+          "Generator",
+          "Batterilager",
+          "Traktor",
+          "MRI",
+          "Verkstedutstyr",
+        ],
+      },
+    },
+    info: {
+      afterPayment: {
+        title: "Hva skjer etter betaling",
+        text: "Nar betalingen er bekreftet, gar registreringsforesporselen videre til gjennomgang. Innsendte dokumenter forblir synlige i dashbordet mens valideringen pagar.",
+      },
+      passport: {
+        title: "Forklaring av passet",
+        text: "EquipRegistry-passet er registerposten som utstedes etter godkjenning. Det kobler registreringsreferansen, grunnleggende assetdata og validert status i en operativ post.",
+      },
+      historyUnknown: {
+        title: "Historikk ukjent",
+        text: "Denne statusen betyr at assetet finnes i registret, men at en verifisert eierskapshistorikk enna ikke er etablert. Den signaliserer begrenset historisk sikkerhet, ikke et automatisk avslag.",
+      },
+      annualValidation: {
+        title: "Arlig validering",
+        text: "Arlig validering holder registerpasset oppdatert og stotter dokumentfornyelse, kontinuitet i eierskap og langsiktig tillit til statusen.",
+      },
+    },
+    actions: {
+      startRegistration: "Start registrering",
+      contact: "Kontakt",
+    },
+  },
 };
 
 export function getPricingPageContent(lang: Lang) {

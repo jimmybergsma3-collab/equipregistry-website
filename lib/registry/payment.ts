@@ -32,6 +32,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Dopo il pagamento, la tua registrazione sarà elaborata e convalidata entro 24 ore.",
     nl: "Na betaling wordt je registratie binnen 24 uur verwerkt en gevalideerd.",
     pt: "Após o pagamento, o teu registo será processado e validado no prazo de 24 horas.",
+  
+    pl: "Po dokonaniu platnosci Twoja rejestracja zostanie przetworzona i zweryfikowana w ciagu 24 godzin.",
+    sv: "Efter betalning kommer din registrering att behandlas och verifieras inom 24 timmar.",
+    da: "Efter betaling bliver din registrering behandlet og valideret inden for 24 timer.",
+    no: "Etter betaling vil registreringen din bli behandlet og verifisert innen 24 timer.",
   } satisfies LocalizedText,
 
   title: {
@@ -42,6 +47,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Completa il pagamento tramite bonifico bancario",
     nl: "Voltooi de betaling via bankoverschrijving",
     pt: "Conclui o pagamento por transferência bancária",
+  
+    pl: "Dokonaj platnosci przelewem bankowym",
+    sv: "Slutfor betalningen via bankoverforing",
+    da: "Gennemfor betalingen via bankoverforsel",
+    no: "Fullfor betalingen via bankoverforing",
   } satisfies LocalizedText,
 
   introText: {
@@ -52,6 +62,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Il tuo fascicolo di registrazione è stato creato, ma l’elaborazione continuerà solo dopo aver ricevuto il pagamento e averlo associato al numero del passaporto.",
     nl: "Je registratiedossier is aangemaakt, maar de verwerking gaat pas verder zodra de betaling is ontvangen en gekoppeld is aan je paspoortnummer.",
     pt: "O teu processo de registo foi criado, mas o processamento só continuará depois de o pagamento ser recebido e associado ao teu número de passaporte.",
+  
+    pl: "Twoja sprawa rejestracyjna zostala utworzona, ale przetwarzanie bedzie kontynuowane dopiero po otrzymaniu platnosci i przypisaniu jej do numeru paszportu.",
+    sv: "Ditt registreringsarende har skapats, men behandlingen fortsatter forst nar betalningen har mottagits och kopplats till ditt passnummer.",
+    da: "Din registreringssag er oprettet, men behandlingen fortsaetter forst, nar betalingen er modtaget og matchet med dit pasnummer.",
+    no: "Registreringssaken din er opprettet, men behandlingen fortsetter forst nar betalingen er mottatt og koblet til passnummeret ditt.",
   } satisfies LocalizedText,
 
   paymentPendingLabel: {
@@ -62,6 +77,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Pagamento in sospeso",
     nl: "Betaling in afwachting",
     pt: "Pagamento pendente",
+  
+    pl: "Platnosc oczekujaca",
+    sv: "Betalning vantar",
+    da: "Betaling afventer",
+    no: "Betaling avventer",
   } satisfies LocalizedText,
 
   accountHolderLabel: {
@@ -72,6 +92,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Intestatario del conto",
     nl: "Rekeninghouder",
     pt: "Titular da conta",
+  
+    pl: "Posiadacz konta",
+    sv: "Kontoinnehavare",
+    da: "Kontohaver",
+    no: "Kontoinnehaver",
   } satisfies LocalizedText,
 
   ibanLabel: {
@@ -82,6 +107,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "IBAN",
     nl: "IBAN",
     pt: "IBAN",
+  
+    pl: "IBAN",
+    sv: "IBAN",
+    da: "IBAN",
+    no: "IBAN",
   } satisfies LocalizedText,
 
   bicLabel: {
@@ -92,6 +122,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "BIC / SWIFT",
     nl: "BIC / SWIFT",
     pt: "BIC / SWIFT",
+  
+    pl: "BIC / SWIFT",
+    sv: "BIC / SWIFT",
+    da: "BIC / SWIFT",
+    no: "BIC / SWIFT",
   } satisfies LocalizedText,
 
   currencyLabel: {
@@ -102,6 +137,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Valuta",
     nl: "Valuta",
     pt: "Moeda",
+  
+    pl: "Waluta",
+    sv: "Valuta",
+    da: "Valuta",
+    no: "Valuta",
   } satisfies LocalizedText,
 
   referenceLabel: {
@@ -112,6 +152,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Riferimento di pagamento / Numero passaporto",
     nl: "Betalingsreferentie / Paspoortnummer",
     pt: "Referência de pagamento / Número do passaporte",
+  
+    pl: "Referencja platnosci / Numer paszportu",
+    sv: "Betalningsreferens / Passnummer",
+    da: "Betalingsreference / Pasnummer",
+    no: "Betalingsreferanse / Passnummer",
   } satisfies LocalizedText,
 
   referenceHelpText: {
@@ -122,6 +167,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Usa questo riferimento esatto nel tuo bonifico bancario. Questo numero rimarrà collegato in modo permanente al tuo futuro passaporto EquipRegistry.",
     nl: "Gebruik exact deze referentie bij je bankoverschrijving. Dit nummer blijft permanent gekoppeld aan je toekomstige EquipRegistry-paspoort.",
     pt: "Usa esta referência exata na tua transferência bancária. Este número permanecerá permanentemente ligado ao teu futuro passaporte EquipRegistry.",
+  
+    pl: "Uzyj dokladnie tej referencji w przelewie bankowym. Ten numer pozostanie na stale powiazany z Twoim przyszlym paszportem EquipRegistry.",
+    sv: "Anvand exakt denna referens i din bankoverforing. Detta nummer forblir permanent kopplat till ditt framtida EquipRegistry-pass.",
+    da: "Brug praecis denne reference i din bankoverforsel. Dette nummer forbliver permanent knyttet til dit fremtidige EquipRegistry-pas.",
+    no: "Bruk denne eksakte referansen i bankoverforingen din. Dette nummeret vil forbli permanent koblet til ditt fremtidige EquipRegistry-pass.",
   } satisfies LocalizedText,
 
   feeLabel: {
@@ -132,6 +182,11 @@ export const MANUAL_PAYMENT_DETAILS = {
     it: "Tariffa",
     nl: "Kosten",
     pt: "Taxa",
+  
+    pl: "Oplata",
+    sv: "Avgift",
+    da: "Gebyr",
+    no: "Gebyr",
   } satisfies LocalizedText,
 };
 

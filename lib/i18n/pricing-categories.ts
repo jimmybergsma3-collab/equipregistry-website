@@ -476,6 +476,175 @@ const PRICING_CATEGORY_CONTENT: Record<
         "الصناعة: تسجيل رقمي للمعدات والآلات الصناعية. يشمل التحقق من الملكية والتحقق من المنشأ وجواز أصل رقمي.",
     },
   },
+
+  pl: {
+    light_mobility: {
+      name: "Rejestracja lekkiej mobilnosci",
+      description:
+        "Lekka mobilnosc: Cyfrowa rejestracja assetow lekkiej mobilnosci, w tym rowerow, e-bike'ow i hulajnog elektrycznych. Obejmuje weryfikacje i cyfrowy paszport assetu.",
+    },
+    vehicles: {
+      name: "Rejestracja pojazdu",
+      description:
+        "Pojazdy: Cyfrowa rejestracja pojazdow, w tym samochodow, vanow, ciezarowek i kamperow. Obejmuje weryfikacje wlasnosci, walidacje historii i cyfrowy paszport assetu.",
+    },
+    machines: {
+      name: "Rejestracja maszyny",
+      description:
+        "Maszyny: Cyfrowa rejestracja maszyn i sprzetu. Obejmuje weryfikacje wlasnosci, walidacje pochodzenia i cyfrowy paszport assetu.",
+    },
+    agriculture: {
+      name: "Rejestracja sprzetu rolniczego",
+      description:
+        "Rolnictwo: Cyfrowa rejestracja sprzetu i maszyn rolniczych. Obejmuje weryfikacje wlasnosci, walidacje pochodzenia i cyfrowy paszport assetu.",
+    },
+    construction: {
+      name: "Rejestracja sprzetu budowlanego",
+      description:
+        "Budownictwo: Cyfrowa rejestracja sprzetu i maszyn budowlanych. Obejmuje weryfikacje wlasnosci, walidacje pochodzenia i cyfrowy paszport assetu.",
+    },
+    marine: {
+      name: "Rejestracja assetu morskiego",
+      description:
+        "Morskie: Cyfrowa rejestracja assetow morskich, w tym lodzi i jednostek wodnych. Obejmuje weryfikacje wlasnosci i cyfrowy paszport assetu.",
+    },
+    energy: {
+      name: "Rejestracja assetu energetycznego",
+      description:
+        "Energia: Cyfrowa rejestracja assetow zwiazanych z energia, takich jak panele solarne, systemy baterii i instalacje. Obejmuje weryfikacje i cyfrowy paszport assetu.",
+    },
+    industry: {
+      name: "Rejestracja sprzetu przemyslowego",
+      description:
+        "Przemysl: Cyfrowa rejestracja sprzetu i maszyn przemyslowych. Obejmuje weryfikacje wlasnosci, walidacje pochodzenia i cyfrowy paszport assetu.",
+    },
+  },
+  sv: {
+    light_mobility: {
+      name: "Registrering av latt mobilitet",
+      description:
+        "Latt mobilitet: Digital registrering av assets inom latt mobilitet, inklusive cyklar, e-bikes och elsparkcyklar. Inkluderar verifiering och digitalt assetpass.",
+    },
+    vehicles: {
+      name: "Fordonsregistrering",
+      description:
+        "Fordon: Digital registrering av fordon, inklusive bilar, vans, lastbilar och husbilar. Inkluderar agarverifiering, historikvalidering och ett digitalt assetpass.",
+    },
+    machines: {
+      name: "Maskinregistrering",
+      description:
+        "Maskiner: Digital registrering av maskiner och utrustning. Inkluderar agarverifiering, ursprungsvalidering och ett digitalt assetpass.",
+    },
+    agriculture: {
+      name: "Registrering av jordbruksutrustning",
+      description:
+        "Jordbruk: Digital registrering av jordbruksutrustning och maskiner. Inkluderar agarverifiering, ursprungsvalidering och ett digitalt assetpass.",
+    },
+    construction: {
+      name: "Registrering av byggutrustning",
+      description:
+        "Bygg: Digital registrering av byggutrustning och maskiner. Inkluderar agarverifiering, ursprungsvalidering och ett digitalt assetpass.",
+    },
+    marine: {
+      name: "Registrering av marint asset",
+      description:
+        "Marint: Digital registrering av marina assets, inklusive batar och andra vattenfarkoster. Inkluderar agarverifiering och ett digitalt assetpass.",
+    },
+    energy: {
+      name: "Registrering av energiasset",
+      description:
+        "Energi: Digital registrering av energirelaterade assets, som solpaneler, batterisystem och installationer. Inkluderar verifiering och ett digitalt assetpass.",
+    },
+    industry: {
+      name: "Registrering av industriutrustning",
+      description:
+        "Industri: Digital registrering av industriutrustning och maskiner. Inkluderar agarverifiering, ursprungsvalidering och ett digitalt assetpass.",
+    },
+  },
+  da: {
+    light_mobility: {
+      name: "Registrering af let mobilitet",
+      description:
+        "Let mobilitet: Digital registrering af assets inden for let mobilitet, herunder cykler, e-bikes og elektriske lobehjul. Inkluderer verificering og digitalt assetpas.",
+    },
+    vehicles: {
+      name: "Koretojsregistrering",
+      description:
+        "Koretojer: Digital registrering af koretojer, herunder biler, vans, lastbiler og campere. Inkluderer ejerskabsverificering, historikvalidering og et digitalt assetpas.",
+    },
+    machines: {
+      name: "Maskinregistrering",
+      description:
+        "Maskiner: Digital registrering af maskiner og udstyr. Inkluderer ejerskabsverificering, oprindelsesvalidering og et digitalt assetpas.",
+    },
+    agriculture: {
+      name: "Registrering af landbrugsudstyr",
+      description:
+        "Landbrug: Digital registrering af landbrugsudstyr og maskiner. Inkluderer ejerskabsverificering, oprindelsesvalidering og et digitalt assetpas.",
+    },
+    construction: {
+      name: "Registrering af byggeudstyr",
+      description:
+        "Byggeri: Digital registrering af byggeudstyr og maskiner. Inkluderer ejerskabsverificering, oprindelsesvalidering og et digitalt assetpas.",
+    },
+    marine: {
+      name: "Registrering af maritimt asset",
+      description:
+        "Maritimt: Digital registrering af maritime assets, herunder bade og andre fartojer pa vand. Inkluderer ejerskabsverificering og et digitalt assetpas.",
+    },
+    energy: {
+      name: "Registrering af energiasset",
+      description:
+        "Energi: Digital registrering af energirelaterede assets som solpaneler, batterisystemer og installationer. Inkluderer verificering og et digitalt assetpas.",
+    },
+    industry: {
+      name: "Registrering af industriudstyr",
+      description:
+        "Industri: Digital registrering af industriudstyr og maskiner. Inkluderer ejerskabsverificering, oprindelsesvalidering og et digitalt assetpas.",
+    },
+  },
+  no: {
+    light_mobility: {
+      name: "Registrering av lett mobilitet",
+      description:
+        "Lett mobilitet: Digital registrering av assets innen lett mobilitet, inkludert sykler, e-bikes og elektriske sparkesykler. Inkluderer verifisering og digitalt assetpass.",
+    },
+    vehicles: {
+      name: "Kjoretoyregistrering",
+      description:
+        "Kjoretoy: Digital registrering av kjoretoy, inkludert biler, vans, lastebiler og bobiler. Inkluderer verifisering av eierskap, validering av historikk og et digitalt assetpass.",
+    },
+    machines: {
+      name: "Maskinregistrering",
+      description:
+        "Maskiner: Digital registrering av maskiner og utstyr. Inkluderer verifisering av eierskap, validering av opprinnelse og et digitalt assetpass.",
+    },
+    agriculture: {
+      name: "Registrering av landbruksutstyr",
+      description:
+        "Landbruk: Digital registrering av landbruksutstyr og maskiner. Inkluderer verifisering av eierskap, validering av opprinnelse og et digitalt assetpass.",
+    },
+    construction: {
+      name: "Registrering av byggeutstyr",
+      description:
+        "Bygg og anlegg: Digital registrering av byggeutstyr og maskiner. Inkluderer verifisering av eierskap, validering av opprinnelse og et digitalt assetpass.",
+    },
+    marine: {
+      name: "Registrering av marint asset",
+      description:
+        "Marint: Digital registrering av marine assets, inkludert bater og andre farkoster pa vann. Inkluderer verifisering av eierskap og et digitalt assetpass.",
+    },
+    energy: {
+      name: "Registrering av energiasset",
+      description:
+        "Energi: Digital registrering av energirelaterte assets som solpaneler, batterisystemer og installasjoner. Inkluderer verifisering og et digitalt assetpass.",
+    },
+    industry: {
+      name: "Registrering av industriutstyr",
+      description:
+        "Industri: Digital registrering av industriutstyr og maskiner. Inkluderer verifisering av eierskap, validering av opprinnelse og et digitalt assetpass.",
+    },
+  },
 };
 
 const PRICING_CATALOG_PAGE_CONTENT: Record<Lang, PricingCatalogPageContent> = {
@@ -522,6 +691,23 @@ const PRICING_CATALOG_PAGE_CONTENT: Record<Lang, PricingCatalogPageContent> = {
   ar: {
     subtitle:
       "تُعرض رسوم التسجيل حسب فئة الأصل حتى تتمكن من اختيار تسجيل EquipRegistry الصحيح قبل إتمام الدفع الآمن.",
+  },
+
+  pl: {
+    subtitle:
+      "Oplaty rejestracyjne sa pokazane wedlug kategorii assetu, aby mozna bylo wybrac poprawna rejestracje EquipRegistry przed bezpiecznym checkoutem.",
+  },
+  sv: {
+    subtitle:
+      "Registreringsavgifter visas per assetkategori sa att du kan valja ratt EquipRegistry-registrering fore saker checkout.",
+  },
+  da: {
+    subtitle:
+      "Registreringsgebyrer vises efter assetkategori, sa du kan vaelge den korrekte EquipRegistry-registrering for sikker checkout.",
+  },
+  no: {
+    subtitle:
+      "Registreringsgebyrer vises etter assetkategori, slik at du kan velge riktig EquipRegistry-registrering for sikker checkout.",
   },
 };
 

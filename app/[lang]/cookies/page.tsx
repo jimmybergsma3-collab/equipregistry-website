@@ -408,6 +408,139 @@ const COOKIE_PAGE_TEXT: Record<Lang, CookiePageText> = {
     backHome: "返回首页",
     privacyLink: "隐私政策",
   },
+
+  pl: {
+    title: "Polityka plikow cookie",
+    intro:
+      "Niniejsza Polityka plikow cookie wyjasnia, jak EquipRegistry korzysta z plikow cookie i podobnych technologii podczas odwiedzania naszej strony internetowej.",
+    lastUpdatedLabel: "Ostatnia aktualizacja",
+    lastUpdatedValue: "Kwiecien 2026",
+    sections: {
+      whatAreCookiesTitle: "Czym sa pliki cookie?",
+      whatAreCookiesText:
+        "Pliki cookie to male pliki tekstowe przechowywane na Twoim urzadzeniu podczas odwiedzania strony. Pomagaja witrynom dzialac poprawnie, zapamietywac preferencje, zwiekszac bezpieczenstwo i rozumiec, jak odwiedzajacy korzystaja ze strony.",
+      howWeUseTitle: "Jak korzystamy z plikow cookie",
+      necessaryTitle: "1. Niezbedne pliki cookie",
+      necessaryText:
+        "Niezbedne pliki cookie sa wymagane do podstawowego dzialania, bezpieczenstwa i niezawodnosci EquipRegistry. Moga wspierac funkcje takie jak nawigacja po stronie, bezpieczne sesje, zapobieganie oszustwom i kluczowa wydajnosc strony. Te pliki cookie nie wymagaja zgody tam, gdzie prawo na to pozwala.",
+      analyticsTitle: "2. Analityczne pliki cookie",
+      analyticsText:
+        "Opcjonalnych analitycznych plikow cookie uzywamy dopiero po uzyskaniu Twojej zgody. Te pliki cookie pomagaja nam rozumiec ruch na stronie, sposob korzystania z podstron i ogolna wydajnosc serwisu, aby ulepszac EquipRegistry. Obecnie EquipRegistry moze korzystac z Cloudflare Web Analytics lub podobnych narzedzi analitycznych dbajacych o prywatnosc.",
+      consentTitle: "Twoja zgoda",
+      consentText:
+        "Przy pierwszej wizycie na naszej stronie mozesz zaakceptowac lub odrzucic opcjonalne analityczne pliki cookie. Jesli je odrzucisz, aktywne powinny pozostac tylko niezbedne pliki cookie. Swoj wybor mozesz pozniej zmienic, czyszczac dane przegladarki lub korzystajac z przyszlych ustawien plikow cookie, gdy beda dostepne.",
+      manageTitle: "Zarzadzanie plikami cookie",
+      manageText:
+        "Wiekszosc przegladarek pozwala blokowac, usuwac lub zarzadzac plikami cookie w ustawieniach. Pamietaj, ze wylaczenie niezbednych plikow cookie moze wplynac na prawidlowe dzialanie strony.",
+      thirdPartyTitle: "Uslugi stron trzecich",
+      thirdPartyText:
+        "Niektore funkcje strony moga polegac na zaufanych uslugach technicznych stron trzecich. Jesli takie uslugi ustawiaja opcjonalne pliki cookie do analityki lub podobnych celow, powinny byc aktywowane dopiero po uzyskaniu zgody.",
+      contactTitle: "Kontakt",
+      contactText:
+        "Jesli masz pytania dotyczace tej Polityki plikow cookie lub sposobu, w jaki EquipRegistry korzysta z plikow cookie, skontaktuj sie z nami pod adresem info@equipregistry.com.",
+    },
+    backHome: "Powrot do strony glownej",
+    privacyLink: "Polityka prywatnosci",
+  },
+  sv: {
+    title: "Cookiepolicy",
+    intro:
+      "Denna cookiepolicy forklarar hur EquipRegistry anvander cookies och liknande tekniker nar du besoker var webbplats.",
+    lastUpdatedLabel: "Senast uppdaterad",
+    lastUpdatedValue: "April 2026",
+    sections: {
+      whatAreCookiesTitle: "Vad ar cookies?",
+      whatAreCookiesText:
+        "Cookies ar sma textfiler som lagras pa din enhet nar du besoker en webbplats. De hjalper webbplatser att fungera korrekt, komma ihag preferenser, forbattra sakerheten och forsta hur besokare anvander webbplatsen.",
+      howWeUseTitle: "Hur vi anvander cookies",
+      necessaryTitle: "1. Nodvandiga cookies",
+      necessaryText:
+        "Nodvandiga cookies kravs for EquipRegistrys grundlaggande funktion, sakerhet och tillforlitlighet. De kan stotta funktioner som sidnavigering, sakra sessioner, bedrageribekampning och viktig webbplatsprestanda. Dessa cookies kravs inte samtycke for dar lagen tillater det.",
+      analyticsTitle: "2. Analyscookies",
+      analyticsText:
+        "Vi anvander endast valfria analyscookies efter att du har gett ditt samtycke. Dessa cookies hjalper oss att forsta webbplatstrafik, sidanvandning och allman webbplatsprestanda sa att vi kan forbattra EquipRegistry. For narvarande kan EquipRegistry anvanda Cloudflare Web Analytics eller liknande integritetsfokuserade analysverktyg.",
+      consentTitle: "Ditt samtycke",
+      consentText:
+        "Nar du besoker var webbplats forsta gangen kan du valja att acceptera eller neka valfria analyscookies. Om du nekar bor endast nodvandiga cookies forbli aktiva. Du kan senare andra ditt val genom att rensa din webblasarlagring eller anvanda framtida installningar for cookies nar de finns tillgangliga.",
+      manageTitle: "Hantera cookies",
+      manageText:
+        "De flesta webblasare later dig blockera, radera eller hantera cookies via installningarna. Observera att avstangning av nodvandiga cookies kan paverka webbplatsens korrekta funktion.",
+      thirdPartyTitle: "Tjanster fran tredje part",
+      thirdPartyText:
+        "Vissa webbplatsfunktioner kan vara beroende av betrodda tekniska tjanster fran tredje part. Dar dessa tjanster sattar valfria cookies for analys eller liknande andamal bor de endast aktiveras efter samtycke.",
+      contactTitle: "Kontakt",
+      contactText:
+        "Om du har fragor om denna cookiepolicy eller om hur EquipRegistry anvander cookies kan du kontakta oss pa info@equipregistry.com.",
+    },
+    backHome: "Tillbaka till startsidan",
+    privacyLink: "Integritetspolicy",
+  },
+  da: {
+    title: "Cookiepolitik",
+    intro:
+      "Denne cookiepolitik forklarer, hvordan EquipRegistry bruger cookies og lignende teknologier, nar du besoger vores hjemmeside.",
+    lastUpdatedLabel: "Sidst opdateret",
+    lastUpdatedValue: "April 2026",
+    sections: {
+      whatAreCookiesTitle: "Hvad er cookies?",
+      whatAreCookiesText:
+        "Cookies er sma tekstfiler, der gemmes pa din enhed, nar du besoger en hjemmeside. De hjaelper hjemmesider med at fungere korrekt, huske praeferencer, forbedre sikkerheden og forsta, hvordan besogende bruger siden.",
+      howWeUseTitle: "Hvordan vi bruger cookies",
+      necessaryTitle: "1. Nodvendige cookies",
+      necessaryText:
+        "Nodvendige cookies er paakraevet for den grundlaeggende drift, sikkerhed og paalidelighed af EquipRegistry. De kan understotte funktioner som sidenavigation, sikre sessioner, forebyggelse af svindel og essentiel hjemmesideydelse. Disse cookies kraever ikke samtykke, hvor loven tillader det.",
+      analyticsTitle: "2. Analysecookies",
+      analyticsText:
+        "Vi bruger kun valgfrie analysecookies, efter du har givet samtykke. Disse cookies hjaelper os med at forsta hjemmesidebesog, sidebrug og generel ydeevne, sa vi kan forbedre EquipRegistry. Pa nuvaerende tidspunkt kan EquipRegistry bruge Cloudflare Web Analytics eller lignende privatlivsfokuserede analysevaerktojer.",
+      consentTitle: "Dit samtykke",
+      consentText:
+        "Nar du forste gang besoger vores hjemmeside, kan du vaelge at acceptere eller afvise valgfrie analysecookies. Hvis du afviser dem, bor kun nodvendige cookies forblive aktive. Du kan senere aendre dit valg ved at rydde din browserlagring eller bruge fremtidige cookieindstillinger, nar de er tilgaengelige.",
+      manageTitle: "Administration af cookies",
+      manageText:
+        "De fleste browsere giver dig mulighed for at blokere, slette eller administrere cookies via browserindstillingerne. Bemark, at deaktivering af nodvendige cookies kan pavirke hjemmesidens korrekte funktion.",
+      thirdPartyTitle: "Tredjepartstjenester",
+      thirdPartyText:
+        "Nogle hjemmesidefunktioner kan vaere afhngige af betroede tekniske tredjepartstjenester. Nar disse tjenester satter valgfrie cookies til analyse eller lignende formal, bor de kun aktiveres efter samtykke.",
+      contactTitle: "Kontakt",
+      contactText:
+        "Hvis du har sporgsmal om denne cookiepolitik eller om, hvordan EquipRegistry bruger cookies, kan du kontakte os pa info@equipregistry.com.",
+    },
+    backHome: "Tilbage til forsiden",
+    privacyLink: "Privatlivspolitik",
+  },
+  no: {
+    title: "Cookiepolicy",
+    intro:
+      "Denne cookiepolicyen forklarer hvordan EquipRegistry bruker cookies og lignende teknologier nar du besoker nettstedet vart.",
+    lastUpdatedLabel: "Sist oppdatert",
+    lastUpdatedValue: "April 2026",
+    sections: {
+      whatAreCookiesTitle: "Hva er cookies?",
+      whatAreCookiesText:
+        "Cookies er sma tekstfiler som lagres pa enheten din nar du besoker et nettsted. De hjelper nettsteder med a fungere riktig, huske preferanser, forbedre sikkerheten og forsta hvordan besokende bruker siden.",
+      howWeUseTitle: "Hvordan vi bruker cookies",
+      necessaryTitle: "1. Nodvendige cookies",
+      necessaryText:
+        "Nodvendige cookies kreves for grunnleggende drift, sikkerhet og palitelighet i EquipRegistry. De kan stotte funksjoner som sidenavigasjon, sikre sesjoner, forebygging av svindel og viktig nettsideytelse. Disse cookiene krever ikke samtykke der loven tillater det.",
+      analyticsTitle: "2. Analysecookies",
+      analyticsText:
+        "Vi bruker bare valgfrie analysecookies etter at du har gitt samtykke. Disse cookiene hjelper oss med a forsta trafikk pa nettstedet, sidebruk og generell ytelse, slik at vi kan forbedre EquipRegistry. For tiden kan EquipRegistry bruke Cloudflare Web Analytics eller lignende personvernfokuserte analyseverktoy.",
+      consentTitle: "Ditt samtykke",
+      consentText:
+        "Nar du besoker nettstedet vart forste gang, kan du velge a godta eller avsla valgfrie analysecookies. Hvis du avslar, bor bare nodvendige cookies forbli aktive. Du kan senere endre valget ditt ved a tømme nettleserlageret eller bruke fremtidige cookieinnstillinger nar de blir tilgjengelige.",
+      manageTitle: "Administrere cookies",
+      manageText:
+        "De fleste nettlesere lar deg blokkere, slette eller administrere cookies via innstillingene. Vaer oppmerksom pa at deaktivering av nodvendige cookies kan pavirke at nettstedet fungerer som det skal.",
+      thirdPartyTitle: "Tredjepartstjenester",
+      thirdPartyText:
+        "Noen nettstedfunksjoner kan vaere avhengige av betrodde tekniske tredjepartstjenester. Der slike tjenester setter valgfrie cookies for analyse eller lignende formal, bor de bare aktiveres etter samtykke.",
+      contactTitle: "Kontakt",
+      contactText:
+        "Hvis du har sporsmal om denne cookiepolicyen eller om hvordan EquipRegistry bruker cookies, kan du kontakte oss pa info@equipregistry.com.",
+    },
+    backHome: "Tilbake til startsiden",
+    privacyLink: "Personvernerklaering",
+  },
 };
 
 export default async function CookiesPage({ params }: PageProps) {

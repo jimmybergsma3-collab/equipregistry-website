@@ -61,7 +61,23 @@ const TEXT: Record<
     processing: "جارٍ المعالجة...",
     markAsPaid: "تحديد كمدفوع",
   },
-};
+
+  pl: {
+    processing: "Przetwarzanie...",
+    markAsPaid: "Oznacz jako oplacone",
+  },
+  sv: {
+    processing: "Bearbetar...",
+    markAsPaid: "Markera som betald",
+  },
+  da: {
+    processing: "Behandler...",
+    markAsPaid: "Marker som betalt",
+  },
+  no: {
+    processing: "Behandler...",
+    markAsPaid: "Marker som betalt",
+  },};
 
 export default function MarkPaidButton({ registrationId, lang }: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";

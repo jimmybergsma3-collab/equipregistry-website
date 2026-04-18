@@ -465,4 +465,493 @@ export const TERMS_CONTENT: Record<Lang, TermsContent> = {
     sections: [],
     lastUpdated: "آخر تحديث: 4 أبريل 2026",
   },
+
+  pl: {
+    pageTitle: "Warunki i postanowienia",
+    intro:
+      "Niniejsze Warunki i postanowienia reguluja korzystanie z platformy EquipRegistry, strony internetowej, publicznych narzedzi weryfikacyjnych, uslug rejestracyjnych, cyfrowych paszportow assetow oraz powiazanych przyszlych uslug.",
+    companyTitle: "Uslugodawca",
+    companyLines,
+    sections: [
+      {
+        title: "1. Informacje ogolne",
+        body: [
+          "EquipRegistry to cyfrowa platforma rejestrowa dla identyfikowalnych assetow, takich jak pojazdy, maszyny, sprzet, rowery, e-bike'i, hulajnogi elektryczne, przyczepy, assety przemyslowe, baterie, assety zwiazane z energia sloneczna oraz inne identyfikowalne mienie.",
+          "Platforma moze obejmowac publiczna weryfikacje, cyfrowe paszporty, panele wlascicieli, workflow rejestracyjne, narzedzia partnerskie i przyszle integracje.",
+        ],
+      },
+      {
+        title: "2. Charakter uslugi",
+        body: [
+          "EquipRegistry dziala jako warstwa rejestracji i weryfikacji i nie gwarantuje automatycznie prawa wlasnosci, legalnego pochodzenia, zbywalnosci ani braku obciazen, chyba ze zostanie to wyraznie potwierdzone po przegladzie.",
+          "Statusy i rekordy opieraja sie na informacjach, dokumentach, oswiadczeniach i walidacjach dostepnych w chwili przegladu.",
+        ],
+      },
+      {
+        title: "3. Odpowiedzialnosc uzytkownika",
+        body: [
+          "Uzytkownicy, wnioskodawcy, wlasciciele i partnerzy musza dostarczac kompletne, dokladne, aktualne i prawdziwe informacje.",
+          "Przesylanie falszywych, zmanipulowanych, wprowadzajacych w blad, skradzionych lub nieautoryzowanych dokumentow, roszczen, numerow seryjnych, faktur lub danych tozsamosci jest surowo zabronione.",
+        ],
+      },
+      {
+        title: "4. Rejestracja i przeglad",
+        body: [
+          "Zlozenie wniosku rejestracyjnego nie gwarantuje zatwierdzenia, weryfikacji ani wydania paszportu.",
+          "EquipRegistry moze zadac dodatkowych dowodow, odrzucic lub zawiesic wnioski, zmienic statusy albo objac rekord przegladem, gdy jest to konieczne.",
+        ],
+      },
+      {
+        title: "5. Statusy assetow",
+        body: [
+          "Assety na platformie moga wyswietlac statusy takie jak Registered & Verified, History Unknown, Stolen / Red Flag, Verification Expired lub Not Registered.",
+          "Statusy te maja charakter informacyjny w kontekscie platformy i moga sie zmieniac wraz z pojawieniem sie nowych informacji.",
+        ],
+      },
+      {
+        title: "6. Zgloszenia kradziezy i sprzeczne roszczenia",
+        body: [
+          "EquipRegistry moze wymagac zgloszenia policyjnego lub porownywalnego oficjalnego dowodu przed nadaniem lub utrzymaniem statusu zwiazanego z kradzieza lub red flag.",
+          "W przypadku sprzecznych roszczen dotyczacych wlasnosci lub kradziezy EquipRegistry moze ograniczyc widocznosc, zawiesic rekord lub zazadac dalszej weryfikacji.",
+        ],
+      },
+      {
+        title: "7. Publiczna weryfikacja i ograniczony dostep",
+        body: [
+          "Publiczne wyniki wyszukiwania i publiczne widoki paszportu maja zwiekszac przejrzystosc i rozpoznawalnosc assetu, ale nie zastepuja prawnego due diligence, kontroli policyjnych, weryfikacji tytulu wlasnosci ani kontroli finansowych.",
+          "Niektore informacje moga pozostac ograniczone, zamaskowane lub dostepne wylacznie dla upowaznionych uzytkownikow, wlascicieli lub zatwierdzonych partnerow.",
+        ],
+      },
+      {
+        title: "8. Zmiany wlasnosci i aktualnosc danych",
+        body: [
+          "Uzytkownicy odpowiadaja za aktualizowanie zmian wlasnosci, odzyskania po kradziezy, sprzedazy, eksportu lub innych istotnych zmian statusu.",
+          "EquipRegistry moze wprowadzic przypomnienia, wymogi odnowienia, workflow przeniesienia wlasnosci lub automatyczne aktualizacje statusu, takie jak Verification Expired.",
+        ],
+      },
+      {
+        title: "9. Platnosci i oplaty",
+        body: [
+          "Niektore uslugi moga podlegac oplatom rejestracyjnym, walidacyjnym, odnowieniowym, oplatom za dostep partnerski lub innym oplatom zwiazanym z transakcja.",
+          "Przeslana referencja rejestracyjna moze stac sie stalym numerem paszportu lub rejestru powiazanym z assetem w systemie EquipRegistry.",
+        ],
+      },
+      {
+        title: "10. Oszustwa, naduzycia i niewlasciwe uzycie",
+        body: [
+          "Platforma nie moze byc wykorzystywana do oszustw, naduzyc tozsamosci, manipulacji dokumentami, naduzyc zwiazanych z kradzieza, dzialan niezgodnych z prawem ani prob nieautoryzowanego dostepu.",
+          "EquipRegistry zastrzega sobie prawo do zawieszenia dostepu, usuniecia rekordow i wspolpracy z odpowiednimi organami, gdy podejrzewa sie naduzycie.",
+        ],
+      },
+      {
+        title: "11. Wlasnosc intelektualna",
+        body: [
+          "Nazwa EquipRegistry, branding, koncepcja platformy, uklad paszportu, struktura bazy danych, teksty i zawartosc strony sa chronione przez odpowiednie przepisy prawa wlasnosci intelektualnej.",
+          "Zadna czesc platformy nie moze byc kopiowana, reprodukowana, poddawana reverse engineeringowi, odsprzedawana ani komercyjnie wykorzystywana bez uprzedniej pisemnej zgody.",
+        ],
+      },
+      {
+        title: "12. Ograniczenie odpowiedzialnosci",
+        body: [
+          "EquipRegistry nie ponosi odpowiedzialnosci za szkody posrednie, utracone zyski, utracone transakcje, szkody reputacyjne, kradziez, oszustwo, spory o wlasnosc, spory finansowe ani poleganie na niepelnych, nieaktualnych, przeslanych przez uzytkownikow lub pochodzacych od stron trzecich informacjach.",
+          "Korzystanie z platformy odbywa sie na wlasne ryzyko uzytkownika. Uzytkownicy nadal odpowiadaja za wlasne kontrole, decyzje i prawne due diligence.",
+        ],
+      },
+      {
+        title: "13. Uslugi stron trzecich",
+        body: [
+          "EquipRegistry moze korzystac z uslug stron trzecich w zakresie hostingu, platnosci, analityki, komunikacji, infrastruktury lub innych funkcji technicznych.",
+          "EquipRegistry nie ponosi odpowiedzialnosci za przerwy, opoznienia ani awarie spowodowane przez dostawcow zewnetrznych.",
+        ],
+      },
+      {
+        title: "14. Przyszle uslugi",
+        body: [
+          "EquipRegistry moze rozszerzyc sie o dostep API, narzedzia dla ubezpieczycieli, kontrole bankowe lub finansowe, panele wynajmu, weryfikacje QR, narzedzia eksportowe i logistyczne, powiadomienia, analityke, naklejki, etykiety i inne warstwy weryfikacji.",
+          "Nowe uslugi moga podlegac dodatkowym warunkom lub umowom handlowym.",
+        ],
+      },
+      {
+        title: "15. Zmiany niniejszych warunkow",
+        body: [
+          "EquipRegistry moze od czasu do czasu aktualizowac niniejsze Warunki i postanowienia, aby odzwierciedlic zmiany prawne, techniczne, operacyjne lub handlowe.",
+          "Najnowsza wersja opublikowana na stronie internetowej obowiazuje od daty publikacji, chyba ze wskazano inaczej.",
+        ],
+      },
+      {
+        title: "16. Prawo wlasciwe i jurysdykcja",
+        body: [
+          "Niniejsze Warunki i postanowienia podlegaja prawu hiszpanskiemu.",
+          "Wszelkie spory zwiazane z korzystaniem z EquipRegistry beda rozstrzygane przez wlasciwe sady w Hiszpanii, chyba ze bezwzglednie obowiazujace prawo stanowi inaczej.",
+        ],
+      },
+    ],
+    lastUpdated: "Ostatnia aktualizacja: 4 kwietnia 2026",
+  },
+  sv: {
+    pageTitle: "Villkor",
+    intro:
+      "Dessa villkor reglerar anvandningen av plattformen EquipRegistry, webbplatsen, publika verifieringsverktyg, registreringstjanster, digitala assetpass och relaterade framtida tjanster.",
+    companyTitle: "Tjansteleverantor",
+    companyLines,
+    sections: [
+      {
+        title: "1. Allman information",
+        body: [
+          "EquipRegistry ar en digital registerplattform for identifierbara assets som fordon, maskiner, utrustning, cyklar, e-bikes, elsparkcyklar, slap, industriella assets, batterier, solrelaterade assets och annan identifierbar egendom.",
+          "Plattformen kan omfatta publik verifiering, digitala pass, agarpaneler, registreringsworkflows, partnerverktyg och framtida integrationer.",
+        ],
+      },
+      {
+        title: "2. Tjanstens natur",
+        body: [
+          "EquipRegistry fungerar som ett register- och verifieringslager och garanterar inte automatiskt lagligt agande, lagligt ursprung, saljbarhet eller franvaro av belastningar om detta inte uttryckligen bekraftas efter granskning.",
+          "Statusar och poster bygger pa den information, de dokument, deklarationer och valideringar som finns tillgangliga vid tidpunkten for granskningen.",
+        ],
+      },
+      {
+        title: "3. Anvandaransvar",
+        body: [
+          "Anvandare, sokande, agare och partner maste tillhandahalla fullstandig, korrekt, aktuell och sanningsenlig information.",
+          "Det ar strangt forbjudet att skicka in falska, manipulerade, vilseledande, stulna eller obehoriga dokument, ansprak, serienummer, fakturor eller identitetsuppgifter.",
+        ],
+      },
+      {
+        title: "4. Registrering och granskning",
+        body: [
+          "Att skicka in en registreringsansokan garanterar inte godkannande, verifiering eller utfardande av pass.",
+          "EquipRegistry kan begara ytterligare bevisning, avsla eller pausa ansokningar, andra statusar eller satta en post under granskning nar det behovs.",
+        ],
+      },
+      {
+        title: "5. Assetstatusar",
+        body: [
+          "Assets pa plattformen kan visa statusar som Registered & Verified, History Unknown, Stolen / Red Flag, Verification Expired eller Not Registered.",
+          "Dessa statusar ar informativa inom plattformens sammanhang och kan andras nar ny information blir tillganglig.",
+        ],
+      },
+      {
+        title: "6. Stoldanmalningar och motstridiga ansprak",
+        body: [
+          "EquipRegistry kan krava en polisanmalan eller jamforbar officiell bevisning innan en status kopplad till stold eller red flag tilldelas eller behalls.",
+          "Vid motstridiga ansprak om agande eller stold kan EquipRegistry begransa synlighet, pausa en post eller begara ytterligare verifiering.",
+        ],
+      },
+      {
+        title: "7. Publik verifiering och begransad tillgang",
+        body: [
+          "Publika sokresultat och publika passvyer ar avsedda att oka transparensen och igenkanningen av en asset, men de ersatter inte juridisk due diligence, poliskontroller, titelverifiering eller finansiella kontroller.",
+          "Viss information kan forbli begransad, maskerad eller endast tillganglig for behoriga anvandare, agare eller godkanda partner.",
+        ],
+      },
+      {
+        title: "8. Agarandringar och datans aktualitet",
+        body: [
+          "Anvandare ansvarar for att uppdatera agarandringar, aterhamtning efter stold, salj, export eller andra relevanta statusandringar.",
+          "EquipRegistry kan infora paminnelser, fornyelsekrav, overlatelsefloden eller automatiska statusuppdateringar som Verification Expired.",
+        ],
+      },
+      {
+        title: "9. Betalningar och avgifter",
+        body: [
+          "Vissa tjanster kan omfattas av registreringsavgifter, valideringsavgifter, fornyelseavgifter, partneravgifter eller andra transaktionsrelaterade kostnader.",
+          "En inskickad registreringsreferens kan bli den permanenta pass- eller registerreferensen som ar kopplad till asseten i EquipRegistry-systemet.",
+        ],
+      },
+      {
+        title: "10. Bedrageri, missbruk och felaktig anvandning",
+        body: [
+          "Plattformen far inte anvandas for bedrageri, identitetsmissbruk, dokumentmanipulation, stoldrelaterat missbruk, olagligt beteende eller forsok till obehorig atkomst.",
+          "EquipRegistry forbehaller sig ratten att stanga av tillgang, ta bort poster och samarbeta med relevanta myndigheter nar missbruk misstanks.",
+        ],
+      },
+      {
+        title: "11. Immateriella rattigheter",
+        body: [
+          "Namnet EquipRegistry, branding, plattformskonceptet, passlayouten, databasstrukturen, texterna och webbplatsens innehall skyddas av tillamplig immaterialrattslig lagstiftning.",
+          "Ingen del av plattformen far kopieras, reproduceras, reverse-engineeras, saljas vidare eller kommersiellt utnyttjas utan forhands skriftligt tillstand.",
+        ],
+      },
+      {
+        title: "12. Ansvarsbegransning",
+        body: [
+          "EquipRegistry ansvarar inte for indirekta forluster, utebliven vinst, missade transaktioner, renommeskada, stold, bedrageri, agarstvister, finansieringstvister eller tillit till ofullstandig, foraldad, anvandarinsand eller tredjepartsinformation.",
+          "Anvandning av plattformen sker pa anvandarens egen risk. Anvandare ansvarar fortfarande for egna kontroller, beslut och juridisk due diligence.",
+        ],
+      },
+      {
+        title: "13. Tredjepartstjanster",
+        body: [
+          "EquipRegistry kan forlita sig pa tredjepartstjanster for hosting, betalningar, analys, kommunikation, infrastruktur eller andra tekniska funktioner.",
+          "EquipRegistry ansvarar inte for avbrott, forseningar eller fel som orsakas av tredjepartsleverantorer.",
+        ],
+      },
+      {
+        title: "14. Framtida tjanster",
+        body: [
+          "EquipRegistry kan utokas med API-atkomst, verktyg for forsakrare, bank- eller finanskontroller, uthyrningsdashboards, QR-verifiering, export- och logistikverktyg, notiser, analys, dekaler, etiketter och andra verifieringslager.",
+          "Nya tjanster kan omfattas av ytterligare villkor eller kommersiella avtal.",
+        ],
+      },
+      {
+        title: "15. Andringar av dessa villkor",
+        body: [
+          "EquipRegistry kan uppdatera dessa villkor fran tid till annan for att spegla juridiska, tekniska, operativa eller kommersiella utvecklingar.",
+          "Den senaste versionen som publiceras pa webbplatsen galler fran publiceringsdatumet om inget annat anges.",
+        ],
+      },
+      {
+        title: "16. Tillamplig lag och jurisdiktion",
+        body: [
+          "Dessa villkor regleras av spansk lag.",
+          "Eventuella tvister som ror anvandningen av EquipRegistry ska overlamnas till behoriga domstolar i Spanien, om inte tvingande lag foreskriver annat.",
+        ],
+      },
+    ],
+    lastUpdated: "Senast uppdaterad: 4 april 2026",
+  },
+  da: {
+    pageTitle: "Vilkar og betingelser",
+    intro:
+      "Disse vilkar og betingelser regulerer brugen af EquipRegistry-platformen, hjemmesiden, offentlige verificeringsvaerktojer, registreringstjenester, digitale assetpas og relaterede fremtidige tjenester.",
+    companyTitle: "Tjenesteudbyder",
+    companyLines,
+    sections: [
+      {
+        title: "1. Generel information",
+        body: [
+          "EquipRegistry er en digital registerplatform for identificerbare assets som koretojer, maskiner, udstyr, cykler, e-bikes, elektriske lobehjul, trailere, industrielle assets, batterier, solrelaterede assets og anden identificerbar ejendom.",
+          "Platformen kan omfatte offentlig verificering, digitale pas, ejerdashboards, registreringsworkflows, partnervaerktojer og fremtidige integrationer.",
+        ],
+      },
+      {
+        title: "2. Tjenestens karakter",
+        body: [
+          "EquipRegistry fungerer som et register- og verificeringslag og garanterer ikke automatisk lovligt ejerskab, lovlig oprindelse, omsaettelighed eller fravaer af haeftelser, medmindre det udtrykkeligt bekraeftes efter gennemgang.",
+          "Statusser og poster bygger pa de oplysninger, dokumenter, erklaeringer og valideringer, der er tilgaengelige pa tidspunktet for gennemgangen.",
+        ],
+      },
+      {
+        title: "3. Brugeransvar",
+        body: [
+          "Brugere, ansogere, ejere og partnere skal levere fuldstaendige, korrekte, aktuelle og sandfaerdige oplysninger.",
+          "Indsendelse af falske, manipulerede, vildledende, stjalne eller uautoriserede dokumenter, krav, serienumre, fakturaer eller identitetsoplysninger er strengt forbudt.",
+        ],
+      },
+      {
+        title: "4. Registrering og gennemgang",
+        body: [
+          "Indsendelse af en registreringsanmodning garanterer ikke godkendelse, verificering eller udstedelse af pas.",
+          "EquipRegistry kan anmode om yderligere dokumentation, afvise eller suspendere ansogninger, aendre statusser eller saette en post under gennemgang, nar det er nodvendigt.",
+        ],
+      },
+      {
+        title: "5. Assetstatusser",
+        body: [
+          "Assets pa platformen kan vise statusser som Registered & Verified, History Unknown, Stolen / Red Flag, Verification Expired eller Not Registered.",
+          "Disse statusser er informative inden for platformens kontekst og kan aendres, nar ny information bliver tilgaengelig.",
+        ],
+      },
+      {
+        title: "6. Tyverianmeldelser og modstridende krav",
+        body: [
+          "EquipRegistry kan kraeve en politirapport eller sammenlignelig officiel dokumentation, for en status relateret til tyveri eller red flag tildeles eller opretholdes.",
+          "Ved modstridende krav om ejerskab eller tyveri kan EquipRegistry begraense synlighed, suspendere en post eller anmode om yderligere verificering.",
+        ],
+      },
+      {
+        title: "7. Offentlig verificering og begraenset adgang",
+        body: [
+          "Offentlige sogeresultater og offentlige pasvisninger er beregnet til at forbedre gennemsigtighed og genkendelse af et asset, men de erstatter ikke juridisk due diligence, politikontrol, titelverificering eller finansielle kontroller.",
+          "Nogle oplysninger kan forblive begraensede, maskerede eller kun tilgaengelige for autoriserede brugere, ejere eller godkendte partnere.",
+        ],
+      },
+      {
+        title: "8. Ejerskabsandringer og dataaktualitet",
+        body: [
+          "Brugere er ansvarlige for at opdatere ejerskabsandringer, genfinding efter tyveri, salg, eksport eller andre relevante statusandringer.",
+          "EquipRegistry kan indfore pamindelser, fornyelseskrav, flows for ejerskabsoverdragelse eller automatiske statusopdateringer som Verification Expired.",
+        ],
+      },
+      {
+        title: "9. Betalinger og gebyrer",
+        body: [
+          "Visse tjenester kan vaere underlagt registreringsgebyrer, valideringsgebyrer, fornyelsesgebyrer, partneradgangsgebyrer eller andre transaktionsrelaterede omkostninger.",
+          "En indsendt registreringsreference kan blive den permanente pas- eller registerreference, der er knyttet til assetet i EquipRegistry-systemet.",
+        ],
+      },
+      {
+        title: "10. Svig, misbrug og forkert anvendelse",
+        body: [
+          "Platformen ma ikke bruges til svig, misbrug af identitet, dokumentmanipulation, tyverirelateret misbrug, ulovlig adfaerd eller forsog pa uautoriseret adgang.",
+          "EquipRegistry forbeholder sig retten til at suspendere adgang, fjerne poster og samarbejde med relevante myndigheder, hvor misbrug mistankes.",
+        ],
+      },
+      {
+        title: "11. Intellektuel ejendomsret",
+        body: [
+          "Navnet EquipRegistry, branding, platformkonceptet, passets layout, databasestrukturen, teksterne og indholdet pa hjemmesiden er beskyttet af gaeldende lovgivning om intellektuel ejendomsret.",
+          "Ingen del af platformen ma kopieres, reproduceres, reverse-engineeres, videresaelges eller udnyttes kommercielt uden forudgaende skriftlig tilladelse.",
+        ],
+      },
+      {
+        title: "12. Ansvarsbegransning",
+        body: [
+          "EquipRegistry er ikke ansvarlig for indirekte tab, tabt fortjeneste, mistede transaktioner, omdommeskade, tyveri, svig, ejerskabstvister, finansieringstvister eller tillid til ufuldstaendige, foraeldede, brugerindsendte eller tredjepartsoplysninger.",
+          "Brug af platformen sker pa brugerens egen risiko. Brugere forbliver ansvarlige for egne kontroller, beslutninger og juridisk due diligence.",
+        ],
+      },
+      {
+        title: "13. Tredjepartstjenester",
+        body: [
+          "EquipRegistry kan vaere afhngig af tredjepartstjenester til hosting, betalinger, analyse, kommunikation, infrastruktur eller andre tekniske funktioner.",
+          "EquipRegistry er ikke ansvarlig for afbrydelser, forsinkelser eller fejl forarsaget af tredjepartsleverandorer.",
+        ],
+      },
+      {
+        title: "14. Fremtidige tjenester",
+        body: [
+          "EquipRegistry kan udvides med API-adgang, vaerktojer til forsikringsselskaber, bank- eller finanskontroller, udlejningsdashboards, QR-verificering, eksport- og logistikvaerktojer, notifikationer, analyse, klistermaerker, etiketter og andre verificeringslag.",
+          "Nye tjenester kan vaere underlagt yderligere vilkar eller kommercielle aftaler.",
+        ],
+      },
+      {
+        title: "15. Andringer af disse vilkar",
+        body: [
+          "EquipRegistry kan fra tid til anden opdatere disse vilkar og betingelser for at afspejle juridiske, tekniske, operationelle eller kommercielle udviklinger.",
+          "Den seneste version, der offentliggores pa hjemmesiden, gaelder fra offentliggorelsesdatoen, medmindre andet er angivet.",
+        ],
+      },
+      {
+        title: "16. Galdende lov og jurisdiktion",
+        body: [
+          "Disse vilkar og betingelser er underlagt spansk lov.",
+          "Enhver tvist vedrorende brugen af EquipRegistry skal indbringes for de kompetente domstole i Spanien, medmindre ufravigelig lovgivning kraever andet.",
+        ],
+      },
+    ],
+    lastUpdated: "Sidst opdateret: 4. april 2026",
+  },
+  no: {
+    pageTitle: "Vilkar og betingelser",
+    intro:
+      "Disse vilkar og betingelser regulerer bruken av EquipRegistry-plattformen, nettstedet, offentlige verifiseringsverktoy, registreringstjenester, digitale assetpass og relaterte fremtidige tjenester.",
+    companyTitle: "Tjenesteleverandor",
+    companyLines,
+    sections: [
+      {
+        title: "1. Generell informasjon",
+        body: [
+          "EquipRegistry er en digital registerplattform for identifiserbare assets som kjoretoy, maskiner, utstyr, sykler, e-bikes, elektriske sparkesykler, tilhengere, industrielle assets, batterier, solrelaterte assets og annen identifiserbar eiendom.",
+          "Plattformen kan omfatte offentlig verifisering, digitale pass, eierdashbord, registreringsworkflows, partnerverktoy og fremtidige integrasjoner.",
+        ],
+      },
+      {
+        title: "2. Tjenestens natur",
+        body: [
+          "EquipRegistry fungerer som et register- og verifiseringslag og garanterer ikke automatisk lovlig eierskap, lovlig opprinnelse, omsettelighet eller fravaer av heftelser med mindre dette uttrykkelig bekreftes etter gjennomgang.",
+          "Statuser og poster bygger pa informasjonen, dokumentene, erklaeringene og valideringene som er tilgjengelige pa tidspunktet for gjennomgangen.",
+        ],
+      },
+      {
+        title: "3. Brukeransvar",
+        body: [
+          "Brukere, sokere, eiere og partnere ma oppgi fullstendig, korrekt, oppdatert og sannferdig informasjon.",
+          "Det er strengt forbudt a sende inn falske, manipulerte, villedende, stjalne eller uautoriserte dokumenter, krav, serienumre, fakturaer eller identitetsopplysninger.",
+        ],
+      },
+      {
+        title: "4. Registrering og gjennomgang",
+        body: [
+          "Innsending av en registreringsforesporsel garanterer ikke godkjenning, verifisering eller utstedelse av pass.",
+          "EquipRegistry kan be om ytterligere dokumentasjon, avvise eller suspendere soknader, endre statuser eller sette en post under gjennomgang nar det er nodvendig.",
+        ],
+      },
+      {
+        title: "5. Assetstatuser",
+        body: [
+          "Assets pa plattformen kan vise statuser som Registered & Verified, History Unknown, Stolen / Red Flag, Verification Expired eller Not Registered.",
+          "Disse statusene er informative innenfor plattformens kontekst og kan endres nar ny informasjon blir tilgjengelig.",
+        ],
+      },
+      {
+        title: "6. Tyverirapporter og motstridende krav",
+        body: [
+          "EquipRegistry kan kreve en politirapport eller sammenlignbar offisiell dokumentasjon for en status knyttet til tyveri eller red flag tildeles eller opprettholdes.",
+          "Ved motstridende krav om eierskap eller tyveri kan EquipRegistry begrense synlighet, suspendere en post eller be om ytterligere verifisering.",
+        ],
+      },
+      {
+        title: "7. Offentlig verifisering og begrenset tilgang",
+        body: [
+          "Offentlige sokeresultater og offentlige passvisninger er ment a forbedre transparens og gjenkjennelse av et asset, men de erstatter ikke juridisk due diligence, politikontroller, tittelverifisering eller finansielle kontroller.",
+          "Noe informasjon kan forbli begrenset, maskert eller bare tilgjengelig for autoriserte brukere, eiere eller godkjente partnere.",
+        ],
+      },
+      {
+        title: "8. Endringer i eierskap og dataenes aktualitet",
+        body: [
+          "Brukere er ansvarlige for a oppdatere endringer i eierskap, gjenfinning etter tyveri, salg, eksport eller andre relevante statusendringer.",
+          "EquipRegistry kan innfore paminnelser, fornyelseskrav, flyter for eierskapsoverforing eller automatiske statusoppdateringer som Verification Expired.",
+        ],
+      },
+      {
+        title: "9. Betalinger og gebyrer",
+        body: [
+          "Visse tjenester kan vaere underlagt registreringsgebyrer, valideringsgebyrer, fornyelsesgebyrer, gebyrer for partnertilgang eller andre transaksjonsrelaterte kostnader.",
+          "En innsendt registreringsreferanse kan bli den permanente pass- eller registerreferansen som er knyttet til assetet i EquipRegistry-systemet.",
+        ],
+      },
+      {
+        title: "10. Svindel, misbruk og feil bruk",
+        body: [
+          "Plattformen ma ikke brukes til svindel, misbruk av identitet, dokumentmanipulasjon, tyverirelatert misbruk, ulovlig atferd eller forsok pa uautorisert tilgang.",
+          "EquipRegistry forbeholder seg retten til a suspendere tilgang, fjerne poster og samarbeide med relevante myndigheter der misbruk mistenkes.",
+        ],
+      },
+      {
+        title: "11. Immaterielle rettigheter",
+        body: [
+          "Navnet EquipRegistry, branding, plattformkonseptet, passlayouten, databasestrukturen, tekstene og innholdet pa nettstedet er beskyttet av gjeldende lovgivning om immaterielle rettigheter.",
+          "Ingen del av plattformen ma kopieres, reproduseres, reverse-engineeres, videreselges eller kommersielt utnyttes uten skriftlig forhandstillatelse.",
+        ],
+      },
+      {
+        title: "12. Ansvarsbegrensning",
+        body: [
+          "EquipRegistry er ikke ansvarlig for indirekte tap, tapt fortjeneste, tapte transaksjoner, omdommeskade, tyveri, svindel, eierskapstvister, finansieringstvister eller tillit til ufullstendig, utdatert, brukerinnsendt eller tredjepartsinformasjon.",
+          "Bruk av plattformen skjer pa brukerens egen risiko. Brukere er fortsatt ansvarlige for egne kontroller, beslutninger og juridisk due diligence.",
+        ],
+      },
+      {
+        title: "13. Tredjepartstjenester",
+        body: [
+          "EquipRegistry kan vaere avhengig av tredjepartstjenester for hosting, betalinger, analyse, kommunikasjon, infrastruktur eller andre tekniske funksjoner.",
+          "EquipRegistry er ikke ansvarlig for avbrudd, forsinkelser eller feil som skyldes tredjepartsleverandorer.",
+        ],
+      },
+      {
+        title: "14. Fremtidige tjenester",
+        body: [
+          "EquipRegistry kan utvides med API-tilgang, verktoy for forsikrere, bank- eller finanskontroller, utleiedashbord, QR-verifisering, eksport- og logistikkverktoy, varsler, analyse, klistremerker, etiketter og andre verifiseringslag.",
+          "Nye tjenester kan vaere underlagt ytterligere vilkar eller kommersielle avtaler.",
+        ],
+      },
+      {
+        title: "15. Endringer i disse vilkarene",
+        body: [
+          "EquipRegistry kan oppdatere disse vilkarene og betingelsene fra tid til annen for a gjenspeile juridiske, tekniske, operative eller kommersielle utviklinger.",
+          "Den nyeste versjonen som publiseres pa nettstedet gjelder fra publiseringsdatoen med mindre noe annet er oppgitt.",
+        ],
+      },
+      {
+        title: "16. Gjeldende lov og jurisdiksjon",
+        body: [
+          "Disse vilkarene og betingelsene er underlagt spansk lov.",
+          "Eventuelle tvister knyttet til bruken av EquipRegistry skal bringes inn for kompetente domstoler i Spania, med mindre ufravikelig lov krever noe annet.",
+        ],
+      },
+    ],
+    lastUpdated: "Sist oppdatert: 4. april 2026",
+  },
 };

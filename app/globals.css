@@ -86,3 +86,18 @@ button {
 ::placeholder {
   color: #9ca3af; /* slate-400 */
 }
+
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  html,
+  body {
+    min-height: auto;
+    background: white !important;
+    color: rgb(var(--foreground));
+    overflow: visible;
+  }
+}

@@ -194,10 +194,15 @@ export default async function PassportPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader lang={safeLang} />
+      <div className="print:hidden">
+        <SiteHeader lang={safeLang} />
+      </div>
 
-      <main className="min-h-screen bg-white" dir={direction}>
-        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <main
+        className="min-h-screen bg-white print:min-h-0 print:bg-white"
+        dir={direction}
+      >
+        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 print:max-w-[190mm] print:px-0 print:py-0">
           <OfficialPassport
             lang={safeLang}
             direction={direction}
@@ -241,7 +246,7 @@ export default async function PassportPage({ params }: Props) {
           />
 
           {isPubliclyStolen && publicCaseReference ? (
-            <section className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6">
+            <section className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6 print:hidden">
               <h2 className="text-lg font-semibold text-red-800">
                 {stolenText.public.warningTitle}
               </h2>
@@ -296,7 +301,9 @@ export default async function PassportPage({ params }: Props) {
         </div>
       </main>
 
-      <SiteFooter lang={safeLang} />
+      <div className="print:hidden">
+        <SiteFooter lang={safeLang} />
+      </div>
     </>
   );
 }

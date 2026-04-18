@@ -569,6 +569,175 @@ const FORM_TEXT: Record<
       rental_partner: "شريك تأجير",
     },
   },
+
+  pl: {
+    foundationTitle: "Podstawa rejestracji",
+    foundationText:
+      "Uzupelnij wszystkie wymagane dane, zanim zgloszenie przejdzie do platnosci lub wyslania.",
+    applicantType: "Typ wnioskodawcy",
+    assetName: "Nazwa assetu",
+    assetNamePlaceholder: "np. Opel Corsa / Komatsu WA380",
+    brand: "Marka",
+    brandPlaceholder: "np. Opel",
+    model: "Model",
+    modelPlaceholder: "np. Corsa",
+    serialNumber: "Numer seryjny / glowny identyfikator",
+    serialNumberPlaceholder: "Wpisz numer seryjny lub glowny identyfikator",
+    year: "Rok",
+    yearPlaceholder: "np. 2019",
+    country: "Kraj",
+    countryPlaceholder: "np. Spain",
+    ownerName: "Nazwa wlasciciela",
+    ownerNamePlaceholder: "Pelna prawna nazwa wlasciciela",
+    ownerEmail: "E-mail wlasciciela",
+    ownerEmailPlaceholder: "name@example.com",
+    declaration:
+      "Potwierdzam, ze przeslane dane sa kompletne i moga byc przetwarzane w celu oceny rejestracji.",
+    workflowTitle: "Wynik workflow",
+    workflowStatus: "Aktualny wewnetrzny status zgloszenia:",
+    retailPaymentNote:
+      "Wnioskodawcy detaliczni i MSP musza zaplacic przed ostatecznym wyslaniem.",
+    partnerNote: "Typ wnioskodawcy partner moze wyslac bezposrednio.",
+    saveDraft: "Zapisz szkic",
+    saving: "Zapisywanie...",
+    submitting: "Wysylanie...",
+    createRequest: "Utworz zgloszenie",
+    submitRegistration: "Wyslij rejestracje",
+    applicantTypeLabels: {
+      private: "Prywatny",
+      sme: "SME",
+      insurer_partner: "Partner ubezpieczeniowy",
+      bank_partner: "Partner bankowy",
+      dealer_partner: "Partner dealerski",
+      rental_partner: "Partner wynajmu",
+    },
+  },
+  sv: {
+    foundationTitle: "Registreringsgrund",
+    foundationText:
+      "Fyll i all obligatorisk data innan arendet kan ga vidare till betalning eller inlamning.",
+    applicantType: "Sokandetyp",
+    assetName: "Assetnamn",
+    assetNamePlaceholder: "t.ex. Opel Corsa / Komatsu WA380",
+    brand: "Marke",
+    brandPlaceholder: "t.ex. Opel",
+    model: "Model",
+    modelPlaceholder: "t.ex. Corsa",
+    serialNumber: "Serienummer / huvud-ID",
+    serialNumberPlaceholder: "Ange serienummer eller huvudidentifierare",
+    year: "Ar",
+    yearPlaceholder: "t.ex. 2019",
+    country: "Land",
+    countryPlaceholder: "t.ex. Spain",
+    ownerName: "Agarens namn",
+    ownerNamePlaceholder: "Fullstandigt juridiskt agarnamn",
+    ownerEmail: "Agarens e-post",
+    ownerEmailPlaceholder: "name@example.com",
+    declaration:
+      "Jag bekraftar att de inskickade uppgifterna ar kompletta och far behandlas for registreringsbedomning.",
+    workflowTitle: "Workflow-resultat",
+    workflowStatus: "Nuvarande intern status for arendet:",
+    retailPaymentNote:
+      "Detalj- och SME-sokande maste betala fore slutlig inlamning.",
+    partnerNote: "Partnertypen kan skicka in direkt.",
+    saveDraft: "Spara utkast",
+    saving: "Sparar...",
+    submitting: "Skickar in...",
+    createRequest: "Skapa arende",
+    submitRegistration: "Skicka in registrering",
+    applicantTypeLabels: {
+      private: "Privat",
+      sme: "SME",
+      insurer_partner: "Forsakringspartner",
+      bank_partner: "Bankpartner",
+      dealer_partner: "Aterforsaljarpartner",
+      rental_partner: "Uthyrningspartner",
+    },
+  },
+  da: {
+    foundationTitle: "Registreringsgrundlag",
+    foundationText:
+      "Udfyld alle obligatoriske data, for anmodningen kan ga videre til betaling eller indsendelse.",
+    applicantType: "Ansogertype",
+    assetName: "Assetnavn",
+    assetNamePlaceholder: "f.eks. Opel Corsa / Komatsu WA380",
+    brand: "Maerke",
+    brandPlaceholder: "f.eks. Opel",
+    model: "Model",
+    modelPlaceholder: "f.eks. Corsa",
+    serialNumber: "Serienummer / hoved-ID",
+    serialNumberPlaceholder: "Indtast serienummer eller hovedidentifikator",
+    year: "Ar",
+    yearPlaceholder: "f.eks. 2019",
+    country: "Land",
+    countryPlaceholder: "f.eks. Spain",
+    ownerName: "Ejerens navn",
+    ownerNamePlaceholder: "Fuldt juridisk ejernavn",
+    ownerEmail: "Ejerens e-mail",
+    ownerEmailPlaceholder: "name@example.com",
+    declaration:
+      "Jeg bekraefter, at de indsendte data er komplette og ma behandles til registreringsvurdering.",
+    workflowTitle: "Workflow-resultat",
+    workflowStatus: "Nuvaerende interne anmodningsstatus:",
+    retailPaymentNote:
+      "Detail- og SME-ansogere skal betale for endelig indsendelse.",
+    partnerNote: "Partnertypen kan indsende direkte.",
+    saveDraft: "Gem kladde",
+    saving: "Gemmer...",
+    submitting: "Indsender...",
+    createRequest: "Opret anmodning",
+    submitRegistration: "Indsend registrering",
+    applicantTypeLabels: {
+      private: "Privat",
+      sme: "SME",
+      insurer_partner: "Forsikringspartner",
+      bank_partner: "Bankpartner",
+      dealer_partner: "Forhandlerpartner",
+      rental_partner: "Udlejningspartner",
+    },
+  },
+  no: {
+    foundationTitle: "Registreringsgrunnlag",
+    foundationText:
+      "Fyll ut alle obligatoriske data for foresporselen kan ga videre til betaling eller innsending.",
+    applicantType: "Sokertype",
+    assetName: "Assetnavn",
+    assetNamePlaceholder: "f.eks. Opel Corsa / Komatsu WA380",
+    brand: "Merke",
+    brandPlaceholder: "f.eks. Opel",
+    model: "Model",
+    modelPlaceholder: "f.eks. Corsa",
+    serialNumber: "Serienummer / hoved-ID",
+    serialNumberPlaceholder: "Skriv inn serienummer eller hovedidentifikator",
+    year: "Ar",
+    yearPlaceholder: "f.eks. 2019",
+    country: "Land",
+    countryPlaceholder: "f.eks. Spain",
+    ownerName: "Eiernavn",
+    ownerNamePlaceholder: "Fullt juridisk eiernavn",
+    ownerEmail: "Eierens e-post",
+    ownerEmailPlaceholder: "name@example.com",
+    declaration:
+      "Jeg bekrefter at de innsendte dataene er komplette og kan behandles for registreringsvurdering.",
+    workflowTitle: "Workflow-resultat",
+    workflowStatus: "Navaerende intern foresporselsstatus:",
+    retailPaymentNote:
+      "Detalj- og SME-sokere ma betale for endelig innsending.",
+    partnerNote: "Partnertypen kan sende inn direkte.",
+    saveDraft: "Lagre kladd",
+    saving: "Lagrer...",
+    submitting: "Sender inn...",
+    createRequest: "Opprett foresporsel",
+    submitRegistration: "Send inn registrering",
+    applicantTypeLabels: {
+      private: "Privat",
+      sme: "SME",
+      insurer_partner: "Forsikringspartner",
+      bank_partner: "Bankpartner",
+      dealer_partner: "Forhandlerpartner",
+      rental_partner: "Utleiepartner",
+    },
+  },
 };
 
 const EXTRA_FORM_TEXT: Record<
@@ -912,6 +1081,123 @@ const EXTRA_FORM_TEXT: Record<
     supportingDocumentsDescription:
       "Arfiq malafat mutaaliqa bitaqrir alshurta aw adilla daima amina baada alikhfa.",
   },
+
+  pl: {
+    applicantTypeOptionLabels: {
+      private: "Private",
+      sme_business: "SME / Business",
+    },
+    proofTitle: "Proof of applicant",
+    proofSubtitle:
+      "Optional first-step proof for private and SME / business registrations.",
+    proofPrivateHint:
+      "Upload only the minimum identity pages needed to confirm the applicant.",
+    proofBusinessHint:
+      "If useful, add proof for the authorized contact or business address.",
+    redactionHint:
+      "Please mask or redact unnecessary sensitive fields before upload.",
+    stolenTitle: "Stolen asset intake",
+    stolenSubtitle:
+      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
+    stolenToggle: "This registration concerns an already stolen asset",
+    policeReportNumber: "Police report number",
+    incidentDate: "Incident date",
+    incidentCountry: "Incident country",
+    incidentCountryPlaceholder: "e.g. Spain",
+    incidentDescription: "Incident description",
+    incidentDescriptionPlaceholder:
+      "Add the known theft details, location, and any safe references.",
+    supportingDocuments: "Supporting documents",
+    supportingDocumentsDescription:
+      "Upload only safe, relevant case files or other supporting evidence.",
+  },
+  sv: {
+    applicantTypeOptionLabels: {
+      private: "Private",
+      sme_business: "SME / Business",
+    },
+    proofTitle: "Proof of applicant",
+    proofSubtitle:
+      "Optional first-step proof for private and SME / business registrations.",
+    proofPrivateHint:
+      "Upload only the minimum identity pages needed to confirm the applicant.",
+    proofBusinessHint:
+      "If useful, add proof for the authorized contact or business address.",
+    redactionHint:
+      "Please mask or redact unnecessary sensitive fields before upload.",
+    stolenTitle: "Stolen asset intake",
+    stolenSubtitle:
+      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
+    stolenToggle: "This registration concerns an already stolen asset",
+    policeReportNumber: "Police report number",
+    incidentDate: "Incident date",
+    incidentCountry: "Incident country",
+    incidentCountryPlaceholder: "e.g. Spain",
+    incidentDescription: "Incident description",
+    incidentDescriptionPlaceholder:
+      "Add the known theft details, location, and any safe references.",
+    supportingDocuments: "Supporting documents",
+    supportingDocumentsDescription:
+      "Upload only safe, relevant case files or other supporting evidence.",
+  },
+  da: {
+    applicantTypeOptionLabels: {
+      private: "Private",
+      sme_business: "SME / Business",
+    },
+    proofTitle: "Proof of applicant",
+    proofSubtitle:
+      "Optional first-step proof for private and SME / business registrations.",
+    proofPrivateHint:
+      "Upload only the minimum identity pages needed to confirm the applicant.",
+    proofBusinessHint:
+      "If useful, add proof for the authorized contact or business address.",
+    redactionHint:
+      "Please mask or redact unnecessary sensitive fields before upload.",
+    stolenTitle: "Stolen asset intake",
+    stolenSubtitle:
+      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
+    stolenToggle: "This registration concerns an already stolen asset",
+    policeReportNumber: "Police report number",
+    incidentDate: "Incident date",
+    incidentCountry: "Incident country",
+    incidentCountryPlaceholder: "e.g. Spain",
+    incidentDescription: "Incident description",
+    incidentDescriptionPlaceholder:
+      "Add the known theft details, location, and any safe references.",
+    supportingDocuments: "Supporting documents",
+    supportingDocumentsDescription:
+      "Upload only safe, relevant case files or other supporting evidence.",
+  },
+  no: {
+    applicantTypeOptionLabels: {
+      private: "Private",
+      sme_business: "SME / Business",
+    },
+    proofTitle: "Proof of applicant",
+    proofSubtitle:
+      "Optional first-step proof for private and SME / business registrations.",
+    proofPrivateHint:
+      "Upload only the minimum identity pages needed to confirm the applicant.",
+    proofBusinessHint:
+      "If useful, add proof for the authorized contact or business address.",
+    redactionHint:
+      "Please mask or redact unnecessary sensitive fields before upload.",
+    stolenTitle: "Stolen asset intake",
+    stolenSubtitle:
+      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
+    stolenToggle: "This registration concerns an already stolen asset",
+    policeReportNumber: "Police report number",
+    incidentDate: "Incident date",
+    incidentCountry: "Incident country",
+    incidentCountryPlaceholder: "e.g. Spain",
+    incidentDescription: "Incident description",
+    incidentDescriptionPlaceholder:
+      "Add the known theft details, location, and any safe references.",
+    supportingDocuments: "Supporting documents",
+    supportingDocumentsDescription:
+      "Upload only safe, relevant case files or other supporting evidence.",
+  },
 };
 
 const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
@@ -926,6 +1212,11 @@ const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
   zh: "Dangqian dashboard zhuangtai:",
   hi: "Vartaman dashboard sthiti:",
   ar: "Halat aldashboard alhali:",
+
+  pl: "Current dashboard status:",
+  sv: "Current dashboard status:",
+  da: "Current dashboard status:",
+  no: "Current dashboard status:",
 };
 
 function normalizeStandardApplicantType(

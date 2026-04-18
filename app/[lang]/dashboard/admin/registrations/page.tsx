@@ -146,7 +146,39 @@ const PAGE_TEXT: Record<
       "يتم عرض التسجيلات التي ما زالت تحتاج إلى مراجعة.",
     showingAll: "يتم عرض جميع التسجيلات ضمن عرض النظام الحالي.",
   },
-};
+
+  pl: {
+    eyebrow: "Administracja EquipRegistry",
+    title: "Zarzadzanie rejestracjami",
+    filteredByStatus: "Wyswietlanie rejestracji filtrowanych wedlug:",
+    showingReviewed: "Wyswietlane sa zweryfikowane rejestracje.",
+    showingNotReviewed: "Wyswietlane sa rejestracje, ktore nadal wymagaja weryfikacji.",
+    showingAll: "Wyswietlane sa wszystkie rejestracje z biezacego widoku systemu.",
+  },
+  sv: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registreringshantering",
+    filteredByStatus: "Visar registreringar filtrerade efter:",
+    showingReviewed: "Visar granskade registreringar.",
+    showingNotReviewed: "Visar registreringar som fortfarande behover granskas.",
+    showingAll: "Visar alla registreringar i den aktuella systemvyn.",
+  },
+  da: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registreringsstyring",
+    filteredByStatus: "Viser registreringer filtreret efter:",
+    showingReviewed: "Viser gennemgaede registreringer.",
+    showingNotReviewed: "Viser registreringer, der stadig skal gennemgas.",
+    showingAll: "Viser alle registreringer i den aktuelle systemvisning.",
+  },
+  no: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Registreringsadministrasjon",
+    filteredByStatus: "Viser registreringer filtrert etter:",
+    showingReviewed: "Viser gjennomgaatte registreringer.",
+    showingNotReviewed: "Viser registreringer som fortsatt trenger gjennomgang.",
+    showingAll: "Viser alle registreringer i den gjeldende systemvisningen.",
+  },};
 
 export default async function AdminRegistrationsPage({
   params,

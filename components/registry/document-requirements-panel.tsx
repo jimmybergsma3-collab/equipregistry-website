@@ -271,7 +271,91 @@ const TEXT: Record<
       rejected: "Marfud",
     },
   },
-};
+
+  pl: {
+    title: "Dokumenty pomocnicze",
+    subtitle:
+      "Wymagane dokumenty zmieniaja sie w zaleznosci od typu wnioskodawcy i wybranej kategorii.",
+    required: "Wymagane",
+    optional: "Opcjonalne",
+    status: "Status",
+    noFileSelected: "Nie przeslano jeszcze zadnych plikow",
+    chooseFile: "Wybierz plik",
+    addFiles: "Dodaj pliki",
+    replaceFile: "Zamien plik",
+    uploading: "Przesylanie...",
+    clearFiles: "Wyczysc",
+    sizeHelp: "PDF, JPG, PNG lub WEBP. Maks. 10 MB na plik.",
+    statuses: {
+      missing: "Brak",
+      uploaded: "Przeslano",
+      accepted: "Zaakceptowano",
+      rejected: "Odrzucono",
+    },
+  },
+  sv: {
+    title: "Stoddokument",
+    subtitle:
+      "Vilka dokument som kravs andras beroende pa sokandetyp och vald kategori.",
+    required: "Kravs",
+    optional: "Valfritt",
+    status: "Status",
+    noFileSelected: "Inga filer har laddats upp an",
+    chooseFile: "Valj fil",
+    addFiles: "Lagg till filer",
+    replaceFile: "Byt fil",
+    uploading: "Laddar upp...",
+    clearFiles: "Rensa",
+    sizeHelp: "PDF, JPG, PNG eller WEBP. Max 10 MB per fil.",
+    statuses: {
+      missing: "Saknas",
+      uploaded: "Uppladdad",
+      accepted: "Godkand",
+      rejected: "Avvisad",
+    },
+  },
+  da: {
+    title: "Understottende dokumenter",
+    subtitle:
+      "De kravede dokumenter aendres alt efter ansogertype og valgt kategori.",
+    required: "Paakraevet",
+    optional: "Valgfrit",
+    status: "Status",
+    noFileSelected: "Ingen filer er uploadet endnu",
+    chooseFile: "Vaelg fil",
+    addFiles: "Tilfoj filer",
+    replaceFile: "Erstat fil",
+    uploading: "Uploader...",
+    clearFiles: "Ryd",
+    sizeHelp: "PDF, JPG, PNG eller WEBP. Maks. 10 MB pr. fil.",
+    statuses: {
+      missing: "Mangler",
+      uploaded: "Uploadet",
+      accepted: "Godkendt",
+      rejected: "Afvist",
+    },
+  },
+  no: {
+    title: "Stottedokumenter",
+    subtitle:
+      "Hvilke dokumenter som kreves endres etter sokertype og valgt kategori.",
+    required: "Pakrevd",
+    optional: "Valgfritt",
+    status: "Status",
+    noFileSelected: "Ingen filer er lastet opp ennå",
+    chooseFile: "Velg fil",
+    addFiles: "Legg til filer",
+    replaceFile: "Bytt fil",
+    uploading: "Laster opp...",
+    clearFiles: "Tomm",
+    sizeHelp: "PDF, JPG, PNG eller WEBP. Maks 10 MB per fil.",
+    statuses: {
+      missing: "Mangler",
+      uploaded: "Lastet opp",
+      accepted: "Godkjent",
+      rejected: "Avvist",
+    },
+  },};
 
 function getStatusClasses(status: RegistrationFileStatus) {
   switch (status) {

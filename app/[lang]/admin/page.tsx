@@ -145,6 +145,11 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
       userDashboard: "Painel do utilizador",
     },
   },
+
+  pl: DEFAULT_PAGE_TEXT,
+  sv: DEFAULT_PAGE_TEXT,
+  da: DEFAULT_PAGE_TEXT,
+  no: DEFAULT_PAGE_TEXT,
 };
 
 export default async function AdminPage({ params }: Props) {

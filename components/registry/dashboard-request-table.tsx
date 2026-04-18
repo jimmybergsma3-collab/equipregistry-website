@@ -334,6 +334,107 @@ const TABLE_TEXT: Record<
       rental_partner: "شركة تأجير",
     },
   },
+
+  pl: {
+    emptyTitle: "Twoje zarejestrowane aktywa",
+    emptyDescription: "Nie ma jeszcze widocznych aktywnych wnioskow rejestracyjnych.",
+    sectionTitle: "Wnioski rejestracyjne",
+    sectionDescription:
+      "Wnioski staja sie widoczne w panelu, gdy wyjda poza etap wersji roboczej.",
+    columns: {
+      passportNumber: "Numer paszportu",
+      asset: "Aktywo",
+      applicant: "Wnioskodawca",
+      status: "Status",
+      completeness: "Kompletnosc",
+      updated: "Zaktualizowano",
+      action: "Akcja",
+    },
+    open: "Otworz",
+    applicantTypes: {
+      private: "Osoba prywatna",
+      sme: "MSP",
+      insurer_partner: "Ubezpieczyciel",
+      bank_partner: "Bank",
+      dealer_partner: "Dealer",
+      rental_partner: "Firma wynajmujaca",
+    },
+  },
+  sv: {
+    emptyTitle: "Dina registrerade tillgangar",
+    emptyDescription: "Inga aktiva registreringsforfragningar ar synliga an.",
+    sectionTitle: "Registreringsforfragningar",
+    sectionDescription:
+      "Forfragningar blir synliga i dashboarden nar de gar forbi utkaststadiet.",
+    columns: {
+      passportNumber: "Passnummer",
+      asset: "Objekt",
+      applicant: "Sokande",
+      status: "Status",
+      completeness: "Komplettering",
+      updated: "Uppdaterad",
+      action: "Atgard",
+    },
+    open: "Oppna",
+    applicantTypes: {
+      private: "Privat",
+      sme: "SMF",
+      insurer_partner: "Forsakringsgivare",
+      bank_partner: "Bank",
+      dealer_partner: "Aterforsaljare",
+      rental_partner: "Uthyrningsforetag",
+    },
+  },
+  da: {
+    emptyTitle: "Dine registrerede aktiver",
+    emptyDescription: "Ingen aktive registreringsanmodninger er synlige endnu.",
+    sectionTitle: "Registreringsanmodninger",
+    sectionDescription:
+      "Anmodninger bliver synlige i dashboardet, nar de gar ud over kladdestadiet.",
+    columns: {
+      passportNumber: "Pasnummer",
+      asset: "Objekt",
+      applicant: "Ansoger",
+      status: "Status",
+      completeness: "Fuldstaendighed",
+      updated: "Opdateret",
+      action: "Handling",
+    },
+    open: "Aabn",
+    applicantTypes: {
+      private: "Privat",
+      sme: "SMV",
+      insurer_partner: "Forsikringsselskab",
+      bank_partner: "Bank",
+      dealer_partner: "Forhandler",
+      rental_partner: "Udlejningsfirma",
+    },
+  },
+  no: {
+    emptyTitle: "Dine registrerte aktiva",
+    emptyDescription: "Ingen aktive registreringsforesporsler er synlige ennå.",
+    sectionTitle: "Registreringsforesporsler",
+    sectionDescription:
+      "Foresporsler blir synlige i dashboardet nar de gar forbi utkaststadiet.",
+    columns: {
+      passportNumber: "Passnummer",
+      asset: "Objekt",
+      applicant: "Soker",
+      status: "Status",
+      completeness: "Fullstendighet",
+      updated: "Oppdatert",
+      action: "Handling",
+    },
+    open: "Apne",
+    applicantTypes: {
+      private: "Privat",
+      sme: "SMB",
+      insurer_partner: "Forsikringsselskap",
+      bank_partner: "Bank",
+      dealer_partner: "Forhandler",
+      rental_partner: "Utleieselskap",
+    },
+  },
 };
 
 const DASHBOARD_TABLE_OVERRIDES: Record<
@@ -409,6 +510,31 @@ const DASHBOARD_TABLE_OVERRIDES: Record<
     sectionTitle: "Tasjilati",
     sectionDescription: "Tazhar altasjilat huna eind tajawuz marhalat almusawada.",
   },
+
+  pl: {
+    emptyTitle: "Panel",
+    emptyDescription: "Nie ma jeszcze widocznych aktywnych rejestracji.",
+    sectionTitle: "Moje rejestracje",
+    sectionDescription: "Rejestracje pojawiaja sie tutaj, gdy wyjda poza etap wersji roboczej.",
+  },
+  sv: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Inga aktiva registreringar ar synliga an.",
+    sectionTitle: "Mina registreringar",
+    sectionDescription: "Registreringar visas har sa snart de gar forbi utkaststadiet.",
+  },
+  da: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Ingen aktive registreringer er synlige endnu.",
+    sectionTitle: "Mine registreringer",
+    sectionDescription: "Registreringer vises her, sa snart de gar ud over kladdestadiet.",
+  },
+  no: {
+    emptyTitle: "Dashboard",
+    emptyDescription: "Ingen aktive registreringer er synlige ennå.",
+    sectionTitle: "Mine registreringer",
+    sectionDescription: "Registreringer vises her sa snart de gar forbi utkaststadiet.",
+  },
 };
 
 function formatDate(dateString: string, lang: Lang) {
@@ -428,6 +554,11 @@ function formatDate(dateString: string, lang: Lang) {
     zh: "zh-CN",
     hi: "hi-IN",
     ar: "ar-SA",
+  
+    pl: "pl-PL",
+    sv: "sv-SE",
+    da: "da-DK",
+    no: "nb-NO",
   };
 
   return new Intl.DateTimeFormat(localeMap[lang], {

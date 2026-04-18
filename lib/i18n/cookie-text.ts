@@ -97,6 +97,39 @@ export const cookieTexts: Record<Lang, CookieTexts> = {
     decline: "拒绝",
     policy: "Cookie 政策",
   },
+
+  pl: {
+    title: "Cookies",
+    description:
+      "EquipRegistry uzywa niezbednych plikow cookie do zapewnienia bezpieczenstwa i prawidlowego dzialania strony. Opcjonalnych plikow cookie analitycznych uzywamy tylko za Twoja zgoda.",
+    accept: "Akceptuj",
+    decline: "Odrzuc",
+    policy: "Polityka plikow cookie",
+  },
+  sv: {
+    title: "Cookies",
+    description:
+      "EquipRegistry anvander nodvandiga cookies for sakerhet och webbplatsens funktionalitet. Vi anvander endast valfria analyscookies om du ger ditt samtycke.",
+    accept: "Acceptera",
+    decline: "Avboj",
+    policy: "Cookiepolicy",
+  },
+  da: {
+    title: "Cookies",
+    description:
+      "EquipRegistry bruger nodvendige cookies til sikkerhed og funktionalitet pa siden. Vi bruger kun valgfrie analysecookies, hvis du giver samtykke.",
+    accept: "Accepter",
+    decline: "Afvis",
+    policy: "Cookiepolitik",
+  },
+  no: {
+    title: "Cookies",
+    description:
+      "EquipRegistry bruker nodvendige informasjonskapsler for sikkerhet og nettstedets funksjonalitet. Vi bruker bare valgfrie analyseinformasjonskapsler hvis du gir samtykke.",
+    accept: "Godta",
+    decline: "Avsla",
+    policy: "Retningslinjer for informasjonskapsler",
+  },
 };
 
 export function getCookieTexts(lang: Lang): CookieTexts {

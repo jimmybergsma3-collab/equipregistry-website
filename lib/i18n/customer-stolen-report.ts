@@ -530,6 +530,187 @@ const TEXT: Record<Lang, CustomerStolenReportText> = {
       authRequired: "Yurja aldukhul marra ukhraa lilmutabaea.",
     },
   },
+
+  pl: {
+    title: "Zglos kradziez lub zaginiecie",
+    description:
+      "Przeslij zgloszenie incydentu wlasciciela wraz z dowodami. EquipRegistry pozostawi publiczny stan paszportu bez zmian do czasu zakonczenia weryfikacji przez administratora.",
+    reportAction: "Zglos kradziez / zaginiecie",
+    submit: "Przeslij zgloszenie wlasciciela",
+    processing: "Wysylanie...",
+    confirmMessage:
+      "Czy na pewno chcesz przeslac to zgloszenie kradziezy lub zaginiecia do weryfikacji administratora?",
+    pendingBadge: "Zgloszenie wlasciciela oczekuje na weryfikacje",
+    pendingDescription:
+      "Twoje zgloszenie wraz z dowodami zostalo przeslane i oczekuje na weryfikacje administratora. Publiczny paszport pozostaje bez zmian, dopoki EquipRegistry nie potwierdzi ostrzezenia.",
+    activeBadge: "Publiczna czerwona flaga aktywna",
+    activeDescription:
+      "EquipRegistry potwierdzil te sprawe i aktywowal publiczne ostrzezenie o kradziezy w paszporcie.",
+    fields: {
+      policeReportNumber: "Numer zgloszenia na policji",
+      incidentDate: "Data zdarzenia",
+      incidentCountry: "Kraj zdarzenia",
+      incidentCountryPlaceholder: "np. Spain",
+      incidentDescription: "Opis zdarzenia",
+      incidentDescriptionPlaceholder:
+        "Opisz, co sie stalo, gdzie sie to wydarzylo i podaj bezpieczne odniesienia, ktore pomoga administratorowi ocenic sprawe.",
+      supportingDocuments: "Dokumenty potwierdzajace / dowody",
+      supportingDocumentsDescription:
+        "Przeslij co najmniej jeden istotny dokument, obraz lub inny plik dowodowy do oceny.",
+    },
+    validation: {
+      descriptionRequired: "Opis zdarzenia jest wymagany.",
+      uploadsRequired:
+        "Wymagany jest co najmniej jeden dokument potwierdzajacy lub plik dowodowy.",
+    },
+    messages: {
+      success:
+        "Twoje zgloszenie zostalo przeslane do weryfikacji administratora. Publiczne ostrzezenie w paszporcie jest nadal nieaktywne.",
+      alreadyPending:
+        "Ten asset ma juz zgloszenie wlasciciela oczekujace na weryfikacje administratora.",
+      alreadyActive:
+        "Ten asset ma juz aktywne publiczne ostrzezenie o kradziezy.",
+      notEligible:
+        "Tylko assety z wydanym paszportem mozna zglaszac z panelu jako skradzione lub zaginione.",
+      requestMissing: "Nie znaleziono rejestracji.",
+      authRequired: "Zaloguj sie ponownie, aby kontynuowac.",
+    },
+  },
+  sv: {
+    title: "Rapportera stulet eller saknat",
+    description:
+      "Skicka in en incidentrapport fran agaren med stodbevis. EquipRegistry behaller passets publika status oforandrad tills admin-granskningen ar klar.",
+    reportAction: "Rapportera stulet / saknat",
+    submit: "Skicka agarrapport",
+    processing: "Skickar...",
+    confirmMessage:
+      "Ar du saker pa att du vill skicka in denna rapport om stulet eller saknat for admin-granskning?",
+    pendingBadge: "Agarrapport vantar pa granskning",
+    pendingDescription:
+      "Din rapport har skickats in med bevis och vantar pa admin-granskning. Det publika passet forblir oforandrat tills EquipRegistry bekraftar varningen.",
+    activeBadge: "Publik rod flagga aktiv",
+    activeDescription:
+      "EquipRegistry har bekraftat detta arende och aktiverat den publika stoldvarningen pa passet.",
+    fields: {
+      policeReportNumber: "Polisanmalans nummer",
+      incidentDate: "Halsedatum",
+      incidentCountry: "Land for handelsen",
+      incidentCountryPlaceholder: "t.ex. Spain",
+      incidentDescription: "Beskrivning av handelsen",
+      incidentDescriptionPlaceholder:
+        "Beskriv vad som hande, var det hande och eventuella sakra referenser som hjalper admin att granska arendet.",
+      supportingDocuments: "Stodjande dokument / bevis",
+      supportingDocumentsDescription:
+        "Ladda upp minst ett relevant dokument, en bild eller annan bevisfil for granskningen.",
+    },
+    validation: {
+      descriptionRequired: "En beskrivning av handelsen kravs.",
+      uploadsRequired:
+        "Minst ett stodjande dokument eller en bevisfil kravs.",
+    },
+    messages: {
+      success:
+        "Din rapport skickades in for admin-granskning. Den publika passvarningen ar fortfarande inaktiv.",
+      alreadyPending:
+        "Denna asset har redan en agarrapport som vantar pa admin-granskning.",
+      alreadyActive:
+        "Denna asset har redan en aktiv publik stoldvarning.",
+      notEligible:
+        "Endast assets med utfardat pass kan rapporteras som stulna eller saknade fran instrumentpanelen.",
+      requestMissing: "Registreringen hittades inte.",
+      authRequired: "Logga in igen for att fortsatta.",
+    },
+  },
+  da: {
+    title: "Rapporter stjalet eller savnet",
+    description:
+      "Indsend en ejerhaendelsesrapport med stottedokumentation. EquipRegistry holder passets offentlige status uandret, indtil admin-gennemgangen er afsluttet.",
+    reportAction: "Rapporter stjalet / savnet",
+    submit: "Indsend ejerrapport",
+    processing: "Indsender...",
+    confirmMessage:
+      "Er du sikker pa, at du vil indsende denne rapport om stjalet eller savnet til admin-gennemgang?",
+    pendingBadge: "Ejerrapport afventer gennemgang",
+    pendingDescription:
+      "Din rapport er indsendt med dokumentation og afventer admin-gennemgang. Det offentlige pas forbliver uandret, indtil EquipRegistry bekraefter advarslen.",
+    activeBadge: "Offentlig rod markering aktiv",
+    activeDescription:
+      "EquipRegistry har bekraeftet denne sag og aktiveret den offentlige stjalet-advarsel pa passet.",
+    fields: {
+      policeReportNumber: "Politirapportnummer",
+      incidentDate: "Haendelsesdato",
+      incidentCountry: "Haendelsesland",
+      incidentCountryPlaceholder: "f.eks. Spain",
+      incidentDescription: "Beskrivelse af haendelsen",
+      incidentDescriptionPlaceholder:
+        "Beskriv hvad der skete, hvor det skete, og eventuelle sikre referencer, der hjalper admin med at gennemga sagen.",
+      supportingDocuments: "Stottedokumenter / beviser",
+      supportingDocumentsDescription:
+        "Upload mindst et relevant dokument, billede eller anden bevisfil til gennemgangen.",
+    },
+    validation: {
+      descriptionRequired: "Beskrivelse af haendelsen er paakraevet.",
+      uploadsRequired:
+        "Mindst et stottedokument eller en bevisfil er paakraevet.",
+    },
+    messages: {
+      success:
+        "Din rapport blev indsendt til admin-gennemgang. Den offentlige pasadvarsel er stadig inaktiv.",
+      alreadyPending:
+        "Denne asset har allerede en ejerrapport, der afventer admin-gennemgang.",
+      alreadyActive:
+        "Denne asset har allerede en aktiv offentlig stjalet-advarsel.",
+      notEligible:
+        "Kun assets med et udstedt pas kan rapporteres som stjalet eller savnet fra kontrolpanelet.",
+      requestMissing: "Registreringen blev ikke fundet.",
+      authRequired: "Log ind igen for at fortsaette.",
+    },
+  },
+  no: {
+    title: "Rapporter stjalet eller savnet",
+    description:
+      "Send inn en hendelsesrapport fra eieren med stottedokumentasjon. EquipRegistry holder passets offentlige status uendret til admin-gjennomgangen er fullfort.",
+    reportAction: "Rapporter stjalet / savnet",
+    submit: "Send inn eierrapport",
+    processing: "Sender inn...",
+    confirmMessage:
+      "Er du sikker pa at du vil sende inn denne rapporten om stjalet eller savnet for admin-gjennomgang?",
+    pendingBadge: "Eierrapport venter pa gjennomgang",
+    pendingDescription:
+      "Rapporten din er sendt inn med dokumentasjon og venter pa admin-gjennomgang. Det offentlige passet forblir uendret til EquipRegistry bekrefter advarselen.",
+    activeBadge: "Offentlig rod markering aktiv",
+    activeDescription:
+      "EquipRegistry har bekreftet denne saken og aktivert den offentlige stjalet-advarselen pa passet.",
+    fields: {
+      policeReportNumber: "Politirapportnummer",
+      incidentDate: "Hendelsesdato",
+      incidentCountry: "Hendelsesland",
+      incidentCountryPlaceholder: "f.eks. Spain",
+      incidentDescription: "Beskrivelse av hendelsen",
+      incidentDescriptionPlaceholder:
+        "Beskriv hva som skjedde, hvor det skjedde og eventuelle trygge referanser som hjelper admin med a gjennomga saken.",
+      supportingDocuments: "Stottedokumenter / bevis",
+      supportingDocumentsDescription:
+        "Last opp minst ett relevant dokument, bilde eller annen bevisfil for gjennomgangen.",
+    },
+    validation: {
+      descriptionRequired: "Beskrivelse av hendelsen er paakrevd.",
+      uploadsRequired:
+        "Minst ett stottedokument eller en bevisfil er paakrevd.",
+    },
+    messages: {
+      success:
+        "Rapporten din ble sendt inn for admin-gjennomgang. Den offentlige passadvarselen er fortsatt inaktiv.",
+      alreadyPending:
+        "Denne asseten har allerede en eierrapport som venter pa admin-gjennomgang.",
+      alreadyActive:
+        "Denne asseten har allerede en aktiv offentlig stjalet-advarsel.",
+      notEligible:
+        "Bare assets med utstedt pass kan rapporteres som stjalet eller savnet fra dashbordet.",
+      requestMissing: "Registreringen ble ikke funnet.",
+      authRequired: "Logg inn pa nytt for a fortsette.",
+    },
+  },
 };
 
 export function getCustomerStolenReportText(

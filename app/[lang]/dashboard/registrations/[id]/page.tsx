@@ -119,6 +119,11 @@ const PAYMENT_PENDING_TEXT: Partial<Record<Lang, string>> = {
   it: "Non completato",
   nl: "Niet voltooid",
   pt: "Nao concluido",
+
+  pl: "Nie zakonczono",
+  sv: "Inte slutford",
+  da: "Ikke afsluttet",
+  no: "Ikke fullfort",
 };
 
 function parseDynamicFields(value: unknown): DynamicFields {

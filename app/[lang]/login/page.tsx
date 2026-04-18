@@ -77,7 +77,31 @@ const LOGIN_ERROR_TEXT: Record<
     EMAIL_NOT_VERIFIED: "يرجى تاكيد بريدك الالكتروني قبل تسجيل الدخول.",
     SERVER_ERROR: "حدث خطا في الخادم. يرجى المحاولة مرة اخرى.",
   },
-};
+
+  pl: {
+    REQUIRED_FIELDS_MISSING: "Uzupelnij wymagane pola.",
+    INVALID_CREDENTIALS: "Nieprawidlowy adres e-mail lub haslo.",
+    EMAIL_NOT_VERIFIED: "Zweryfikuj swoj adres e-mail przed zalogowaniem.",
+    SERVER_ERROR: "Blad serwera. Sprobuj ponownie.",
+  },
+  sv: {
+    REQUIRED_FIELDS_MISSING: "Fyll i de obligatoriska falten.",
+    INVALID_CREDENTIALS: "Fel e-postadress eller losenord.",
+    EMAIL_NOT_VERIFIED: "Verifiera din e-postadress innan du loggar in.",
+    SERVER_ERROR: "Serverfel. Forsok igen.",
+  },
+  da: {
+    REQUIRED_FIELDS_MISSING: "Udfyld de obligatoriske felter.",
+    INVALID_CREDENTIALS: "Forkert e-mail eller adgangskode.",
+    EMAIL_NOT_VERIFIED: "Bekraeft din e-mailadresse, for du logger ind.",
+    SERVER_ERROR: "Serverfejl. Prov igen.",
+  },
+  no: {
+    REQUIRED_FIELDS_MISSING: "Fyll ut de obligatoriske feltene.",
+    INVALID_CREDENTIALS: "Feil e-postadresse eller passord.",
+    EMAIL_NOT_VERIFIED: "Verifiser e-postadressen din for du logger inn.",
+    SERVER_ERROR: "Serverfeil. Prov igjen.",
+  },};
 
 const LOGIN_TEXT: Record<
   Lang,
@@ -250,7 +274,63 @@ const LOGIN_TEXT: Record<
     setupDone: "تم إكمال الإعداد بنجاح.",
     homepage: "العودة إلى الصفحة الرئيسية",
   },
-};
+
+  pl: {
+    title: "Logowanie",
+    subtitle: "Uzyskaj dostep do swojego konta EquipRegistry",
+    email: "E-mail",
+    emailPlaceholder: "Wpisz swoj adres e-mail",
+    password: "Haslo",
+    passwordPlaceholder: "Wpisz swoje haslo",
+    login: "Zaloguj sie",
+    loading: "Ladowanie...",
+    loginFailed: "Logowanie nie powiodlo sie.",
+    serverError: "Blad serwera. Sprobuj ponownie.",
+    setupDone: "Konfiguracja zostala pomyslnie zakonczona.",
+    homepage: "Powrot na strone glowna",
+  },
+  sv: {
+    title: "Logga in",
+    subtitle: "Fa tillgang till ditt EquipRegistry-konto",
+    email: "E-post",
+    emailPlaceholder: "Ange din e-postadress",
+    password: "Losenord",
+    passwordPlaceholder: "Ange ditt losenord",
+    login: "Logga in",
+    loading: "Laddar...",
+    loginFailed: "Inloggningen misslyckades.",
+    serverError: "Serverfel. Forsok igen.",
+    setupDone: "Installationen slutfordes.",
+    homepage: "Tillbaka till startsidan",
+  },
+  da: {
+    title: "Log ind",
+    subtitle: "Fa adgang til din EquipRegistry-konto",
+    email: "E-mail",
+    emailPlaceholder: "Indtast din e-mail",
+    password: "Adgangskode",
+    passwordPlaceholder: "Indtast din adgangskode",
+    login: "Log ind",
+    loading: "Indlaeser...",
+    loginFailed: "Login mislykkedes.",
+    serverError: "Serverfejl. Prov igen.",
+    setupDone: "Opsaetning gennemfort.",
+    homepage: "Tilbage til forsiden",
+  },
+  no: {
+    title: "Logg inn",
+    subtitle: "Fa tilgang til EquipRegistry-kontoen din",
+    email: "E-post",
+    emailPlaceholder: "Skriv inn e-postadressen din",
+    password: "Passord",
+    passwordPlaceholder: "Skriv inn passordet ditt",
+    login: "Logg inn",
+    loading: "Laster...",
+    loginFailed: "Innlogging mislyktes.",
+    serverError: "Serverfeil. Prov igjen.",
+    setupDone: "Oppsettet ble fullfort.",
+    homepage: "Tilbake til startsiden",
+  },};
 
 export default function LoginPage() {
   const router = useRouter();

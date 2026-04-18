@@ -37,6 +37,11 @@ const fieldCatalog = {
       zh: "VIN / Chejiahao",
       hi: "VIN / Chassis number",
       ar: "VIN / Raqm alshasih",
+    
+      pl: "VIN / numer podwozia",
+      sv: "VIN / chassinummer",
+      da: "VIN / chassisnummer",
+      no: "VIN / chassisnummer",
     },
     required: true,
   },
@@ -54,6 +59,11 @@ const fieldCatalog = {
       zh: "Cheliang dengji hao",
       hi: "Registration number",
       ar: "Raqm altasjeel",
+    
+      pl: "Numer rejestracyjny",
+      sv: "Registreringsnummer",
+      da: "Registreringsnummer",
+      no: "Registreringsnummer",
     },
   },
   fuelType: {
@@ -70,6 +80,11 @@ const fieldCatalog = {
       zh: "Ranliao leixing",
       hi: "Fuel type",
       ar: "Naw altshaheel",
+    
+      pl: "Rodzaj paliwa",
+      sv: "Bransletyp",
+      da: "Braendstoftype",
+      no: "Drivstofftype",
     },
   },
   engineSerialNumber: {
@@ -86,6 +101,11 @@ const fieldCatalog = {
       zh: "Fadongji xuliehao",
       hi: "Engine serial number",
       ar: "Raqm tasalsul almuharik",
+    
+      pl: "Numer seryjny silnika",
+      sv: "Motorns serienummer",
+      da: "Motorens serienummer",
+      no: "Motorens serienummer",
     },
   },
   chassisNumber: {
@@ -102,6 +122,11 @@ const fieldCatalog = {
       zh: "Fu chejia / chekuang hao",
       hi: "Secondary chassis / frame number",
       ar: "Raqm thanawi lilshasih / alitaar",
+    
+      pl: "Dodatkowy numer podwozia / ramy",
+      sv: "Sekundart chassi- / ramnummer",
+      da: "Sekundaert chassis- / stelnummer",
+      no: "Sekundaert chassis- / rammenummer",
     },
   },
   hoursOfOperation: {
@@ -118,6 +143,11 @@ const fieldCatalog = {
       zh: "Yunxing xiaoshi",
       hi: "Hours of operation",
       ar: "Sa'at alttashgheel",
+    
+      pl: "Godziny pracy",
+      sv: "Drifttimmar",
+      da: "Driftstimer",
+      no: "Driftstimer",
     },
   },
   unitType: {
@@ -134,6 +164,11 @@ const fieldCatalog = {
       zh: "Danwei leixing",
       hi: "Unit type",
       ar: "Naw alwahda",
+    
+      pl: "Typ jednostki",
+      sv: "Enhetstyp",
+      da: "Enhedstype",
+      no: "Enhetstype",
     },
     required: true,
   },
@@ -151,6 +186,11 @@ const fieldCatalog = {
       zh: "Neibu cankao",
       hi: "Internal reference",
       ar: "Marja dakhili",
+    
+      pl: "Referencja wewnetrzna",
+      sv: "Intern referens",
+      da: "Intern reference",
+      no: "Intern referanse",
     },
   },
   solarPanelSerialNumbers: {
@@ -167,6 +207,11 @@ const fieldCatalog = {
       zh: "Taiyangneng ban xuliehao",
       hi: "Solar panel serial numbers",
       ar: "Arqam tasalsul alalwah alshamsia",
+    
+      pl: "Numery seryjne paneli solarnych",
+      sv: "Serienummer for solpaneler",
+      da: "Serienumre for solpaneler",
+      no: "Serienumre for solpaneler",
     },
     required: true,
     type: "list",
@@ -185,6 +230,11 @@ const fieldCatalog = {
       zh: "Dianchi xuliehao",
       hi: "Battery serial numbers",
       ar: "Arqam tasalsul albatariat",
+    
+      pl: "Numery seryjne baterii",
+      sv: "Serienummer for batterier",
+      da: "Serienumre for batterier",
+      no: "Serienumre for batterier",
     },
     type: "list",
   },
@@ -202,6 +252,11 @@ const fieldCatalog = {
       zh: "Rongliang",
       hi: "Capacity",
       ar: "Alsaea",
+    
+      pl: "Pojemnosc",
+      sv: "Kapacitet",
+      da: "Kapacitet",
+      no: "Kapasitet",
     },
   },
   powerRating: {
@@ -218,6 +273,11 @@ const fieldCatalog = {
       zh: "Gonglv dengji",
       hi: "Power rating",
       ar: "Alqudra alismia",
+    
+      pl: "Moc znamionowa",
+      sv: "Markeffekt",
+      da: "Maerkeffekt",
+      no: "Merkeeffekt",
     },
   },
   batchLotNumber: {
@@ -234,6 +294,11 @@ const fieldCatalog = {
       zh: "Pici / pici hao",
       hi: "Batch / lot number",
       ar: "Raqm aldafaa / allot",
+    
+      pl: "Numer partii / serii",
+      sv: "Batch- / lotnummer",
+      da: "Batch- / lotnummer",
+      no: "Batch- / lotnummer",
     },
   },
   installationLocation: {
@@ -250,6 +315,11 @@ const fieldCatalog = {
       zh: "Anzhuang didian",
       hi: "Installation location",
       ar: "Mawqie altarkeeb",
+    
+      pl: "Lokalizacja instalacji",
+      sv: "Installationsplats",
+      da: "Installationssted",
+      no: "Installasjonssted",
     },
   },
   frameNumber: {
@@ -266,6 +336,11 @@ const fieldCatalog = {
       zh: "Chejiahao",
       hi: "Frame number",
       ar: "Raqm alitaar",
+    
+      pl: "Numer ramy",
+      sv: "Ramnummer",
+      da: "Stelnummer",
+      no: "Rammenummer",
     },
     required: true,
   },
@@ -283,6 +358,11 @@ const fieldCatalog = {
       zh: "Dier dianchi xuliehao",
       hi: "Second battery serial number",
       ar: "Raqm tasalsul albataria althania",
+    
+      pl: "Numer seryjny drugiej baterii",
+      sv: "Andra batteriets serienummer",
+      da: "Andet batteris serienummer",
+      no: "Andre batteris serienummer",
     },
   },
   deviceId: {
@@ -299,6 +379,11 @@ const fieldCatalog = {
       zh: "Shebei ID",
       hi: "Device ID",
       ar: "Muarif aljihaz",
+    
+      pl: "ID urzadzenia",
+      sv: "Enhets-ID",
+      da: "Enheds-ID",
+      no: "Enhets-ID",
     },
   },
   certification: {
@@ -315,6 +400,11 @@ const fieldCatalog = {
       zh: "Renzheng",
       hi: "Certification",
       ar: "Alshahada",
+    
+      pl: "Certyfikacja",
+      sv: "Certifiering",
+      da: "Certificering",
+      no: "Sertifisering",
     },
   },
   ownerOrganisation: {
@@ -331,6 +421,11 @@ const fieldCatalog = {
       zh: "Suoyouzhe jigou",
       hi: "Owner organisation",
       ar: "Aljihah almalika",
+    
+      pl: "Organizacja wlasciciela",
+      sv: "Agarorganisation",
+      da: "Ejerorganisation",
+      no: "Eierorganisasjon",
     },
   },
   customCategory: {
@@ -347,6 +442,11 @@ const fieldCatalog = {
       zh: "Zidingyi leibie shuoming",
       hi: "Custom category description",
       ar: "Wasf mukhasas lilfiea",
+    
+      pl: "Opis wlasnej kategorii",
+      sv: "Beskrivning av anpassad kategori",
+      da: "Beskrivelse af brugerdefineret kategori",
+      no: "Beskrivelse av egendefinert kategori",
     },
     required: true,
   },

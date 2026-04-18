@@ -108,7 +108,39 @@ const TEXT: Record<
     remove: "Hazf",
     listHint: "Add as many identifiers as needed for this asset.",
   },
-};
+
+  pl: {
+    title: "Szczegoly zalezne od kategorii",
+    subtitle:
+      "Dodatkowe pola sa wyswietlane na podstawie wybranej kategorii i podkategorii assetu.",
+    addEntry: "Dodaj wpis",
+    remove: "Usun",
+    listHint: "Dodaj tyle identyfikatorow, ile potrzeba dla tego assetu.",
+  },
+  sv: {
+    title: "Kategorispecifika detaljer",
+    subtitle:
+      "Ytterligare falt visas baserat pa vald kategori och underkategori for asseten.",
+    addEntry: "Lagg till post",
+    remove: "Ta bort",
+    listHint: "Lagg till sa manga identifierare som behovs for denna asset.",
+  },
+  da: {
+    title: "Kategorispecifikke detaljer",
+    subtitle:
+      "Yderligere felter vises ud fra den valgte kategori og underkategori for assetet.",
+    addEntry: "Tilfoj post",
+    remove: "Fjern",
+    listHint: "Tilfoj sa mange identifikatorer som nodvendigt for dette asset.",
+  },
+  no: {
+    title: "Kategorispesifikke detaljer",
+    subtitle:
+      "Ekstra felt vises basert pa valgt kategori og underkategori for assetet.",
+    addEntry: "Legg til post",
+    remove: "Fjern",
+    listHint: "Legg til sa mange identifikatorer som trengs for dette assetet.",
+  },};
 
 function toStringValue(value: unknown) {
   return typeof value === "string" ? value : "";

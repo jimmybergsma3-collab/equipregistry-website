@@ -323,6 +323,115 @@ const PASSPORT_PAGE_CONTENT: Record<Lang, PassportPageContent> = {
     },
     unavailable: "غير متاح",
   },
+
+  pl: {
+    eyebrow: "EquipRegistry",
+    documentTitle: "Paszport assetu",
+    publicNote:
+      "Ten publiczny paszport jest oficjalnym rekordem EquipRegistry dla zatwierdzonej rejestracji assetu.",
+    statusLabel: "Status",
+    qrTitle: "Zeskanuj kod QR",
+    qrText:
+      "Zeskanuj kod QR, aby otworzyc ten publiczny paszport bezposrednio w EquipRegistry do weryfikacji i uzycia w wersji drukowanej.",
+    qrAlt: "Kod QR prowadzacy do publicznego paszportu EquipRegistry",
+    verificationPanelTitle: "Oficjalna weryfikacja",
+    verificationPanelText:
+      "Ten paszport pozostaje na stale powiazany z zatwierdzonym numerem rejestracji i rekordem assetu w EquipRegistry.",
+    verificationUrlLabel: "Adres URL weryfikacji",
+    fields: {
+      passportNumber: "Numer paszportu",
+      assetName: "Nazwa assetu",
+      category: "Kategoria",
+      subcategory: "Podkategoria",
+      brand: "Marka",
+      model: "Model",
+      year: "Rok",
+      country: "Kraj",
+      serialNumber: "Numer seryjny",
+    },
+    unavailable: "Niedostepne",
+  },
+  sv: {
+    eyebrow: "EquipRegistry",
+    documentTitle: "Assetpass",
+    publicNote:
+      "Detta publika pass ar EquipRegistrys officiella post for den godkanda registreringen av asseten.",
+    statusLabel: "Status",
+    qrTitle: "Skanna QR-kod",
+    qrText:
+      "Skanna QR-koden for att oppna detta publika pass direkt i EquipRegistry for verifiering och anvandning i tryckt form.",
+    qrAlt: "QR-kod som lankar till det publika EquipRegistry-passet",
+    verificationPanelTitle: "Officiell verifiering",
+    verificationPanelText:
+      "Detta pass forblir permanent kopplat till det godkanda registreringsnumret och assetposten i EquipRegistry.",
+    verificationUrlLabel: "Verifierings-URL",
+    fields: {
+      passportNumber: "Passnummer",
+      assetName: "Assetnamn",
+      category: "Kategori",
+      subcategory: "Underkategori",
+      brand: "Marke",
+      model: "Modell",
+      year: "Ar",
+      country: "Land",
+      serialNumber: "Serienummer",
+    },
+    unavailable: "Inte tillgangligt",
+  },
+  da: {
+    eyebrow: "EquipRegistry",
+    documentTitle: "Assetpas",
+    publicNote:
+      "Dette offentlige pas er EquipRegistrys officielle registrering for den godkendte assetregistrering.",
+    statusLabel: "Status",
+    qrTitle: "Scan QR-kode",
+    qrText:
+      "Scan QR-koden for at abne dette offentlige pas direkte i EquipRegistry til verificering og brug i trykt form.",
+    qrAlt: "QR-kode der linker til det offentlige EquipRegistry-pas",
+    verificationPanelTitle: "Officiel verificering",
+    verificationPanelText:
+      "Dette pas forbliver permanent knyttet til det godkendte registreringsnummer og assetposten i EquipRegistry.",
+    verificationUrlLabel: "Verificerings-URL",
+    fields: {
+      passportNumber: "Pasnummer",
+      assetName: "Assetnavn",
+      category: "Kategori",
+      subcategory: "Underkategori",
+      brand: "Maerke",
+      model: "Model",
+      year: "Ar",
+      country: "Land",
+      serialNumber: "Serienummer",
+    },
+    unavailable: "Ikke tilgaengelig",
+  },
+  no: {
+    eyebrow: "EquipRegistry",
+    documentTitle: "Assetpass",
+    publicNote:
+      "Dette offentlige passet er EquipRegistrys offisielle post for den godkjente registreringen av assetet.",
+    statusLabel: "Status",
+    qrTitle: "Skann QR-kode",
+    qrText:
+      "Skann QR-koden for a apne dette offentlige passet direkte i EquipRegistry for verifisering og bruk i trykt form.",
+    qrAlt: "QR-kode som lenker til det offentlige EquipRegistry-passet",
+    verificationPanelTitle: "Offisiell verifisering",
+    verificationPanelText:
+      "Dette passet forblir permanent knyttet til det godkjente registreringsnummeret og assetposten i EquipRegistry.",
+    verificationUrlLabel: "Verifiserings-URL",
+    fields: {
+      passportNumber: "Passnummer",
+      assetName: "Assetnavn",
+      category: "Kategori",
+      subcategory: "Underkategori",
+      brand: "Merke",
+      model: "Modell",
+      year: "Ar",
+      country: "Land",
+      serialNumber: "Serienummer",
+    },
+    unavailable: "Ikke tilgjengelig",
+  },
 };
 
 export function getPassportPageContent(lang: Lang) {

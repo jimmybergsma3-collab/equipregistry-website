@@ -156,6 +156,59 @@ const TEXT: Record<Lang, RegistryUploadText> = {
       "Qum bikhafa aw hajb albayanat alshakhsia walmalia wabayanat alhuwia ghayr aldaruria qabl alraf.",
     uploadFailed: "Fashal alraf. Hawil maratan ukhraa.",
   },
+
+  pl: {
+    chooseFile: "Wybierz plik",
+    addFiles: "Dodaj pliki",
+    replaceFile: "Zamien plik",
+    uploading: "Przesylanie...",
+    clearFiles: "Wyczysc",
+    noFileSelected: "Nie przeslano jeszcze zadnych plikow",
+    sizeHelp:
+      "PDF, JPG, PNG lub WEBP. Obrazy sa optymalizowane przed przeslaniem. Maks. 6 MB na plik.",
+    privacyNote:
+      "Przed przeslaniem ukryj lub zamaz niepotrzebne dane osobowe, finansowe i identyfikacyjne.",
+    uploadFailed: "Przesylanie nie powiodlo sie. Sprobuj ponownie.",
+  },
+  sv: {
+    chooseFile: "Valj fil",
+    addFiles: "Lagg till filer",
+    replaceFile: "Byt ut fil",
+    uploading: "Laddar upp...",
+    clearFiles: "Rensa",
+    noFileSelected: "Inga filer har laddats upp an",
+    sizeHelp:
+      "PDF, JPG, PNG eller WEBP. Bilder optimeras fore uppladdning. Max 6 MB per fil.",
+    privacyNote:
+      "Maskera eller dolj onodiga personuppgifter, ekonomiska uppgifter och ID-data fore uppladdning.",
+    uploadFailed: "Uppladdningen misslyckades. Forsok igen.",
+  },
+  da: {
+    chooseFile: "Vaelg fil",
+    addFiles: "Tilfoj filer",
+    replaceFile: "Udskift fil",
+    uploading: "Uploader...",
+    clearFiles: "Ryd",
+    noFileSelected: "Der er endnu ikke uploadet filer",
+    sizeHelp:
+      "PDF, JPG, PNG eller WEBP. Billeder optimeres for upload. Maks. 6 MB pr. fil.",
+    privacyNote:
+      "Skjul eller rediger unodvendige personlige, finansielle og ID-relaterede data for upload.",
+    uploadFailed: "Upload mislykkedes. Prov igen.",
+  },
+  no: {
+    chooseFile: "Velg fil",
+    addFiles: "Legg til filer",
+    replaceFile: "Bytt fil",
+    uploading: "Laster opp...",
+    clearFiles: "Tomm",
+    noFileSelected: "Ingen filer er lastet opp enn",
+    sizeHelp:
+      "PDF, JPG, PNG eller WEBP. Bilder optimaliseres for opplasting. Maks 6 MB per fil.",
+    privacyNote:
+      "Masker eller skjul unodvendige person-, finans- og ID-data for opplasting.",
+    uploadFailed: "Opplasting mislyktes. Prov igjen.",
+  },
 };
 
 export function getRegistryUploadText(lang: Lang): RegistryUploadText {

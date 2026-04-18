@@ -104,7 +104,35 @@ const TEXT: Record<
     selectSubcategory: "اختر فئة فرعية",
     chooseCategoryFirst: "اختر الفئة أولاً",
   },
-};
+
+  pl: {
+    category: "Kategoria",
+    subcategory: "Podkategoria",
+    selectCategory: "Wybierz kategorie",
+    selectSubcategory: "Wybierz podkategorie",
+    chooseCategoryFirst: "Najpierw wybierz kategorie",
+  },
+  sv: {
+    category: "Kategori",
+    subcategory: "Underkategori",
+    selectCategory: "Valj en kategori",
+    selectSubcategory: "Valj en underkategori",
+    chooseCategoryFirst: "Valj forst en kategori",
+  },
+  da: {
+    category: "Kategori",
+    subcategory: "Underkategori",
+    selectCategory: "Vaelg en kategori",
+    selectSubcategory: "Vaelg en underkategori",
+    chooseCategoryFirst: "Vaelg forst en kategori",
+  },
+  no: {
+    category: "Kategori",
+    subcategory: "Underkategori",
+    selectCategory: "Velg en kategori",
+    selectSubcategory: "Velg en underkategori",
+    chooseCategoryFirst: "Velg forst en kategori",
+  },};
 
 export default function CategorySelects({
   lang,

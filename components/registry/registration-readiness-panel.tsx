@@ -262,7 +262,87 @@ const TEXT: Record<
     paid: "مدفوع / تمت التسوية",
     pending: "الدفع معلق",
   },
-};
+
+  pl: {
+    title: "Gotowosc rejestracji",
+    applicantType: "Typ wnioskodawcy",
+    complete: "Kompletna",
+    incomplete: "Niekompletna",
+    nextSteps: {
+      incomplete: "Uzupelnij wszystkie wymagane informacje.",
+      payment:
+        "Twoja sprawa jest kompletna. Przejdz do platnosci, aby aktywowac zlozenie.",
+      ready: "Twoja sprawa jest kompletna i gotowa do zlozenia.",
+    },
+    missingFields: "Brakujace pola",
+    missingDynamic: "Brakujace pola zalezne od kategorii",
+    missingDocuments: "Brakujace dokumenty",
+    paymentStatus: "Status platnosci",
+    paymentDone: "Platnosc zostala zakonczona lub nie jest wymagana dla tego typu partnera.",
+    paymentPending: "Platnosc nie zostala jeszcze zakonczona.",
+    paid: "Oplacone / Rozliczone",
+    pending: "Oczekuje na platnosc",
+  },
+  sv: {
+    title: "Registreringsstatus",
+    applicantType: "Sokandetyp",
+    complete: "Komplett",
+    incomplete: "Ofullstandig",
+    nextSteps: {
+      incomplete: "Fyll i all obligatorisk information.",
+      payment:
+        "Ditt arende ar komplett. Fortsatt till betalning for att aktivera inlamningen.",
+      ready: "Ditt arende ar komplett och klart att skickas in.",
+    },
+    missingFields: "Saknade falt",
+    missingDynamic: "Saknade kategorispecifika falt",
+    missingDocuments: "Saknade dokument",
+    paymentStatus: "Betalningsstatus",
+    paymentDone: "Betalningen ar genomford eller kravs inte for denna partnertyp.",
+    paymentPending: "Betalningen har inte genomforts an.",
+    paid: "Betald / Bekraftad",
+    pending: "Betalning vantar",
+  },
+  da: {
+    title: "Registreringsstatus",
+    applicantType: "Ansogertype",
+    complete: "Komplet",
+    incomplete: "Ufuldstaendig",
+    nextSteps: {
+      incomplete: "Udfyld alle obligatoriske oplysninger.",
+      payment:
+        "Din sag er komplet. Fortsaet til betaling for at aktivere indsendelsen.",
+      ready: "Din sag er komplet og klar til at blive indsendt.",
+    },
+    missingFields: "Manglende felter",
+    missingDynamic: "Manglende kategorispecifikke felter",
+    missingDocuments: "Manglende dokumenter",
+    paymentStatus: "Betalingsstatus",
+    paymentDone: "Betalingen er gennemfort eller er ikke kraevet for denne partnertype.",
+    paymentPending: "Betalingen er endnu ikke gennemfort.",
+    paid: "Betalt / Godkendt",
+    pending: "Betaling afventer",
+  },
+  no: {
+    title: "Registreringsstatus",
+    applicantType: "Sokertype",
+    complete: "Komplett",
+    incomplete: "Ufullstendig",
+    nextSteps: {
+      incomplete: "Fyll ut all obligatorisk informasjon.",
+      payment:
+        "Saken din er komplett. Fortsett til betaling for a aktivere innsendingen.",
+      ready: "Saken din er komplett og klar til a sendes inn.",
+    },
+    missingFields: "Manglende felt",
+    missingDynamic: "Manglende kategorispesifikke felt",
+    missingDocuments: "Manglende dokumenter",
+    paymentStatus: "Betalingsstatus",
+    paymentDone: "Betalingen er fullfort eller ikke paakrevd for denne partnertypen.",
+    paymentPending: "Betalingen er ikke fullfort enn.",
+    paid: "Betalt / Bekreftet",
+    pending: "Betaling venter",
+  },};
 
 const STATUS_COPY_OVERRIDES: Record<
   Lang,
@@ -394,7 +474,51 @@ const STATUS_COPY_OVERRIDES: Record<
     paid: "Muakkad",
     pending: "Fi intizar alcheckout",
   },
-};
+
+  pl: {
+    nextSteps: {
+      payment:
+        "Your file is complete. Final processing starts after checkout confirmation.",
+    },
+    paymentStatus: "Checkout status",
+    paymentDone: "Checkout is confirmed or not required for this applicant type.",
+    paymentPending: "Checkout has not been completed yet.",
+    paid: "Confirmed",
+    pending: "Ready for checkout",
+  },
+  sv: {
+    nextSteps: {
+      payment:
+        "Your file is complete. Final processing starts after checkout confirmation.",
+    },
+    paymentStatus: "Checkout status",
+    paymentDone: "Checkout is confirmed or not required for this applicant type.",
+    paymentPending: "Checkout has not been completed yet.",
+    paid: "Confirmed",
+    pending: "Ready for checkout",
+  },
+  da: {
+    nextSteps: {
+      payment:
+        "Your file is complete. Final processing starts after checkout confirmation.",
+    },
+    paymentStatus: "Checkout status",
+    paymentDone: "Checkout is confirmed or not required for this applicant type.",
+    paymentPending: "Checkout has not been completed yet.",
+    paid: "Confirmed",
+    pending: "Ready for checkout",
+  },
+  no: {
+    nextSteps: {
+      payment:
+        "Your file is complete. Final processing starts after checkout confirmation.",
+    },
+    paymentStatus: "Checkout status",
+    paymentDone: "Checkout is confirmed or not required for this applicant type.",
+    paymentPending: "Checkout has not been completed yet.",
+    paid: "Confirmed",
+    pending: "Ready for checkout",
+  },};
 
 export default function RegistrationReadinessPanel({
   lang,
