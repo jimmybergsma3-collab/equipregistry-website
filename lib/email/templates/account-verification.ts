@@ -22,14 +22,16 @@ const TRANSACTIONAL_SIGNATURE = `EquipRegistry · ${MAILBOXES.transactionalFromE
 
 const CONTENT: Record<Lang, VerificationEmailContent> = {
   en: {
-    subject: "Zweryfikuj swoj adres e-mail | EquipRegistry",
-    greeting: "Witaj",
-    welcome: "Witamy w EquipRegistry.",
+    subject: "Verify your email address | EquipRegistry",
+    greeting: "Hello",
+    welcome: "Welcome to EquipRegistry.",
     instruction:
-      "Zweryfikuj swoj adres e-mail, aby aktywowac konto i kontynuowac rejestracje.",
-    button: "Zweryfikuj adres e-mail",
-    fallback: "Jesli przycisk nie dziala, skopiuj i wklej ten link do przegladarki:",
-    ignore: "Jesli nie utworzyles tego konta, mozesz zignorowac ten e-mail.",
+      "Please verify your email address to activate your account and continue with your registration.",
+    button: "Verify email address",
+    fallback:
+      "If the button does not work, copy and paste this link into your browser:",
+    ignore:
+      "If you did not create this account, you can ignore this email.",
     signature: "EquipRegistry · info@equipregistry.com",
   },
   es: {
@@ -160,47 +162,55 @@ const CONTENT: Record<Lang, VerificationEmailContent> = {
   },
 
   pl: {
+    subject: "Zweryfikuj swoj adres e-mail | EquipRegistry",
+    greeting: "Witaj",
+    welcome: "Witamy w EquipRegistry.",
+    instruction:
+      "Zweryfikuj swoj adres e-mail, aby aktywowac konto i kontynuowac rejestracje.",
+    button: "Zweryfikuj adres e-mail",
+    fallback:
+      "Jesli przycisk nie dziala, skopiuj i wklej ten link do przegladarki:",
+    ignore:
+      "Jesli nie utworzyles tego konta, mozesz zignorowac ten e-mail.",
+    signature: "EquipRegistry · info@equipregistry.com",
+  },
+  sv: {
     subject: "Verifiera din e-postadress | EquipRegistry",
     greeting: "Hej",
     welcome: "Valkommen till EquipRegistry.",
     instruction:
       "Verifiera din e-postadress for att aktivera ditt konto och fortsatta med din registrering.",
     button: "Verifiera e-postadress",
-    fallback: "Om knappen inte fungerar, kopiera och klistra in den har lanken i din webblasare:",
-    ignore: "Om du inte skapade detta konto kan du ignorera det har mailet.",
+    fallback:
+      "Om knappen inte fungerar, kopiera och klistra in den har lanken i din webblasare:",
+    ignore:
+      "Om du inte skapade detta konto kan du ignorera det har mailet.",
     signature: "EquipRegistry · info@equipregistry.com",
   },
-  sv: {
+  da: {
     subject: "Bekraeft din e-mailadresse | EquipRegistry",
     greeting: "Hej",
     welcome: "Velkommen til EquipRegistry.",
     instruction:
       "Bekraeft din e-mailadresse for at aktivere din konto og fortsaette med din registrering.",
     button: "Bekraeft e-mailadresse",
-    fallback: "Hvis knappen ikke virker, skal du kopiere og indsatte dette link i din browser:",
-    ignore: "Hvis du ikke har oprettet denne konto, kan du se bort fra denne e-mail.",
+    fallback:
+      "Hvis knappen ikke virker, skal du kopiere og indsatte dette link i din browser:",
+    ignore:
+      "Hvis du ikke har oprettet denne konto, kan du se bort fra denne e-mail.",
     signature: "EquipRegistry · info@equipregistry.com",
   },
-  da: {
+  no: {
     subject: "Verifiser e-postadressen din | EquipRegistry",
     greeting: "Hei",
     welcome: "Velkommen til EquipRegistry.",
     instruction:
       "Verifiser e-postadressen din for a aktivere kontoen din og fortsette med registreringen.",
     button: "Verifiser e-postadresse",
-    fallback: "Hvis knappen ikke fungerer, kopier og lim inn denne lenken i nettleseren din:",
-    ignore: "Hvis du ikke opprettet denne kontoen, kan du ignorere denne e-posten.",
-    signature: "EquipRegistry · info@equipregistry.com",
-  },
-  no: {
-    subject: "Verify your email address | EquipRegistry",
-    greeting: "Hello",
-    welcome: "Welcome to EquipRegistry.",
-    instruction:
-      "Please verify your email address to activate your account and continue with your registration.",
-    button: "Verify email address",
-    fallback: "If the button does not work, copy and paste this link into your browser:",
-    ignore: "If you did not create this account, you can ignore this email.",
+    fallback:
+      "Hvis knappen ikke fungerer, kopier og lim inn denne lenken i nettleseren din:",
+    ignore:
+      "Hvis du ikke opprettet denne kontoen, kan du ignorere denne e-posten.",
     signature: "EquipRegistry · info@equipregistry.com",
   },
 };

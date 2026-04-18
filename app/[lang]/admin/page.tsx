@@ -146,10 +146,66 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     },
   },
 
-  pl: DEFAULT_PAGE_TEXT,
-  sv: DEFAULT_PAGE_TEXT,
-  da: DEFAULT_PAGE_TEXT,
-  no: DEFAULT_PAGE_TEXT,
+  pl: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Przeglad administratora",
+    subtitle: "Przeglad wszystkich wnioskow rejestracyjnych w systemie.",
+    cards: {
+      total: "Laczna liczba wnioskow",
+      open: "Otwarte / aktywne",
+      approved: "Zatwierdzone z wydanymi",
+      issued: "Paszport wydany",
+    },
+    links: {
+      website: "Powrot do strony",
+      userDashboard: "Panel uzytkownika",
+    },
+  },
+  sv: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Adminoversikt",
+    subtitle: "Oversikt over alle registreringsforesporsler i systemet.",
+    cards: {
+      total: "Totalt antall foresporsler",
+      open: "Apne / aktive",
+      approved: "Godkjente inkl. utstedte",
+      issued: "Pass utstedt",
+    },
+    links: {
+      website: "Till webbplatsen",
+      userDashboard: "Anvandarpanel",
+    },
+  },
+  da: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Adminoversigt",
+    subtitle: "Oversigt over alle registreringsanmodninger i systemet.",
+    cards: {
+      total: "Samlet antal anmodninger",
+      open: "Aabne / aktive",
+      approved: "Godkendte inkl. udstedte",
+      issued: "Pas udstedt",
+    },
+    links: {
+      website: "Tilbage til siden",
+      userDashboard: "Brugerdashboard",
+    },
+  },
+  no: {
+    eyebrow: "EquipRegistry Admin",
+    title: "Adminoversikt",
+    subtitle: "Oversikt over alle registreringsforesporsler i systemet.",
+    cards: {
+      total: "Totalt antall foresporsler",
+      open: "Apne / aktive",
+      approved: "Godkjente inkl. utstedte",
+      issued: "Pass utstedt",
+    },
+    links: {
+      website: "Tilbake til nettstedet",
+      userDashboard: "Brukerdashboard",
+    },
+  },
 };
 
 export default async function AdminPage({ params }: Props) {

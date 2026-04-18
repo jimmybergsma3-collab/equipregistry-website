@@ -88,7 +88,7 @@ export default async function RegistrationsPage({ params }: Props) {
   }
 
   if (session.user.role === "admin") {
-    redirect(`/${lang}/dashboard/admin/registrations`);
+    redirect(`/${lang}/admin`);
   }
 
   const text = getCustomerDashboardText(lang as Lang);

@@ -55,11 +55,29 @@ function buildDraftFromFormData(formData: FormData): RegistrationDraft {
     country: normalizeString(formData.get("country")),
     ownerName: normalizeString(formData.get("ownerName")),
     ownerEmail: normalizeString(formData.get("ownerEmail")),
+    vatNumber: normalizeString(formData.get("vatNumber")),
     applicantType: normalizeString(formData.get("applicantType")) as ApplicantType,
     declarationAccepted: formData.get("declarationAccepted") === "true",
     dynamicFields: parseJsonField(formData.get("dynamicFields")),
     documents: parseJsonField(formData.get("documents")),
   };
+}
+
+async function persistUserVatNumber(userId: string, draft: RegistrationDraft) {
+  if (draft.applicantType !== "sme") {
+    return;
+  }
+
+  const vatNumber = draft.vatNumber?.trim() ?? "";
+
+  if (!vatNumber) {
+    return;
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { vatNumber },
+  });
 }
 
 function getEmailRecipient(draft: RegistrationDraft) {
@@ -105,6 +123,13 @@ export async function saveRegistrationDraft(
     };
   }
 
+  if (session.user.role === "admin") {
+    return {
+      success: false,
+      message: "Admin users cannot create customer registrations from this flow.",
+    };
+  }
+
   const draft = buildDraftFromFormData(formData);
   const langValue = normalizeString(formData.get("lang")).toLowerCase();
   const lang = isValidLang(langValue) ? langValue : "en";
@@ -115,6 +140,8 @@ export async function saveRegistrationDraft(
   );
   const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
   const documents = draft.documents as Prisma.InputJsonValue;
+
+  await persistUserVatNumber(session.user.id, draft);
 
   const request = await prisma.registrationRequest.create({
     data: {
@@ -159,8 +186,11 @@ export async function saveRegistrationDraft(
   }
 
   revalidatePath("/");
+  revalidatePath(`/${lang}/admin`);
+  revalidatePath(`/${lang}/dashboard/admin/registrations`);
   revalidatePath("/dashboard/registrations");
   revalidatePath(`/${lang}/dashboard/registrations`);
+  revalidatePath(`/${lang}/dashboard/register`);
 
   return {
     success: true,
@@ -181,6 +211,13 @@ export async function submitRegistrationRequest(
     return {
       success: false,
       message: "You must be logged in to submit a registration.",
+    };
+  }
+
+  if (session.user.role === "admin") {
+    return {
+      success: false,
+      message: "Admin users cannot create customer registrations from this flow.",
     };
   }
 
@@ -209,6 +246,8 @@ export async function submitRegistrationRequest(
   );
   const dynamicFields = draft.dynamicFields as Prisma.InputJsonValue;
   const documents = draft.documents as Prisma.InputJsonValue;
+
+  await persistUserVatNumber(session.user.id, draft);
 
   const request = await prisma.registrationRequest.create({
     data: {
@@ -295,8 +334,11 @@ export async function submitRegistrationRequest(
   }
 
   revalidatePath("/");
+  revalidatePath(`/${lang}/admin`);
+  revalidatePath(`/${lang}/dashboard/admin/registrations`);
   revalidatePath("/dashboard/registrations");
   revalidatePath(`/${lang}/dashboard/registrations`);
+  revalidatePath(`/${lang}/dashboard/register`);
 
   if (partner) {
     revalidatePath(`/${lang}/dashboard/admin/registrations`);

@@ -3,9 +3,9 @@ type VerificationAwareUser = {
   emailVerifiedAt: Date | null;
 };
 
-// Launch behavior: keep account creation and login non-blocking for customer users
-// even when verification delivery fails. The verification flow and database field stay intact.
-export const TEMPORARY_ALLOW_UNVERIFIED_LOGIN = true;
+// Customer access requires verified email addresses.
+// Admin access remains allowed through the permanent admin exception below.
+export const TEMPORARY_ALLOW_UNVERIFIED_LOGIN = false;
 
 export function canUseAuthenticatedApp(user: VerificationAwareUser) {
   if (user.role === "admin") {
@@ -17,12 +17,4 @@ export function canUseAuthenticatedApp(user: VerificationAwareUser) {
   }
 
   return Boolean(user.emailVerifiedAt);
-}
-
-export function isUsingVerificationBypass(user: VerificationAwareUser) {
-  return (
-    TEMPORARY_ALLOW_UNVERIFIED_LOGIN &&
-    user.role !== "admin" &&
-    !user.emailVerifiedAt
-  );
 }

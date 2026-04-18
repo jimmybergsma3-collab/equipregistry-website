@@ -22,6 +22,17 @@ export const metadata: Metadata = {
   },
 };
 
+const TEXT = {
+  en: {
+    title: "Admin access",
+    subtitle: "This page is intended only for internal admin access.",
+  },
+  nl: {
+    title: "Admin toegang",
+    subtitle: "Deze pagina is alleen bedoeld voor interne beheerstoegang.",
+  },
+} as const;
+
 export default async function SecureAdminAccessPage({ params }: Props) {
   const { lang } = await params;
 
@@ -35,6 +46,8 @@ export default async function SecureAdminAccessPage({ params }: Props) {
     redirect(`/${lang}/admin`);
   }
 
+  const text = lang === "nl" ? TEXT.nl : TEXT.en;
+
   return (
     <>
       <SiteHeader lang={lang} />
@@ -46,10 +59,10 @@ export default async function SecureAdminAccessPage({ params }: Props) {
               EquipRegistry
             </p>
             <h1 className="mt-2 text-3xl font-semibold text-neutral-900">
-              Admin access
+              {text.title}
             </h1>
             <p className="mt-3 text-sm text-neutral-600">
-              Deze pagina is alleen bedoeld voor interne beheerstoegang.
+              {text.subtitle}
             </p>
           </div>
 

@@ -19,7 +19,11 @@ export default async function RegisterPage({ params }: Props) {
   const session = await getSession();
 
   if (session.isAuthenticated) {
-    redirect(`/${lang}/dashboard/register`);
+    redirect(
+      session.user.role === "admin"
+        ? `/${lang}/admin`
+        : `/${lang}/dashboard/register`
+    );
   }
 
   return <PublicRegisterPage lang={lang as Lang} />;

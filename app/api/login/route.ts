@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
-import {
-  canUseAuthenticatedApp,
-  isUsingVerificationBypass,
-} from "@/lib/auth/email-verification";
+import { canUseAuthenticatedApp } from "@/lib/auth/email-verification";
 
 export async function POST(req: Request) {
   try {
@@ -53,18 +50,8 @@ export async function POST(req: Request) {
       );
     }
 
-    if (isUsingVerificationBypass(user)) {
-      console.warn(
-        "LOGIN WARNING: allowing unverified account during non-blocking verification flow",
-        {
-          userId: user.id,
-          role: user.role,
-        }
-      );
-    }
-
     const redirectTo =
-      user.role === "admin" ? "/dashboard/admin" : "/dashboard";
+      user.role === "admin" ? "/admin" : "/dashboard";
 
     const res = NextResponse.json({
       success: true,

@@ -8,6 +8,15 @@ import { sendEmail } from "@/lib/email/mailer";
 
 type ContactType = ContactMailboxType;
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function getDefaultSubject(contactType: ContactType) {
   switch (contactType) {
     case "business":
@@ -45,17 +54,22 @@ export async function POST(req: Request) {
 
     const to = getContactRecipient(contactType);
     const finalSubject = subject || getDefaultSubject(contactType);
+    const safeContactType = escapeHtml(contactType);
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeSubject = escapeHtml(finalSubject);
+    const safeMessage = escapeHtml(message);
 
     const html = `
       <div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #111827;">
         <h2>New contact form submission</h2>
-        <p><strong>Type:</strong> ${contactType}</p>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${finalSubject}</p>
+        <p><strong>Type:</strong> ${safeContactType}</p>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
         <hr style="margin: 24px 0;" />
         <p><strong>Message:</strong></p>
-        <p style="white-space: pre-wrap;">${message}</p>
+        <p style="white-space: pre-wrap;">${safeMessage}</p>
       </div>
     `;
 

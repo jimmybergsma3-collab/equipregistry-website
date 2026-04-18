@@ -17,5 +17,5 @@ export default async function AdminDashboardIndexPage({ params }: Props) {
 
   await requireAdminSession(lang);
 
-  redirect(`/${lang}/dashboard/admin/registrations`);
+  redirect(`/${lang}/admin`);
 }

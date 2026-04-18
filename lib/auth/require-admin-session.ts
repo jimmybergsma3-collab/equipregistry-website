@@ -6,7 +6,7 @@ export async function requireAdminSession(lang: string) {
   const session = await getSession();
 
   if (!session.isAuthenticated) {
-    redirect(`/${lang}/login?next=/${lang}/dashboard/admin/registrations`);
+    redirect(`/${lang}/login?next=/${lang}/admin`);
   }
 
   const user = await prisma.user.findUnique({

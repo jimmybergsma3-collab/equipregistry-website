@@ -42,7 +42,7 @@ export default async function DashboardProfilePage({ params }: Props) {
   }
 
   if (session.user.role === "admin") {
-    redirect(`/${lang}/dashboard/admin/registrations`);
+    redirect(`/${lang}/admin`);
   }
 
   const user = await prisma.user.findUnique({

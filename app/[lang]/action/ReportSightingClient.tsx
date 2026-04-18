@@ -21,6 +21,14 @@ type ReportText = {
   submittedText: string;
 };
 
+type UnavailableText = {
+  title: string;
+  description: string;
+  submit: string;
+  caseId: string;
+  registryMissing: string;
+};
+
 const TEXT: Partial<Record<Lang, ReportText>> = {
   en: {
     title: "Submit sighting report",
@@ -202,6 +210,26 @@ const FALLBACK_TEXT: ReportText = {
   submittedText: "Your sighting report has been recorded in this demo flow.",
 };
 
+const UNAVAILABLE_TEXT: Partial<Record<Lang, UnavailableText>> = {
+  en: {
+    title: "Reporting unavailable",
+    description:
+      "Sighting reporting is currently unavailable. Contact the relevant authorities directly.",
+    submit: "Reporting unavailable",
+    caseId: "Case ID",
+    registryMissing: "Registry ID missing. This report cannot be submitted.",
+  },
+  nl: {
+    title: "Melden niet beschikbaar",
+    description:
+      "Het melden van waarnemingen is momenteel niet beschikbaar. Neem rechtstreeks contact op met de bevoegde autoriteiten.",
+    submit: "Melden niet beschikbaar",
+    caseId: "Zaak-ID",
+    registryMissing:
+      "Registratie-ID ontbreekt. Deze melding kan niet worden verzonden.",
+  },
+};
+
 export default function ReportSightingClient({
   lang,
   registryId,
@@ -214,13 +242,20 @@ export default function ReportSightingClient({
   const [error, setError] = useState("");
 
   const t = TEXT[lang] ?? FALLBACK_TEXT;
+  const unavailableText = UNAVAILABLE_TEXT[lang] ?? UNAVAILABLE_TEXT.en!;
+  const reportingUnavailable = true;
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
 
+    if (reportingUnavailable) {
+      setError(unavailableText.description);
+      return;
+    }
+
     if (!registryId) {
-      setError("Registry ID missing. This report cannot be submitted.");
+      setError(unavailableText.registryMissing);
       return;
     }
 
@@ -263,6 +298,10 @@ export default function ReportSightingClient({
   return (
     <div style={styles.wrapper}>
       <h3 style={styles.title}>{t.title}</h3>
+      <div style={styles.warningBox}>
+        <strong>{unavailableText.title}</strong>
+        <p style={styles.warningText}>{unavailableText.description}</p>
+      </div>
 
       {!submitted ? (
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -274,7 +313,7 @@ export default function ReportSightingClient({
 
           {caseId ? (
             <div style={styles.infoBox}>
-              <strong>Case ID:</strong> {caseId}
+              <strong>{unavailableText.caseId}:</strong> {caseId}
             </div>
           ) : null}
 
@@ -285,6 +324,7 @@ export default function ReportSightingClient({
               onChange={(e) => setLocation(e.target.value)}
               placeholder={t.locationPlaceholder}
               style={styles.input}
+              disabled={reportingUnavailable || submitting}
             />
           </div>
 
@@ -296,11 +336,20 @@ export default function ReportSightingClient({
               placeholder={t.notesPlaceholder}
               rows={5}
               style={styles.textarea}
+              disabled={reportingUnavailable || submitting}
             />
           </div>
 
-          <button type="submit" disabled={submitting} style={styles.button}>
-            {submitting ? `${t.submit}...` : t.submit}
+          <button
+            type="submit"
+            disabled={reportingUnavailable || submitting}
+            style={styles.button}
+          >
+            {reportingUnavailable
+              ? unavailableText.submit
+              : submitting
+                ? `${t.submit}...`
+                : t.submit}
           </button>
 
           {error ? <p style={styles.error}>{error}</p> : null}
@@ -328,6 +377,19 @@ const styles: Record<string, CSSProperties> = {
   form: {
     display: "grid",
     gap: 14,
+  },
+  warningBox: {
+    border: "1px solid #fcd34d",
+    backgroundColor: "#fffbeb",
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 14,
+    color: "#92400e",
+    fontSize: 14,
+  },
+  warningText: {
+    marginTop: 8,
+    marginBottom: 0,
   },
   infoBox: {
     border: "1px solid #e5e7eb",

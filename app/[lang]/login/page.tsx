@@ -341,8 +341,7 @@ export default function LoginPage() {
   const t = LOGIN_TEXT[lang] ?? LOGIN_TEXT.en;
 
   const rawNext = searchParams.get("next");
-  const safeNext =
-    rawNext && rawNext.startsWith("/") ? rawNext : `/${lang}/dashboard`;
+  const safeNext = rawNext && rawNext.startsWith("/") ? rawNext : null;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -380,7 +379,12 @@ export default function LoginPage() {
         return;
       }
 
-      router.push(safeNext);
+      const fallbackTarget =
+        typeof data?.redirectTo === "string" && data.redirectTo.startsWith("/")
+          ? `/${lang}${data.redirectTo}`
+          : `/${lang}/dashboard`;
+
+      router.push(safeNext ?? fallbackTarget);
       router.refresh();
     } catch {
       setError(t.serverError);

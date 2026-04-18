@@ -414,7 +414,6 @@ export default function AdminRequestRowActions({
           <DeleteRequestButton
             id={registrationId}
             lang={lang}
-            admin
             label={text.delete}
             deletingText={text.deleting}
             confirmText={text.confirmDelete}

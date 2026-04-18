@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
 import RegistrationFormStep1 from "@/components/registry/registration-form-step1";
+import { getSession } from "@/lib/auth/getSession";
 import { isValidLang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 
@@ -17,6 +18,16 @@ export default async function RegisterPage({ params }: Props) {
 
   if (!isValidLang(lang)) {
     notFound();
+  }
+
+  const session = await getSession();
+
+  if (!session.isAuthenticated) {
+    redirect(`/${lang}/login?next=/${lang}/dashboard/register`);
+  }
+
+  if (session.user.role === "admin") {
+    redirect(`/${lang}/admin`);
   }
 
   const dict = getDictionary(lang);

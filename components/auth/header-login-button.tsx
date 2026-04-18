@@ -99,7 +99,7 @@ export default function HeaderLoginButton({
 
   const dashboardHref =
     session.role === "admin"
-      ? `/${lang}/dashboard/admin`
+      ? `/${lang}/admin`
       : `/${lang}/dashboard`;
 
   return (

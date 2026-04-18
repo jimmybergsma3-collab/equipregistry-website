@@ -9,9 +9,21 @@ type Props = {
   lang: string;
 };
 
+const TEXT = {
+  en: {
+    loading: "Loading...",
+    logout: "Log out",
+  },
+  nl: {
+    loading: "Bezig...",
+    logout: "Uitloggen",
+  },
+} as const;
+
 export default function AdminLogoutButton({ lang }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const text = lang === "nl" ? TEXT.nl : TEXT.en;
 
   async function handleLogout() {
     setLoading(true);
@@ -34,7 +46,7 @@ export default function AdminLogoutButton({ lang }: Props) {
       disabled={loading}
       className="inline-flex rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100 disabled:opacity-60"
     >
-      {loading ? "Bezig..." : "Logout"}
+      {loading ? text.loading : text.logout}
     </button>
   );
 }

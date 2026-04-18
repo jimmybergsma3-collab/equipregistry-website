@@ -273,6 +273,9 @@ async function runNotification(
   actionName: string,
   sendNotification: () => Promise<{ success: boolean } | void>
 ) {
+  const deliveryUnavailableMessage =
+    "Notification email could not be sent because email delivery is unavailable.";
+
   try {
     const result = await sendNotification();
 
@@ -282,7 +285,7 @@ async function runNotification(
       "success" in result &&
       result.success === false
     ) {
-      return "Notification email could not be sent because SMTP delivery is misconfigured or unavailable.";
+      return deliveryUnavailableMessage;
     }
 
     return null;
@@ -300,89 +303,8 @@ async function runNotification(
       message: mailError.message,
     });
 
-    return "Notification email could not be sent because SMTP delivery is misconfigured or unavailable.";
+    return deliveryUnavailableMessage;
   }
-}
-
-export async function markRegistrationAsPaid(
-  registrationId: string,
-  lang: string
-): Promise<ActionResult> {
-  const auth = await assertAdminAction();
-
-  if (!auth.ok) {
-    return { success: false, message: auth.message, tone: "error" };
-  }
-
-  const request = await getRequestById(registrationId);
-
-  if (!request) {
-    return {
-      success: false,
-      message: "Registration not found.",
-      tone: "error",
-    };
-  }
-
-  if (request.paymentCompleted) {
-    return {
-      success: false,
-      message: "Payment has already been marked as completed.",
-      tone: "error",
-    };
-  }
-
-  if (request.requestStatus !== "payment_required") {
-    return {
-      success: false,
-      message: "This registration is not waiting for payment confirmation.",
-      tone: "error",
-    };
-  }
-
-  const updated = await prisma.registrationRequest.update({
-    where: { id: request.id },
-    data: {
-      paymentCompleted: true,
-      requestStatus: "submitted",
-    },
-  });
-
-  let message =
-    "Payment marked as received. Registration moved to submitted.";
-  let tone: ActionResult["tone"] = "success";
-
-  if (updated.ownerEmail?.trim()) {
-    const mailWarning = await runNotification(
-      "MARK_REGISTRATION_AS_PAID",
-      async () => {
-        const { sendPaymentConfirmedEmail } = await import(
-          "@/lib/email/send-registration-email"
-        );
-
-        await sendPaymentConfirmedEmail({
-          to: updated.ownerEmail,
-          ownerName: updated.ownerName || "Customer",
-          passportNumber: updated.reference,
-          assetName: updated.assetName || "Unnamed asset",
-        });
-      }
-    );
-
-    if (mailWarning) {
-      message = `${message} ${mailWarning}`;
-      tone = "warning";
-    }
-  }
-
-  revalidateRegistrationPaths(lang, registrationId);
-
-  return {
-    success: true,
-    message,
-    tone,
-    refresh: true,
-  };
 }
 
 export async function moveRegistrationToReview(

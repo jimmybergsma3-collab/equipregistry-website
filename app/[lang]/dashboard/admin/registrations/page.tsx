@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
@@ -7,7 +6,6 @@ import AdminRequestTable from "@/components/registry/admin-request-table";
 import { prisma } from "@/lib/db";
 import { requireAdminSession } from "@/lib/auth/require-admin-session";
 import { RegistrationRequestStatus } from "@/lib/registry/workflow";
-import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
@@ -194,8 +192,6 @@ export default async function AdminRegistrationsPage({
   await requireAdminSession(lang);
   const safeLang = lang as Lang;
   const pageText = PAGE_TEXT[safeLang];
-  const dictionary = getDictionary(safeLang);
-
   const validStatus =
     status && ALLOWED_STATUSES.includes(status as RegistrationRequestStatus)
       ? (status as RegistrationRequestStatus)
@@ -294,13 +290,6 @@ export default async function AdminRegistrationsPage({
                 currentStatus={validStatus ?? "all"}
                 currentReview={validReview}
               />
-
-              <Link
-                href={`/${lang}/dashboard/register`}
-                className="inline-flex items-center rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-zinc-800 sm:text-sm"
-              >
-                {dictionary.pages.dashboard.registrations.newRegistration}
-              </Link>
             </div>
           </div>
 

@@ -63,8 +63,6 @@ type DynamicFields = Partial<{
 type DetailTexts = {
   backToAdminRegistrations: string;
   backToRegistrations: string;
-  adminPaymentConfirmationTitle: string;
-  adminPaymentConfirmationDescription: string;
   reviewWorkflowTitle: string;
   reviewWorkflowDescription: string;
   detailsTitle: string;
@@ -202,11 +200,6 @@ function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
       section?.backToRegistrations ??
       section?.back ??
       "Back to registrations",
-    adminPaymentConfirmationTitle:
-      section?.adminPaymentConfirmationTitle ?? "Admin payment confirmation",
-    adminPaymentConfirmationDescription:
-      section?.adminPaymentConfirmationDescription ??
-      "Payment is confirmed automatically after Stripe Checkout completes.",
     reviewWorkflowTitle: section?.reviewWorkflowTitle ?? "Review workflow",
     reviewWorkflowDescription:
       section?.reviewWorkflowDescription ??

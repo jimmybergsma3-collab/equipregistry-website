@@ -33,7 +33,7 @@ export default async function DashboardPassportsPage({ params }: Props) {
   }
 
   if (session.user.role === "admin") {
-    redirect(`/${lang}/dashboard/admin/registrations`);
+    redirect(`/${lang}/admin`);
   }
 
   const passports = await prisma.registrationRequest.findMany({

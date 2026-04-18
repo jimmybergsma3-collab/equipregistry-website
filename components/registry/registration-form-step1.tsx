@@ -1200,6 +1200,26 @@ const EXTRA_FORM_TEXT: Record<
   },
 };
 
+const VAT_LABELS: Record<Lang, string> = {
+  en: "VAT number",
+  es: "Numero de IVA",
+  de: "USt-IdNr.",
+  fr: "Numero de TVA",
+  it: "Partita IVA",
+  nl: "BTW-nummer",
+  pt: "Numero de IVA",
+  ru: "Nomer NDS",
+  zh: "VAT / zengzhishui hao",
+  hi: "VAT number",
+  ar: "Raqm daribat alqima almudafa",
+  pl: "Numer VAT",
+  sv: "Momsnummer",
+  da: "Momsnummer",
+  no: "MVA-nummer",
+};
+
+const VAT_PLACEHOLDER = "ESB12345678 / NL123456789B01";
+
 const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
   en: "Current dashboard status:",
   es: "Estado actual del dashboard:",
@@ -1492,6 +1512,7 @@ export default function RegistrationFormStep1({
   const applicantIdText = getDocumentText(lang, "applicant_id");
   const proofOfAddressText = getDocumentText(lang, "proof_of_address");
   const assetPhotoText = getDocumentText(lang, "asset_overview_photo");
+  const vatLabel = VAT_LABELS[lang];
 
   function updateField<K extends keyof RegistrationDraft>(
     key: K,
@@ -1609,6 +1630,7 @@ export default function RegistrationFormStep1({
         <input type="hidden" name="country" value={draft.country ?? ""} />
         <input type="hidden" name="ownerName" value={draft.ownerName} />
         <input type="hidden" name="ownerEmail" value={draft.ownerEmail} />
+        <input type="hidden" name="vatNumber" value={draft.vatNumber ?? ""} />
         <input
           type="hidden"
           name="applicantType"
@@ -1813,6 +1835,25 @@ export default function RegistrationFormStep1({
                 className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
               />
             </div>
+
+            {draft.applicantType === "sme" ? (
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="vatNumber"
+                  className="mb-2 block text-sm font-medium text-zinc-900"
+                >
+                  {vatLabel}
+                </label>
+                <input
+                  id="vatNumber"
+                  type="text"
+                  value={draft.vatNumber ?? ""}
+                  onChange={(e) => updateField("vatNumber", e.target.value)}
+                  placeholder={VAT_PLACEHOLDER}
+                  className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                />
+              </div>
+            ) : null}
           </div>
         </section>
 
@@ -2088,6 +2129,7 @@ export default function RegistrationFormStep1({
         <input type="hidden" name="country" value={draft.country ?? ""} />
         <input type="hidden" name="ownerName" value={draft.ownerName} />
         <input type="hidden" name="ownerEmail" value={draft.ownerEmail} />
+        <input type="hidden" name="vatNumber" value={draft.vatNumber ?? ""} />
         <input
           type="hidden"
           name="applicantType"

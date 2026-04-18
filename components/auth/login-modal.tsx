@@ -127,19 +127,19 @@ const TEXT: Record<
   }
 > = {
   en: {
-    title: "Logowanie",
-    subtitle: "Zaloguj sie, aby kontynuowac.",
-    email: "E-mail",
+    title: "Login",
+    subtitle: "Log in to continue.",
+    email: "Email",
     emailPlaceholder: "name@company.com",
-    password: "Haslo",
+    password: "Password",
     passwordPlaceholder: "••••••••",
-    login: "Zaloguj sie",
-    loading: "Ladowanie...",
-    loginFailed: "Logowanie nie powiodlo sie.",
-    serverError: "Blad serwera podczas logowania.",
-    cancel: "Anuluj",
-    forgotPassword: "Nie pamietasz hasla?",
-    noAccount: "Nie masz jeszcze konta? Zarejestruj sie tutaj",
+    login: "Login",
+    loading: "Loading...",
+    loginFailed: "Login failed.",
+    serverError: "Server error during login.",
+    cancel: "Cancel",
+    forgotPassword: "Forgot password?",
+    noAccount: "No account yet? Register here",
   },
   es: {
     title: "Iniciar sesión",
@@ -295,6 +295,21 @@ const TEXT: Record<
   },
 
   pl: {
+    title: "Zaloguj sie",
+    subtitle: "Zaloguj sie, aby kontynuowac.",
+    email: "E-mail",
+    emailPlaceholder: "name@company.com",
+    password: "Haslo",
+    passwordPlaceholder: "••••••••",
+    login: "Zaloguj sie",
+    loading: "Ladowanie...",
+    loginFailed: "Logowanie nie powiodlo sie.",
+    serverError: "Blad serwera podczas logowania.",
+    cancel: "Anuluj",
+    forgotPassword: "Nie pamietasz hasla?",
+    noAccount: "Nie masz jeszcze konta? Zarejestruj sie tutaj",
+  },
+  sv: {
     title: "Logga in",
     subtitle: "Logga in for att fortsatta.",
     email: "E-post",
@@ -309,7 +324,7 @@ const TEXT: Record<
     forgotPassword: "Glomt losenordet?",
     noAccount: "Inget konto annu? Registrera dig har",
   },
-  sv: {
+  da: {
     title: "Log ind",
     subtitle: "Log ind for at fortsaette.",
     email: "E-mail",
@@ -324,7 +339,7 @@ const TEXT: Record<
     forgotPassword: "Glemt adgangskoden?",
     noAccount: "Ingen konto endnu? Registrer dig her",
   },
-  da: {
+  no: {
     title: "Logg inn",
     subtitle: "Logg inn for a fortsette.",
     email: "E-post",
@@ -338,21 +353,6 @@ const TEXT: Record<
     cancel: "Avbryt",
     forgotPassword: "Glemt passordet?",
     noAccount: "Ingen konto enna? Registrer deg her",
-  },
-  no: {
-    title: "Login",
-    subtitle: "Log in to continue.",
-    email: "Email",
-    emailPlaceholder: "name@company.com",
-    password: "Password",
-    passwordPlaceholder: "••••••••",
-    login: "Login",
-    loading: "Loading...",
-    loginFailed: "Login failed.",
-    serverError: "Server error during login.",
-    cancel: "Cancel",
-    forgotPassword: "Forgot password?",
-    noAccount: "No account yet? Register here",
   },};
 
 export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
@@ -417,7 +417,10 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
       const target =
         next && next.trim().length > 0
           ? next
-          : `/${lang}/dashboard/registrations`;
+          : typeof data?.redirectTo === "string" &&
+            data.redirectTo.startsWith("/")
+          ? `/${lang}${data.redirectTo}`
+          : `/${lang}/dashboard`;
 
       onClose();
       router.refresh();

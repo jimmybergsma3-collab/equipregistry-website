@@ -11,7 +11,6 @@ type Props = {
   confirmText?: string;
   deletingText?: string;
   errorText?: string;
-  admin?: boolean;
 };
 
 export default function DeleteRequestButton({
@@ -21,7 +20,6 @@ export default function DeleteRequestButton({
   confirmText = "Are you sure you want to delete this registration?",
   deletingText = "Deleting...",
   errorText = "Failed to delete registration.",
-  admin = false,
 }: Props) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,23 +31,10 @@ export default function DeleteRequestButton({
 
     try {
       setIsDeleting(true);
+      const result = await deleteRegistrationAsAdmin(id, lang);
 
-      if (admin) {
-        const result = await deleteRegistrationAsAdmin(id, lang);
-
-        if (!result.success) {
-          throw new Error(result.message || errorText);
-        }
-      } else {
-        const response = await fetch(`/api/register-request/${id}`, {
-          method: "DELETE",
-        });
-
-        const data = await response.json().catch(() => null);
-
-        if (!response.ok) {
-          throw new Error(data?.error || errorText);
-        }
+      if (!result.success) {
+        throw new Error(result.message || errorText);
       }
 
       router.refresh();

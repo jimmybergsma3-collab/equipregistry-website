@@ -958,7 +958,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
         <div style={styles.card}>
           <h1 style={styles.title}>{t.report.title}</h1>
 
-          <p style={styles.text}>{t.report.intro}</p>
+          <p style={styles.text}>{t.fallback.text}</p>
 
           {registryId ? (
             <p style={styles.registryId}>
@@ -967,26 +967,8 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
           ) : null}
 
           <div style={styles.warning}>
-            <strong>{t.report.important}</strong>
+            <strong>{t.fallback.title}</strong>
             <p style={{ marginTop: 6 }}>{t.report.importantText}</p>
-          </div>
-
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>{t.report.whyTitle}</h3>
-            <ul style={styles.list}>
-              {t.report.why.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>{t.report.nextTitle}</h3>
-            <ul style={styles.list}>
-              {t.report.next.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
           </div>
 
           <ReportSightingClient
