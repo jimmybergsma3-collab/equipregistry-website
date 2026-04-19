@@ -52,14 +52,17 @@ export default function StripeCheckoutButton({ registrationId, lang }: Props) {
 
   return (
     <div className="space-y-3">
-      <button
-        type="button"
-        onClick={handleCheckout}
-        disabled={isPending}
-        className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {isPending ? text.processing : text.payButton}
-      </button>
+      <div className="inline-flex flex-col items-start gap-1">
+        <button
+          type="button"
+          onClick={handleCheckout}
+          disabled={isPending}
+          className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isPending ? text.processing : text.payButton}
+        </button>
+        <p className="text-xs text-zinc-500">{text.payButtonNote}</p>
+      </div>
 
       {message ? (
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

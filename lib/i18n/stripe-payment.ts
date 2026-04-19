@@ -6,6 +6,7 @@ type StripePaymentText = {
   amountLabel: string;
   webhookNote: string;
   payButton: string;
+  payButtonNote: string;
   processing: string;
   genericError: string;
   returnSuccessTitle: string;
@@ -27,7 +28,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Registration fee",
     webhookNote:
       "Payment is confirmed automatically after Stripe webhook confirmation.",
-    payButton: "Pay with Stripe",
+    payButton: "Checkout",
+    payButtonNote: "Secure payment via Stripe",
     processing: "Redirecting...",
     genericError: "Unable to start Stripe Checkout right now.",
     returnSuccessTitle: "Stripe checkout completed",
@@ -45,42 +47,44 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
   es: {
     checkoutTitle: "Completar pago",
     checkoutDescription:
-      "Continúe este registro mediante Stripe Checkout seguro.",
+      "Continua este registro mediante Stripe Checkout seguro.",
     amountLabel: "Tarifa de registro",
     webhookNote:
-      "El pago se confirma automáticamente después de la confirmación del webhook de Stripe.",
-    payButton: "Pagar con Stripe",
+      "El pago se confirma automaticamente despues de la confirmacion del webhook de Stripe.",
+    payButton: "Finalizar compra",
+    payButtonNote: "Pago seguro mediante Stripe",
     processing: "Redirigiendo...",
     genericError: "No se puede iniciar Stripe Checkout en este momento.",
     returnSuccessTitle: "Stripe Checkout completado",
     returnSuccessText:
-      "Se recibió el retorno del pago. La confirmación final se completa automáticamente cuando Stripe confirme el pago.",
+      "Se recibio el retorno del pago. La confirmacion final se completa automaticamente cuando Stripe confirma el pago.",
     returnCancelTitle: "Stripe Checkout cancelado",
     returnCancelText:
-      "No se completó ningún pago. Puede volver a este registro e intentarlo de nuevo cuando quiera.",
-    authRequired: "Debe iniciar sesión para continuar al pago.",
+      "No se completo ningun pago. Puedes volver a este registro e intentarlo de nuevo cuando quieras.",
+    authRequired: "Debes iniciar sesion para continuar al pago.",
     requestMissing: "Registro no encontrado.",
     alreadyPaid: "Este registro ya ha sido pagado.",
-    notPayable: "Este registro no está esperando pago.",
+    notPayable: "Este registro no esta esperando pago.",
     sessionUnavailable: "No se pudo crear Stripe Checkout en este momento.",
   },
   de: {
-    checkoutTitle: "Zahlung abschließen",
+    checkoutTitle: "Zahlung abschliessen",
     checkoutDescription:
-      "Führen Sie diese Registrierung über den sicheren Stripe Checkout fort.",
-    amountLabel: "Registrierungsgebühr",
+      "Fuhren Sie diese Registrierung uber den sicheren Stripe Checkout fort.",
+    amountLabel: "Registrierungsgebuhr",
     webhookNote:
-      "Die Zahlung wird nach der Stripe-Webhook-Bestätigung automatisch bestätigt.",
-    payButton: "Mit Stripe bezahlen",
+      "Die Zahlung wird nach der Stripe-Webhook-Bestatigung automatisch bestatigt.",
+    payButton: "Zur Kasse",
+    payButtonNote: "Sicher bezahlen uber Stripe",
     processing: "Weiterleitung...",
     genericError: "Stripe Checkout kann derzeit nicht gestartet werden.",
     returnSuccessTitle: "Stripe Checkout abgeschlossen",
     returnSuccessText:
-      "Ihre Zahlungsrückleitung wurde empfangen. Die endgültige Bestätigung erfolgt automatisch, sobald Stripe die Zahlung bestätigt.",
+      "Ihre Zahlungsruckleitung wurde empfangen. Die endgultige Bestatigung erfolgt automatisch, sobald Stripe die Zahlung bestatigt.",
     returnCancelTitle: "Stripe Checkout abgebrochen",
     returnCancelText:
-      "Es wurde keine Zahlung abgeschlossen. Sie können zu dieser Registrierung zurückkehren und es später erneut versuchen.",
-    authRequired: "Sie müssen angemeldet sein, um zur Zahlung fortzufahren.",
+      "Es wurde keine Zahlung abgeschlossen. Sie konnen zu dieser Registrierung zuruckkehren und es spater erneut versuchen.",
+    authRequired: "Sie mussen angemeldet sein, um zur Zahlung fortzufahren.",
     requestMissing: "Registrierung nicht gefunden.",
     alreadyPaid: "Diese Registrierung wurde bereits bezahlt.",
     notPayable: "Diese Registrierung wartet nicht auf eine Zahlung.",
@@ -89,24 +93,25 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
   fr: {
     checkoutTitle: "Finaliser le paiement",
     checkoutDescription:
-      "Poursuivez cet enregistrement via Stripe Checkout sécurisé.",
-    amountLabel: "Frais d’enregistrement",
+      "Poursuivez cet enregistrement via Stripe Checkout securise.",
+    amountLabel: "Frais d'enregistrement",
     webhookNote:
-      "Le paiement est confirmé automatiquement après la confirmation du webhook Stripe.",
-    payButton: "Payer avec Stripe",
+      "Le paiement est confirme automatiquement apres la confirmation du webhook Stripe.",
+    payButton: "Passer au paiement",
+    payButtonNote: "Paiement securise via Stripe",
     processing: "Redirection...",
     genericError: "Impossible de lancer Stripe Checkout pour le moment.",
-    returnSuccessTitle: "Stripe Checkout terminé",
+    returnSuccessTitle: "Stripe Checkout termine",
     returnSuccessText:
-      "Le retour de paiement a bien été reçu. La confirmation finale est effectuée automatiquement lorsque Stripe confirme le paiement.",
-    returnCancelTitle: "Stripe Checkout annulé",
+      "Le retour de paiement a bien ete recu. La confirmation finale est effectuee automatiquement lorsque Stripe confirme le paiement.",
+    returnCancelTitle: "Stripe Checkout annule",
     returnCancelText:
-      "Aucun paiement n’a été finalisé. Vous pouvez revenir à cet enregistrement et réessayer quand vous le souhaitez.",
-    authRequired: "Vous devez être connecté pour continuer vers le paiement.",
+      "Aucun paiement n'a ete finalise. Vous pouvez revenir a cet enregistrement et reessayer quand vous le souhaitez.",
+    authRequired: "Vous devez etre connecte pour continuer vers le paiement.",
     requestMissing: "Enregistrement introuvable.",
-    alreadyPaid: "Cet enregistrement a déjà été payé.",
-    notPayable: "Cet enregistrement n’attend pas de paiement.",
-    sessionUnavailable: "Stripe Checkout n’a pas pu être créé pour le moment.",
+    alreadyPaid: "Cet enregistrement a deja ete paye.",
+    notPayable: "Cet enregistrement n'attend pas de paiement.",
+    sessionUnavailable: "Stripe Checkout n'a pas pu etre cree pour le moment.",
   },
   it: {
     checkoutTitle: "Completa il pagamento",
@@ -115,20 +120,21 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Tariffa di registrazione",
     webhookNote:
       "Il pagamento viene confermato automaticamente dopo la conferma del webhook di Stripe.",
-    payButton: "Paga con Stripe",
+    payButton: "Vai al pagamento",
+    payButtonNote: "Pagamento sicuro tramite Stripe",
     processing: "Reindirizzamento...",
     genericError: "Impossibile avviare Stripe Checkout in questo momento.",
     returnSuccessTitle: "Stripe Checkout completato",
     returnSuccessText:
-      "Il ritorno del pagamento è stato ricevuto. La conferma finale viene completata automaticamente quando Stripe conferma il pagamento.",
+      "Il ritorno del pagamento e stato ricevuto. La conferma finale viene completata automaticamente quando Stripe conferma il pagamento.",
     returnCancelTitle: "Stripe Checkout annullato",
     returnCancelText:
-      "Nessun pagamento è stato completato. Puoi tornare a questa registrazione e riprovare quando vuoi.",
+      "Nessun pagamento e stato completato. Puoi tornare a questa registrazione e riprovare quando vuoi.",
     authRequired: "Devi accedere per continuare al pagamento.",
     requestMissing: "Registrazione non trovata.",
-    alreadyPaid: "Questa registrazione è già stata pagata.",
-    notPayable: "Questa registrazione non è in attesa di pagamento.",
-    sessionUnavailable: "Stripe Checkout non può essere creato in questo momento.",
+    alreadyPaid: "Questa registrazione e gia stata pagata.",
+    notPayable: "Questa registrazione non e in attesa di pagamento.",
+    sessionUnavailable: "Stripe Checkout non puo essere creato in questo momento.",
   },
   nl: {
     checkoutTitle: "Betaling voltooien",
@@ -137,7 +143,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Registratiekost",
     webhookNote:
       "De betaling wordt automatisch bevestigd na bevestiging via de Stripe-webhook.",
-    payButton: "Betalen met Stripe",
+    payButton: "Afrekenen",
+    payButtonNote: "Veilig betalen via Stripe",
     processing: "Doorsturen...",
     genericError: "Stripe Checkout kan nu niet worden gestart.",
     returnSuccessTitle: "Stripe Checkout voltooid",
@@ -155,33 +162,35 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
   pt: {
     checkoutTitle: "Concluir pagamento",
     checkoutDescription:
-      "Continue este registo através do Stripe Checkout seguro.",
+      "Continue este registo atraves do Stripe Checkout seguro.",
     amountLabel: "Taxa de registo",
     webhookNote:
-      "O pagamento é confirmado automaticamente após a confirmação do webhook da Stripe.",
-    payButton: "Pagar com Stripe",
+      "O pagamento e confirmado automaticamente apos a confirmacao do webhook da Stripe.",
+    payButton: "Finalizar compra",
+    payButtonNote: "Pagamento seguro via Stripe",
     processing: "A redirecionar...",
-    genericError: "Não é possível iniciar o Stripe Checkout neste momento.",
-    returnSuccessTitle: "Stripe Checkout concluído",
+    genericError: "Nao e possivel iniciar o Stripe Checkout neste momento.",
+    returnSuccessTitle: "Stripe Checkout concluido",
     returnSuccessText:
-      "O retorno do pagamento foi recebido. A confirmação final é concluída automaticamente quando a Stripe confirmar o pagamento.",
+      "O retorno do pagamento foi recebido. A confirmacao final e concluida automaticamente quando a Stripe confirmar o pagamento.",
     returnCancelTitle: "Stripe Checkout cancelado",
     returnCancelText:
-      "Nenhum pagamento foi concluído. Pode voltar a este registo e tentar novamente quando quiser.",
-    authRequired: "Tem de iniciar sessão para continuar para o pagamento.",
-    requestMissing: "Registo não encontrado.",
-    alreadyPaid: "Este registo já foi pago.",
-    notPayable: "Este registo não está à espera de pagamento.",
-    sessionUnavailable: "Não foi possível criar o Stripe Checkout neste momento.",
+      "Nenhum pagamento foi concluido. Pode voltar a este registo e tentar novamente quando quiser.",
+    authRequired: "Tem de iniciar sessao para continuar para o pagamento.",
+    requestMissing: "Registo nao encontrado.",
+    alreadyPaid: "Este registo ja foi pago.",
+    notPayable: "Este registo nao esta a espera de pagamento.",
+    sessionUnavailable: "Nao foi possivel criar Stripe Checkout neste momento.",
   },
   ru: {
     checkoutTitle: "Завершить оплату",
     checkoutDescription:
-      "Продолжите эту регистрацию через защищенный Stripe Checkout.",
+      "Продолжите эту регистрацию через безопасный Stripe Checkout.",
     amountLabel: "Регистрационный сбор",
     webhookNote:
       "Оплата подтверждается автоматически после подтверждения вебхуком Stripe.",
-    payButton: "Оплатить через Stripe",
+    payButton: "Оформить оплату",
+    payButtonNote: "Безопасная оплата через Stripe",
     processing: "Перенаправление...",
     genericError: "Сейчас невозможно запустить Stripe Checkout.",
     returnSuccessTitle: "Stripe Checkout завершен",
@@ -201,7 +210,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     checkoutDescription: "通过安全的 Stripe Checkout 继续此注册流程。",
     amountLabel: "注册费用",
     webhookNote: "付款会在 Stripe webhook 确认后自动完成确认。",
-    payButton: "使用 Stripe 支付",
+    payButton: "前往结账",
+    payButtonNote: "通过 Stripe 安全支付",
     processing: "正在跳转...",
     genericError: "当前无法启动 Stripe Checkout。",
     returnSuccessTitle: "Stripe Checkout 已完成",
@@ -219,11 +229,12 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
   hi: {
     checkoutTitle: "भुगतान पूरा करें",
     checkoutDescription:
-      "सुरक्षित Stripe Checkout के माध्यम से इस पंजीकरण को आगे बढ़ाएँ।",
+      "सुरक्षित Stripe Checkout के माध्यम से इस पंजीकरण को आगे बढ़ाएं।",
     amountLabel: "पंजीकरण शुल्क",
     webhookNote:
       "Stripe webhook पुष्टि के बाद भुगतान स्वतः पुष्टि हो जाता है।",
-    payButton: "Stripe से भुगतान करें",
+    payButton: "चेकआउट करें",
+    payButtonNote: "Stripe के जरिए सुरक्षित भुगतान",
     processing: "रीडायरेक्ट किया जा रहा है...",
     genericError: "अभी Stripe Checkout शुरू नहीं किया जा सकता।",
     returnSuccessTitle: "Stripe Checkout पूरा हुआ",
@@ -242,23 +253,23 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     checkoutTitle: "إكمال الدفع",
     checkoutDescription: "تابع هذا التسجيل عبر Stripe Checkout الآمن.",
     amountLabel: "رسوم التسجيل",
-    webhookNote: "يتم تأكيد الدفع تلقائيًا بعد تأكيد Webhook من Stripe.",
-    payButton: "الدفع عبر Stripe",
-    processing: "جارٍ إعادة التوجيه...",
+    webhookNote: "يتم تأكيد الدفع تلقائيا بعد تأكيد Webhook من Stripe.",
+    payButton: "إكمال الدفع",
+    payButtonNote: "دفع آمن عبر Stripe",
+    processing: "جار إعادة التوجيه...",
     genericError: "لا يمكن بدء Stripe Checkout الآن.",
     returnSuccessTitle: "اكتمل Stripe Checkout",
     returnSuccessText:
-      "تم استلام عودة الدفع. يكتمل التأكيد النهائي تلقائيًا بعد أن تؤكد Stripe الدفع.",
+      "تم استلام عودة الدفع. يكتمل التأكيد النهائي تلقائيا بعد أن تؤكد Stripe الدفع.",
     returnCancelTitle: "تم إلغاء Stripe Checkout",
     returnCancelText:
-      "لم يكتمل أي دفع. يمكنك العودة إلى هذا التسجيل والمحاولة مرة أخرى عندما تكون جاهزًا.",
+      "لم يكتمل أي دفع. يمكنك العودة إلى هذا التسجيل والمحاولة مرة أخرى عندما تكون جاهزا.",
     authRequired: "يجب تسجيل الدخول للمتابعة إلى الدفع.",
     requestMissing: "لم يتم العثور على التسجيل.",
     alreadyPaid: "تم دفع هذا التسجيل بالفعل.",
     notPayable: "هذا التسجيل لا ينتظر الدفع.",
     sessionUnavailable: "تعذر إنشاء Stripe Checkout الآن.",
   },
-
   pl: {
     checkoutTitle: "Dokoncz platnosc",
     checkoutDescription:
@@ -266,7 +277,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Oplata rejestracyjna",
     webhookNote:
       "Platnosc jest potwierdzana automatycznie po potwierdzeniu webhooka Stripe.",
-    payButton: "Zaplac przez Stripe",
+    payButton: "Przejdz do platnosci",
+    payButtonNote: "Bezpieczna platnosc przez Stripe",
     processing: "Przekierowywanie...",
     genericError: "Nie mozna teraz uruchomic Stripe Checkout.",
     returnSuccessTitle: "Platnosc Stripe zakonczona",
@@ -288,7 +300,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Registreringsavgift",
     webhookNote:
       "Betalningen bekraftas automatiskt efter Stripe-webhookbekraftelse.",
-    payButton: "Pay with Stripe",
+    payButton: "Ga till betalning",
+    payButtonNote: "Saker betalning via Stripe",
     processing: "Omdirigerar...",
     genericError: "Det gar inte att starta Stripe Checkout just nu.",
     returnSuccessTitle: "Stripe Checkout slutford",
@@ -310,7 +323,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Registreringsgebyr",
     webhookNote:
       "Betalingen bekraeftes automatisk efter Stripe-webhookbekraeftelse.",
-    payButton: "Betal med Stripe",
+    payButton: "Ga til betaling",
+    payButtonNote: "Sikker betaling via Stripe",
     processing: "Omdirigerer...",
     genericError: "Stripe Checkout kan ikke startes lige nu.",
     returnSuccessTitle: "Stripe Checkout gennemfort",
@@ -332,7 +346,8 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
     amountLabel: "Registreringsgebyr",
     webhookNote:
       "Betalingen bekreftes automatisk etter Stripe-webhookbekreftelse.",
-    payButton: "Betal med Stripe",
+    payButton: "Ga til betaling",
+    payButtonNote: "Sikker betaling via Stripe",
     processing: "Omdirigerer...",
     genericError: "Kan ikke starte Stripe Checkout akkurat na.",
     returnSuccessTitle: "Stripe Checkout fullfort",
