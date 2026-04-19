@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site-footer";
 import PageHero from "@/components/page-hero";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getPartnersUiText } from "@/lib/i18n/partners-ui";
 
 type Props = {
   params: Promise<{
@@ -21,12 +22,13 @@ export default async function PartnersPage({ params }: Props) {
   const currentLang = lang as Lang;
   const t = getDictionary(currentLang);
   const p = t.pages.partners;
+  const uiText = getPartnersUiText(currentLang);
 
   return (
     <>
       <SiteHeader lang={currentLang} />
 
-      <PageHero title={p.title} subtitle={p.subtitle} />
+      <PageHero title={uiText.title} subtitle={uiText.subtitle} />
 
       <section className="border-b bg-white py-10">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-4 px-6">

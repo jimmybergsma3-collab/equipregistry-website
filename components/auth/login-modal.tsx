@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Lang } from "@/lib/i18n/config";
+import { getForgotPasswordText } from "@/lib/i18n/forgot-password";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 const LOGIN_ERROR_TEXT: Record<
@@ -359,6 +360,7 @@ const TEXT: Record<
 export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const router = useRouter();
   const t = repairMojibakeDeep(TEXT[lang] ?? TEXT.en);
+  const forgotPasswordText = getForgotPasswordText(lang);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -481,7 +483,15 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
             />
           </div>
 
-          <div className="flex justify-end text-sm">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <Link
+              href={`/${lang}/forgot-password`}
+              onClick={onClose}
+              className="text-zinc-600 underline underline-offset-4 transition hover:text-zinc-900"
+            >
+              {forgotPasswordText.linkLabel}
+            </Link>
+
             <Link
               href={`/${lang}/register`}
               onClick={onClose}

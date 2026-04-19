@@ -220,6 +220,42 @@ const UNAVAILABLE_TEXT: Partial<Record<Lang, UnavailableText>> = {
     caseId: "Case ID",
     registryMissing: "Registry ID missing. This report cannot be submitted.",
   },
+  es: {
+    title: "Reporte no disponible",
+    description:
+      "El reporte de avistamientos no esta disponible en este momento. Contacte directamente con las autoridades competentes.",
+    submit: "Reporte no disponible",
+    caseId: "ID del caso",
+    registryMissing:
+      "Falta el ID de registro. Este reporte no se puede enviar.",
+  },
+  de: {
+    title: "Meldung nicht verfuegbar",
+    description:
+      "Sichtungsmeldungen sind derzeit nicht verfuegbar. Kontaktieren Sie die zustaendigen Behoerden direkt.",
+    submit: "Meldung nicht verfuegbar",
+    caseId: "Fall-ID",
+    registryMissing:
+      "Register-ID fehlt. Diese Meldung kann nicht gesendet werden.",
+  },
+  fr: {
+    title: "Signalement indisponible",
+    description:
+      "Le signalement d'observation n'est pas disponible pour le moment. Contactez directement les autorites competentes.",
+    submit: "Signalement indisponible",
+    caseId: "ID du dossier",
+    registryMissing:
+      "L'ID d'enregistrement manque. Ce signalement ne peut pas etre envoye.",
+  },
+  it: {
+    title: "Segnalazione non disponibile",
+    description:
+      "La segnalazione di avvistamento non e disponibile in questo momento. Contatti direttamente le autorita competenti.",
+    submit: "Segnalazione non disponibile",
+    caseId: "ID caso",
+    registryMissing:
+      "Manca l'ID registro. Questa segnalazione non puo essere inviata.",
+  },
   nl: {
     title: "Melden niet beschikbaar",
     description:
@@ -228,6 +264,87 @@ const UNAVAILABLE_TEXT: Partial<Record<Lang, UnavailableText>> = {
     caseId: "Zaak-ID",
     registryMissing:
       "Registratie-ID ontbreekt. Deze melding kan niet worden verzonden.",
+  },
+  pt: {
+    title: "Reporte indisponivel",
+    description:
+      "O reporte de avistamentos nao esta disponivel neste momento. Contacte diretamente as autoridades competentes.",
+    submit: "Reporte indisponivel",
+    caseId: "ID do caso",
+    registryMissing:
+      "Falta o ID do registo. Este reporte nao pode ser enviado.",
+  },
+  pl: {
+    title: "Zgloszenie niedostepne",
+    description:
+      "Zgloszenia obserwacji sa obecnie niedostepne. Skontaktuj sie bezposrednio z odpowiednimi sluzbami.",
+    submit: "Zgloszenie niedostepne",
+    caseId: "ID sprawy",
+    registryMissing:
+      "Brakuje ID rejestru. Tego zgloszenia nie mozna wyslac.",
+  },
+  sv: {
+    title: "Rapportering ej tillganglig",
+    description:
+      "Rapportering av observationer ar inte tillganglig just nu. Kontakta relevanta myndigheter direkt.",
+    submit: "Rapportering ej tillganglig",
+    caseId: "Arende-ID",
+    registryMissing:
+      "Register-ID saknas. Denna rapport kan inte skickas.",
+  },
+  da: {
+    title: "Rapportering utilgaengelig",
+    description:
+      "Observationsrapportering er ikke tilgaengelig lige nu. Kontakt de relevante myndigheder direkte.",
+    submit: "Rapportering utilgaengelig",
+    caseId: "Sags-ID",
+    registryMissing:
+      "Register-ID mangler. Denne rapport kan ikke sendes.",
+  },
+  no: {
+    title: "Rapportering utilgjengelig",
+    description:
+      "Observasjonsrapportering er ikke tilgjengelig akkurat na. Kontakt relevante myndigheter direkte.",
+    submit: "Rapportering utilgjengelig",
+    caseId: "Saks-ID",
+    registryMissing:
+      "Register-ID mangler. Denne rapporten kan ikke sendes.",
+  },
+  ru: {
+    title: "Otchet nedostupen",
+    description:
+      "Soobshcheniya o nablyudenii vremenno nedostupny. Svyazhites s kompetentnymi organami napryamuyu.",
+    submit: "Otchet nedostupen",
+    caseId: "ID dela",
+    registryMissing:
+      "Otsutstvuet ID reestra. Etot otchet nelzya otpravit.",
+  },
+  zh: {
+    title: "Baogao zan buke yong",
+    description:
+      "Muqian wufa tijiao muji baogao. Qing zhijie lianxi xiangguan zhifa jigou.",
+    submit: "Baogao zan buke yong",
+    caseId: "Case ID",
+    registryMissing:
+      "Que shao Registry ID. Ci baogao wufa tijiao.",
+  },
+  hi: {
+    title: "Reporting uplabdh nahin",
+    description:
+      "Sighting reporting filhal uplabdh nahin hai. Kripya seedhe sambandhit authorities se sampark karen.",
+    submit: "Reporting uplabdh nahin",
+    caseId: "Case ID",
+    registryMissing:
+      "Registry ID missing hai. Yeh report submit nahin ki ja sakti.",
+  },
+  ar: {
+    title: "Al'iبلاغ ghayr mutah",
+    description:
+      "Iبلاغ almushahadat ghayr mutah halian. Tawasul mubasharatan mae aljihatin almukhtassa.",
+    submit: "Al'iبلاغ ghayr mutah",
+    caseId: "Case ID",
+    registryMissing:
+      "Registry ID ghayr mawjud. La yumkin irsal hadha alبلاغ.",
   },
 };
 

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import { getLangDir, isValidLang } from "@/lib/i18n/config";
+import { getLegalUiText } from "@/lib/i18n/legal-ui";
 import { disclaimerContent } from "@/lib/legal/disclaimer";
 
 type PageProps = {
@@ -47,6 +48,7 @@ export default async function DisclaimerPage({ params }: PageProps) {
   }
 
   const content = disclaimerContent[lang];
+  const legalUi = getLegalUiText(lang);
   const dir = getLangDir(lang);
 
   return (
@@ -59,7 +61,7 @@ export default async function DisclaimerPage({ params }: PageProps) {
             href={`/${lang}`}
             className="inline-flex items-center text-sm font-medium text-[#1d4ed8] hover:underline"
           >
-            ← Back
+            {"<-"} {legalUi.back}
           </Link>
         </div>
 
@@ -139,24 +141,28 @@ export default async function DisclaimerPage({ params }: PageProps) {
 
             <div className="mt-4 grid gap-3 rounded-2xl bg-[#f8fafc] p-4 text-sm sm:grid-cols-2">
               <div>
-                <p className="font-semibold text-[#111827]">Responsible person</p>
+                <p className="font-semibold text-[#111827]">
+                  {legalUi.responsiblePerson}
+                </p>
                 <p>{CONTACT.owner}</p>
               </div>
 
               <div>
-                <p className="font-semibold text-[#111827]">Email</p>
+                <p className="font-semibold text-[#111827]">{legalUi.email}</p>
                 <p>{CONTACT.email}</p>
               </div>
 
               <div>
-                <p className="font-semibold text-[#111827]">Address</p>
+                <p className="font-semibold text-[#111827]">
+                  {legalUi.address}
+                </p>
                 <p>{CONTACT.addressLine1}</p>
                 <p>{CONTACT.addressLine2}</p>
                 <p>{CONTACT.addressLine3}</p>
               </div>
 
               <div>
-                <p className="font-semibold text-[#111827]">Tax / ID number</p>
+                <p className="font-semibold text-[#111827]">{legalUi.taxId}</p>
                 <p>{CONTACT.taxId}</p>
               </div>
             </div>

@@ -30,7 +30,8 @@ function Section({
   content,
   pricingDisplay,
   priceLabel,
-  priceNote,
+  registerHref,
+  registerLabel,
   textAlignClass,
 }: {
   pricingCategory: AssetPricingCategory;
@@ -40,7 +41,8 @@ function Section({
   };
   pricingDisplay: LocalizedPricingDisplay;
   priceLabel: string;
-  priceNote: string | null;
+  registerHref: string;
+  registerLabel: string;
   textAlignClass: string;
 }) {
   const pricing = PRICING[pricingCategory];
@@ -55,9 +57,12 @@ function Section({
             <p className="mt-1 text-sm font-semibold text-zinc-950">
               {formatLocalizedPricingAmount(pricing.registration, pricingDisplay)}
             </p>
-            {priceNote ? (
-              <p className="mt-2 text-xs leading-5 text-zinc-500">{priceNote}</p>
-            ) : null}
+            <Link
+              href={registerHref}
+              className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800"
+            >
+              {registerLabel}
+            </Link>
           </div>
         </div>
         <div className={`rounded-2xl border border-zinc-200 bg-zinc-50 p-5 ${textAlignClass}`}>
@@ -107,9 +112,6 @@ export default async function PricingPage({ params }: Props) {
     acceptLanguage: headerList.get("accept-language"),
     countryCode: getVisitorCountryCodeFromHeaders(headerList),
   });
-  const priceNote = pricingDisplay.usedFallback
-    ? null
-    : content.labels.estimatedLocalCurrency;
 
   return (
     <>
@@ -137,7 +139,8 @@ export default async function PricingPage({ params }: Props) {
                   content={getPricingCategoryContent(currentLang, pricingCategory)}
                   pricingDisplay={pricingDisplay}
                   priceLabel={content.labels.registration}
-                  priceNote={priceNote}
+                  registerHref={`/${currentLang}/register`}
+                  registerLabel={content.actions.startRegistration}
                   textAlignClass={textAlignClass}
                 />
               ))}

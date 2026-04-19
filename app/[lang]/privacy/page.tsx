@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import { getLangDir, isValidLang } from "@/lib/i18n/config";
+import { getLegalUiText } from "@/lib/i18n/legal-ui";
 import { getPrivacyText, PRIVACY_CONTACT } from "@/lib/legal/privacy";
 
 type PageProps = {
@@ -46,6 +47,7 @@ export default async function PrivacyPage({ params }: PageProps) {
   }
 
   const t = getPrivacyText(lang);
+  const legalUi = getLegalUiText(lang);
   const dir = getLangDir(lang);
 
   return (
@@ -58,7 +60,7 @@ export default async function PrivacyPage({ params }: PageProps) {
             href={`/${lang}`}
             className="inline-flex items-center text-sm font-medium text-[#1d4ed8] hover:underline"
           >
-            ← {t.backToHome}
+            {"<-"} {legalUi.back}
           </Link>
         </div>
 

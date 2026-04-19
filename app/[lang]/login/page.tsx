@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Lang } from "@/lib/i18n/config";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import { getForgotPasswordText } from "@/lib/i18n/forgot-password";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 const LOGIN_ERROR_TEXT: Record<
@@ -340,6 +341,7 @@ export default function LoginPage() {
 
   const lang = String(params.lang || "en") as Lang;
   const t = repairMojibakeDeep(LOGIN_TEXT[lang] ?? LOGIN_TEXT.en);
+  const forgotPasswordText = getForgotPasswordText(lang);
 
   const rawNext = searchParams.get("next");
   const safeNext = rawNext && rawNext.startsWith("/") ? rawNext : null;
@@ -431,6 +433,15 @@ export default function LoginPage() {
                   placeholder={t.passwordPlaceholder}
                   required
                 />
+              </div>
+
+              <div className="flex justify-end text-sm">
+                <Link
+                  href={`/${lang}/forgot-password`}
+                  className="text-slate-600 underline hover:text-blue-700"
+                >
+                  {forgotPasswordText.linkLabel}
+                </Link>
               </div>
 
               {error && (

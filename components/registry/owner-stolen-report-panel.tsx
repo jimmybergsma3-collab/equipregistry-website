@@ -6,6 +6,7 @@ import { submitOwnerStolenReport } from "@/app/[lang]/dashboard/registrations/[i
 import SearchableCountrySelect from "@/components/registry/searchable-country-select";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
+import { getStolenCustomerActionsText } from "@/lib/i18n/stolen-customer-actions";
 import { getRegistryUploadText } from "@/lib/i18n/registry-upload";
 import {
   ClientUploadError,
@@ -30,6 +31,7 @@ export default function OwnerStolenReportPanel({
 }: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const text = getCustomerStolenReportText(safeLang);
+  const actionText = getStolenCustomerActionsText(safeLang);
   const uploadText = getRegistryUploadText(safeLang);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -51,8 +53,14 @@ export default function OwnerStolenReportPanel({
   const [supportingDocuments, setSupportingDocuments] = useState<StoredUpload[]>(
     existingCase?.evidenceFiles ?? []
   );
+  const [policeReportFiles, setPoliceReportFiles] = useState<StoredUpload[]>(
+    existingCase?.policeReportFiles ?? []
+  );
 
-  async function handleUpload(fileList: FileList | null) {
+  async function handleUpload(
+    bucket: "stolen_supporting_document" | "stolen_police_report",
+    fileList: FileList | null
+  ) {
     if (!fileList || fileList.length === 0) {
       return;
     }
@@ -61,11 +69,13 @@ export default function OwnerStolenReportPanel({
     setUploadError("");
 
     try {
-      const uploads = await uploadFilesForBucket(
-        "stolen_supporting_document",
-        Array.from(fileList)
-      );
-      setSupportingDocuments((current) => [...current, ...uploads]);
+      const uploads = await uploadFilesForBucket(bucket, Array.from(fileList));
+
+      if (bucket === "stolen_police_report") {
+        setPoliceReportFiles((current) => [...current, ...uploads]);
+      } else {
+        setSupportingDocuments((current) => [...current, ...uploads]);
+      }
     } catch (error) {
       setUploadError(
         error instanceof ClientUploadError &&
@@ -88,7 +98,10 @@ export default function OwnerStolenReportPanel({
       return;
     }
 
-    if (supportingDocuments.length === 0) {
+    if (
+      supportingDocuments.length === 0 &&
+      policeReportFiles.length === 0
+    ) {
       setFormError(text.validation.uploadsRequired);
       return;
     }
@@ -104,6 +117,7 @@ export default function OwnerStolenReportPanel({
         incidentCountry,
         incidentDescription,
         evidenceFiles: supportingDocuments,
+        policeReportFiles,
       });
 
       if (!result.success) {
@@ -204,7 +218,10 @@ export default function OwnerStolenReportPanel({
                 accept={ALLOWED_UPLOAD_ACCEPT}
                 className="hidden"
                 onChange={(event) => {
-                  void handleUpload(event.target.files);
+                  void handleUpload(
+                    "stolen_supporting_document",
+                    event.target.files
+                  );
                   event.currentTarget.value = "";
                 }}
               />
@@ -247,6 +264,79 @@ export default function OwnerStolenReportPanel({
                 {uploadError}
               </p>
             ) : null}
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-zinc-900">
+              {actionText.policeFilesTitle}
+            </p>
+            <p className="mt-2 text-sm text-zinc-600">
+              {actionText.policeFilesDescription}
+            </p>
+            <p className="mt-2 text-xs text-zinc-500">{uploadText.privacyNote}</p>
+          </div>
+
+          <div className="lg:w-[440px]">
+            <div className="flex flex-wrap items-center gap-3">
+              <label
+                htmlFor="owner-stolen-police-report-files"
+                className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
+              >
+                {uploading
+                  ? uploadText.uploading
+                  : policeReportFiles.length > 0
+                  ? uploadText.addFiles
+                  : uploadText.chooseFile}
+              </label>
+
+              <input
+                id="owner-stolen-police-report-files"
+                type="file"
+                multiple
+                accept={ALLOWED_UPLOAD_ACCEPT}
+                className="hidden"
+                onChange={(event) => {
+                  void handleUpload("stolen_police_report", event.target.files);
+                  event.currentTarget.value = "";
+                }}
+              />
+
+              {policeReportFiles.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPoliceReportFiles([]);
+                    setUploadError("");
+                  }}
+                  className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 transition hover:bg-zinc-100"
+                >
+                  {uploadText.clearFiles}
+                </button>
+              ) : null}
+            </div>
+
+            <p className="mt-3 text-xs text-zinc-500">{uploadText.sizeHelp}</p>
+
+            <div className="mt-4">
+              {policeReportFiles.length > 0 ? (
+                <ul className="space-y-2">
+                  {policeReportFiles.map((file) => (
+                    <li
+                      key={file.id}
+                      className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+                    >
+                      {file.originalName}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-zinc-500">{uploadText.noFileSelected}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

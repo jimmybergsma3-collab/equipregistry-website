@@ -23,10 +23,7 @@ export default function LoginRequiredButton({
     <>
       <button
         type="button"
-        onClick={() => {
-          console.log("LOGIN BUTTON CLICKED");
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
         className={className}
       >
         {label}

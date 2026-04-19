@@ -11,6 +11,7 @@ import StolenCasePanel from "@/components/registry/stolen-case-panel";
 import StripeCheckoutButton from "@/components/registry/stripe-checkout-button";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
+import { MAILBOXES } from "@/lib/email/addresses";
 import { getPricing, getPricingCategory } from "@/lib/registry/pricing";
 import { getStolenCaseRecord } from "@/lib/registry/request-meta";
 import { canManageStolenCase } from "@/lib/registry/stolen-case";
@@ -21,10 +22,16 @@ import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
 import { getPricingCategoryContent } from "@/lib/i18n/pricing-categories";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getStripePaymentText } from "@/lib/i18n/stripe-payment";
+import { getStolenCustomerActionsText } from "@/lib/i18n/stolen-customer-actions";
 import {
   getCategoryByValue,
   getSubcategoryByValue,
 } from "@/lib/registry/categories";
+import {
+  getRequiredDocumentsForContext,
+  type RegistrationDocumentKey,
+  type RegistrationDocumentMap,
+} from "@/lib/registry/document-rules";
 import {
   formatDateForLang,
   getLocalizedApplicantTypeLabel,
@@ -67,7 +74,9 @@ type DetailTexts = {
   reviewWorkflowDescription: string;
   detailsTitle: string;
   dynamicFieldsTitle: string;
+  documentsTitle: string;
   noAdditionalData: string;
+  noDocuments: string;
   paymentCompleted: string;
   paymentPending: string;
   labels: {
@@ -130,6 +139,42 @@ const PAYMENT_PENDING_TEXT: Partial<Record<Lang, string>> = {
   no: "Ikke fullfort",
 };
 
+const DOCUMENTS_TITLE_TEXT: Record<Lang, string> = {
+  en: "Uploaded documents",
+  es: "Documentos cargados",
+  de: "Hochgeladene Dokumente",
+  fr: "Documents televerses",
+  it: "Documenti caricati",
+  nl: "Geuploade documenten",
+  pt: "Documentos carregados",
+  pl: "Przeslane dokumenty",
+  sv: "Uppladdade dokument",
+  da: "Uploadede dokumenter",
+  no: "Opplastede dokumenter",
+  ru: "Zagruzhennye dokumenty",
+  zh: "Yishangchuan wenjian",
+  hi: "Uploaded documents",
+  ar: "Alwathayiq almarfuea",
+};
+
+const NO_DOCUMENTS_TEXT: Record<Lang, string> = {
+  en: "No uploaded documents available.",
+  es: "No hay documentos cargados disponibles.",
+  de: "Keine hochgeladenen Dokumente verfuegbar.",
+  fr: "Aucun document televerse disponible.",
+  it: "Nessun documento caricato disponibile.",
+  nl: "Geen geuploade documenten beschikbaar.",
+  pt: "Nenhum documento carregado disponivel.",
+  pl: "Brak przeslanych dokumentow.",
+  sv: "Inga uppladdade dokument tillgangliga.",
+  da: "Ingen uploadede dokumenter tilgaengelige.",
+  no: "Ingen opplastede dokumenter tilgjengelige.",
+  ru: "Zagruzhennye dokumenty otsutstvuyut.",
+  zh: "Meiyou keyong de yishangchuan wenjian.",
+  hi: "Koi uploaded documents upalabdh nahin hain.",
+  ar: "La tujad wathayiq marfuea mutaha.",
+};
+
 function parseDynamicFields(value: unknown): DynamicFields {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
@@ -166,6 +211,22 @@ function parseDynamicFields(value: unknown): DynamicFields {
     certification: toStringValue(raw.certification),
     ownerOrganisation: toStringValue(raw.ownerOrganisation),
   };
+}
+
+function parseDocumentMap(value: unknown): RegistrationDocumentMap {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  return value as RegistrationDocumentMap;
+}
+
+function humanizeDocumentKey(key: string) {
+  return key
+    .split("_")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
 }
 
 function hasRenderableValue(value: unknown) {
@@ -206,7 +267,9 @@ function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
       "Move the registration through review, approval, and final passport issuance.",
     detailsTitle: section?.detailsTitle ?? "Registration details",
     dynamicFieldsTitle: section?.dynamicFieldsTitle ?? "Additional asset data",
+    documentsTitle: DOCUMENTS_TITLE_TEXT[lang] ?? "Uploaded documents",
     noAdditionalData: section?.noAdditionalData ?? "No additional data available.",
+    noDocuments: NO_DOCUMENTS_TEXT[lang] ?? "No uploaded documents available.",
     paymentCompleted: section?.paymentCompleted ?? "Completed / Cleared",
     paymentPending:
       PAYMENT_PENDING_TEXT[lang] ?? section?.paymentPending ?? "Not completed",
@@ -311,11 +374,13 @@ function RegistrationDetailsCard({
     paymentCompleted: boolean;
     completenessScore: number;
     dynamicFields: unknown;
+    documents: unknown;
   };
   texts: DetailTexts;
   lang: Lang;
 }) {
   const dynamicFields = parseDynamicFields(request.dynamicFields);
+  const documents = parseDocumentMap(request.documents);
   const officialPassportNumber = getOfficialPassportNumber(
     request.reference,
     request.category,
@@ -376,6 +441,22 @@ function RegistrationDetailsCard({
       value: dynamicFields.ownerOrganisation ?? "",
     },
   ].filter((entry) => hasRenderableValue(entry.value));
+  const documentDefinitions = new Map(
+    getRequiredDocumentsForContext(
+      request.applicantType,
+      request.category,
+      lang
+    ).map((document) => [document.key, document.label])
+  );
+  const documentEntries = Object.entries(documents)
+    .map(([key, state]) => ({
+      key,
+      label:
+        documentDefinitions.get(key as RegistrationDocumentKey) ??
+        humanizeDocumentKey(key),
+      files: Array.isArray(state?.files) ? state.files : [],
+    }))
+    .filter((entry) => entry.files.length > 0);
 
   return (
     <section className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -440,6 +521,39 @@ function RegistrationDetailsCard({
           <p className="mt-3 text-sm text-zinc-600">{texts.noAdditionalData}</p>
         )}
       </div>
+
+      <div className="mt-8 border-t border-zinc-200 pt-6">
+        <h3 className="text-base font-semibold text-zinc-900">
+          {texts.documentsTitle}
+        </h3>
+
+        {documentEntries.length > 0 ? (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {documentEntries.map((entry) => (
+              <div
+                key={entry.key}
+                className="rounded-xl border border-zinc-200 bg-zinc-50 p-4"
+              >
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">
+                  {entry.label}
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {entry.files.map((file) => (
+                    <li
+                      key={file.id}
+                      className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+                    >
+                      {file.originalName}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-zinc-600">{texts.noDocuments}</p>
+        )}
+      </div>
     </section>
   );
 }
@@ -458,6 +572,7 @@ export default async function RegistrationRequestDetailPage({
   const dictionary = await getDictionary(lang as Lang);
   const customerDashboardText = getCustomerDashboardText(lang as Lang);
   const customerStolenReportText = getCustomerStolenReportText(lang as Lang);
+  const customerStolenActionsText = getStolenCustomerActionsText(lang as Lang);
   const texts = getDetailTexts(lang as Lang, dictionary);
   const stripeText = getStripePaymentText(lang as Lang);
   const headerList = await headers();
@@ -534,6 +649,12 @@ export default async function RegistrationRequestDetailPage({
             ) : null}
           </div>
 
+            <RegistrationDetailsCard
+              request={request}
+              texts={texts}
+              lang={lang as Lang}
+            />
+
             {showReviewActions ? (
               <div className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
                 <div className="mb-4">
@@ -560,12 +681,6 @@ export default async function RegistrationRequestDetailPage({
                 existingCase={stolenCase}
               />
             ) : null}
-
-            <RegistrationDetailsCard
-              request={request}
-              texts={texts}
-              lang={lang as Lang}
-            />
           </div>
         </main>
 
@@ -661,40 +776,6 @@ export default async function RegistrationRequestDetailPage({
             ) : null}
           </div>
 
-          {ownRequest.requestStatus === "passport_issued" ? (
-            <section
-              id="owner-incident-report"
-              className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6"
-            >
-              <div className="max-w-2xl">
-                <h2 className="text-lg font-semibold text-zinc-900">
-                  {customerStolenReportText.title}
-                </h2>
-                <p className="mt-1 text-sm text-zinc-600">
-                  {customerStolenReportText.description}
-                </p>
-              </div>
-
-              {ownerReportPending ? (
-                <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                  {customerStolenReportText.pendingDescription}
-                </div>
-              ) : ownerReportedStolen ? (
-                <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  {customerStolenReportText.activeDescription}
-                </div>
-              ) : (
-                <div className="mt-5">
-                  <OwnerStolenReportPanel
-                    registrationId={ownRequest.id}
-                    lang={lang}
-                    existingCase={ownStolenCase}
-                  />
-                </div>
-              )}
-            </section>
-          ) : null}
-
           {paymentReturnState === "stripe_success" ||
           paymentReturnState === "stripe_cancel" ? (
             <div className={`mb-6 rounded-2xl border px-5 py-4 text-sm ${paymentBannerTone}`}>
@@ -765,6 +846,59 @@ export default async function RegistrationRequestDetailPage({
             texts={texts}
             lang={lang as Lang}
           />
+
+          {ownRequest.requestStatus === "passport_issued" ? (
+            <section
+              id="owner-incident-report"
+              className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6"
+            >
+              <div className="max-w-2xl">
+                <h2 className="text-lg font-semibold text-zinc-900">
+                  {customerStolenReportText.title}
+                </h2>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {customerStolenReportText.description}
+                </p>
+              </div>
+
+              {ownerReportPending ? (
+                <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                  {customerStolenReportText.pendingDescription}
+                </div>
+              ) : ownerReportedStolen ? (
+                <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {customerStolenReportText.activeDescription}
+                </div>
+              ) : (
+                <div className="mt-5">
+                  <OwnerStolenReportPanel
+                    registrationId={ownRequest.id}
+                    lang={lang}
+                    existingCase={ownStolenCase}
+                  />
+                </div>
+              )}
+            </section>
+          ) : null}
+
+          {ownerReportPending || ownerReportedStolen ? (
+            <section className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
+              <h2 className="text-lg font-semibold text-emerald-900">
+                {customerStolenActionsText.recoveredTitle}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-emerald-800">
+                {customerStolenActionsText.recoveredDescription}
+              </p>
+              <div className="mt-4">
+                <a
+                  href={`mailto:${MAILBOXES.support}?subject=${encodeURIComponent(`${customerStolenActionsText.recoveredTitle} - ${ownRequest.reference}`)}`}
+                  className="inline-flex items-center rounded-xl border border-emerald-300 bg-white px-4 py-2 text-sm font-medium text-emerald-900 transition hover:bg-emerald-100"
+                >
+                  {customerStolenActionsText.recoveredAction}
+                </a>
+              </div>
+            </section>
+          ) : null}
         </div>
       </main>
 

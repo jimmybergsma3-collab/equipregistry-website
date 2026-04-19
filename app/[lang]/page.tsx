@@ -7,6 +7,7 @@ import SiteHeader from "@/components/site-header";
 import { prisma } from "@/lib/db";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getHomeCounterText } from "@/lib/i18n/home-counter";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import {
   getRegistryAssetStatus,
@@ -383,6 +384,7 @@ export default async function Home({ params, searchParams }: Props) {
   }
 
   const t = getDictionary(lang);
+  const counterText = getHomeCounterText(lang as Lang);
   const dir = getLangDir(lang);
   const isRtl = dir === "rtl";
   const textAlignClass = isRtl ? "text-right" : "text-left";
@@ -392,6 +394,12 @@ export default async function Home({ params, searchParams }: Props) {
   const status = normalizedSerial
     ? await getStatus(serial, lang)
     : null;
+  const issuedPassportCount = await prisma.registrationRequest.count({
+    where: {
+      deletedAt: null,
+      requestStatus: "passport_issued",
+    },
+  });
 
   const isLoggedIn = false;
 
@@ -522,6 +530,27 @@ export default async function Home({ params, searchParams }: Props) {
             }}
           />
         )}
+
+        <section className="border-t bg-white py-10">
+          <div className="mx-auto max-w-3xl px-6">
+            <div
+              className={`rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5 ${textAlignClass}`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                {counterText.eyebrow}
+              </p>
+              <p className="mt-2 text-3xl font-bold text-slate-900">
+                {new Intl.NumberFormat(lang).format(issuedPassportCount)}
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-700">
+                {counterText.label}
+              </p>
+              <p className="mt-2 text-sm text-slate-600">
+                {counterText.description}
+              </p>
+            </div>
+          </div>
+        </section>
 
         <section id="how" className="border-t bg-slate-50 py-20">
           <div className="mx-auto max-w-6xl px-6">

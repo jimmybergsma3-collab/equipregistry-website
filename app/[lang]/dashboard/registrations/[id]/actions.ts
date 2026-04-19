@@ -125,6 +125,7 @@ type OwnerStolenReportPayload = {
   incidentCountry?: string;
   incidentDescription?: string;
   evidenceFiles?: StoredUpload[];
+  policeReportFiles?: StoredUpload[];
 };
 
 function getMachineStatusForIssuedRequest(
@@ -862,8 +863,19 @@ export async function submitOwnerStolenReport(
           )
       )
     : [];
+  const policeReportFiles = Array.isArray(payload.policeReportFiles)
+    ? payload.policeReportFiles.filter(
+        (file): file is StoredUpload =>
+          Boolean(
+            file &&
+              typeof file.id === "string" &&
+              typeof file.originalName === "string" &&
+              typeof file.relativePath === "string"
+          )
+      )
+    : [];
 
-  if (evidenceFiles.length === 0) {
+  if (evidenceFiles.length === 0 && policeReportFiles.length === 0) {
     return {
       success: false,
       message: text.validation.uploadsRequired,
@@ -907,6 +919,7 @@ export async function submitOwnerStolenReport(
     },
     nextStatus: "pending_review",
     evidenceFiles,
+    policeReportFiles,
   });
   const updatedDynamicFields = setRegistryAssetStatus(
     setStolenCaseRecord(request.dynamicFields, nextCase),

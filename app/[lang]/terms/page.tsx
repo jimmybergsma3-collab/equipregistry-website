@@ -3,6 +3,7 @@ import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import { TERMS_CONTENT } from "@/lib/legal/terms";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
+import { getLegalUiText } from "@/lib/i18n/legal-ui";
 
 type Props = {
   params: Promise<{
@@ -19,6 +20,7 @@ export default async function TermsPage({ params }: Props) {
 
   const safeLang = lang as Lang;
   const content = TERMS_CONTENT[safeLang];
+  const legalUi = getLegalUiText(safeLang);
   const dir = getLangDir(safeLang);
 
   return (
@@ -31,7 +33,7 @@ export default async function TermsPage({ params }: Props) {
             href={`/${safeLang}`}
             className="mb-4 inline-block text-sm text-slate-500 hover:text-slate-800"
           >
-            ← Back
+            {"<-"} {legalUi.back}
           </a>
 
           <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

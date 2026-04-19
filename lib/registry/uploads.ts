@@ -71,6 +71,17 @@ function getSafeExtension(name: string) {
   return ext;
 }
 
+function shouldUseInlineFallback(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const code =
+    "code" in error && typeof error.code === "string" ? error.code : "";
+
+  return code === "EROFS" || code === "EPERM" || code === "EACCES";
+}
+
 export function isUploadBucket(value: string): value is UploadBucket {
   return ALLOWED_BUCKETS.includes(value as UploadBucket);
 }
@@ -115,11 +126,29 @@ export async function persistUploadFile(
   const storedName = `${id}-${baseName}${extension}`;
   const relativePath = path.join("data", "uploads", bucket, storedName);
   const absolutePath = path.join(process.cwd(), relativePath);
-
-  await mkdir(path.dirname(absolutePath), { recursive: true });
-
   const buffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(absolutePath, buffer);
+
+  try {
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, buffer);
+  } catch (error) {
+    if (!shouldUseInlineFallback(error)) {
+      throw error;
+    }
+
+    return {
+      id,
+      bucket,
+      originalName: file.name,
+      storedName,
+      relativePath: `inline://${bucket}/${storedName}`,
+      mimeType: file.type || "application/octet-stream",
+      size: file.size,
+      uploadedAt,
+      storage: "inline",
+      inlineBase64: buffer.toString("base64"),
+    };
+  }
 
   return {
     id,
@@ -130,10 +159,23 @@ export async function persistUploadFile(
     mimeType: file.type || "application/octet-stream",
     size: file.size,
     uploadedAt,
+    storage: "filesystem",
   };
 }
 
 export async function readStoredUpload(upload: StoredUpload) {
+  if (
+    (upload.storage === "inline" || upload.relativePath.startsWith("inline://")) &&
+    typeof upload.inlineBase64 === "string" &&
+    upload.inlineBase64.length > 0
+  ) {
+    return {
+      buffer: Buffer.from(upload.inlineBase64, "base64"),
+      mimeType: upload.mimeType || "application/octet-stream",
+      fileName: upload.originalName || upload.storedName,
+    };
+  }
+
   const absolutePath = path.join(process.cwd(), upload.relativePath);
   const buffer = await readFile(absolutePath);
 

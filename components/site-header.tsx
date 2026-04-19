@@ -4,6 +4,7 @@ import HeaderLoginButton from "@/components/auth/header-login-button";
 import LanguageSwitcher from "@/components/language-switcher";
 import { getLangDir, isValidLang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { getPartnersUiText } from "@/lib/i18n/partners-ui";
 
 type Props = {
   lang: string;
@@ -23,6 +24,7 @@ export default function SiteHeader({
 }: Props) {
   const safeLang = isValidLang(lang) ? lang : "en";
   const t = getDictionary(safeLang);
+  const partnersText = getPartnersUiText(safeLang);
   const dir = getLangDir(safeLang);
   const isRtl = dir === "rtl";
   const menuPanelPositionClass = isRtl ? "left-0" : "right-0";
@@ -31,7 +33,7 @@ export default function SiteHeader({
     { href: `/${safeLang}`, label: t.menu.home },
     { href: `/${safeLang}/register`, label: t.menu.registerAsset },
     { href: `/${safeLang}/pricing`, label: t.menu.pricing },
-    { href: `/${safeLang}/partners`, label: t.menu.partners },
+    { href: `/${safeLang}/partners`, label: partnersText.menuLabel },
     { href: `/${safeLang}/contact`, label: t.menu.contact },
   ];
 
