@@ -1,13 +1,21 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
-import type { Lang } from "@/lib/i18n/config";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { isRTL, type Lang } from "@/lib/i18n/config";
 import { getPublicAuthoritiesText } from "@/lib/i18n/public-authorities";
+import {
+  buildFallbackPoliceMapsUrl,
+  buildNearbyPoliceMapsUrl,
+  getAuthorityContact,
+  getCountryNameForDisplay,
+  inferCountryCodeFromLocale,
+} from "@/lib/public-authorities/global-authorities";
 
 type Props = {
   lang: Lang;
   registryId?: string;
   caseId: string;
+  initialCountryCode?: string | null;
 };
 
 type LocationState =
@@ -15,18 +23,24 @@ type LocationState =
       status: "idle" | "loading";
       country: null;
       countryCode: null;
+      latitude: null;
+      longitude: null;
       error: null;
     }
   | {
       status: "ready";
       country: string | null;
       countryCode: string | null;
+      latitude: number;
+      longitude: number;
       error: null;
     }
   | {
       status: "error";
       country: null;
       countryCode: null;
+      latitude: null;
+      longitude: null;
       error: "denied" | "unsupported" | "failed";
     };
 
@@ -34,44 +48,20 @@ const DEFAULT_LOCATION_STATE: LocationState = {
   status: "idle",
   country: null,
   countryCode: null,
+  latitude: null,
+  longitude: null,
   error: null,
 };
 
-const EMERGENCY_NUMBERS: Record<string, string> = {
-  US: "911",
-  CA: "911",
-  GB: "999",
-  AU: "000",
-  NZ: "111",
-  CN: "110",
-  IN: "112",
-  RU: "112",
-};
-
-function getEmergencyNumber(countryCode: string | null) {
-  if (!countryCode) {
-    return "112";
-  }
-
-  return EMERGENCY_NUMBERS[countryCode] ?? "112";
-}
-
 function getLocationMessage(
   state: LocationState,
-  text: ReturnType<typeof getPublicAuthoritiesText>
+  text: ReturnType<typeof getPublicAuthoritiesText>,
+  countryName: string | null
 ) {
   if (state.status === "ready") {
-    if (state.country && state.countryCode) {
-      return `${text.locationDetected}: ${state.country} (${state.countryCode})`;
-    }
-
-    if (state.country) {
-      return `${text.locationDetected}: ${state.country}`;
-    }
-
-    if (state.countryCode) {
-      return `${text.locationDetected}: ${state.countryCode}`;
-    }
+    return countryName
+      ? `${text.locationDetected}: ${countryName}`
+      : text.locationDetected;
   }
 
   if (state.status === "loading") {
@@ -122,8 +112,10 @@ export default function AuthoritiesClient({
   lang,
   registryId,
   caseId,
+  initialCountryCode = null,
 }: Props) {
   const text = getPublicAuthoritiesText(lang);
+  const rtl = isRTL(lang);
   const [locationState, setLocationState] =
     useState<LocationState>(DEFAULT_LOCATION_STATE);
 
@@ -133,6 +125,8 @@ export default function AuthoritiesClient({
         status: "error",
         country: null,
         countryCode: null,
+        latitude: null,
+        longitude: null,
         error: "unsupported",
       });
       return;
@@ -142,6 +136,8 @@ export default function AuthoritiesClient({
       status: "loading",
       country: null,
       countryCode: null,
+      latitude: null,
+      longitude: null,
       error: null,
     });
 
@@ -157,6 +153,8 @@ export default function AuthoritiesClient({
             status: "ready",
             country: result.country,
             countryCode: result.countryCode,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
             error: null,
           });
         } catch {
@@ -164,6 +162,8 @@ export default function AuthoritiesClient({
             status: "error",
             country: null,
             countryCode: null,
+            latitude: null,
+            longitude: null,
             error: "failed",
           });
         }
@@ -173,8 +173,9 @@ export default function AuthoritiesClient({
           status: "error",
           country: null,
           countryCode: null,
-          error:
-            error.code === error.PERMISSION_DENIED ? "denied" : "failed",
+          latitude: null,
+          longitude: null,
+          error: error.code === error.PERMISSION_DENIED ? "denied" : "failed",
         });
       },
       {
@@ -189,17 +190,74 @@ export default function AuthoritiesClient({
     void requestLocation();
   }, []);
 
-  const emergencyNumber = getEmergencyNumber(locationState.countryCode);
-  const locationMessage = getLocationMessage(locationState, text);
+  const fallbackCountryCode = useMemo(() => {
+    if (locationState.countryCode) {
+      return locationState.countryCode;
+    }
+
+    if (initialCountryCode) {
+      return initialCountryCode;
+    }
+
+    if (typeof navigator !== "undefined") {
+      return inferCountryCodeFromLocale(navigator.language, lang);
+    }
+
+    return inferCountryCodeFromLocale(null, lang);
+  }, [initialCountryCode, lang, locationState.countryCode]);
+
+  const displayCountryName = useMemo(
+    () =>
+      getCountryNameForDisplay(
+        fallbackCountryCode,
+        lang,
+        locationState.country
+      ),
+    [fallbackCountryCode, lang, locationState.country]
+  );
+
+  const authorityContact = useMemo(
+    () => getAuthorityContact(fallbackCountryCode),
+    [fallbackCountryCode]
+  );
+
+  const mapsUrl =
+    locationState.status === "ready"
+      ? buildNearbyPoliceMapsUrl(
+          locationState.latitude,
+          locationState.longitude
+        )
+      : buildFallbackPoliceMapsUrl(displayCountryName);
+  const mapsLabel =
+    locationState.status === "ready"
+      ? text.openNearbyPoliceMap
+      : text.openPoliceMapSearch;
+  const locationButtonLabel =
+    locationState.status === "loading"
+      ? text.locating
+      : locationState.status === "idle"
+        ? text.useLocation
+        : text.retry;
+  const locationMessage = getLocationMessage(
+    locationState,
+    text,
+    displayCountryName
+  );
 
   return (
-    <div style={styles.card}>
+    <div
+      style={{
+        ...styles.card,
+        direction: rtl ? "rtl" : "ltr",
+        textAlign: rtl ? "right" : "left",
+      }}
+    >
       <h3 style={styles.title}>{text.title}</h3>
 
       <p style={styles.text}>{text.intro}</p>
 
       <div style={styles.locationBox}>
-        <div>
+        <div style={styles.locationCopy}>
           <p style={styles.locationMessage}>{locationMessage}</p>
           <p style={styles.note}>{text.note}</p>
         </div>
@@ -209,13 +267,13 @@ export default function AuthoritiesClient({
           onClick={() => void requestLocation()}
           disabled={locationState.status === "loading"}
           style={{
-            ...styles.locationButton,
+            ...styles.primaryButton,
             opacity: locationState.status === "loading" ? 0.7 : 1,
             cursor:
               locationState.status === "loading" ? "not-allowed" : "pointer",
           }}
         >
-          {locationState.status === "loading" ? text.locating : text.retry}
+          {locationButtonLabel}
         </button>
       </div>
 
@@ -229,23 +287,66 @@ export default function AuthoritiesClient({
         <p style={styles.metaLine}>
           <strong>{text.caseId}:</strong> {caseId}
         </p>
+
+        {displayCountryName ? (
+          <p style={styles.metaLine}>
+            <strong>{text.countryLabel}:</strong> {displayCountryName}
+          </p>
+        ) : null}
+
+        {locationState.status === "ready" ? (
+          <p style={styles.metaLine}>
+            <strong>{text.coordinatesLabel}:</strong>{" "}
+            {locationState.latitude.toFixed(5)},{" "}
+            {locationState.longitude.toFixed(5)}
+          </p>
+        ) : null}
       </div>
 
       <div style={styles.section}>
         <h4 style={styles.sectionTitle}>{text.localAuthoritiesTitle}</h4>
-        <ul style={styles.list}>
+        <ul
+          style={{
+            ...styles.list,
+            paddingInlineStart: rtl ? 0 : 18,
+            paddingInlineEnd: rtl ? 18 : 0,
+          }}
+        >
           <li>
-            <strong>{text.emergencyNumber}:</strong> {emergencyNumber}
+            <strong>{text.emergencyNumber}:</strong>{" "}
+            {authorityContact?.emergencyNumber ?? "112"}
           </li>
-          <li>{text.policeContact}</li>
-          <li>{text.customsContact}</li>
-          <li>{text.borderContact}</li>
+          <li>
+            <strong>{text.policeNumber}:</strong>{" "}
+            {authorityContact?.policeNumber ??
+              authorityContact?.emergencyNumber ??
+              "112"}
+          </li>
         </ul>
       </div>
 
       <div style={styles.section}>
+        <h4 style={styles.sectionTitle}>{text.mapsTitle}</h4>
+        <p style={styles.text}>{text.mapsHint}</p>
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noreferrer"
+          style={styles.secondaryButton}
+        >
+          {mapsLabel}
+        </a>
+      </div>
+
+      <div style={styles.section}>
         <h4 style={styles.sectionTitle}>{text.shareTitle}</h4>
-        <ul style={styles.list}>
+        <ul
+          style={{
+            ...styles.list,
+            paddingInlineStart: rtl ? 0 : 18,
+            paddingInlineEnd: rtl ? 18 : 0,
+          }}
+        >
           <li>{text.shareRegistry}</li>
           <li>{text.shareCase}</li>
           <li>{text.shareLocation}</li>
@@ -295,20 +396,15 @@ const styles: Record<string, CSSProperties> = {
     alignItems: "center",
     flexWrap: "wrap",
   },
+  locationCopy: {
+    flex: 1,
+    minWidth: 220,
+  },
   locationMessage: {
     fontSize: 14,
     color: "#111827",
     margin: 0,
     marginBottom: 4,
-    fontWeight: 600,
-  },
-  locationButton: {
-    borderRadius: 8,
-    border: "1px solid #1d4ed8",
-    backgroundColor: "#1d4ed8",
-    color: "#ffffff",
-    padding: "10px 14px",
-    fontSize: 13,
     fontWeight: 600,
   },
   metaBox: {
@@ -340,12 +436,31 @@ const styles: Record<string, CSSProperties> = {
   },
   list: {
     margin: 0,
-    paddingLeft: 18,
     display: "grid",
     gap: 8,
     color: "#1f2937",
     fontSize: 14,
     lineHeight: 1.5,
+  },
+  primaryButton: {
+    borderRadius: 8,
+    border: "1px solid #1d4ed8",
+    backgroundColor: "#1d4ed8",
+    color: "#ffffff",
+    padding: "10px 14px",
+    fontSize: 13,
+    fontWeight: 600,
+  },
+  secondaryButton: {
+    display: "inline-block",
+    borderRadius: 8,
+    border: "1px solid #1d4ed8",
+    backgroundColor: "#ffffff",
+    color: "#1d4ed8",
+    padding: "10px 14px",
+    fontSize: 13,
+    fontWeight: 600,
+    textDecoration: "none",
   },
   fallbackBox: {
     border: "1px solid #fecaca",

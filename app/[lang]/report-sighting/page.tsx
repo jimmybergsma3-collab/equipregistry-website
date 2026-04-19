@@ -3,8 +3,7 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import PageHero from "@/components/page-hero";
 import ReportSightingClient from "../action/ReportSightingClient";
-import { isValidLang, type Lang } from "@/lib/i18n/config";
-import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
+import { getLangDir, isValidLang, isRTL, type Lang } from "@/lib/i18n/config";
 
 type Props = {
   params: Promise<{
@@ -229,75 +228,75 @@ const REPORT_TEXT: Record<
     ],
   },
   ru: {
-    title: "Soobshchit o nablyudenii",
+    title: "Сообщить о наблюдении",
     subtitle:
-      "Ispolzuyte etu stranicu dlya publichnoy instruktsii po ukradennomu aktivu i derzhite mesto, vremya i ID dela gotovymi dlya vlastey.",
-    warningTitle: "Preduprezhdenie",
+      "Используйте эту страницу для публичных инструкций по украденному активу и держите место, время и ID дела под рукой для властей.",
+    warningTitle: "Предупреждение",
     warningText:
-      "Etot aktiv zaregistrirovan kak ukradennyy. Ne podkhodite k nemu samostoyatelno. Snachala svyazhites s kompetentnymi organami.",
-    caseInfo: "Informatsiya o dele",
-    registryId: "ID reestra",
-    caseId: "ID dela",
-    whatToDo: "Chto delat",
+      "Этот актив зарегистрирован как украденный. Не приближайтесь к нему самостоятельно. Сначала свяжитесь с компетентными органами.",
+    caseInfo: "Информация о деле",
+    registryId: "ID реестра",
+    caseId: "ID дела",
+    whatToDo: "Что делать",
     steps: [
-      "Derzhites na bezopasnom rasstoyanii",
-      "Zapishete mesto i vremya",
-      "Svyazhites s mestnoy politsiey ili pogranichnymi sluzhbami",
-      "Ispolzuyte ID dela pri soobshchenii",
+      "Держитесь на безопасном расстоянии",
+      "Запишите место и время",
+      "Свяжитесь с местной полицией или пограничными службами",
+      "Используйте ID дела при сообщении",
     ],
   },
   zh: {
-    title: "Baogao muji",
+    title: "报告目击情况",
     subtitle:
-      "Shiyong ci yemian huode bei dao ziche de gongkai zhidao, bing wei zhifa jigou zhunbei didian, shijian he Case ID.",
-    warningTitle: "Jinggao",
+      "使用此页面获取失窃资产的公开指引，并为执法机构准备好地点、时间和案件编号。",
+    warningTitle: "警告",
     warningText:
-      "Ci ziche yi dengji wei bei dao. Qing buyao qinjin duixiang. Qing xian lianxi xiangguan zhifa jigou.",
-    caseInfo: "Case xinxi",
-    registryId: "Registry ID",
-    caseId: "Case ID",
-    whatToDo: "Ying gai zenme zuo",
+      "该资产已被登记为失窃。请不要自行接近该物品。请先联系相关执法机构。",
+    caseInfo: "案件信息",
+    registryId: "登记编号",
+    caseId: "案件编号",
+    whatToDo: "应采取的行动",
     steps: [
-      "Baochi anquan juli",
-      "Jilu didian he shijian",
-      "Lianxi dangdi jingcha huo bianjing jigou",
-      "Baoan shi shiyong Case ID",
+      "保持安全距离",
+      "记录地点和时间",
+      "联系当地警方或边境执法机构",
+      "报案时使用案件编号",
     ],
   },
   hi: {
-    title: "Sighting report bhejen",
+    title: "देखे जाने की रिपोर्ट भेजें",
     subtitle:
-      "Is page ka upyog public stolen-asset guidance ke liye karen aur authorities ke liye location, time aur Case ID taiyar rakhen.",
-    warningTitle: "Warning",
+      "इस पेज का उपयोग चोरी हुए एसेट के सार्वजनिक मार्गदर्शन के लिए करें और अधिकारियों के लिए स्थान, समय और केस आईडी तैयार रखें।",
+    warningTitle: "चेतावनी",
     warningText:
-      "Yeh asset stolen ke roop me registered hai. Iske paas khud na jayen. Pehle sambandhit authorities se sampark karen.",
-    caseInfo: "Case jankari",
-    registryId: "Registry ID",
-    caseId: "Case ID",
-    whatToDo: "Kya karna hai",
+      "यह एसेट चोरी के रूप में पंजीकृत है। इसके पास स्वयं न जाएँ। पहले संबंधित अधिकारियों से संपर्क करें।",
+    caseInfo: "केस जानकारी",
+    registryId: "रजिस्ट्री आईडी",
+    caseId: "केस आईडी",
+    whatToDo: "क्या करना है",
     steps: [
-      "Surakshit doori banaye rakhen",
-      "Location aur time note karen",
-      "Local police ya border authorities se sampark karen",
-      "Report karte waqt Case ID ka upyog karen",
+      "सुरक्षित दूरी बनाए रखें",
+      "स्थान और समय नोट करें",
+      "स्थानीय पुलिस या सीमा अधिकारियों से संपर्क करें",
+      "रिपोर्ट करते समय केस आईडी का उपयोग करें",
     ],
   },
   ar: {
-    title: "Irsal balagh mushahada",
+    title: "إرسال بلاغ مشاهدة",
     subtitle:
-      "Astakhdim hadhihi alsafha li'iirshadat al'usul almasruqa wahtafiz bialmawqie walwaqt wa Case ID li'jihat alikhtisas.",
-    warningTitle: "Tahdhir",
+      "استخدم هذه الصفحة للحصول على إرشادات عامة حول الأصل المسروق، واحتفظ بالموقع والوقت ومعرّف القضية للجهات المختصة.",
+    warningTitle: "تحذير",
     warningText:
-      "Hatha al'asl musajjal ka masruq. La taqtarib minhu binafsik. Tawasul awal an ma e aljihatin almukhtassa.",
-    caseInfo: "Maelumat alqadiya",
-    registryId: "Registry ID",
-    caseId: "Case ID",
-    whatToDo: "Mada tafal",
+      "هذا الأصل مسجل كأصل مسروق. لا تقترب منه بنفسك. تواصل أولاً مع الجهات المختصة.",
+    caseInfo: "معلومات القضية",
+    registryId: "معرّف السجل",
+    caseId: "معرّف القضية",
+    whatToDo: "ما الذي يجب فعله",
     steps: [
-      "Abq masafa amina",
-      "Sajjil almawqie walwaqt",
-      "Tawasul mae alshurta almahalliya aw aljihatin alhududiya",
-      "Astakhdim Case ID eind al'ibligh",
+      "ابقَ على مسافة آمنة",
+      "سجّل الموقع والوقت",
+      "تواصل مع الشرطة المحلية أو الجهات الحدودية",
+      "استخدم معرّف القضية عند الإبلاغ",
     ],
   },
 };
@@ -316,64 +315,73 @@ export default async function ReportSightingPage({
     notFound();
   }
 
+  const safeLang = lang as Lang;
   const query = searchParams ? await searchParams : {};
   const registryId = query?.registryId || "";
   const caseId = query?.caseId || "";
-  const t = repairMojibakeDeep(getReportTexts(lang));
+  const t = getReportTexts(safeLang);
+  const dir = getLangDir(safeLang);
+  const rtl = isRTL(safeLang);
 
   return (
     <>
-      <SiteHeader lang={lang} />
+      <SiteHeader lang={safeLang} />
 
-      <PageHero title={t.title} subtitle={t.subtitle} />
+      <main dir={dir}>
+        <PageHero title={t.title} subtitle={t.subtitle} />
 
-      <section className="bg-white py-16">
-        <div className="mx-auto max-w-4xl space-y-6 px-6">
-          <div className="rounded-2xl border border-red-300 bg-red-50 p-6">
-            <h2 className="mb-2 text-xl font-semibold text-red-700">
-              {t.warningTitle}
-            </h2>
+        <section className="bg-white py-16">
+          <div className="mx-auto max-w-4xl space-y-6 px-6">
+            <div className="rounded-2xl border border-red-300 bg-red-50 p-6">
+              <h2 className="mb-2 text-xl font-semibold text-red-700">
+                {t.warningTitle}
+              </h2>
 
-            <p className="text-sm text-red-700">{t.warningText}</p>
-          </div>
-
-          {(registryId || caseId) && (
-            <div className="rounded-2xl border bg-slate-50 p-6">
-              <h3 className="mb-3 font-semibold">{t.caseInfo}</h3>
-
-              {registryId && (
-                <p className="text-sm">
-                  <strong>{t.registryId}:</strong> {registryId}
-                </p>
-              )}
-
-              {caseId && (
-                <p className="text-sm">
-                  <strong>{t.caseId}:</strong> {caseId}
-                </p>
-              )}
+              <p className="text-sm text-red-700">{t.warningText}</p>
             </div>
-          )}
 
-          <ReportSightingClient
-            lang={lang}
-            registryId={registryId || undefined}
-            caseId={caseId || undefined}
-          />
+            {(registryId || caseId) && (
+              <div className="rounded-2xl border bg-slate-50 p-6">
+                <h3 className="mb-3 font-semibold">{t.caseInfo}</h3>
 
-          <div className="rounded-2xl border bg-white p-6">
-            <h3 className="mb-3 font-semibold">{t.whatToDo}</h3>
+                {registryId && (
+                  <p className="text-sm">
+                    <strong>{t.registryId}:</strong> {registryId}
+                  </p>
+                )}
 
-            <ul className="list-disc space-y-2 pl-5 text-sm text-slate-700">
-              {t.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ul>
+                {caseId && (
+                  <p className="text-sm">
+                    <strong>{t.caseId}:</strong> {caseId}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <ReportSightingClient
+              lang={safeLang}
+              registryId={registryId || undefined}
+              caseId={caseId || undefined}
+            />
+
+            <div className="rounded-2xl border bg-white p-6">
+              <h3 className="mb-3 font-semibold">{t.whatToDo}</h3>
+
+              <ul
+                className={`list-disc space-y-2 text-sm text-slate-700 ${
+                  rtl ? "pr-5 text-right" : "pl-5 text-left"
+                }`}
+              >
+                {t.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      <SiteFooter lang={lang} />
+      <SiteFooter lang={safeLang} />
     </>
   );
 }

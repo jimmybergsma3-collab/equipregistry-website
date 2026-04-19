@@ -74,28 +74,28 @@ const TEXT: Record<Lang, PartnersUiText> = {
       "EquipRegistry stotter forsikringsselskaper, finanspartnere, utleieoperatorer, terminaler og andre operative partnere med paalitelige registersignaler.",
   },
   ru: {
-    menuLabel: "Dlya partnerov",
-    title: "Dlya partnerov",
+    menuLabel: "Для партнеров",
+    title: "Для партнеров",
     subtitle:
-      "EquipRegistry podderzhivaet strakhovshchikov, finansovykh partnerov, arendnykh operatorov, terminaly i drugikh partnerov nadezhnymi signalami statusa reestra.",
+      "EquipRegistry помогает страховщикам, финансовым партнерам, операторам аренды, терминалам и другим операционным партнерам надежными сигналами статуса реестра.",
   },
   zh: {
-    menuLabel: "Gong hezuo huoban",
-    title: "Gong hezuo huoban",
+    menuLabel: "合作伙伴",
+    title: "合作伙伴",
     subtitle:
-      "EquipRegistry wei baoxian, rongzi, zulin, zhongduan he qita yunyin huoban tigong kekaode zhucedengji zhuangtai xinhao.",
+      "EquipRegistry 为保险、融资、租赁、终端以及其他运营合作伙伴提供可靠的登记状态信号。",
   },
   hi: {
-    menuLabel: "Partners ke liye",
-    title: "Partners ke liye",
+    menuLabel: "साझेदारों के लिए",
+    title: "साझेदारों के लिए",
     subtitle:
-      "EquipRegistry bima, finance, rental, terminal aur anya operational partners ko bharosemand registry status signals deta hai.",
+      "EquipRegistry बीमा, वित्त, किराया, टर्मिनल और अन्य परिचालन साझेदारों को विश्वसनीय रजिस्ट्री स्थिति संकेत प्रदान करता है।",
   },
   ar: {
-    menuLabel: "Lilshuraka",
-    title: "Lilshuraka",
+    menuLabel: "للشركاء",
+    title: "للشركاء",
     subtitle:
-      "Tuqaddim EquipRegistry daeman lisharikat altaamin walttamwil wal'ijar walmawanie wa ghayriha min alshuraka b'isharat mawthuqa lihalat alsijil.",
+      "تقدم EquipRegistry دعماً لشركات التأمين والتمويل والتأجير والمحطات وغيرهم من الشركاء التشغيليين عبر إشارات موثوقة لحالة السجل.",
   },
 };
 

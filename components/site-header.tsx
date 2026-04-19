@@ -2,9 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import HeaderLoginButton from "@/components/auth/header-login-button";
 import LanguageSwitcher from "@/components/language-switcher";
-import { getLangDir, isValidLang } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionary";
-import { getPartnersUiText } from "@/lib/i18n/partners-ui";
+import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
+import { getSiteHeaderText } from "@/lib/i18n/site-header";
 
 type Props = {
   lang: string;
@@ -22,19 +21,18 @@ export default function SiteHeader({
   lang,
   showDivider = true,
 }: Props) {
-  const safeLang = isValidLang(lang) ? lang : "en";
-  const t = getDictionary(safeLang);
-  const partnersText = getPartnersUiText(safeLang);
+  const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
+  const text = getSiteHeaderText(safeLang);
   const dir = getLangDir(safeLang);
   const isRtl = dir === "rtl";
   const menuPanelPositionClass = isRtl ? "left-0" : "right-0";
   const mobileTextAlignClass = isRtl ? "text-right" : "text-left";
   const navItems = [
-    { href: `/${safeLang}`, label: t.menu.home },
-    { href: `/${safeLang}/register`, label: t.menu.registerAsset },
-    { href: `/${safeLang}/pricing`, label: t.menu.pricing },
-    { href: `/${safeLang}/partners`, label: partnersText.menuLabel },
-    { href: `/${safeLang}/contact`, label: t.menu.contact },
+    { href: `/${safeLang}`, label: text.home },
+    { href: `/${safeLang}/register`, label: text.registerAsset },
+    { href: `/${safeLang}/pricing`, label: text.pricing },
+    { href: `/${safeLang}/partners`, label: text.partners },
+    { href: `/${safeLang}/contact`, label: text.contact },
   ];
 
   return (
@@ -77,9 +75,9 @@ export default function SiteHeader({
           <div className="hidden h-10 items-center xl:flex">
             <HeaderLoginButton
               lang={safeLang}
-              loginLabel={t.nav.login}
-              logoutLabel={t.nav.logout}
-              dashboardLabel={t.nav.dashboard}
+              loginLabel={text.login}
+              logoutLabel={text.logout}
+              dashboardLabel={text.dashboard}
             />
           </div>
 
@@ -89,7 +87,7 @@ export default function SiteHeader({
 
           <details className="relative xl:hidden">
             <summary className="flex h-10 cursor-pointer list-none items-center rounded-md border border-zinc-300 px-3 text-sm font-medium text-zinc-700 transition hover:border-zinc-400 hover:text-zinc-950">
-              {t.nav.menu}
+              {text.menu}
             </summary>
 
             <div
@@ -110,9 +108,9 @@ export default function SiteHeader({
               <div className="mt-4 border-t border-zinc-200 pt-4">
                 <HeaderLoginButton
                   lang={safeLang}
-                  loginLabel={t.nav.login}
-                  logoutLabel={t.nav.logout}
-                  dashboardLabel={t.nav.dashboard}
+                  loginLabel={text.login}
+                  logoutLabel={text.logout}
+                  dashboardLabel={text.dashboard}
                 />
               </div>
             </div>

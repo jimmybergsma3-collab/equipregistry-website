@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties, type FormEvent } from "react";
-import type { Lang } from "@/lib/i18n/config";
-import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
+import { isRTL, type Lang } from "@/lib/i18n/config";
 
 type Props = {
   lang: Lang;
@@ -30,7 +29,7 @@ type UnavailableText = {
   registryMissing: string;
 };
 
-const TEXT: Partial<Record<Lang, ReportText>> = {
+const TEXT: Record<Lang, ReportText> = {
   en: {
     title: "Submit sighting report",
     registryId: "Registry ID",
@@ -45,19 +44,19 @@ const TEXT: Partial<Record<Lang, ReportText>> = {
   es: {
     title: "Enviar aviso de avistamiento",
     registryId: "ID de registro",
-    locationLabel: "Ubicación aproximada",
-    locationPlaceholder: "Ciudad, zona o ubicación más cercana",
+    locationLabel: "Ubicacion aproximada",
+    locationPlaceholder: "Ciudad, zona o ubicacion mas cercana",
     notesLabel: "Notas",
     notesPlaceholder: "Describe lo que viste",
     submit: "Enviar aviso",
     submittedTitle: "Aviso enviado",
-    submittedText: "Tu aviso ha sido registrado en este flujo de demostración.",
+    submittedText: "Tu aviso ha sido registrado en este flujo de demostracion.",
   },
   de: {
     title: "Sichtungsmeldung senden",
     registryId: "Register-ID",
-    locationLabel: "Ungefähre Position",
-    locationPlaceholder: "Stadt, Gebiet oder nächstgelegener Ort",
+    locationLabel: "Ungefaehre Position",
+    locationPlaceholder: "Stadt, Gebiet oder naechstgelegener Ort",
     notesLabel: "Notizen",
     notesPlaceholder: "Beschreiben Sie, was Sie gesehen haben",
     submit: "Meldung senden",
@@ -66,25 +65,25 @@ const TEXT: Partial<Record<Lang, ReportText>> = {
   },
   fr: {
     title: "Envoyer un signalement",
-    registryId: "ID d’enregistrement",
+    registryId: "ID d'enregistrement",
     locationLabel: "Lieu approximatif",
     locationPlaceholder: "Ville, zone ou lieu le plus proche",
     notesLabel: "Notes",
-    notesPlaceholder: "Décrivez ce que vous avez vu",
+    notesPlaceholder: "Decrivez ce que vous avez vu",
     submit: "Envoyer le signalement",
-    submittedTitle: "Signalement envoyé",
-    submittedText: "Votre signalement a été enregistré dans ce flux de démonstration.",
+    submittedTitle: "Signalement envoye",
+    submittedText: "Votre signalement a ete enregistre dans ce flux de demonstration.",
   },
   it: {
     title: "Invia segnalazione avvistamento",
     registryId: "ID registro",
     locationLabel: "Posizione approssimativa",
-    locationPlaceholder: "Città, zona o località più vicina",
+    locationPlaceholder: "Citta, zona o localita piu vicina",
     notesLabel: "Note",
-    notesPlaceholder: "Descrivi ciò che hai visto",
+    notesPlaceholder: "Descrivi cio che hai visto",
     submit: "Invia segnalazione",
     submittedTitle: "Segnalazione inviata",
-    submittedText: "La tua segnalazione è stata registrata in questo flusso demo.",
+    submittedText: "La tua segnalazione e stata registrata in questo flusso demo.",
   },
   nl: {
     title: "Waarneming doorgeven",
@@ -100,59 +99,14 @@ const TEXT: Partial<Record<Lang, ReportText>> = {
   pt: {
     title: "Enviar avistamento",
     registryId: "ID de registo",
-    locationLabel: "Localização aproximada",
-    locationPlaceholder: "Cidade, área ou localização mais próxima",
+    locationLabel: "Localizacao aproximada",
+    locationPlaceholder: "Cidade, area ou localizacao mais proxima",
     notesLabel: "Notas",
     notesPlaceholder: "Descreva o que viu",
-    submit: "Enviar relatório",
-    submittedTitle: "Relatório enviado",
-    submittedText: "O seu relatório foi registado neste fluxo de demonstração.",
+    submit: "Enviar relatorio",
+    submittedTitle: "Relatorio enviado",
+    submittedText: "O seu relatorio foi registado neste fluxo de demonstracao.",
   },
-  ru: {
-    title: "Отправить сообщение о замеченном объекте",
-    registryId: "ID реестра",
-    locationLabel: "Примерное местоположение",
-    locationPlaceholder: "Город, район или ближайшее место",
-    notesLabel: "Примечания",
-    notesPlaceholder: "Опишите, что вы увидели",
-    submit: "Отправить сообщение",
-    submittedTitle: "Сообщение отправлено",
-    submittedText: "Ваше сообщение сохранено в этом демонстрационном сценарии.",
-  },
-  zh: {
-    title: "提交目击报告",
-    registryId: "注册 ID",
-    locationLabel: "大致位置",
-    locationPlaceholder: "城市、区域或最近地点",
-    notesLabel: "备注",
-    notesPlaceholder: "请描述你所看到的情况",
-    submit: "提交报告",
-    submittedTitle: "报告已提交",
-    submittedText: "你的目击报告已记录到此演示流程中。",
-  },
-  hi: {
-    title: "देखे जाने की रिपोर्ट भेजें",
-    registryId: "रजिस्ट्री आईडी",
-    locationLabel: "अनुमानित स्थान",
-    locationPlaceholder: "शहर, क्षेत्र या निकटतम स्थान",
-    notesLabel: "नोट्स",
-    notesPlaceholder: "जो आपने देखा उसका वर्णन करें",
-    submit: "रिपोर्ट भेजें",
-    submittedTitle: "रिपोर्ट भेज दी गई",
-    submittedText: "आपकी रिपोर्ट इस डेमो फ्लो में दर्ज कर ली गई है।",
-  },
-  ar: {
-    title: "إرسال بلاغ مشاهدة",
-    registryId: "معرّف السجل",
-    locationLabel: "الموقع التقريبي",
-    locationPlaceholder: "المدينة أو المنطقة أو أقرب موقع",
-    notesLabel: "ملاحظات",
-    notesPlaceholder: "اشرح ما الذي شاهدته",
-    submit: "إرسال البلاغ",
-    submittedTitle: "تم إرسال البلاغ",
-    submittedText: "تم تسجيل بلاغ المشاهدة في هذا المسار التجريبي.",
-  },
-
   pl: {
     title: "Przeslij zgloszenie obserwacji",
     registryId: "ID rejestru",
@@ -197,21 +151,53 @@ const TEXT: Partial<Record<Lang, ReportText>> = {
     submittedTitle: "Rapport sendt",
     submittedText: "Observasjonsrapporten din er registrert i denne demo-flyten.",
   },
+  ru: {
+    title: "Отправить сообщение о замеченном объекте",
+    registryId: "ID реестра",
+    locationLabel: "Примерное местоположение",
+    locationPlaceholder: "Город, район или ближайшее место",
+    notesLabel: "Примечания",
+    notesPlaceholder: "Опишите, что вы увидели",
+    submit: "Отправить сообщение",
+    submittedTitle: "Сообщение отправлено",
+    submittedText: "Ваше сообщение сохранено в этом демонстрационном сценарии.",
+  },
+  zh: {
+    title: "提交目击报告",
+    registryId: "登记编号",
+    locationLabel: "大致位置",
+    locationPlaceholder: "城市、区域或最近地点",
+    notesLabel: "备注",
+    notesPlaceholder: "请描述你所看到的情况",
+    submit: "提交报告",
+    submittedTitle: "报告已提交",
+    submittedText: "你的目击报告已记录到此演示流程中。",
+  },
+  hi: {
+    title: "देखे जाने की रिपोर्ट भेजें",
+    registryId: "रजिस्ट्री आईडी",
+    locationLabel: "अनुमानित स्थान",
+    locationPlaceholder: "शहर, क्षेत्र या निकटतम स्थान",
+    notesLabel: "नोट्स",
+    notesPlaceholder: "जो आपने देखा उसका वर्णन करें",
+    submit: "रिपोर्ट भेजें",
+    submittedTitle: "रिपोर्ट भेज दी गई",
+    submittedText: "आपकी रिपोर्ट इस डेमो फ्लो में दर्ज कर ली गई है।",
+  },
+  ar: {
+    title: "إرسال بلاغ مشاهدة",
+    registryId: "معرّف السجل",
+    locationLabel: "الموقع التقريبي",
+    locationPlaceholder: "المدينة أو المنطقة أو أقرب موقع",
+    notesLabel: "ملاحظات",
+    notesPlaceholder: "اشرح ما الذي شاهدته",
+    submit: "إرسال البلاغ",
+    submittedTitle: "تم إرسال البلاغ",
+    submittedText: "تم تسجيل بلاغ المشاهدة في هذا المسار التجريبي.",
+  },
 };
 
-const FALLBACK_TEXT: ReportText = {
-  title: "Submit sighting report",
-  registryId: "Registry ID",
-  locationLabel: "Approximate location",
-  locationPlaceholder: "City, area or nearest location",
-  notesLabel: "Notes",
-  notesPlaceholder: "Describe what you saw",
-  submit: "Submit report",
-  submittedTitle: "Report submitted",
-  submittedText: "Your sighting report has been recorded in this demo flow.",
-};
-
-const UNAVAILABLE_TEXT: Partial<Record<Lang, UnavailableText>> = {
+const UNAVAILABLE_TEXT: Record<Lang, UnavailableText> = {
   en: {
     title: "Reporting unavailable",
     description:
@@ -311,40 +297,40 @@ const UNAVAILABLE_TEXT: Partial<Record<Lang, UnavailableText>> = {
       "Register-ID mangler. Denne rapporten kan ikke sendes.",
   },
   ru: {
-    title: "Otchet nedostupen",
+    title: "Отчет недоступен",
     description:
-      "Soobshcheniya o nablyudenii vremenno nedostupny. Svyazhites s kompetentnymi organami napryamuyu.",
-    submit: "Otchet nedostupen",
-    caseId: "ID dela",
+      "Сообщения о наблюдении временно недоступны. Свяжитесь с компетентными органами напрямую.",
+    submit: "Отчет недоступен",
+    caseId: "ID дела",
     registryMissing:
-      "Otsutstvuet ID reestra. Etot otchet nelzya otpravit.",
+      "Отсутствует ID реестра. Этот отчет нельзя отправить.",
   },
   zh: {
-    title: "Baogao zan buke yong",
+    title: "报告暂不可用",
     description:
-      "Muqian wufa tijiao muji baogao. Qing zhijie lianxi xiangguan zhifa jigou.",
-    submit: "Baogao zan buke yong",
-    caseId: "Case ID",
+      "目前无法提交目击报告。请直接联系相关执法机构。",
+    submit: "报告暂不可用",
+    caseId: "案件编号",
     registryMissing:
-      "Que shao Registry ID. Ci baogao wufa tijiao.",
+      "缺少登记编号。无法提交此报告。",
   },
   hi: {
-    title: "Reporting uplabdh nahin",
+    title: "रिपोर्टिंग उपलब्ध नहीं",
     description:
-      "Sighting reporting filhal uplabdh nahin hai. Kripya seedhe sambandhit authorities se sampark karen.",
-    submit: "Reporting uplabdh nahin",
-    caseId: "Case ID",
+      "दृश्य रिपोर्टिंग फिलहाल उपलब्ध नहीं है। कृपया सीधे संबंधित अधिकारियों से संपर्क करें।",
+    submit: "रिपोर्टिंग उपलब्ध नहीं",
+    caseId: "केस आईडी",
     registryMissing:
-      "Registry ID missing hai. Yeh report submit nahin ki ja sakti.",
+      "रजिस्ट्री आईडी अनुपस्थित है। यह रिपोर्ट सबमिट नहीं की जा सकती।",
   },
   ar: {
-    title: "Al'iبلاغ ghayr mutah",
+    title: "الإبلاغ غير متاح",
     description:
-      "Iبلاغ almushahadat ghayr mutah halian. Tawasul mubasharatan mae aljihatin almukhtassa.",
-    submit: "Al'iبلاغ ghayr mutah",
-    caseId: "Case ID",
+      "الإبلاغ عن المشاهدات غير متاح حالياً. تواصل مباشرة مع الجهات المختصة.",
+    submit: "الإبلاغ غير متاح",
+    caseId: "معرّف القضية",
     registryMissing:
-      "Registry ID ghayr mawjud. La yumkin irsal hadha alبلاغ.",
+      "معرّف السجل غير موجود. لا يمكن إرسال هذا البلاغ.",
   },
 };
 
@@ -359,10 +345,9 @@ export default function ReportSightingClient({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const t = repairMojibakeDeep(TEXT[lang] ?? FALLBACK_TEXT);
-  const unavailableText = repairMojibakeDeep(
-    UNAVAILABLE_TEXT[lang] ?? UNAVAILABLE_TEXT.en!
-  );
+  const t = TEXT[lang] ?? TEXT.en;
+  const unavailableText = UNAVAILABLE_TEXT[lang] ?? UNAVAILABLE_TEXT.en;
+  const rtl = isRTL(lang);
   const reportingUnavailable = true;
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -416,7 +401,13 @@ export default function ReportSightingClient({
   }
 
   return (
-    <div style={styles.wrapper}>
+    <div
+      style={{
+        ...styles.wrapper,
+        direction: rtl ? "rtl" : "ltr",
+        textAlign: rtl ? "right" : "left",
+      }}
+    >
       <h3 style={styles.title}>{t.title}</h3>
       <div style={styles.warningBox}>
         <strong>{unavailableText.title}</strong>
@@ -443,7 +434,10 @@ export default function ReportSightingClient({
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder={t.locationPlaceholder}
-              style={styles.input}
+              style={{
+                ...styles.input,
+                textAlign: rtl ? "right" : "left",
+              }}
               disabled={reportingUnavailable || submitting}
             />
           </div>
@@ -455,7 +449,10 @@ export default function ReportSightingClient({
               onChange={(e) => setNotes(e.target.value)}
               placeholder={t.notesPlaceholder}
               rows={5}
-              style={styles.textarea}
+              style={{
+                ...styles.textarea,
+                textAlign: rtl ? "right" : "left",
+              }}
               disabled={reportingUnavailable || submitting}
             />
           </div>

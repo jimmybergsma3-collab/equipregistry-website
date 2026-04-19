@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
@@ -5,6 +6,8 @@ import PageHero from "@/components/page-hero";
 import AuthoritiesClient from "@/app/[lang]/action/authorities/AuthoritiesClient";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
 import { getPublicAuthoritiesText } from "@/lib/i18n/public-authorities";
+import { getVisitorCountryCodeFromHeaders } from "@/lib/registry/display-pricing";
+import { inferCountryCodeFromAcceptLanguage } from "@/lib/public-authorities/global-authorities";
 
 type Props = {
   params: Promise<{ lang: string }>;
@@ -26,9 +29,16 @@ export default async function ContactAuthoritiesRedirect({
   const safeLang = lang as Lang;
   const text = getPublicAuthoritiesText(safeLang);
   const dir = getLangDir(safeLang);
+  const headerList = await headers();
   const query = searchParams ? await searchParams : {};
   const registryId = query?.registryId?.trim() || undefined;
   const caseId = query?.caseId?.trim() || "";
+  const initialCountryCode =
+    getVisitorCountryCodeFromHeaders(headerList) ??
+    inferCountryCodeFromAcceptLanguage(
+      headerList.get("accept-language"),
+      safeLang
+    );
 
   return (
     <>
@@ -46,6 +56,7 @@ export default async function ContactAuthoritiesRedirect({
             lang={safeLang}
             registryId={registryId}
             caseId={caseId}
+            initialCountryCode={initialCountryCode}
           />
         </section>
       </main>

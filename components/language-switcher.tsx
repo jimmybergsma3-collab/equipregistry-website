@@ -13,13 +13,31 @@ const LABELS: Record<Lang, string> = {
   nl: "NL",
   pl: "PL",
   pt: "PT",
-  ru: "RU",
+  ru: "РУ",
   sv: "SV",
   da: "DA",
   no: "NO",
   zh: "中文",
-  hi: "HI",
-  ar: "AR",
+  hi: "हिन्दी",
+  ar: "العربية",
+};
+
+const ARIA_LABELS: Record<Lang, string> = {
+  en: "Select language",
+  es: "Seleccionar idioma",
+  de: "Sprache auswählen",
+  fr: "Choisir la langue",
+  it: "Seleziona lingua",
+  nl: "Selecteer taal",
+  pl: "Wybierz język",
+  pt: "Selecionar idioma",
+  ru: "Выберите язык",
+  sv: "Välj språk",
+  da: "Vælg sprog",
+  no: "Velg språk",
+  zh: "选择语言",
+  hi: "भाषा चुनें",
+  ar: "اختر اللغة",
 };
 
 type Props = {
@@ -30,7 +48,6 @@ export default function LanguageSwitcher({ currentLang }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-
   const [open, setOpen] = useState(false);
 
   const segments = pathname.split("/").filter(Boolean);
@@ -86,7 +103,7 @@ export default function LanguageSwitcher({ currentLang }: Props) {
         className="flex h-10 min-w-[84px] items-center justify-between rounded-xl border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label="Select language"
+        aria-label={ARIA_LABELS[activeLang]}
       >
         <span>{LABELS[activeLang]}</span>
         <span
