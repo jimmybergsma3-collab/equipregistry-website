@@ -5,6 +5,7 @@ import AuthoritiesClient from "./authorities/AuthoritiesClient";
 import ReportSightingClient from "./ReportSightingClient";
 import LoginRequiredButton from "@/components/auth/login-required-button";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 interface PageProps {
   params: Promise<{
@@ -861,7 +862,7 @@ export default async function ActionPage({ params, searchParams }: PageProps) {
   }
 
   const safeLang = lang as Lang;
-  const t = ACTION_TEXT[safeLang] ?? EN_FALLBACK;
+  const t = repairMojibakeDeep(ACTION_TEXT[safeLang] ?? EN_FALLBACK);
 
   const nextTarget = registryId
     ? `/${safeLang}/passport/${encodeURIComponent(registryId)}`

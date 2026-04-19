@@ -13,7 +13,10 @@ import {
   type Lang,
 } from "@/lib/i18n/config";
 import { getPassportPageContent } from "@/lib/i18n/passport-page";
-import { getStolenCaseRecord } from "@/lib/registry/request-meta";
+import {
+  getRegistryAssetStatus,
+  getStolenCaseRecord,
+} from "@/lib/registry/request-meta";
 import {
   getCategoryByValue,
   getSubcategoryByValue,
@@ -40,6 +43,60 @@ function getDisplayValue(
   return normalized ? normalized : unavailable;
 }
 
+type PublicPassportRecord = {
+  reference: string;
+  assetName: string | null;
+  category: string;
+  subcategory: string;
+  brand: string | null;
+  model: string | null;
+  serialNumber: string | null;
+  year: string | null;
+  country: string | null;
+  dynamicFields: unknown;
+  publicStatus?: "registered_verified" | "history_unknown";
+};
+
+function getDemoPublicPassportRecord(
+  registryId: string
+): PublicPassportRecord | null {
+  const normalized = registryId.trim().toUpperCase();
+
+  if (normalized === "ER-REG-001") {
+    return {
+      reference: normalized,
+      assetName: "Caterpillar 980 Wheel Loader",
+      category: "machines",
+      subcategory: "wheel_loader",
+      brand: "Caterpillar",
+      model: "980 Wheel Loader",
+      serialNumber: normalized,
+      year: "2021",
+      country: "EU",
+      dynamicFields: {},
+      publicStatus: "registered_verified",
+    };
+  }
+
+  if (normalized === "ER-HIS-404") {
+    return {
+      reference: normalized,
+      assetName: "Volvo L90H Wheel Loader",
+      category: "machines",
+      subcategory: "wheel_loader",
+      brand: "Volvo",
+      model: "L90H Wheel Loader",
+      serialNumber: normalized,
+      year: "2014",
+      country: "EU",
+      dynamicFields: {},
+      publicStatus: "history_unknown",
+    };
+  }
+
+  return null;
+}
+
 export default async function PassportPage({ params }: Props) {
   const { lang, registryId } = await params;
 
@@ -56,7 +113,7 @@ export default async function PassportPage({ params }: Props) {
   const rtl = isRTL(safeLang);
   const alignClassName = rtl ? "text-right" : "text-left";
 
-  const request = await prisma.registrationRequest.findFirst({
+  const storedRequest = await prisma.registrationRequest.findFirst({
     where: {
       reference: registryId,
       requestStatus: "passport_issued",
@@ -75,6 +132,9 @@ export default async function PassportPage({ params }: Props) {
       dynamicFields: true,
     },
   });
+
+  const request: PublicPassportRecord | null =
+    storedRequest ?? getDemoPublicPassportRecord(registryId);
 
   if (!request) {
     notFound();
@@ -163,6 +223,30 @@ export default async function PassportPage({ params }: Props) {
         stolenText.public.unknownDate
       )
     : null;
+  const publicRegistryStatus =
+    request.publicStatus ??
+    getRegistryAssetStatus(request.dynamicFields, "passport_issued");
+  const isHistoryUnknown = publicRegistryStatus === "history_unknown";
+  const verificationSummaryTitle = isPubliclyStolen
+    ? dictionary.statuses.stolen.label
+    : isHistoryUnknown
+    ? dictionary.statuses.historyUnknown.label
+    : dictionary.statuses.registeredVerified.label;
+  const verificationSummaryMessage = isPubliclyStolen
+    ? dictionary.statuses.stolen.message
+    : isHistoryUnknown
+    ? dictionary.statuses.historyUnknown.message
+    : dictionary.statuses.registeredVerified.message;
+  const verificationSummaryWhy = isPubliclyStolen
+    ? dictionary.statuses.stolen.why
+    : isHistoryUnknown
+    ? dictionary.statuses.historyUnknown.why
+    : dictionary.statuses.registeredVerified.why;
+  const statusValue = isPubliclyStolen
+    ? dictionary.statuses.stolen.label
+    : request.publicStatus
+    ? verificationSummaryTitle
+    : dictionary.dashboard.requestStatuses.passportIssued;
 
   if (isPubliclyStolen && publicCaseReference) {
     passportFields.push({
@@ -213,27 +297,11 @@ export default async function PassportPage({ params }: Props) {
             passportNumberLabel={content.fields.passportNumber}
             passportNumber={officialPassportNumber}
             statusLabel={content.statusLabel}
-            statusValue={
-              isPubliclyStolen
-                ? dictionary.statuses.stolen.label
-                : dictionary.dashboard.requestStatuses.passportIssued
-            }
+            statusValue={statusValue}
             statusTone={isPubliclyStolen ? "danger" : "default"}
-            verificationSummaryTitle={
-              isPubliclyStolen
-                ? dictionary.statuses.stolen.label
-                : dictionary.statuses.registeredVerified.label
-            }
-            verificationSummaryMessage={
-              isPubliclyStolen
-                ? dictionary.statuses.stolen.message
-                : dictionary.statuses.registeredVerified.message
-            }
-            verificationSummaryWhy={
-              isPubliclyStolen
-                ? dictionary.statuses.stolen.why
-                : dictionary.statuses.registeredVerified.why
-            }
+            verificationSummaryTitle={verificationSummaryTitle}
+            verificationSummaryMessage={verificationSummaryMessage}
+            verificationSummaryWhy={verificationSummaryWhy}
             verificationPanelTitle={content.verificationPanelTitle}
             verificationPanelText={content.verificationPanelText}
             verificationUrlLabel={content.verificationUrlLabel}

@@ -137,14 +137,9 @@ function getDemoStatus(serial: string, lang: Lang): Status {
           style: "secondary",
         },
         {
-          label: t.historyUnknown.actionRequestVerification,
-          href: `/${lang}/register`,
-          style: "primary",
-        },
-        {
           label: t.historyUnknown.actionRegisterDocuments,
           href: `/${lang}/register`,
-          style: "secondary",
+          style: "primary",
         },
       ],
     };
@@ -186,8 +181,8 @@ function getDemoStatus(serial: string, lang: Lang): Status {
           style: "danger",
         },
         {
-          label: t.stolen.actionVerifyCaseId,
-          href: `/${lang}/register`,
+          label: t.stolen.actionReportSighting,
+          href: `/${lang}/report-sighting?registryId=${encodeURIComponent(s)}&caseId=ER-CASE-2026-00123`,
           style: "secondary",
         },
       ],

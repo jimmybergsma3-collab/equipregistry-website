@@ -1,5 +1,7 @@
 ﻿import type { Lang } from "./config";
 
+import { repairMojibakeDeep } from "./repair-mojibake";
+
 type Dictionary = {
   nav: {
     howItWorks: string;
@@ -3852,6 +3854,18 @@ export const dictionary: Record<Lang, Dictionary> = {
   no: en,
 };
 
+const dictionaryCache = new Map<Lang, Dictionary>();
+
 export function getDictionary(lang: string) {
-  return dictionary[lang as Lang] ?? dictionary.en;
+  const requestedLang = lang as Lang;
+  const safeLang = requestedLang in dictionary ? requestedLang : "en";
+
+  if (!dictionaryCache.has(safeLang)) {
+    dictionaryCache.set(
+      safeLang,
+      repairMojibakeDeep(dictionary[safeLang] ?? dictionary.en)
+    );
+  }
+
+  return dictionaryCache.get(safeLang) ?? dictionary.en;
 }

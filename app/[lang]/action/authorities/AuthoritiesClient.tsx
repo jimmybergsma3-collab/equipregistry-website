@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import type { Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   lang: Lang;
@@ -111,7 +112,7 @@ export default function AuthoritiesClient({
   registryId,
   caseId,
 }: Props) {
-  const t = TEXT[lang] ?? FALLBACK_TEXT;
+  const t = repairMojibakeDeep(TEXT[lang] ?? FALLBACK_TEXT);
 
   return (
     <div style={styles.card}>

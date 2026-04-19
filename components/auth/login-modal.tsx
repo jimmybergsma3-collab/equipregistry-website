@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 const LOGIN_ERROR_TEXT: Record<
   Lang,
@@ -357,7 +358,7 @@ const TEXT: Record<
 
 export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const router = useRouter();
-  const t = TEXT[lang] ?? TEXT.en;
+  const t = repairMojibakeDeep(TEXT[lang] ?? TEXT.en);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -365,7 +366,9 @@ export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const [loading, setLoading] = useState(false);
 
   function getLoginErrorMessage(code?: string) {
-    const messages = LOGIN_ERROR_TEXT[lang] ?? LOGIN_ERROR_TEXT.en;
+    const messages = repairMojibakeDeep(
+      LOGIN_ERROR_TEXT[lang] ?? LOGIN_ERROR_TEXT.en
+    );
 
     if (code && code in messages) {
       return messages[code as keyof typeof messages];

@@ -1,4 +1,5 @@
 import type { Lang } from "./config";
+import { repairMojibakeDeep } from "./repair-mojibake";
 
 export type PassportPageContent = {
   eyebrow: string;
@@ -435,5 +436,7 @@ const PASSPORT_PAGE_CONTENT: Record<Lang, PassportPageContent> = {
 };
 
 export function getPassportPageContent(lang: Lang) {
-  return PASSPORT_PAGE_CONTENT[lang] ?? PASSPORT_PAGE_CONTENT.en;
+  return repairMojibakeDeep(
+    PASSPORT_PAGE_CONTENT[lang] ?? PASSPORT_PAGE_CONTENT.en
+  );
 }

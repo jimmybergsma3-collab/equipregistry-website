@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useActionState } from "react";
 import CategorySelects from "@/components/registry/category-selects";
 import DynamicAssetFields from "@/components/registry/dynamic-asset-fields";
@@ -1475,6 +1475,13 @@ export default function RegistrationFormStep1({
     submitRegistrationRequest,
     initialActionState
   );
+  const [submitLocked, setSubmitLocked] = useState(false);
+
+  useEffect(() => {
+    if (!submitPending && !submitState.success) {
+      setSubmitLocked(false);
+    }
+  }, [submitPending, submitState.success, submitState.message]);
 
   const submissionDynamicFields = useMemo(
     () => buildSubmissionDynamicFields(draft.dynamicFields, stolenAssetIntake),
@@ -2102,7 +2109,7 @@ export default function RegistrationFormStep1({
               <button
                 type="submit"
                 className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
-                disabled={savePending}
+                disabled={savePending || submitPending || submitLocked}
               >
                 {savePending ? text.saving : text.saveDraft}
               </button>
@@ -2117,7 +2124,12 @@ export default function RegistrationFormStep1({
         </section>
       </form>
 
-      <form action={submitAction}>
+      <form
+        action={submitAction}
+        onSubmitCapture={() => {
+          setSubmitLocked(true);
+        }}
+      >
         <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="assetName" value={draft.assetName} />
         <input type="hidden" name="category" value={draft.category} />
@@ -2156,7 +2168,7 @@ export default function RegistrationFormStep1({
             <button
               type="submit"
               className="inline-flex items-center rounded-xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-800"
-              disabled={submitPending}
+              disabled={submitPending || submitLocked}
             >
               {submitPending ? text.submitting : text.submitRegistration}
             </button>

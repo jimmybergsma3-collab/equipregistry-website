@@ -1,4 +1,5 @@
 import type { Lang } from "./config";
+import { repairMojibakeDeep } from "./repair-mojibake";
 
 type PricingSectionContent = {
   title: string;
@@ -1099,6 +1100,17 @@ export const PRICING_PAGE_CONTENT: Record<Lang, PricingPageContent> = {
   },
 };
 
+const pricingPageContentCache = new Map<Lang, PricingPageContent>();
+
 export function getPricingPageContent(lang: Lang) {
-  return PRICING_PAGE_CONTENT[lang] ?? PRICING_PAGE_CONTENT.en;
+  const safeLang = lang in PRICING_PAGE_CONTENT ? lang : "en";
+
+  if (!pricingPageContentCache.has(safeLang)) {
+    pricingPageContentCache.set(
+      safeLang,
+      repairMojibakeDeep(PRICING_PAGE_CONTENT[safeLang] ?? PRICING_PAGE_CONTENT.en)
+    );
+  }
+
+  return pricingPageContentCache.get(safeLang) ?? PRICING_PAGE_CONTENT.en;
 }

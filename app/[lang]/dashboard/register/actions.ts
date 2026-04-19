@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
@@ -82,6 +83,43 @@ async function persistUserVatNumber(userId: string, draft: RegistrationDraft) {
 
 function getEmailRecipient(draft: RegistrationDraft) {
   return draft.ownerEmail.trim();
+}
+
+async function findRecentDuplicateSubmittedRequest(
+  userId: string,
+  draft: RegistrationDraft
+) {
+  const recentWindow = new Date(Date.now() - 5 * 60 * 1000);
+
+  return prisma.registrationRequest.findFirst({
+    where: {
+      deletedAt: null,
+      userId,
+      applicantType: draft.applicantType,
+      assetName: draft.assetName,
+      category: draft.category,
+      subcategory: draft.subcategory,
+      brand: draft.brand,
+      model: draft.model,
+      serialNumber: draft.serialNumber,
+      ownerName: draft.ownerName,
+      ownerEmail: draft.ownerEmail,
+      createdAt: {
+        gte: recentWindow,
+      },
+      requestStatus: {
+        notIn: ["draft", "incomplete"],
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      reference: true,
+      requestStatus: true,
+    },
+  });
 }
 
 async function logEmailAttempt(
@@ -236,6 +274,14 @@ export async function submitRegistrationRequest(
 
   const partner = isPartnerApplicantType(draft.applicantType);
   const paymentCompleted = partner ? true : false;
+  const existingRequest = await findRecentDuplicateSubmittedRequest(
+    session.user.id,
+    draft
+  );
+
+  if (existingRequest) {
+    redirect(`/${lang}/dashboard/registrations/${existingRequest.id}`);
+  }
 
   const derivedStatus = deriveRequestStatus(draft, paymentCompleted);
   const finalStatus: RegistrationRequestStatus = partner ? "submitted" : derivedStatus;
@@ -344,13 +390,5 @@ export async function submitRegistrationRequest(
     revalidatePath(`/${lang}/dashboard/admin/registrations`);
   }
 
-  return {
-    success: true,
-    message: partner
-      ? `Registration submitted successfully under passport number ${passportNumber}.`
-      : `Registration created under passport number ${passportNumber}. Continue to checkout to complete the submission.`,
-    requestId: request.id,
-    requestStatus: finalStatus,
-    passportNumber,
-  };
+  redirect(`/${lang}/dashboard/registrations/${request.id}`);
 }
