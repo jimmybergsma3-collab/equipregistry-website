@@ -1,14 +1,14 @@
 import Link from "next/link";
 import type { Lang } from "@/lib/i18n/config";
 import { getLangDir } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionary";
+import { getSiteFooterText } from "@/lib/i18n/site-footer";
 
 type Props = {
   lang: Lang;
 };
 
 export default function SiteFooter({ lang }: Props) {
-  const t = getDictionary(lang);
+  const t = getSiteFooterText(lang);
   const dir = getLangDir(lang);
   const footerTextAlignClass = dir === "rtl" ? "md:text-right" : "md:text-left";
 

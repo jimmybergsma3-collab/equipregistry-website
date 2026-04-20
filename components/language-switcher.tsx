@@ -93,7 +93,7 @@ export default function LanguageSwitcher({ currentLang }: Props) {
             open ? "rotate-180" : ""
           }`}
         >
-          ▼
+          v
         </span>
       </button>
 

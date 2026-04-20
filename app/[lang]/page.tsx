@@ -6,8 +6,8 @@ import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import { prisma } from "@/lib/db";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionary";
 import { getHomeCounterText } from "@/lib/i18n/home-counter";
+import { getPublicHomeText } from "@/lib/i18n/public-home";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import {
   getRegistryAssetStatus,
@@ -83,7 +83,7 @@ function getActionClasses(style: ActionStyle) {
 
 function getDemoStatus(serial: string, lang: Lang): Status {
   const s = normalizeLookupSerial(serial);
-  const t = getDictionary(lang).statuses;
+  const t = getPublicHomeText(lang).statuses;
 
   if (s === "ER-REG-001") {
     return {
@@ -254,8 +254,7 @@ async function getStoredStatus(serial: string, lang: Lang): Promise<Status | nul
     return null;
   }
 
-  const dictionary = getDictionary(lang);
-  const t = dictionary.statuses;
+  const t = getPublicHomeText(lang).statuses;
   const stolenText = getStolenCaseText(lang);
   const stolenCase = getStolenCaseRecord(request.dynamicFields);
 
@@ -383,16 +382,17 @@ export default async function Home({ params, searchParams }: Props) {
     notFound();
   }
 
-  const t = getDictionary(lang);
-  const counterText = getHomeCounterText(lang as Lang);
-  const dir = getLangDir(lang);
+  const safeLang = lang as Lang;
+  const t = getPublicHomeText(safeLang);
+  const counterText = getHomeCounterText(safeLang);
+  const dir = getLangDir(safeLang);
   const isRtl = dir === "rtl";
   const textAlignClass = isRtl ? "text-right" : "text-left";
   const query = searchParams ? await searchParams : undefined;
   const serial = query?.serial?.trim() || "";
   const normalizedSerial = serial ? normalizeLookupSerial(serial) : "";
   const status = normalizedSerial
-    ? await getStatus(serial, lang)
+    ? await getStatus(serial, safeLang)
     : null;
   const issuedPassportCount = await prisma.registrationRequest.count({
     where: {
@@ -540,7 +540,7 @@ export default async function Home({ params, searchParams }: Props) {
                 {counterText.eyebrow}
               </p>
               <p className="mt-2 text-3xl font-bold text-slate-900">
-                {new Intl.NumberFormat(lang).format(issuedPassportCount)}
+                {new Intl.NumberFormat(safeLang).format(issuedPassportCount)}
               </p>
               <p className="mt-1 text-sm font-medium text-slate-700">
                 {counterText.label}
