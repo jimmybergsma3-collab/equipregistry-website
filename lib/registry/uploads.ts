@@ -7,6 +7,12 @@ import {
   type StoredUpload,
 } from "@/lib/registry/upload-types";
 
+type UploadAccessOptions = {
+  requestId: string;
+  fileId: string;
+  download?: boolean;
+};
+
 export type UploadBucket =
   | "proof_of_ownership"
   | "applicant_id"
@@ -184,4 +190,137 @@ export async function readStoredUpload(upload: StoredUpload) {
     mimeType: upload.mimeType || "application/octet-stream",
     fileName: upload.originalName || upload.storedName,
   };
+}
+
+function encodePathSegments(value: string) {
+  return value
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+}
+
+function getSupabaseBaseUrl() {
+  const raw =
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
+    process.env.SUPABASE_URL?.trim() ||
+    "";
+
+  if (!raw) {
+    return null;
+  }
+
+  return raw.replace(/\/+$/, "");
+}
+
+function getSupabaseObjectLocation(upload: StoredUpload) {
+  if (upload.storage === "supabase" && upload.relativePath) {
+    return {
+      bucket: upload.bucket,
+      objectPath: upload.relativePath.replace(/^\/+/, ""),
+    };
+  }
+
+  if (!upload.relativePath.startsWith("supabase://")) {
+    return null;
+  }
+
+  const remainder = upload.relativePath.slice("supabase://".length);
+  const [bucket, ...rest] = remainder.split("/").filter(Boolean);
+
+  if (!bucket || rest.length === 0) {
+    return null;
+  }
+
+  return {
+    bucket,
+    objectPath: rest.join("/"),
+  };
+}
+
+function getSupabasePublicBuckets() {
+  return new Set(
+    (process.env.SUPABASE_PUBLIC_BUCKETS || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean)
+  );
+}
+
+export function buildStoredUploadAccessUrl({
+  requestId,
+  fileId,
+  download = false,
+}: UploadAccessOptions) {
+  const params = new URLSearchParams({
+    requestId,
+    fileId,
+  });
+
+  if (download) {
+    params.set("download", "1");
+  }
+
+  return `/api/uploads?${params.toString()}`;
+}
+
+export async function getSupabaseAccessUrl(
+  upload: StoredUpload,
+  options?: { download?: boolean }
+) {
+  const location = getSupabaseObjectLocation(upload);
+  const baseUrl = getSupabaseBaseUrl();
+
+  if (!location || !baseUrl) {
+    return null;
+  }
+
+  const { bucket, objectPath } = location;
+  const encodedBucket = encodeURIComponent(bucket);
+  const encodedObjectPath = encodePathSegments(objectPath);
+
+  if (getSupabasePublicBuckets().has(bucket)) {
+    return `${baseUrl}/storage/v1/object/public/${encodedBucket}/${encodedObjectPath}`;
+  }
+
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+
+  if (!serviceRoleKey) {
+    return null;
+  }
+
+  const signUrl = `${baseUrl}/storage/v1/object/sign/${encodedBucket}/${encodedObjectPath}`;
+  const response = await fetch(signUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+    },
+    body: JSON.stringify({
+      expiresIn: 60 * 60,
+      download: options?.download ? upload.originalName || true : undefined,
+    }),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as {
+    signedURL?: string;
+    signedUrl?: string;
+  };
+  const signedPath = payload.signedURL || payload.signedUrl;
+
+  if (!signedPath) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(signedPath)) {
+    return signedPath;
+  }
+
+  return `${baseUrl}${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
 }

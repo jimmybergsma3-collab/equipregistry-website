@@ -42,6 +42,7 @@ import {
   getLocalizedPricingDisplay,
   getVisitorCountryCodeFromHeaders,
 } from "@/lib/registry/display-pricing";
+import { buildStoredUploadAccessUrl } from "@/lib/registry/uploads";
 
 type Props = {
   params: Promise<{
@@ -105,6 +106,10 @@ type DetailTexts = {
     deviceId: string;
     certification: string;
     ownerOrganisation: string;
+  };
+  actions: {
+    viewDocument: string;
+    downloadDocument: string;
   };
 };
 
@@ -173,6 +178,42 @@ const NO_DOCUMENTS_TEXT: Record<Lang, string> = {
   zh: "Meiyou keyong de yishangchuan wenjian.",
   hi: "Koi uploaded documents upalabdh nahin hain.",
   ar: "La tujad wathayiq marfuea mutaha.",
+};
+
+const VIEW_DOCUMENT_TEXT: Record<Lang, string> = {
+  en: "View",
+  es: "Ver",
+  de: "Ansehen",
+  fr: "Voir",
+  it: "Apri",
+  nl: "Bekijken",
+  pt: "Ver",
+  pl: "Otworz",
+  sv: "Visa",
+  da: "Vis",
+  no: "Vis",
+  ru: "Открыть",
+  zh: "查看",
+  hi: "देखें",
+  ar: "عرض",
+};
+
+const DOWNLOAD_DOCUMENT_TEXT: Record<Lang, string> = {
+  en: "Download",
+  es: "Descargar",
+  de: "Download",
+  fr: "Telecharger",
+  it: "Scarica",
+  nl: "Downloaden",
+  pt: "Transferir",
+  pl: "Pobierz",
+  sv: "Ladda ned",
+  da: "Download",
+  no: "Last ned",
+  ru: "Скачать",
+  zh: "下载",
+  hi: "डाउनलोड",
+  ar: "تنزيل",
 };
 
 function parseDynamicFields(value: unknown): DynamicFields {
@@ -304,6 +345,10 @@ function getDetailTexts(lang: Lang, dictionary: unknown): DetailTexts {
       certification: labels?.certification ?? "Certification",
       ownerOrganisation: labels?.ownerOrganisation ?? "Owner Organisation",
     },
+    actions: {
+      viewDocument: VIEW_DOCUMENT_TEXT[lang] ?? "View",
+      downloadDocument: DOWNLOAD_DOCUMENT_TEXT[lang] ?? "Download",
+    },
   };
 }
 
@@ -357,8 +402,10 @@ function RegistrationDetailsCard({
   request,
   texts,
   lang,
+  enableDocumentActions = false,
 }: {
   request: {
+    id: string;
     reference: string;
     applicantType: ApplicantType;
     assetName: string;
@@ -378,6 +425,7 @@ function RegistrationDetailsCard({
   };
   texts: DetailTexts;
   lang: Lang;
+  enableDocumentActions?: boolean;
 }) {
   const dynamicFields = parseDynamicFields(request.dynamicFields);
   const documents = parseDocumentMap(request.documents);
@@ -541,9 +589,41 @@ function RegistrationDetailsCard({
                   {entry.files.map((file) => (
                     <li
                       key={file.id}
-                      className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700"
+                      className="rounded-xl border border-zinc-200 bg-white px-3 py-3 text-sm text-zinc-700"
                     >
-                      {file.originalName}
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="break-all font-medium text-zinc-900">
+                          {file.originalName}
+                        </span>
+
+                        {enableDocumentActions ? (
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={buildStoredUploadAccessUrl({
+                                requestId: request.id,
+                                fileId: file.id,
+                              })}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50"
+                            >
+                              {texts.actions.viewDocument}
+                            </a>
+                            <a
+                              href={buildStoredUploadAccessUrl({
+                                requestId: request.id,
+                                fileId: file.id,
+                                download: true,
+                              })}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center rounded-lg border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50"
+                            >
+                              {texts.actions.downloadDocument}
+                            </a>
+                          </div>
+                        ) : null}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -653,6 +733,7 @@ export default async function RegistrationRequestDetailPage({
               request={request}
               texts={texts}
               lang={lang as Lang}
+              enableDocumentActions
             />
 
             {showReviewActions ? (

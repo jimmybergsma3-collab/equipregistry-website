@@ -24,6 +24,6 @@ export type StoredUpload = {
   mimeType: string;
   size: number;
   uploadedAt: string;
-  storage?: "filesystem" | "inline";
+  storage?: "filesystem" | "inline" | "supabase";
   inlineBase64?: string;
 };
