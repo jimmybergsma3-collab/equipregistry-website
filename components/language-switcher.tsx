@@ -11,33 +11,15 @@ const LABELS: Record<Lang, string> = {
   fr: "FR",
   it: "IT",
   nl: "NL",
-  pl: "PL",
   pt: "PT",
-  ru: "РУ",
+  pl: "PL",
   sv: "SV",
   da: "DA",
   no: "NO",
-  zh: "中文",
-  hi: "हिन्दी",
-  ar: "العربية",
-};
-
-const ARIA_LABELS: Record<Lang, string> = {
-  en: "Select language",
-  es: "Seleccionar idioma",
-  de: "Sprache auswählen",
-  fr: "Choisir la langue",
-  it: "Seleziona lingua",
-  nl: "Selecteer taal",
-  pl: "Wybierz język",
-  pt: "Selecionar idioma",
-  ru: "Выберите язык",
-  sv: "Välj språk",
-  da: "Vælg sprog",
-  no: "Velg språk",
-  zh: "选择语言",
-  hi: "भाषा चुनें",
-  ar: "اختر اللغة",
+  ru: "RU",
+  zh: "ZH",
+  hi: "HI",
+  ar: "AR",
 };
 
 type Props = {
@@ -61,10 +43,10 @@ export default function LanguageSwitcher({ currentLang }: Props) {
   const dir = getLangDir(activeLang);
   const isRtl = dir === "rtl";
   const rest = hasLang ? segments.slice(1) : segments;
-  const sortedLanguages = LANGUAGES.map((lang) => ({
+  const orderedLanguages = LANGUAGES.map((lang) => ({
     code: lang,
     label: LABELS[lang],
-  })).sort((a, b) => a.label.localeCompare(b.label));
+  }));
 
   function changeLanguage(nextLang: Lang) {
     setOpen(false);
@@ -103,7 +85,7 @@ export default function LanguageSwitcher({ currentLang }: Props) {
         className="flex h-10 min-w-[84px] items-center justify-between rounded-xl border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={ARIA_LABELS[activeLang]}
+        aria-label="Select language"
       >
         <span>{LABELS[activeLang]}</span>
         <span
@@ -122,7 +104,7 @@ export default function LanguageSwitcher({ currentLang }: Props) {
           }`}
         >
           <ul role="listbox" className="py-1">
-            {sortedLanguages.map(({ code, label }) => {
+            {orderedLanguages.map(({ code, label }) => {
               const lang = code;
               const isActive = lang === activeLang;
 

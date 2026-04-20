@@ -143,28 +143,28 @@ export default function AuthoritiesClient({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
         try {
-          const result = await lookupCountry(
-            position.coords.latitude,
-            position.coords.longitude
-          );
+          const result = await lookupCountry(latitude, longitude);
 
           setLocationState({
             status: "ready",
             country: result.country,
             countryCode: result.countryCode,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude,
+            longitude,
             error: null,
           });
         } catch {
           setLocationState({
-            status: "error",
+            status: "ready",
             country: null,
             countryCode: null,
-            latitude: null,
-            longitude: null,
-            error: "failed",
+            latitude,
+            longitude,
+            error: null,
           });
         }
       },
@@ -179,9 +179,9 @@ export default function AuthoritiesClient({
         });
       },
       {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000,
+        maximumAge: 0,
       }
     );
   }
@@ -297,8 +297,7 @@ export default function AuthoritiesClient({
         {locationState.status === "ready" ? (
           <p style={styles.metaLine}>
             <strong>{text.coordinatesLabel}:</strong>{" "}
-            {locationState.latitude.toFixed(5)},{" "}
-            {locationState.longitude.toFixed(5)}
+            {locationState.latitude}, {locationState.longitude}
           </p>
         ) : null}
       </div>

@@ -168,8 +168,7 @@ export function getCountryNameForDisplay(
 }
 
 export function buildNearbyPoliceMapsUrl(lat: number, lng: number) {
-  const query = `police station near ${lat},${lng}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  return `https://www.google.com/maps/search/police/@${lat},${lng},15z`;
 }
 
 export function buildFallbackPoliceMapsUrl(countryName?: string | null) {
