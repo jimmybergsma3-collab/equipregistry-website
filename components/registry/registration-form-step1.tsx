@@ -43,6 +43,9 @@ type Props = {
 type StandardApplicantTypeOption = "private" | "sme_business";
 
 type ProofDocumentKey = "applicant_id" | "proof_of_address";
+type StolenDocumentKey = "stolen_supporting_document";
+type RegistrationDocumentMapWithStolen = RegistrationDocumentMap &
+  Partial<Record<StolenDocumentKey, RegistrationDocumentState>>;
 
 type StolenAssetIntakeState = {
   enabled: boolean;
@@ -1273,9 +1276,10 @@ function createInitialStolenAssetIntake(): StolenAssetIntakeState {
 function buildSubmissionDocuments(
   documents: RegistrationDocumentMap,
   proofDocuments: Partial<Record<ProofDocumentKey, RegistrationDocumentState>>,
-  applicantType: ApplicantType
-): RegistrationDocumentMap {
-  const nextDocuments: RegistrationDocumentMap = { ...documents };
+  applicantType: ApplicantType,
+  stolenAssetIntake: StolenAssetIntakeState
+): RegistrationDocumentMapWithStolen {
+  const nextDocuments: RegistrationDocumentMapWithStolen = { ...documents };
 
   if (proofDocuments.applicant_id?.files?.length) {
     nextDocuments.applicant_id = proofDocuments.applicant_id;
@@ -1287,6 +1291,16 @@ function buildSubmissionDocuments(
     nextDocuments.proof_of_address = proofDocuments.proof_of_address;
   } else {
     delete nextDocuments.proof_of_address;
+  }
+
+  if (stolenAssetIntake.enabled && stolenAssetIntake.supportingDocuments.length > 0) {
+    nextDocuments.stolen_supporting_document = {
+      status: "uploaded",
+      fileName: stolenAssetIntake.supportingDocuments[0]?.originalName ?? "",
+      files: stolenAssetIntake.supportingDocuments,
+    };
+  } else {
+    delete nextDocuments.stolen_supporting_document;
   }
 
   return nextDocuments;
@@ -1492,8 +1506,13 @@ export default function RegistrationFormStep1({
 
   const submissionDocuments = useMemo(
     () =>
-      buildSubmissionDocuments(draft.documents, proofDocuments, draft.applicantType),
-    [draft.documents, proofDocuments, draft.applicantType]
+      buildSubmissionDocuments(
+        draft.documents,
+        proofDocuments,
+        draft.applicantType,
+        stolenAssetIntake
+      ),
+    [draft.documents, proofDocuments, draft.applicantType, stolenAssetIntake]
   );
 
   const safeSubmissionDynamicFields = useMemo(
@@ -1502,7 +1521,10 @@ export default function RegistrationFormStep1({
   );
 
   const safeSubmissionDocuments = useMemo(
-    () => stripHeavyUploadPayloads(submissionDocuments) as RegistrationDocumentMap,
+    () =>
+      stripHeavyUploadPayloads(
+        submissionDocuments
+      ) as RegistrationDocumentMapWithStolen,
     [submissionDocuments]
   );
 
