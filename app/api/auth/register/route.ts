@@ -32,12 +32,37 @@ function hashToken(token: string) {
 }
 
 function getBaseUrl(request: Request) {
+  const forwardedHost = request.headers
+    .get("x-forwarded-host")
+    ?.split(",")[0]
+    ?.trim();
+  const host =
+    forwardedHost ||
+    request.headers.get("host")?.split(",")[0]?.trim();
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  const requestUrl = new URL(request.url);
+  const protocol =
+    forwardedProto || requestUrl.protocol.replace(/:$/, "") || "https";
+
+  if (host) {
+    return `${protocol}://${host}`.replace(/\/+$/, "");
+  }
+
+  const requestOrigin = requestUrl.origin.replace(/\/+$/, "");
+
+  if (requestOrigin) {
+    return requestOrigin;
+  }
+
   const envUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
   if (envUrl) {
     return envUrl.replace(/\/+$/, "");
   }
 
-  return new URL(request.url).origin.replace(/\/+$/, "");
+  return requestOrigin;
 }
 
 function isLang(value: string): value is Lang {

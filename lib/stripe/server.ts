@@ -26,7 +26,35 @@ export function getStripeWebhookSecret() {
   return webhookSecret;
 }
 
+function getRequestBaseUrl(request: Request) {
+  const forwardedHost = request.headers
+    .get("x-forwarded-host")
+    ?.split(",")[0]
+    ?.trim();
+  const host =
+    forwardedHost ||
+    request.headers.get("host")?.split(",")[0]?.trim();
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  const url = new URL(request.url);
+  const protocol = forwardedProto || url.protocol.replace(/:$/, "") || "https";
+
+  if (host) {
+    return `${protocol}://${host}`.replace(/\/+$/, "");
+  }
+
+  return url.origin.replace(/\/+$/, "");
+}
+
 export function getAppBaseUrl(request: Request) {
+  const requestUrl = getRequestBaseUrl(request);
+
+  if (requestUrl) {
+    return requestUrl;
+  }
+
   const envUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
 
   if (envUrl) {

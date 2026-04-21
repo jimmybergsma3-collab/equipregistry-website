@@ -361,7 +361,7 @@ export async function moveRegistrationToReview(
           "@/lib/email/send-registration-email"
         );
 
-        await sendUnderReviewEmail({
+        return sendUnderReviewEmail({
           to: updated.ownerEmail,
           ownerName: updated.ownerName || "Customer",
           passportNumber: updated.reference,
@@ -600,7 +600,7 @@ export async function issuePassport(
           "@/lib/email/send-registration-email"
         );
 
-        await sendPassportIssuedEmail({
+        return sendPassportIssuedEmail({
           to: updated.ownerEmail,
           ownerName: updated.ownerName || "Customer",
           passportNumber: updated.reference,

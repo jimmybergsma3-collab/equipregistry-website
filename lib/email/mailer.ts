@@ -1,3 +1,4 @@
+import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { MAILBOXES } from "@/lib/email/addresses";
 
@@ -41,6 +42,54 @@ function getResendClient() {
   return resendClient;
 }
 
+function getSmtpConfig() {
+  const host = process.env.SMTP_HOST?.trim();
+  const portValue = process.env.SMTP_PORT?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.trim();
+  const port = portValue ? Number(portValue) : NaN;
+  const missingKeys = [
+    !host ? "SMTP_HOST" : null,
+    !portValue || !Number.isFinite(port) ? "SMTP_PORT" : null,
+    !user ? "SMTP_USER" : null,
+    !pass ? "SMTP_PASS" : null,
+  ].filter((key): key is string => Boolean(key));
+
+  return {
+    host,
+    port,
+    user,
+    pass,
+    from: process.env.SMTP_FROM?.trim(),
+    isConfigured: missingKeys.length === 0,
+    missingKeys,
+  };
+}
+
+let smtpTransporter: nodemailer.Transporter | null = null;
+
+function getSmtpTransporter() {
+  const config = getSmtpConfig();
+
+  if (!config.isConfigured) {
+    return null;
+  }
+
+  if (!smtpTransporter) {
+    smtpTransporter = nodemailer.createTransport({
+      host: config.host!,
+      port: config.port,
+      secure: config.port === 465,
+      auth: {
+        user: config.user!,
+        pass: config.pass!,
+      },
+    });
+  }
+
+  return smtpTransporter;
+}
+
 export type EmailSendResult =
   | {
       success: true;
@@ -66,12 +115,22 @@ export async function sendEmail(params: {
   from?: string;
   replyTo?: string;
 }): Promise<EmailSendResult> {
-  const config = getResendApiKey();
+  const resendConfig = getResendApiKey();
+  const smtpConfig = getSmtpConfig();
+  const from =
+    params.from?.trim() ||
+    smtpConfig.from ||
+    MAILBOXES.transactionalFrom;
 
-  if (!config.isConfigured) {
+  if (!resendConfig.isConfigured && !smtpConfig.isConfigured) {
+    const missingKeys = [
+      ...resendConfig.missingKeys,
+      ...smtpConfig.missingKeys,
+    ];
+
     console.error("MAIL_CONFIG_INVALID", {
-      provider: "resend",
-      missingKeys: config.missingKeys,
+      provider: "resend_or_smtp",
+      missingKeys,
       to: maskRecipients(params.to),
       subject: params.subject,
     });
@@ -80,14 +139,14 @@ export async function sendEmail(params: {
       success: false,
       skipped: true,
       reason: "config_invalid",
-      message: `Resend configuration is incomplete: ${config.missingKeys.join(", ")}`,
-      missingKeys: config.missingKeys,
+      message: `Email configuration is incomplete: ${missingKeys.join(", ")}`,
+      missingKeys,
     };
   }
 
-  const resend = getResendClient();
+  const resend = resendConfig.isConfigured ? getResendClient() : null;
 
-  if (!resend) {
+  if (resendConfig.isConfigured && !resend) {
     return {
       success: false,
       skipped: true,
@@ -97,10 +156,117 @@ export async function sendEmail(params: {
     };
   }
 
-  const from = params.from?.trim() || MAILBOXES.transactionalFrom;
+  if (resend) {
+    try {
+      const { data, error } = await resend.emails.send({
+        from,
+        to: params.to,
+        replyTo: params.replyTo?.trim() || undefined,
+        subject: params.subject,
+        text: params.text,
+        html: params.html,
+      });
+
+      if (error) {
+        if (smtpConfig.isConfigured) {
+          console.warn("MAIL_RESEND_SEND_FAILED_TRYING_SMTP", {
+            provider: "resend",
+            from,
+            to: maskRecipients(params.to),
+            subject: params.subject,
+            errorCode: error.name,
+            responseCode:
+              "statusCode" in error && typeof error.statusCode === "number"
+                ? error.statusCode
+                : undefined,
+            message: error.message,
+          });
+        } else {
+          console.error("MAIL_SEND_FAILED", {
+            provider: "resend",
+            from,
+            to: maskRecipients(params.to),
+            subject: params.subject,
+            errorCode: error.name,
+            responseCode:
+              "statusCode" in error && typeof error.statusCode === "number"
+                ? error.statusCode
+                : undefined,
+            message: error.message,
+          });
+
+          return {
+            success: false,
+            skipped: true,
+            reason: "send_failed",
+            message: error.message,
+            errorCode: error.name,
+            responseCode:
+              "statusCode" in error && typeof error.statusCode === "number"
+                ? error.statusCode
+                : undefined,
+          };
+        }
+      } else {
+        return {
+          success: true,
+          skipped: false,
+          messageId: data?.id ?? "",
+        };
+      }
+    } catch (error) {
+      const mailError = error as Error & {
+        code?: string;
+        statusCode?: number;
+      };
+
+      if (smtpConfig.isConfigured) {
+        console.warn("MAIL_RESEND_SEND_FAILED_TRYING_SMTP", {
+          provider: "resend",
+          from,
+          to: maskRecipients(params.to),
+          subject: params.subject,
+          errorCode: mailError.code,
+          responseCode: mailError.statusCode,
+          message: mailError.message,
+        });
+      } else {
+        console.error("MAIL_SEND_FAILED", {
+          provider: "resend",
+          from,
+          to: maskRecipients(params.to),
+          subject: params.subject,
+          errorCode: mailError.code,
+          responseCode: mailError.statusCode,
+          message: mailError.message,
+        });
+
+        return {
+          success: false,
+          skipped: true,
+          reason: "send_failed",
+          message: mailError.message,
+          errorCode: mailError.code,
+          responseCode: mailError.statusCode,
+        };
+      }
+    }
+  }
+
+  const smtpTransporter = getSmtpTransporter();
+
+  if (!smtpTransporter) {
+    return {
+      success: false,
+      skipped: true,
+      reason: "config_invalid",
+      message: "SMTP client could not be initialized.",
+      missingKeys: smtpConfig.missingKeys,
+    };
+  }
 
   try {
-    const { data, error } = await resend.emails.send({
+    const result = await smtpTransporter.sendMail({
       from,
       to: params.to,
       replyTo: params.replyTo?.trim() || undefined,
@@ -109,37 +275,10 @@ export async function sendEmail(params: {
       html: params.html,
     });
 
-    if (error) {
-      console.error("MAIL_SEND_FAILED", {
-        provider: "resend",
-        from,
-        to: maskRecipients(params.to),
-        subject: params.subject,
-        errorCode: error.name,
-        responseCode:
-          "statusCode" in error && typeof error.statusCode === "number"
-            ? error.statusCode
-            : undefined,
-        message: error.message,
-      });
-
-      return {
-        success: false,
-        skipped: true,
-        reason: "send_failed",
-        message: error.message,
-        errorCode: error.name,
-        responseCode:
-          "statusCode" in error && typeof error.statusCode === "number"
-            ? error.statusCode
-            : undefined,
-      };
-    }
-
     return {
       success: true,
       skipped: false,
-      messageId: data?.id ?? "",
+      messageId: result.messageId ?? "",
     };
   } catch (error) {
     const mailError = error as Error & {
@@ -148,7 +287,7 @@ export async function sendEmail(params: {
     };
 
     console.error("MAIL_SEND_FAILED", {
-      provider: "resend",
+      provider: "smtp",
       from,
       to: maskRecipients(params.to),
       subject: params.subject,
