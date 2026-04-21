@@ -1,5 +1,7 @@
 export const runtime = "nodejs";
 
+import { randomUUID } from "node:crypto";
+import path from "node:path";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/getSession";
 import { prisma } from "@/lib/db";
@@ -7,7 +9,6 @@ import {
   bucketSupportsMultipleFiles,
   getSupabaseAccessUrl,
   normalizeUploadBucket,
-  persistUploadFile,
   readStoredUpload,
   validateUploadFile,
 } from "@/lib/registry/uploads";
@@ -15,6 +16,7 @@ import {
   stripHeavyUploadPayloads,
   type StoredUpload,
 } from "@/lib/registry/upload-types";
+import type { UploadBucket } from "@/lib/registry/uploads";
 
 function findStoredUpload(documents: unknown, fileId: string): StoredUpload | null {
   if (!documents || typeof documents !== "object" || Array.isArray(documents)) {
@@ -56,6 +58,125 @@ function getDownloadFileName(upload: StoredUpload) {
   return (upload.originalName || upload.storedName || "document")
     .replace(/[\r\n"]/g, "")
     .trim();
+}
+
+function sanitizeBaseName(name: string) {
+  return name
+    .replace(/\.[^.]+$/, "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60);
+}
+
+function getSafeExtension(name: string) {
+  const ext = path.extname(name).toLowerCase();
+  if (!ext || ext.length > 8) {
+    return ".bin";
+  }
+
+  return ext;
+}
+
+function encodePathSegments(value: string) {
+  return value
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+}
+
+function getSupabaseBaseUrl() {
+  const raw =
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ||
+    process.env.SUPABASE_URL?.trim() ||
+    "";
+
+  if (!raw) {
+    throw new Error("Supabase URL is not configured.");
+  }
+
+  return raw.replace(/\/+$/, "");
+}
+
+function getSupabaseServiceRoleKey() {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+
+  if (!serviceRoleKey) {
+    throw new Error("Supabase service role key is not configured.");
+  }
+
+  return serviceRoleKey;
+}
+
+async function uploadFileToSupabase(file: File, bucket: UploadBucket) {
+  const configuredBucket =
+    process.env.SUPABASE_UPLOAD_BUCKET ||
+    process.env.SUPABASE_STORAGE_BUCKET;
+
+  if (!configuredBucket) {
+    throw new Error("Supabase upload bucket is not configured.");
+  }
+
+  const id = randomUUID();
+  const uploadedAt = new Date().toISOString();
+  const extension = getSafeExtension(file.name);
+  const baseName = sanitizeBaseName(file.name) || "upload";
+  const storedName = `${id}-${baseName}${extension}`;
+  const storageBucket = configuredBucket;
+  const objectPath = `${bucket}/${storedName}`;
+  const baseUrl = getSupabaseBaseUrl();
+  const serviceRoleKey = getSupabaseServiceRoleKey();
+  const uploadUrl = `${baseUrl}/storage/v1/object/${encodeURIComponent(
+    storageBucket
+  )}/${encodePathSegments(objectPath)}`;
+
+  console.log("UPLOAD_TARGET", {
+    storageBucket,
+    objectPath,
+  });
+
+  const body = new Blob([await file.arrayBuffer()], {
+    type: file.type || "application/octet-stream",
+  });
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+      "Content-Type": file.type || "application/octet-stream",
+      "x-upsert": "false",
+    },
+    body,
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    console.error("UPLOAD_SUPABASE_FAILED", {
+      storageBucket,
+      objectPath,
+      status: response.status,
+      details: details.slice(0, 300),
+    });
+    throw new Error("Upload storage failed. Please try again.");
+  }
+
+  return {
+    id,
+    bucket,
+    storageBucket,
+    originalName: file.name,
+    storedName,
+    relativePath: objectPath,
+    mimeType: file.type || "application/octet-stream",
+    size: file.size,
+    uploadedAt,
+    storage: "supabase",
+  } satisfies StoredUpload;
 }
 
 export async function GET(request: Request) {
@@ -176,7 +297,7 @@ export async function POST(request: Request) {
 
     for (const file of fileEntries) {
       validateUploadFile(file);
-      uploads.push(stripHeavyUploadPayloads(await persistUploadFile(file, bucket)));
+      uploads.push(stripHeavyUploadPayloads(await uploadFileToSupabase(file, bucket)));
     }
 
     return NextResponse.json({ success: true, uploads });
