@@ -44,6 +44,32 @@ const ALLOWED_BUCKETS: UploadBucket[] = [
   "stolen_police_report",
 ];
 
+const UPLOAD_BUCKET_ALIASES: Record<string, UploadBucket> = {
+  addressProof: "proof_of_address",
+  proofOfAddress: "proof_of_address",
+  proofOfOwnership: "proof_of_ownership",
+  ownershipProof: "proof_of_ownership",
+  applicantId: "applicant_id",
+  applicantID: "applicant_id",
+  invoicePurchaseProof: "invoice_purchase_proof",
+  purchaseProof: "invoice_purchase_proof",
+  assetOverviewPhoto: "asset_overview_photo",
+  assetPhoto: "asset_overview_photo",
+  serialPlatePhoto: "serial_plate_photo",
+  vinChassisPhoto: "vin_chassis_photo",
+  vinPhoto: "vin_chassis_photo",
+  chassisPhoto: "vin_chassis_photo",
+  registrationDocument: "registration_document",
+  hullIdPhoto: "hull_id_photo",
+  hinPhoto: "hull_id_photo",
+  engineSerialPhoto: "engine_serial_photo",
+  additionalSupportingDocument: "additional_supporting_document",
+  supportingDocument: "additional_supporting_document",
+  stolenSupportingDocument: "stolen_supporting_document",
+  stolenPoliceReport: "stolen_police_report",
+  policeReport: "stolen_police_report",
+};
+
 const MULTI_FILE_BUCKETS: UploadBucket[] = [
   "applicant_id",
   "invoice_purchase_proof",
@@ -92,6 +118,16 @@ export function isUploadBucket(value: string): value is UploadBucket {
   return ALLOWED_BUCKETS.includes(value as UploadBucket);
 }
 
+export function normalizeUploadBucket(value: string): UploadBucket | null {
+  const trimmed = value.trim();
+
+  if (isUploadBucket(trimmed)) {
+    return trimmed;
+  }
+
+  return UPLOAD_BUCKET_ALIASES[trimmed] ?? null;
+}
+
 export function bucketSupportsMultipleFiles(bucket: UploadBucket) {
   return MULTI_FILE_BUCKETS.includes(bucket);
 }
@@ -106,7 +142,7 @@ export function validateUploadFile(file: File) {
   }
 
   if (file.size > MAX_UPLOAD_SIZE_BYTES) {
-    throw new Error("Each file must be 6 MB or smaller.");
+    throw new Error("Each file must be 10 MB or smaller.");
   }
 
   if (
@@ -115,7 +151,7 @@ export function validateUploadFile(file: File) {
       file.type as (typeof ALLOWED_UPLOAD_MIME_TYPES)[number]
     )
   ) {
-    throw new Error("Only PDF, JPG, PNG, and WEBP files are allowed.");
+    throw new Error("Only PDF, JPG, PNG, WEBP, HEIC, and HEIF files are allowed.");
   }
 }
 

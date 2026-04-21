@@ -119,6 +119,18 @@ export function evaluateRegistrationCompleteness(
   const missingFields: string[] = [];
   const missingDocuments: string[] = [];
   const missingDynamicFields: string[] = [];
+  const dynamicFields =
+    draft.dynamicFields &&
+    typeof draft.dynamicFields === "object" &&
+    !Array.isArray(draft.dynamicFields)
+      ? draft.dynamicFields
+      : {};
+  const documents =
+    draft.documents &&
+    typeof draft.documents === "object" &&
+    !Array.isArray(draft.documents)
+      ? draft.documents
+      : {};
 
   const requiredFields = getRequiredFieldLabels(draft.applicantType);
 
@@ -143,7 +155,7 @@ export function evaluateRegistrationCompleteness(
   );
 
   for (const fieldKey of requiredDynamicFieldKeys) {
-    const value = draft.dynamicFields[fieldKey];
+    const value = dynamicFields[fieldKey];
 
     if (typeof value === "string" && value.trim() === "") {
       missingDynamicFields.push(fieldKey);
@@ -173,7 +185,7 @@ export function evaluateRegistrationCompleteness(
   for (const documentDefinition of requiredDocuments) {
     if (!documentDefinition.required) continue;
 
-    const state = draft.documents[documentDefinition.key];
+    const state = documents[documentDefinition.key];
 
     const hasFiles = Array.isArray(state?.files) && state.files.length > 0;
 

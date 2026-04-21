@@ -35,10 +35,16 @@ function normalizeString(value: FormDataEntryValue | null) {
   return value.trim();
 }
 
-function parseJsonField(value: FormDataEntryValue | null) {
+function parseJsonObjectField(value: FormDataEntryValue | null) {
   if (typeof value !== "string" || !value.trim()) return {};
   try {
-    return JSON.parse(value);
+    const parsed = JSON.parse(value);
+
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return {};
+    }
+
+    return parsed;
   } catch {
     return {};
   }
@@ -59,8 +65,8 @@ function buildDraftFromFormData(formData: FormData): RegistrationDraft {
     vatNumber: normalizeString(formData.get("vatNumber")),
     applicantType: normalizeString(formData.get("applicantType")) as ApplicantType,
     declarationAccepted: formData.get("declarationAccepted") === "true",
-    dynamicFields: parseJsonField(formData.get("dynamicFields")),
-    documents: parseJsonField(formData.get("documents")),
+    dynamicFields: parseJsonObjectField(formData.get("dynamicFields")),
+    documents: parseJsonObjectField(formData.get("documents")),
   };
 }
 

@@ -6,9 +6,10 @@ import { prisma } from "@/lib/db";
 import {
   bucketSupportsMultipleFiles,
   getSupabaseAccessUrl,
-  isUploadBucket,
+  normalizeUploadBucket,
   persistUploadFile,
   readStoredUpload,
+  validateUploadFile,
 } from "@/lib/registry/uploads";
 import type { StoredUpload } from "@/lib/registry/upload-types";
 
@@ -121,8 +122,22 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const bucketValue = String(formData.get("bucket") || "").trim();
+    const bucket = normalizeUploadBucket(bucketValue);
 
-    if (!isUploadBucket(bucketValue)) {
+    console.info("UPLOAD_FORMDATA_RECEIVED", {
+      bucket: bucketValue || null,
+      resolvedBucket: bucket,
+      fileTypes: formData
+        .getAll("files")
+        .filter((entry): entry is File => entry instanceof File)
+        .map((file) => file.type || "unknown"),
+      singleFileType:
+        formData.get("file") instanceof File
+          ? (formData.get("file") as File).type || "unknown"
+          : null,
+    });
+
+    if (!bucket) {
       return NextResponse.json(
         { error: "Unsupported upload bucket." },
         { status: 400 }
@@ -147,7 +162,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!bucketSupportsMultipleFiles(bucketValue) && fileEntries.length > 1) {
+    if (!bucketSupportsMultipleFiles(bucket) && fileEntries.length > 1) {
       return NextResponse.json(
         { error: "Only one file is allowed for this document type." },
         { status: 400 }
@@ -157,7 +172,8 @@ export async function POST(request: Request) {
     const uploads = [];
 
     for (const file of fileEntries) {
-      uploads.push(await persistUploadFile(file, bucketValue));
+      validateUploadFile(file);
+      uploads.push(await persistUploadFile(file, bucket));
     }
 
     return NextResponse.json({ success: true, uploads });
