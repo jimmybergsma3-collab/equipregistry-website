@@ -11,7 +11,10 @@ import {
   readStoredUpload,
   validateUploadFile,
 } from "@/lib/registry/uploads";
-import type { StoredUpload } from "@/lib/registry/upload-types";
+import {
+  stripHeavyUploadPayloads,
+  type StoredUpload,
+} from "@/lib/registry/upload-types";
 
 function findStoredUpload(documents: unknown, fileId: string): StoredUpload | null {
   if (!documents || typeof documents !== "object" || Array.isArray(documents)) {
@@ -173,7 +176,7 @@ export async function POST(request: Request) {
 
     for (const file of fileEntries) {
       validateUploadFile(file);
-      uploads.push(await persistUploadFile(file, bucket));
+      uploads.push(stripHeavyUploadPayloads(await persistUploadFile(file, bucket)));
     }
 
     return NextResponse.json({ success: true, uploads });

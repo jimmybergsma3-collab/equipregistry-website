@@ -29,6 +29,7 @@ import { uploadFilesForBucket, ClientUploadError } from "@/lib/registry/client-u
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 import {
   ALLOWED_UPLOAD_ACCEPT,
+  stripHeavyUploadPayloads,
   type StoredUpload,
 } from "@/lib/registry/upload-types";
 import SearchableCountrySelect from "@/components/registry/searchable-country-select";
@@ -1495,13 +1496,23 @@ export default function RegistrationFormStep1({
     [draft.documents, proofDocuments, draft.applicantType]
   );
 
+  const safeSubmissionDynamicFields = useMemo(
+    () => stripHeavyUploadPayloads(submissionDynamicFields) as typeof submissionDynamicFields,
+    [submissionDynamicFields]
+  );
+
+  const safeSubmissionDocuments = useMemo(
+    () => stripHeavyUploadPayloads(submissionDocuments) as RegistrationDocumentMap,
+    [submissionDocuments]
+  );
+
   const composedDraft = useMemo(
     () => ({
       ...draft,
-      dynamicFields: submissionDynamicFields,
-      documents: submissionDocuments,
+      dynamicFields: safeSubmissionDynamicFields,
+      documents: safeSubmissionDocuments,
     }),
-    [draft, submissionDynamicFields, submissionDocuments]
+    [draft, safeSubmissionDynamicFields, safeSubmissionDocuments]
   );
 
   const completeness = useMemo(
@@ -1658,12 +1669,12 @@ export default function RegistrationFormStep1({
         <input
           type="hidden"
           name="dynamicFields"
-          value={JSON.stringify(submissionDynamicFields)}
+          value={JSON.stringify(safeSubmissionDynamicFields)}
         />
         <input
           type="hidden"
           name="documents"
-          value={JSON.stringify(submissionDocuments)}
+          value={JSON.stringify(safeSubmissionDocuments)}
         />
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
@@ -2162,12 +2173,12 @@ export default function RegistrationFormStep1({
         <input
           type="hidden"
           name="dynamicFields"
-          value={JSON.stringify(submissionDynamicFields)}
+          value={JSON.stringify(safeSubmissionDynamicFields)}
         />
         <input
           type="hidden"
           name="documents"
-          value={JSON.stringify(submissionDocuments)}
+          value={JSON.stringify(safeSubmissionDocuments)}
         />
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">

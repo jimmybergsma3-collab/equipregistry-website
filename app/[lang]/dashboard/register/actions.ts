@@ -21,6 +21,7 @@ import {
   sendPaymentRequiredEmail,
   sendRegistrationRequestNotificationEmail,
 } from "@/lib/email/send-registration-email";
+import { stripHeavyUploadPayloads } from "@/lib/registry/upload-types";
 
 type ActionResult = {
   success: boolean;
@@ -44,7 +45,13 @@ function parseJsonObjectField(value: FormDataEntryValue | null) {
       return {};
     }
 
-    return parsed;
+    const sanitized = stripHeavyUploadPayloads(parsed);
+
+    if (!sanitized || typeof sanitized !== "object" || Array.isArray(sanitized)) {
+      return {};
+    }
+
+    return sanitized;
   } catch {
     return {};
   }
@@ -65,8 +72,12 @@ function buildDraftFromFormData(formData: FormData): RegistrationDraft {
     vatNumber: normalizeString(formData.get("vatNumber")),
     applicantType: normalizeString(formData.get("applicantType")) as ApplicantType,
     declarationAccepted: formData.get("declarationAccepted") === "true",
-    dynamicFields: parseJsonObjectField(formData.get("dynamicFields")),
-    documents: parseJsonObjectField(formData.get("documents")),
+    dynamicFields: parseJsonObjectField(
+      formData.get("dynamicFields")
+    ) as RegistrationDraft["dynamicFields"],
+    documents: parseJsonObjectField(
+      formData.get("documents")
+    ) as RegistrationDraft["documents"],
   };
 }
 

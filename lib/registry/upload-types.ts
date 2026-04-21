@@ -20,6 +20,7 @@ export const ALLOWED_UPLOAD_ACCEPT = ".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif";
 export type StoredUpload = {
   id: string;
   bucket: string;
+  storageBucket?: string;
   originalName: string;
   storedName: string;
   relativePath: string;
@@ -29,3 +30,32 @@ export type StoredUpload = {
   storage?: "filesystem" | "inline" | "supabase";
   inlineBase64?: string;
 };
+
+const HEAVY_UPLOAD_PAYLOAD_KEYS = new Set([
+  "inlineBase64",
+  "fileContent",
+  "rawBuffer",
+  "buffer",
+]);
+
+export function stripHeavyUploadPayloads(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(stripHeavyUploadPayloads);
+  }
+
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  const next: Record<string, unknown> = {};
+
+  for (const [key, item] of Object.entries(value)) {
+    if (HEAVY_UPLOAD_PAYLOAD_KEYS.has(key)) {
+      continue;
+    }
+
+    next[key] = stripHeavyUploadPayloads(item);
+  }
+
+  return next;
+}

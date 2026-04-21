@@ -103,17 +103,6 @@ function getSafeExtension(name: string) {
   return ext;
 }
 
-function shouldUseInlineFallback(error: unknown) {
-  if (!error || typeof error !== "object") {
-    return false;
-  }
-
-  const code =
-    "code" in error && typeof error.code === "string" ? error.code : "";
-
-  return code === "EROFS" || code === "EPERM" || code === "EACCES";
-}
-
 export function isUploadBucket(value: string): value is UploadBucket {
   return ALLOWED_BUCKETS.includes(value as UploadBucket);
 }
@@ -155,6 +144,100 @@ export function validateUploadFile(file: File) {
   }
 }
 
+function getSupabaseServiceRoleKey() {
+  return process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || null;
+}
+
+function getSupabaseUploadTarget(bucket: UploadBucket, storedName: string) {
+  const baseUrl = getSupabaseBaseUrl();
+  const serviceRoleKey = getSupabaseServiceRoleKey();
+
+  if (!baseUrl || !serviceRoleKey) {
+    return null;
+  }
+
+  const configuredBucket =
+    process.env.SUPABASE_UPLOAD_BUCKET?.trim() ||
+    process.env.SUPABASE_STORAGE_BUCKET?.trim() ||
+    "";
+  const storageBucket = configuredBucket || bucket;
+  const objectPath = configuredBucket ? `${bucket}/${storedName}` : storedName;
+
+  return {
+    baseUrl,
+    serviceRoleKey,
+    storageBucket,
+    objectPath,
+  };
+}
+
+async function uploadToSupabaseStorage(
+  file: File,
+  bucket: UploadBucket,
+  storedName: string
+): Promise<Pick<StoredUpload, "storageBucket" | "relativePath" | "storage"> | null> {
+  const target = getSupabaseUploadTarget(bucket, storedName);
+
+  if (!target) {
+    return null;
+  }
+
+  const { baseUrl, serviceRoleKey, storageBucket, objectPath } = target;
+  const uploadUrl = `${baseUrl}/storage/v1/object/${encodeURIComponent(
+    storageBucket
+  )}/${encodePathSegments(objectPath)}`;
+  const body = new Blob([await file.arrayBuffer()], {
+    type: file.type || "application/octet-stream",
+  });
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+      "Content-Type": file.type || "application/octet-stream",
+      "x-upsert": "false",
+    },
+    body,
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => "");
+    console.error("UPLOAD_SUPABASE_FAILED", {
+      bucket,
+      storageBucket,
+      status: response.status,
+      details: details.slice(0, 300),
+    });
+    throw new Error("Upload storage failed. Please try again.");
+  }
+
+  return {
+    storageBucket,
+    relativePath: objectPath,
+    storage: "supabase",
+  };
+}
+
+async function writeLocalUploadFile(
+  file: File,
+  bucket: UploadBucket,
+  storedName: string
+) {
+  const relativePath = path.join("data", "uploads", bucket, storedName);
+  const absolutePath = path.join(process.cwd(), relativePath);
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  await mkdir(path.dirname(absolutePath), { recursive: true });
+  await writeFile(absolutePath, buffer);
+
+  return {
+    relativePath: relativePath.replace(/\\/g, "/"),
+    storage: "filesystem" as const,
+  };
+}
+
 export async function persistUploadFile(
   file: File,
   bucket: UploadBucket
@@ -166,42 +249,23 @@ export async function persistUploadFile(
   const extension = getSafeExtension(file.name);
   const baseName = sanitizeBaseName(file.name) || "upload";
   const storedName = `${id}-${baseName}${extension}`;
-  const relativePath = path.join("data", "uploads", bucket, storedName);
-  const absolutePath = path.join(process.cwd(), relativePath);
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const durableUpload = await uploadToSupabaseStorage(file, bucket, storedName);
 
-  try {
-    await mkdir(path.dirname(absolutePath), { recursive: true });
-    await writeFile(absolutePath, buffer);
-  } catch (error) {
-    if (!shouldUseInlineFallback(error)) {
-      throw error;
-    }
-
-    return {
-      id,
-      bucket,
-      originalName: file.name,
-      storedName,
-      relativePath: `inline://${bucket}/${storedName}`,
-      mimeType: file.type || "application/octet-stream",
-      size: file.size,
-      uploadedAt,
-      storage: "inline",
-      inlineBase64: buffer.toString("base64"),
-    };
+  if (!durableUpload && process.env.NODE_ENV === "production") {
+    throw new Error("Upload storage is not configured. Please try again later.");
   }
+
+  const storage = durableUpload ?? (await writeLocalUploadFile(file, bucket, storedName));
 
   return {
     id,
     bucket,
     originalName: file.name,
     storedName,
-    relativePath: relativePath.replace(/\\/g, "/"),
+    ...storage,
     mimeType: file.type || "application/octet-stream",
     size: file.size,
     uploadedAt,
-    storage: "filesystem",
   };
 }
 
@@ -252,7 +316,7 @@ function getSupabaseBaseUrl() {
 function getSupabaseObjectLocation(upload: StoredUpload) {
   if (upload.storage === "supabase" && upload.relativePath) {
     return {
-      bucket: upload.bucket,
+      bucket: upload.storageBucket || upload.bucket,
       objectPath: upload.relativePath.replace(/^\/+/, ""),
     };
   }
@@ -319,7 +383,7 @@ export async function getSupabaseAccessUrl(
     return `${baseUrl}/storage/v1/object/public/${encodedBucket}/${encodedObjectPath}`;
   }
 
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const serviceRoleKey = getSupabaseServiceRoleKey();
 
   if (!serviceRoleKey) {
     return null;
