@@ -43,6 +43,7 @@ import {
   getVisitorCountryCodeFromHeaders,
 } from "@/lib/registry/display-pricing";
 import { buildStoredUploadAccessUrl } from "@/lib/registry/uploads";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   params: Promise<{
@@ -239,7 +240,7 @@ function parseDynamicFields(value: unknown): DynamicFields {
     return value ? value : undefined;
   };
 
-  return {
+  return repairMojibakeDeep({
     solarPanelSerialNumbers: toStringArray(raw.solarPanelSerialNumbers),
     batterySerialNumbers: toStringArray(raw.batterySerialNumbers),
     bikeBatterySerialNumbers: toStringArray(raw.bikeBatterySerialNumbers),
@@ -251,7 +252,7 @@ function parseDynamicFields(value: unknown): DynamicFields {
     deviceId: toStringValue(raw.deviceId),
     certification: toStringValue(raw.certification),
     ownerOrganisation: toStringValue(raw.ownerOrganisation),
-  };
+  });
 }
 
 function parseDocumentMap(value: unknown): RegistrationDocumentMap {
@@ -649,12 +650,18 @@ export default async function RegistrationRequestDetailPage({
     notFound();
   }
 
-  const dictionary = await getDictionary(lang as Lang);
-  const customerDashboardText = getCustomerDashboardText(lang as Lang);
-  const customerStolenReportText = getCustomerStolenReportText(lang as Lang);
-  const customerStolenActionsText = getStolenCustomerActionsText(lang as Lang);
+  const dictionary = repairMojibakeDeep(await getDictionary(lang as Lang));
+  const customerDashboardText = repairMojibakeDeep(
+    getCustomerDashboardText(lang as Lang)
+  );
+  const customerStolenReportText = repairMojibakeDeep(
+    getCustomerStolenReportText(lang as Lang)
+  );
+  const customerStolenActionsText = repairMojibakeDeep(
+    getStolenCustomerActionsText(lang as Lang)
+  );
   const texts = getDetailTexts(lang as Lang, dictionary);
-  const stripeText = getStripePaymentText(lang as Lang);
+  const stripeText = repairMojibakeDeep(getStripePaymentText(lang as Lang));
   const headerList = await headers();
   const paymentReturnState = Array.isArray(query.payment)
     ? query.payment[0]
@@ -785,9 +792,8 @@ export default async function RegistrationRequestDetailPage({
     ownRequest.category,
     ownRequest.subcategory
   );
-  const pricingCategoryContent = getPricingCategoryContent(
-    lang as Lang,
-    pricingCategory
+  const pricingCategoryContent = repairMojibakeDeep(
+    getPricingCategoryContent(lang as Lang, pricingCategory)
   );
   const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
   const pricingDisplay = await getLocalizedPricingDisplay({

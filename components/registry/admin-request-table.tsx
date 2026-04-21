@@ -349,24 +349,6 @@ function formatDate(dateString: string) {
   }).format(date);
 }
 
-function getStatusDotClass(status: RegistrationRequestSummary["requestStatus"]) {
-  switch (status) {
-    case "passport_issued":
-    case "approved":
-      return "bg-emerald-500";
-    case "under_review":
-    case "more_info_required":
-    case "payment_required":
-      return "bg-amber-500";
-    case "rejected":
-      return "bg-red-500";
-    case "submitted":
-      return "bg-blue-500";
-    default:
-      return "bg-zinc-400";
-  }
-}
-
 export default function AdminRequestTable({ lang, requests }: Props) {
   const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
   const text = TABLE_TEXT[safeLang];
@@ -452,13 +434,7 @@ export default function AdminRequestTable({ lang, requests }: Props) {
                 </td>
 
                 <td className="px-2.5 py-2 text-sm text-zinc-700">
-                  <div className="flex items-center gap-1.5 whitespace-nowrap">
-                    <span
-                      className={`inline-block size-2 rounded-full ${getStatusDotClass(
-                        item.requestStatus
-                      )}`}
-                      aria-hidden="true"
-                    />
+                  <div className="whitespace-nowrap">
                     <RequestStatusBadge
                       status={item.requestStatus}
                       lang={lang}

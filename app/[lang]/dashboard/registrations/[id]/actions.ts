@@ -414,62 +414,17 @@ export async function approveRegistration(
     };
   }
 
-  let updated: Awaited<
-    ReturnType<typeof issuePassportRecordForRequest>
-  >["updatedRequest"];
-  let machine: Awaited<ReturnType<typeof issuePassportRecordForRequest>>["machine"];
+  await prisma.registrationRequest.update({
+    where: { id: request.id },
+    data: {
+      requestStatus: "approved",
+    },
+  });
 
-  try {
-    const issued = await prisma.$transaction((tx) =>
-      issuePassportRecordForRequest(tx, request.id, "under_review")
-    );
+  const message = "Registration approved.";
+  const tone: ActionResult["tone"] = "success";
 
-    updated = issued.updatedRequest;
-    machine = issued.machine;
-  } catch (error) {
-    console.error("APPROVE_REGISTRATION_PASSPORT_FAILED", {
-      registrationId,
-      message: error instanceof Error ? error.message : "Unknown error",
-      code:
-        error instanceof Prisma.PrismaClientKnownRequestError
-          ? error.code
-          : undefined,
-    });
-
-    return {
-      success: false,
-      message: getPassportIssuanceMessage(error),
-      tone: "error",
-    };
-  }
-
-  let message = "Registration approved and passport issued.";
-  let tone: ActionResult["tone"] = "success";
-
-  if (updated.ownerEmail?.trim()) {
-    const mailWarning = await runNotification(
-      "APPROVE_REGISTRATION",
-      async () => {
-        const { sendPassportIssuedEmail } = await import(
-          "@/lib/email/send-registration-email"
-        );
-
-        await sendPassportIssuedEmail({
-          to: updated.ownerEmail,
-          ownerName: updated.ownerName || "Customer",
-          passportNumber: updated.reference,
-          assetName: updated.assetName || "Unnamed asset",
-        });
-      }
-    );
-
-    if (mailWarning) {
-      message = `${message} ${mailWarning}`;
-      tone = "warning";
-    }
-  }
-
-  revalidateRegistrationPaths(lang, registrationId, updated.reference, machine.id);
+  revalidateRegistrationPaths(lang, registrationId, request.reference);
 
   return {
     success: true,

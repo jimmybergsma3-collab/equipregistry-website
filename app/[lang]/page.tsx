@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
 import { getHomeCounterText } from "@/lib/i18n/home-counter";
 import { getPublicHomeText } from "@/lib/i18n/public-home";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import {
   getRegistryAssetStatus,
@@ -83,7 +84,7 @@ function getActionClasses(style: ActionStyle) {
 
 function getDemoStatus(serial: string, lang: Lang): Status {
   const s = normalizeLookupSerial(serial);
-  const t = getPublicHomeText(lang).statuses;
+  const t = repairMojibakeDeep(getPublicHomeText(lang)).statuses;
 
   if (s === "ER-REG-001") {
     return {
@@ -254,8 +255,8 @@ async function getStoredStatus(serial: string, lang: Lang): Promise<Status | nul
     return null;
   }
 
-  const t = getPublicHomeText(lang).statuses;
-  const stolenText = getStolenCaseText(lang);
+  const t = repairMojibakeDeep(getPublicHomeText(lang)).statuses;
+  const stolenText = repairMojibakeDeep(getStolenCaseText(lang));
   const stolenCase = getStolenCaseRecord(request.dynamicFields);
 
   if (stolenCase?.isStolen && stolenCase.status === "open") {
@@ -383,8 +384,8 @@ export default async function Home({ params, searchParams }: Props) {
   }
 
   const safeLang = lang as Lang;
-  const t = getPublicHomeText(safeLang);
-  const counterText = getHomeCounterText(safeLang);
+  const t = repairMojibakeDeep(getPublicHomeText(safeLang));
+  const counterText = repairMojibakeDeep(getHomeCounterText(safeLang));
   const dir = getLangDir(safeLang);
   const isRtl = dir === "rtl";
   const textAlignClass = isRtl ? "text-right" : "text-left";

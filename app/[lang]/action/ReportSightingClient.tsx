@@ -2,6 +2,7 @@
 
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { isRTL, type Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   lang: Lang;
@@ -345,8 +346,10 @@ export default function ReportSightingClient({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const t = TEXT[lang] ?? TEXT.en;
-  const unavailableText = UNAVAILABLE_TEXT[lang] ?? UNAVAILABLE_TEXT.en;
+  const t = repairMojibakeDeep(TEXT[lang] ?? TEXT.en);
+  const unavailableText = repairMojibakeDeep(
+    UNAVAILABLE_TEXT[lang] ?? UNAVAILABLE_TEXT.en
+  );
   const rtl = isRTL(lang);
   const reportingUnavailable = true;
 

@@ -1,5 +1,6 @@
 import type { Lang } from "@/lib/i18n/config";
 import { MAILBOXES } from "@/lib/email/addresses";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type VerificationEmailParams = {
   ownerName: string;
@@ -229,8 +230,8 @@ export function buildAccountVerificationEmail({
   verifyUrl,
   lang,
 }: VerificationEmailParams) {
-  const t = CONTENT[lang] ?? CONTENT.en;
-  const signature = TRANSACTIONAL_SIGNATURE;
+  const t = repairMojibakeDeep(CONTENT[lang] ?? CONTENT.en);
+  const signature = repairMojibakeDeep(TRANSACTIONAL_SIGNATURE);
   const safeName = ownerName.trim() || "User";
   const dir = lang === "ar" ? "rtl" : "ltr";
   const align = lang === "ar" ? "right" : "left";

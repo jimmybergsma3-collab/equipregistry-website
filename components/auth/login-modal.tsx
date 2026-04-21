@@ -360,7 +360,7 @@ const TEXT: Record<
 export default function LoginModal({ lang, next, isOpen, onClose }: Props) {
   const router = useRouter();
   const t = repairMojibakeDeep(TEXT[lang] ?? TEXT.en);
-  const forgotPasswordText = getForgotPasswordText(lang);
+  const forgotPasswordText = repairMojibakeDeep(getForgotPasswordText(lang));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

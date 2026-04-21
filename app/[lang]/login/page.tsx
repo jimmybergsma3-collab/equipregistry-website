@@ -341,7 +341,7 @@ export default function LoginPage() {
 
   const lang = String(params.lang || "en") as Lang;
   const t = repairMojibakeDeep(LOGIN_TEXT[lang] ?? LOGIN_TEXT.en);
-  const forgotPasswordText = getForgotPasswordText(lang);
+  const forgotPasswordText = repairMojibakeDeep(getForgotPasswordText(lang));
 
   const rawNext = searchParams.get("next");
   const safeNext = rawNext && rawNext.startsWith("/") ? rawNext : null;

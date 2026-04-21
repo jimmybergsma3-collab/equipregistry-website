@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import { getLangDir, isValidLang, type Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import {
   getPricingCatalogSubtitle,
   getPricingCategoryContent,
@@ -106,7 +107,7 @@ export default async function PricingPage({ params }: Props) {
   const textAlignClass = isRtl ? "text-right" : "text-left";
   const ctaLayoutClass = isRtl ? "justify-end" : "";
   const content = getPricingPageContent(currentLang);
-  const subtitle = getPricingCatalogSubtitle(currentLang);
+  const subtitle = repairMojibakeDeep(getPricingCatalogSubtitle(currentLang));
   const pricingDisplay = await getLocalizedPricingDisplay({
     lang: currentLang,
     acceptLanguage: headerList.get("accept-language"),
@@ -136,7 +137,9 @@ export default async function PricingPage({ params }: Props) {
                 <Section
                   key={pricingCategory}
                   pricingCategory={pricingCategory}
-                  content={getPricingCategoryContent(currentLang, pricingCategory)}
+                  content={repairMojibakeDeep(
+                    getPricingCategoryContent(currentLang, pricingCategory)
+                  )}
                   pricingDisplay={pricingDisplay}
                   priceLabel={content.labels.registration}
                   registerHref={`/${currentLang}/register`}

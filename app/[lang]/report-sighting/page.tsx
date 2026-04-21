@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site-footer";
 import PageHero from "@/components/page-hero";
 import ReportSightingClient from "../action/ReportSightingClient";
 import { getLangDir, isValidLang, isRTL, type Lang } from "@/lib/i18n/config";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   params: Promise<{
@@ -302,7 +303,7 @@ const REPORT_TEXT: Record<
 };
 
 function getReportTexts(lang: Lang) {
-  return REPORT_TEXT[lang] ?? REPORT_TEXT.en;
+  return repairMojibakeDeep(REPORT_TEXT[lang] ?? REPORT_TEXT.en);
 }
 
 export default async function ReportSightingPage({

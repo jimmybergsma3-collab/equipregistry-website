@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { isRTL, type Lang } from "@/lib/i18n/config";
 import { getPublicAuthoritiesText } from "@/lib/i18n/public-authorities";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import {
   buildFallbackPoliceMapsUrl,
   buildNearbyPoliceMapsUrl,
@@ -114,7 +115,7 @@ export default function AuthoritiesClient({
   caseId,
   initialCountryCode = null,
 }: Props) {
-  const text = getPublicAuthoritiesText(lang);
+  const text = repairMojibakeDeep(getPublicAuthoritiesText(lang));
   const rtl = isRTL(lang);
   const [locationState, setLocationState] =
     useState<LocationState>(DEFAULT_LOCATION_STATE);

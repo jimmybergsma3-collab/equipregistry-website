@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import { normalizeRequestStatus } from "@/lib/registry/workflow";
 
 type Props = {
@@ -91,7 +92,7 @@ export default async function RegistrationsPage({ params }: Props) {
     redirect(`/${lang}/admin`);
   }
 
-  const text = getCustomerDashboardText(lang as Lang);
+  const text = repairMojibakeDeep(getCustomerDashboardText(lang as Lang));
 
   const requests = await prisma.registrationRequest.findMany({
     where: {

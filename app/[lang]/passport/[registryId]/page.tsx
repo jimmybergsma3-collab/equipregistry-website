@@ -21,6 +21,7 @@ import {
   getCategoryByValue,
   getSubcategoryByValue,
 } from "@/lib/registry/categories";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import {
   getPublicDateValue,
   getPublicIncidentLocation,
@@ -107,8 +108,8 @@ export default async function PassportPage({ params }: Props) {
   const safeLang = lang as Lang;
   const headerList = await headers();
   const content = getPassportPageContent(safeLang);
-  const dictionary = getDictionary(safeLang);
-  const stolenText = getStolenCaseText(safeLang);
+  const dictionary = repairMojibakeDeep(getDictionary(safeLang));
+  const stolenText = repairMojibakeDeep(getStolenCaseText(safeLang));
   const direction = getLangDir(safeLang);
   const rtl = isRTL(safeLang);
   const alignClassName = rtl ? "text-right" : "text-left";

@@ -32,6 +32,7 @@ import {
   type StoredUpload,
 } from "@/lib/registry/upload-types";
 import SearchableCountrySelect from "@/components/registry/searchable-country-select";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   lang: Lang;
@@ -1513,13 +1514,19 @@ export default function RegistrationFormStep1({
     [composedDraft]
   );
 
-  const text = FORM_TEXT[lang];
-  const extraText = EXTRA_FORM_TEXT[lang];
-  const uploadText = getRegistryUploadText(lang);
-  const applicantIdText = getDocumentText(lang, "applicant_id");
-  const proofOfAddressText = getDocumentText(lang, "proof_of_address");
-  const assetPhotoText = getDocumentText(lang, "asset_overview_photo");
-  const vatLabel = VAT_LABELS[lang];
+  const text = repairMojibakeDeep(FORM_TEXT[lang]);
+  const extraText = repairMojibakeDeep(EXTRA_FORM_TEXT[lang]);
+  const uploadText = repairMojibakeDeep(getRegistryUploadText(lang));
+  const applicantIdText = repairMojibakeDeep(
+    getDocumentText(lang, "applicant_id")
+  );
+  const proofOfAddressText = repairMojibakeDeep(
+    getDocumentText(lang, "proof_of_address")
+  );
+  const assetPhotoText = repairMojibakeDeep(
+    getDocumentText(lang, "asset_overview_photo")
+  );
+  const vatLabel = repairMojibakeDeep(VAT_LABELS[lang]);
 
   function updateField<K extends keyof RegistrationDraft>(
     key: K,
@@ -2100,7 +2107,7 @@ export default function RegistrationFormStep1({
                 {text.workflowTitle}
               </h3>
               <p className="mt-1 text-sm text-zinc-600">
-                {WORKFLOW_STATUS_TEXT[lang]}{" "}
+                {repairMojibakeDeep(WORKFLOW_STATUS_TEXT[lang])}{" "}
                 <strong>{getLocalizedRequestStatusLabel(requestStatus, lang)}</strong>
               </p>
             </div>

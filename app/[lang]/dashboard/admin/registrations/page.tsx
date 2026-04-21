@@ -8,6 +8,7 @@ import { requireAdminSession } from "@/lib/auth/require-admin-session";
 import { RegistrationRequestStatus } from "@/lib/registry/workflow";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   params: Promise<{
@@ -191,11 +192,14 @@ export default async function AdminRegistrationsPage({
 
   await requireAdminSession(lang);
   const safeLang = lang as Lang;
-  const pageText = PAGE_TEXT[safeLang];
+  const pageText = repairMojibakeDeep(PAGE_TEXT[safeLang]);
   const validStatus =
     status && ALLOWED_STATUSES.includes(status as RegistrationRequestStatus)
       ? (status as RegistrationRequestStatus)
       : null;
+  const filteredStatusLabel = validStatus
+    ? repairMojibakeDeep(getLocalizedRequestStatusLabel(validStatus, safeLang))
+    : null;
   const validReview =
     review === "reviewed" || review === "not_reviewed" ? review : "all";
   const reviewedStatuses: RegistrationRequestStatus[] = [
@@ -272,10 +276,7 @@ export default async function AdminRegistrationsPage({
               </h1>
               <p className="mt-1.5 text-sm text-zinc-600">
                 {validStatus
-                  ? `${pageText.filteredByStatus} ${getLocalizedRequestStatusLabel(
-                      validStatus,
-                      safeLang
-                    )}`
+                  ? `${pageText.filteredByStatus} ${filteredStatusLabel}`
                   : validReview === "reviewed"
                   ? pageText.showingReviewed
                   : validReview === "not_reviewed"

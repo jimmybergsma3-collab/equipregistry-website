@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth/get-current-user";
 import AdminLogoutButton from "@/components/auth/admin-logout-button";
 import AdminRequestTable from "@/components/registry/admin-request-table";
 import { prisma } from "@/lib/db";
+import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
 type Props = {
   params: Promise<{
@@ -44,7 +45,7 @@ const DEFAULT_PAGE_TEXT: PageText = {
   cards: {
     total: "Total requests",
     open: "Open / active",
-    approved: "Approved incl. issued",
+    approved: "Approved",
     issued: "Passport issued",
   },
   links: {
@@ -62,7 +63,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Solicitudes totales",
       open: "Abiertas / activas",
-      approved: "Aprobadas incl. emitidas",
+      approved: "Aprobadas",
       issued: "Pasaporte emitido",
     },
     links: {
@@ -77,7 +78,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Anfragen gesamt",
       open: "Offen / aktiv",
-      approved: "Genehmigt inkl. ausgestellt",
+      approved: "Genehmigt",
       issued: "Pass ausgestellt",
     },
     links: {
@@ -92,7 +93,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Demandes totales",
       open: "Ouvertes / actives",
-      approved: "Approuvees incl. emises",
+      approved: "Approuvees",
       issued: "Passeport emis",
     },
     links: {
@@ -107,7 +108,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Richieste totali",
       open: "Aperte / attive",
-      approved: "Approvate incl. emesse",
+      approved: "Approvate",
       issued: "Passaporto emesso",
     },
     links: {
@@ -122,7 +123,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Totaal aanvragen",
       open: "Open / actief",
-      approved: "Goedgekeurd incl. uitgegeven",
+      approved: "Goedgekeurd",
       issued: "Paspoort uitgegeven",
     },
     links: {
@@ -137,7 +138,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Total de pedidos",
       open: "Abertos / ativos",
-      approved: "Aprovados incl. emitidos",
+      approved: "Aprovados",
       issued: "Passaporte emitido",
     },
     links: {
@@ -153,7 +154,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Laczna liczba wnioskow",
       open: "Otwarte / aktywne",
-      approved: "Zatwierdzone z wydanymi",
+      approved: "Zatwierdzone",
       issued: "Paszport wydany",
     },
     links: {
@@ -168,7 +169,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Totalt antall foresporsler",
       open: "Apne / aktive",
-      approved: "Godkjente inkl. utstedte",
+      approved: "Godkjente",
       issued: "Pass utstedt",
     },
     links: {
@@ -183,7 +184,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Samlet antal anmodninger",
       open: "Aabne / aktive",
-      approved: "Godkendte inkl. udstedte",
+      approved: "Godkendte",
       issued: "Pas udstedt",
     },
     links: {
@@ -198,7 +199,7 @@ const PAGE_TEXT: Partial<Record<Lang, PageText>> = {
     cards: {
       total: "Totalt antall foresporsler",
       open: "Apne / aktive",
-      approved: "Godkjente inkl. utstedte",
+      approved: "Godkjente",
       issued: "Pass utstedt",
     },
     links: {
@@ -216,7 +217,9 @@ export default async function AdminPage({ params }: Props) {
   }
 
   const currentLang = lang as Lang;
-  const text = PAGE_TEXT[currentLang] ?? DEFAULT_PAGE_TEXT;
+  const text = repairMojibakeDeep(
+    PAGE_TEXT[currentLang] ?? DEFAULT_PAGE_TEXT
+  );
 
   const user = await requireAdmin();
 
@@ -259,9 +262,7 @@ export default async function AdminPage({ params }: Props) {
   const approvedCount = await prisma.registrationRequest.count({
     where: {
       deletedAt: null,
-      requestStatus: {
-        in: ["approved", "passport_issued"],
-      },
+      requestStatus: "approved",
     },
   });
 
