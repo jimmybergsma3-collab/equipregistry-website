@@ -61,15 +61,24 @@ function getDownloadFileName(upload: StoredUpload) {
 }
 
 function isUploadedFile(entry: FormDataEntryValue | null): entry is File {
+  if (entry instanceof File) {
+    return true;
+  }
+
+  if (!entry || typeof entry !== "object") {
+    return false;
+  }
+
+  const candidate = entry as {
+    arrayBuffer?: unknown;
+    name?: unknown;
+    size?: unknown;
+  };
+
   return (
-    !!entry &&
-    typeof entry === "object" &&
-    "arrayBuffer" in entry &&
-    typeof entry.arrayBuffer === "function" &&
-    "name" in entry &&
-    typeof entry.name === "string" &&
-    "size" in entry &&
-    typeof entry.size === "number"
+    typeof candidate.name === "string" &&
+    typeof candidate.size === "number" &&
+    typeof candidate.arrayBuffer === "function"
   );
 }
 
@@ -283,15 +292,27 @@ export async function POST(request: Request) {
 
     const files = formData.getAll("files");
     const singleFile = formData.get("file");
-    const fileEntries = files.filter(isUploadedFile);
-
-    if (fileEntries.length === 0 && isUploadedFile(singleFile)) {
-      fileEntries.push(singleFile);
-    }
+    const documents = formData.getAll("documents");
+    const singleDocument = formData.get("document");
+    const fileEntries = [
+      ...files,
+      singleFile,
+      ...documents,
+      singleDocument,
+    ].filter(isUploadedFile);
 
     console.log("UPLOAD_FILE_ENTRIES_CHECK", {
       filesCount: files.length,
       singleFilePresent: Boolean(singleFile),
+      fileEntriesLength: fileEntries.length,
+    });
+
+    console.log("UPLOAD_DEBUG_FULL", {
+      keys: Array.from(formData.keys()),
+      filesRawCount: formData.getAll("files").length,
+      singleFilePresent: Boolean(formData.get("file")),
+      documentsRawCount: formData.getAll("documents").length,
+      singleDocumentPresent: Boolean(formData.get("document")),
       fileEntriesLength: fileEntries.length,
     });
 
