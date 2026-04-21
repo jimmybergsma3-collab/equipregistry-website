@@ -60,6 +60,19 @@ function getDownloadFileName(upload: StoredUpload) {
     .trim();
 }
 
+function isUploadedFile(entry: FormDataEntryValue | null): entry is File {
+  return (
+    !!entry &&
+    typeof entry === "object" &&
+    "arrayBuffer" in entry &&
+    typeof entry.arrayBuffer === "function" &&
+    "name" in entry &&
+    typeof entry.name === "string" &&
+    "size" in entry &&
+    typeof entry.size === "number"
+  );
+}
+
 function sanitizeBaseName(name: string) {
   return name
     .replace(/\.[^.]+$/, "")
@@ -253,10 +266,10 @@ export async function POST(request: Request) {
       resolvedBucket: bucket,
       fileTypes: formData
         .getAll("files")
-        .filter((entry): entry is File => entry instanceof File)
+        .filter(isUploadedFile)
         .map((file) => file.type || "unknown"),
       singleFileType:
-        formData.get("file") instanceof File
+        isUploadedFile(formData.get("file"))
           ? (formData.get("file") as File).type || "unknown"
           : null,
     });
@@ -268,16 +281,19 @@ export async function POST(request: Request) {
       );
     }
 
-    const fileEntries = formData
-      .getAll("files")
-      .filter((entry): entry is File => entry instanceof File);
+    const files = formData.getAll("files");
+    const singleFile = formData.get("file");
+    const fileEntries = files.filter(isUploadedFile);
 
-    if (fileEntries.length === 0) {
-      const singleFile = formData.get("file");
-      if (singleFile instanceof File) {
-        fileEntries.push(singleFile);
-      }
+    if (fileEntries.length === 0 && isUploadedFile(singleFile)) {
+      fileEntries.push(singleFile);
     }
+
+    console.log("UPLOAD_FILE_ENTRIES_CHECK", {
+      filesCount: files.length,
+      singleFilePresent: Boolean(singleFile),
+      fileEntriesLength: fileEntries.length,
+    });
 
     if (fileEntries.length === 0) {
       return NextResponse.json(
