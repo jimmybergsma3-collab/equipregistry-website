@@ -133,22 +133,15 @@ function getSupabaseServiceRoleKey() {
   return serviceRoleKey;
 }
 
-async function uploadFileToSupabase(file: File, bucket: UploadBucket) {
-  const configuredBucket =
-    process.env.SUPABASE_UPLOAD_BUCKET ||
-    process.env.SUPABASE_STORAGE_BUCKET;
-
-  if (!configuredBucket) {
-    throw new Error("Supabase upload bucket is not configured.");
-  }
-
+async function uploadFileToSupabase(file: File, folder: UploadBucket) {
+  const bucket = "equipregistry-uploads";
   const id = randomUUID();
   const uploadedAt = new Date().toISOString();
   const extension = getSafeExtension(file.name);
   const baseName = sanitizeBaseName(file.name) || "upload";
   const storedName = `${id}-${baseName}${extension}`;
-  const storageBucket = configuredBucket;
-  const objectPath = `${bucket}/${storedName}`;
+  const storageBucket = bucket;
+  const objectPath = `${folder}/${storedName}`;
   const baseUrl = getSupabaseBaseUrl();
   const serviceRoleKey = getSupabaseServiceRoleKey();
   const uploadUrl = `${baseUrl}/storage/v1/object/${encodeURIComponent(
