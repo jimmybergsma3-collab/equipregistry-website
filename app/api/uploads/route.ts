@@ -60,6 +60,10 @@ function getDownloadFileName(upload: StoredUpload) {
     .trim();
 }
 
+class UploadStorageError extends Error {
+  statusCode = 502;
+}
+
 function isUploadedFile(entry: FormDataEntryValue | null): entry is File {
   if (entry instanceof File) {
     return true;
@@ -117,7 +121,8 @@ function getSupabaseBaseUrl() {
     "";
 
   if (!raw) {
-    throw new Error("Supabase URL is not configured.");
+    console.error("UPLOAD_CONFIG_ERROR", { hasSupabaseUrl: false });
+    throw new UploadStorageError("Supabase URL is not configured.");
   }
 
   return raw.replace(/\/+$/, "");
@@ -127,7 +132,8 @@ function getSupabaseServiceRoleKey() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
   if (!serviceRoleKey) {
-    throw new Error("Supabase service role key is not configured.");
+    console.error("UPLOAD_CONFIG_ERROR", { hasServiceRoleKey: false });
+    throw new UploadStorageError("Supabase service role key is not configured.");
   }
 
   return serviceRoleKey;
@@ -170,14 +176,13 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
   });
 
   if (!response.ok) {
-    const details = await response.text().catch(() => "");
+    const body = await response.text().catch(() => "");
     console.error("UPLOAD_SUPABASE_FAILED", {
-      storageBucket,
-      objectPath,
       status: response.status,
-      details: details.slice(0, 300),
+      statusText: response.statusText,
+      body,
     });
-    throw new Error("Upload storage failed. Please try again.");
+    throw new UploadStorageError("Upload storage failed. Please try again.");
   }
 
   return {
@@ -338,7 +343,8 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Upload failed unexpectedly.";
+    const status = error instanceof UploadStorageError ? error.statusCode : 400;
 
-    return NextResponse.json({ error: message }, { status: 400 });
+    return NextResponse.json({ error: message }, { status });
   }
 }
