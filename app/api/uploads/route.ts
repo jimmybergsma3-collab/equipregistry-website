@@ -326,6 +326,10 @@ export async function POST(request: Request) {
     const uploads = [];
 
     for (const file of fileEntries) {
+      console.log("UPLOAD_MIME_CHECK", {
+        fileName: file.name,
+        mimeType: file.type,
+      });
       validateUploadFile(file);
       uploads.push(stripHeavyUploadPayloads(await uploadFileToSupabase(file, bucket)));
     }

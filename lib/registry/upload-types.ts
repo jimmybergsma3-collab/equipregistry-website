@@ -2,11 +2,17 @@ export const MAX_UPLOAD_SIZE_BYTES = 10 * 1024 * 1024;
 
 export const ALLOWED_UPLOAD_MIME_TYPES = [
   "application/pdf",
+  "application/x-pdf",
   "image/jpeg",
+  "image/jpg",
+  "image/pjpeg",
   "image/png",
+  "image/x-png",
   "image/webp",
   "image/heic",
+  "image/heic-sequence",
   "image/heif",
+  "image/heif-sequence",
 ] as const;
 
 export const COMPRESSIBLE_IMAGE_MIME_TYPES = [
