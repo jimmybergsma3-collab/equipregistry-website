@@ -2,33 +2,27 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {
+  DEFAULT_LANG,
+  isActiveLaunchLang,
+  isKnownLang,
+} from "@/lib/i18n/config";
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const segments = pathname.split("/").filter(Boolean);
+  const lang = segments[0] || "";
 
-  const isAdminRoute =
-    pathname === "/en/admin" ||
-    pathname.startsWith("/en/admin/") ||
-    pathname === "/es/admin" ||
-    pathname.startsWith("/es/admin/") ||
-    pathname === "/de/admin" ||
-    pathname.startsWith("/de/admin/") ||
-    pathname === "/fr/admin" ||
-    pathname.startsWith("/fr/admin/") ||
-    pathname === "/it/admin" ||
-    pathname.startsWith("/it/admin/") ||
-    pathname === "/nl/admin" ||
-    pathname.startsWith("/nl/admin/") ||
-    pathname === "/pt/admin" ||
-    pathname.startsWith("/pt/admin/") ||
-    pathname === "/ru/admin" ||
-    pathname.startsWith("/ru/admin/") ||
-    pathname === "/zh/admin" ||
-    pathname.startsWith("/zh/admin/") ||
-    pathname === "/hi/admin" ||
-    pathname.startsWith("/hi/admin/") ||
-    pathname === "/ar/admin" ||
-    pathname.startsWith("/ar/admin/");
+  if (lang && isKnownLang(lang) && !isActiveLaunchLang(lang)) {
+    const url = req.nextUrl.clone();
+    const rest = segments.slice(1).join("/");
+
+    url.pathname = `/${DEFAULT_LANG}${rest ? `/${rest}` : ""}`;
+
+    return NextResponse.redirect(url);
+  }
+
+  const isAdminRoute = isActiveLaunchLang(lang) && segments[1] === "admin";
 
   if (!isAdminRoute) {
     return NextResponse.next();
@@ -37,9 +31,6 @@ export function proxy(req: NextRequest) {
   const session = req.cookies.get("er_session")?.value;
 
   if (!session) {
-    const segments = pathname.split("/").filter(Boolean);
-    const lang = segments[0] || "en";
-
     return NextResponse.redirect(
       new URL(`/${lang}/secure-admin-access`, req.url)
     );
@@ -49,5 +40,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:lang/admin/:path*"],
+  matcher: ["/:lang/:path*"],
 };

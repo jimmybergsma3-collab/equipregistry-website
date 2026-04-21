@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getLangDir, LANGUAGES, type Lang } from "@/lib/i18n/config";
+import {
+  ACTIVE_LAUNCH_LANGUAGES,
+  DEFAULT_LANG,
+  getLangDir,
+  isActiveLaunchLang,
+  isKnownLang,
+  type Lang,
+} from "@/lib/i18n/config";
 
 const LABELS: Record<Lang, string> = {
   en: "EN",
@@ -34,16 +41,18 @@ export default function LanguageSwitcher({ currentLang }: Props) {
 
   const segments = pathname.split("/").filter(Boolean);
   const hasLang =
-    segments.length > 0 && LANGUAGES.includes(segments[0] as Lang);
+    segments.length > 0 && isKnownLang(segments[0]);
   const activeLang = currentLang
-    ? (currentLang as Lang)
-    : hasLang
+    ? isActiveLaunchLang(currentLang)
+      ? currentLang
+      : DEFAULT_LANG
+    : hasLang && isActiveLaunchLang(segments[0])
       ? (segments[0] as Lang)
-      : "en";
+      : DEFAULT_LANG;
   const dir = getLangDir(activeLang);
   const isRtl = dir === "rtl";
   const rest = hasLang ? segments.slice(1) : segments;
-  const orderedLanguages = LANGUAGES.map((lang) => ({
+  const orderedLanguages = ACTIVE_LAUNCH_LANGUAGES.map((lang) => ({
     code: lang,
     label: LABELS[lang],
   }));
