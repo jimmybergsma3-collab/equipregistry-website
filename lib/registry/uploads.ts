@@ -160,8 +160,13 @@ function getSupabaseUploadTarget(bucket: UploadBucket, storedName: string) {
     process.env.SUPABASE_UPLOAD_BUCKET?.trim() ||
     process.env.SUPABASE_STORAGE_BUCKET?.trim() ||
     "";
-  const storageBucket = configuredBucket || bucket;
-  const objectPath = configuredBucket ? `${bucket}/${storedName}` : storedName;
+
+  if (!configuredBucket) {
+    throw new Error("Supabase upload bucket is not configured.");
+  }
+
+  const storageBucket = configuredBucket;
+  const objectPath = `${bucket}/${storedName}`;
 
   return {
     baseUrl,
