@@ -262,13 +262,13 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
 }
 
 export async function GET(request: Request) {
+  const url = new URL(request.url);
   const session = await getSession();
 
   if (!session.isAuthenticated) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
-  const url = new URL(request.url);
   const requestId = url.searchParams.get("requestId")?.trim() || "";
   const fileId = url.searchParams.get("fileId")?.trim() || "";
   const download = url.searchParams.get("download") === "1";
