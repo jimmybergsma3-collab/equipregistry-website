@@ -272,6 +272,7 @@ export async function GET(request: Request) {
   const requestId = url.searchParams.get("requestId")?.trim() || "";
   const fileId = url.searchParams.get("fileId")?.trim() || "";
   const download = url.searchParams.get("download") === "1";
+  const debug = url.searchParams.get("debug") === "1";
 
   if (!requestId || !fileId) {
     return NextResponse.json({ error: "Missing file reference." }, { status: 400 });
@@ -303,6 +304,22 @@ export async function GET(request: Request) {
   }
 
   const externalUrl = await getSupabaseAccessUrl(upload, { download });
+  const signedUrlHost = externalUrl
+    ? new URL(externalUrl).host
+    : null;
+
+  if (debug) {
+    return NextResponse.json({
+      requestId,
+      kind: fileId,
+      download,
+      storageBucket: upload.storageBucket ?? null,
+      relativePath: upload.relativePath,
+      signedUrlCreated: Boolean(externalUrl),
+      signedUrlHost,
+      error: externalUrl ? null : "Unable to create signed upload URL.",
+    });
+  }
 
   if (externalUrl) {
     return NextResponse.redirect(externalUrl);
