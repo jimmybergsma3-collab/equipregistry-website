@@ -395,7 +395,7 @@ export function buildStoredUploadAccessUrl({
 
 export async function getSupabaseAccessUrl(
   upload: StoredUpload,
-  _options?: { download?: boolean }
+  options?: { download?: boolean }
 ) {
   const location = getSupabaseObjectLocation(upload);
   const baseUrl = getSupabaseBaseUrl();
@@ -413,6 +413,11 @@ export async function getSupabaseAccessUrl(
   if (!serviceRoleKey) {
     return null;
   }
+
+  console.error("UPLOAD_SIGNED_URL_TARGET", {
+    storageBucket: bucket,
+    relativePath: objectPath,
+  });
 
   const signUrl = `${baseUrl}/storage/v1/object/sign/${encodedBucket}/${encodedObjectPath}`;
   const response = await fetch(signUrl, {
@@ -442,9 +447,15 @@ export async function getSupabaseAccessUrl(
     return null;
   }
 
-  if (/^https?:\/\//i.test(signedPath)) {
-    return signedPath;
+  const signedUrl = /^https?:\/\//i.test(signedPath)
+    ? signedPath
+    : `${baseUrl}${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
+
+  if (!options?.download) {
+    return signedUrl;
   }
 
-  return `${baseUrl}${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
+  const downloadUrl = new URL(signedUrl);
+  downloadUrl.searchParams.set("download", upload.originalName || "document");
+  return downloadUrl.toString();
 }
