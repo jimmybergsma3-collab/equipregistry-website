@@ -182,7 +182,15 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
       statusText: response.statusText,
       body,
     });
-    throw new UploadStorageError("Upload storage failed. Please try again.");
+    return NextResponse.json(
+      {
+        error: "Supabase upload failed",
+        status: response.status,
+        statusText: response.statusText,
+        body,
+      },
+      { status: 502 }
+    );
   }
 
   return {
@@ -336,7 +344,13 @@ export async function POST(request: Request) {
         mimeType: file.type,
       });
       validateUploadFile(file);
-      uploads.push(stripHeavyUploadPayloads(await uploadFileToSupabase(file, bucket)));
+      const upload = await uploadFileToSupabase(file, bucket);
+
+      if (upload instanceof NextResponse) {
+        return upload;
+      }
+
+      uploads.push(stripHeavyUploadPayloads(upload));
     }
 
     return NextResponse.json({ success: true, uploads });
