@@ -268,17 +268,29 @@ export async function GET(request: Request) {
   const debugData: Record<string, unknown> = {};
 
   const debugResponse = (error: string | null = null) =>
-    Response.json({
-      requestId: debugData.requestId ?? null,
-      fileId: debugData.fileId ?? null,
-      download: debugData.download ?? null,
-      step,
-      storageBucket: debugData.storageBucket ?? null,
-      relativePath: debugData.relativePath ?? null,
-      signedUrlCreated: debugData.signedUrlCreated ?? false,
-      signedUrlHost: debugData.signedUrlHost ?? null,
-      error,
-    });
+    new Response(
+      JSON.stringify(
+        {
+          requestId: debugData.requestId ?? null,
+          fileId: debugData.fileId ?? null,
+          download: debugData.download ?? null,
+          step,
+          storageBucket: debugData.storageBucket ?? null,
+          relativePath: debugData.relativePath ?? null,
+          signedUrlCreated: debugData.signedUrlCreated ?? false,
+          signedUrlHost: debugData.signedUrlHost ?? null,
+          error,
+        },
+        null,
+        2
+      ),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      }
+    );
 
   const requestId = url.searchParams.get("requestId")?.trim() || "";
   const fileId = url.searchParams.get("fileId")?.trim() || "";
@@ -291,8 +303,12 @@ export async function GET(request: Request) {
     download,
   });
 
-  if ((!requestId || !fileId) && debug) {
-    return debugResponse("Missing file reference.");
+  if (!requestId || !fileId) {
+    if (debug) {
+      return debugResponse("Missing file reference.");
+    }
+
+    return NextResponse.json({ error: "Missing file reference." }, { status: 400 });
   }
 
   const session = await getSession();
@@ -304,10 +320,6 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
-
-  if (!requestId || !fileId) {
-    return NextResponse.json({ error: "Missing file reference." }, { status: 400 });
   }
 
   const registrationRequest = await prisma.registrationRequest.findUnique({
@@ -362,13 +374,11 @@ export async function GET(request: Request) {
     signedUrlHost: externalUrl ? new URL(externalUrl).host : null,
   });
 
-  if (debug) {
-    return debugResponse(
-      externalUrl ? null : "Unable to create signed upload URL."
-    );
-  }
-
   if (externalUrl) {
+    if (debug) {
+      return debugResponse(null);
+    }
+
     return NextResponse.redirect(externalUrl);
   }
 
@@ -376,6 +386,10 @@ export async function GET(request: Request) {
     storageBucket: upload.storageBucket,
     relativePath: upload.relativePath,
   });
+
+  if (debug) {
+    return debugResponse("Unable to create signed upload URL.");
+  }
 
   return NextResponse.json(
     { error: "Unable to create signed upload URL." },
