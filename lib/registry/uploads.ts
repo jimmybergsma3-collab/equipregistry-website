@@ -343,15 +343,6 @@ function getSupabaseObjectLocation(upload: StoredUpload) {
   };
 }
 
-function getSupabasePublicBuckets() {
-  return new Set(
-    (process.env.SUPABASE_PUBLIC_BUCKETS || "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean)
-  );
-}
-
 export function buildStoredUploadAccessUrl({
   requestId,
   fileId,
@@ -383,10 +374,6 @@ export async function getSupabaseAccessUrl(
   const { bucket, objectPath } = location;
   const encodedBucket = encodeURIComponent(bucket);
   const encodedObjectPath = encodePathSegments(objectPath);
-
-  if (getSupabasePublicBuckets().has(bucket)) {
-    return `${baseUrl}/storage/v1/object/public/${encodedBucket}/${encodedObjectPath}`;
-  }
 
   const serviceRoleKey = getSupabaseServiceRoleKey();
 
