@@ -60,6 +60,14 @@ function getDownloadFileName(upload: StoredUpload) {
     .trim();
 }
 
+function isSupabaseStoredUpload(upload: StoredUpload) {
+  return (
+    upload.storage === "supabase" ||
+    Boolean(upload.storageBucket) ||
+    upload.relativePath.startsWith("supabase://")
+  );
+}
+
 class UploadStorageError extends Error {
   statusCode = 502;
 }
@@ -309,15 +317,66 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "File not found." }, { status: 404 });
   }
 
-  const externalUrl = await getSupabaseAccessUrl(upload, { download });
+  const disposition = download ? "attachment" : "inline";
+  const safeName = encodeURIComponent(getDownloadFileName(upload));
+  const externalUrl = await getSupabaseAccessUrl(upload);
 
   if (externalUrl) {
-    return NextResponse.redirect(externalUrl);
+    const signedResponse = await fetch(externalUrl, { cache: "no-store" });
+
+    if (!signedResponse.ok) {
+      const body = await signedResponse.text().catch(() => "");
+      console.error("UPLOAD_SIGNED_URL_FETCH_FAILED", {
+        status: signedResponse.status,
+        statusText: signedResponse.statusText,
+        body,
+        storageBucket: upload.storageBucket,
+        relativePath: upload.relativePath,
+      });
+
+      return NextResponse.json(
+        { error: "Unable to read uploaded file." },
+        { status: 502 }
+      );
+    }
+
+    if (!signedResponse.body) {
+      return NextResponse.json(
+        { error: "Uploaded file response was empty." },
+        { status: 502 }
+      );
+    }
+
+    return new NextResponse(signedResponse.body, {
+      status: 200,
+      headers: {
+        "Content-Type":
+          upload.mimeType ||
+          signedResponse.headers.get("Content-Type") ||
+          "application/octet-stream",
+        "Cache-Control": "private, no-store, max-age=0",
+        "Content-Disposition": `${disposition}; filename*=UTF-8''${safeName}`,
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
+  }
+
+  if (isSupabaseStoredUpload(upload)) {
+    console.error("UPLOAD_SIGNED_URL_MISSING", {
+      storageBucket: upload.storageBucket,
+      relativePath: upload.relativePath,
+    });
+
+    return NextResponse.json(
+      { error: "Unable to create signed upload URL." },
+      { status: 502 }
+    );
   }
 
   const { buffer, mimeType, fileName } = await readStoredUpload(upload);
-  const disposition = download ? "attachment" : "inline";
-  const safeName = encodeURIComponent(getDownloadFileName({ ...upload, originalName: fileName }));
+  const localSafeName = encodeURIComponent(
+    getDownloadFileName({ ...upload, originalName: fileName })
+  );
 
   return new NextResponse(buffer, {
     status: 200,
@@ -325,7 +384,7 @@ export async function GET(request: Request) {
       "Content-Type": mimeType,
       "Content-Length": String(buffer.length),
       "Cache-Control": "private, no-store, max-age=0",
-      "Content-Disposition": `${disposition}; filename*=UTF-8''${safeName}`,
+      "Content-Disposition": `${disposition}; filename*=UTF-8''${localSafeName}`,
       "X-Content-Type-Options": "nosniff",
     },
   });

@@ -13,6 +13,8 @@ type UploadAccessOptions = {
   download?: boolean;
 };
 
+const DEFAULT_SUPABASE_UPLOAD_BUCKET = "equipregistry-uploads";
+
 export type UploadBucket =
   | "proof_of_ownership"
   | "applicant_id"
@@ -318,29 +320,60 @@ function getSupabaseBaseUrl() {
   return raw.replace(/\/+$/, "");
 }
 
+function normalizeSupabaseObjectPath(objectPath: string, bucket: string) {
+  const segments = objectPath.replace(/^\/+/, "").split("/").filter(Boolean);
+
+  if (segments[0] === bucket) {
+    segments.shift();
+  }
+
+  return segments.join("/");
+}
+
+function getConfiguredSupabaseUploadBucket() {
+  return (
+    process.env.SUPABASE_UPLOAD_BUCKET?.trim() ||
+    process.env.SUPABASE_STORAGE_BUCKET?.trim() ||
+    DEFAULT_SUPABASE_UPLOAD_BUCKET
+  );
+}
+
 function getSupabaseObjectLocation(upload: StoredUpload) {
-  if (upload.storage === "supabase" && upload.relativePath) {
+  const metadataBucket = upload.storageBucket?.trim() || "";
+  const configuredBucket = getConfiguredSupabaseUploadBucket();
+  const storedBucket = upload.bucket?.trim() || "";
+
+  if (upload.relativePath.startsWith("supabase://")) {
+    const remainder = upload.relativePath.slice("supabase://".length);
+    const [pathBucket, ...rest] = remainder.split("/").filter(Boolean);
+    const bucket = metadataBucket || pathBucket || configuredBucket || storedBucket;
+    const objectPath = normalizeSupabaseObjectPath(rest.join("/"), bucket);
+
+    if (!bucket || !objectPath) {
+      return null;
+    }
+
     return {
-      bucket: upload.storageBucket || upload.bucket,
-      objectPath: upload.relativePath.replace(/^\/+/, ""),
+      bucket,
+      objectPath,
     };
   }
 
-  if (!upload.relativePath.startsWith("supabase://")) {
-    return null;
+  if (upload.storage === "supabase" && upload.relativePath) {
+    const bucket = metadataBucket || configuredBucket || storedBucket;
+    const objectPath = normalizeSupabaseObjectPath(upload.relativePath, bucket);
+
+    if (!bucket || !objectPath) {
+      return null;
+    }
+
+    return {
+      bucket,
+      objectPath,
+    };
   }
 
-  const remainder = upload.relativePath.slice("supabase://".length);
-  const [bucket, ...rest] = remainder.split("/").filter(Boolean);
-
-  if (!bucket || rest.length === 0) {
-    return null;
-  }
-
-  return {
-    bucket,
-    objectPath: rest.join("/"),
-  };
+  return null;
 }
 
 export function buildStoredUploadAccessUrl({
@@ -362,7 +395,7 @@ export function buildStoredUploadAccessUrl({
 
 export async function getSupabaseAccessUrl(
   upload: StoredUpload,
-  options?: { download?: boolean }
+  _options?: { download?: boolean }
 ) {
   const location = getSupabaseObjectLocation(upload);
   const baseUrl = getSupabaseBaseUrl();
@@ -391,7 +424,6 @@ export async function getSupabaseAccessUrl(
     },
     body: JSON.stringify({
       expiresIn: 60 * 60,
-      download: options?.download ? upload.originalName || true : undefined,
     }),
     cache: "no-store",
   });
