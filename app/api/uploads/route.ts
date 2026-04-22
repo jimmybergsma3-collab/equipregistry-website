@@ -264,41 +264,47 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const debug = url.searchParams.get("debug") === "1";
+  let step = "start";
+  const debugData: Record<string, unknown> = {};
 
-  if (debug) {
-    return new Response(
-      JSON.stringify(
-        {
-          ok: true,
-          debug: true,
-          requestUrl: request.url,
-          requestId: url.searchParams.get("requestId"),
-          fileId: url.searchParams.get("fileId"),
-          download: url.searchParams.get("download"),
-          stepReached: "top-of-route",
-        },
-        null,
-        2
-      ),
-      {
-        status: 200,
-        headers: {
-          "content-type": "application/json; charset=utf-8",
-          "cache-control": "no-store",
-        },
-      }
-    );
-  }
-
-  const session = await getSession();
-
-  if (!session.isAuthenticated) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const debugResponse = (error: string | null = null) =>
+    Response.json({
+      requestId: debugData.requestId ?? null,
+      fileId: debugData.fileId ?? null,
+      download: debugData.download ?? null,
+      step,
+      storageBucket: debugData.storageBucket ?? null,
+      relativePath: debugData.relativePath ?? null,
+      signedUrlCreated: debugData.signedUrlCreated ?? false,
+      signedUrlHost: debugData.signedUrlHost ?? null,
+      error,
+    });
 
   const requestId = url.searchParams.get("requestId")?.trim() || "";
   const fileId = url.searchParams.get("fileId")?.trim() || "";
   const download = url.searchParams.get("download") === "1";
+
+  step = "after-params";
+  Object.assign(debugData, {
+    requestId,
+    fileId,
+    download,
+  });
+
+  if ((!requestId || !fileId) && debug) {
+    return debugResponse("Missing file reference.");
+  }
+
+  const session = await getSession();
+  step = "after-auth";
+
+  if (!session.isAuthenticated) {
+    if (debug) {
+      return debugResponse("Not authenticated.");
+    }
+
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
 
   if (!requestId || !fileId) {
     return NextResponse.json({ error: "Missing file reference." }, { status: 400 });
@@ -311,8 +317,13 @@ export async function GET(request: Request) {
       documents: true,
     },
   });
+  step = "after-db-lookup";
 
   if (!registrationRequest) {
+    if (debug) {
+      return debugResponse("Registration not found.");
+    }
+
     return NextResponse.json({ error: "Registration not found." }, { status: 404 });
   }
 
@@ -320,16 +331,42 @@ export async function GET(request: Request) {
   const isOwner = registrationRequest.userId === session.user.id;
 
   if (!isAdmin && !isOwner) {
+    if (debug) {
+      return debugResponse("Forbidden.");
+    }
+
     return NextResponse.json({ error: "Forbidden." }, { status: 403 });
   }
 
   const upload = findStoredUpload(registrationRequest.documents, fileId);
+  step = "after-upload-found";
 
   if (!upload) {
+    if (debug) {
+      return debugResponse("File not found.");
+    }
+
     return NextResponse.json({ error: "File not found." }, { status: 404 });
   }
 
+  Object.assign(debugData, {
+    storageBucket: upload.storageBucket ?? null,
+    relativePath: upload.relativePath,
+  });
+
+  step = "before-signed-url";
   const externalUrl = await getSupabaseAccessUrl(upload, { download });
+  step = "after-signed-url";
+  Object.assign(debugData, {
+    signedUrlCreated: Boolean(externalUrl),
+    signedUrlHost: externalUrl ? new URL(externalUrl).host : null,
+  });
+
+  if (debug) {
+    return debugResponse(
+      externalUrl ? null : "Unable to create signed upload URL."
+    );
+  }
 
   if (externalUrl) {
     return NextResponse.redirect(externalUrl);
