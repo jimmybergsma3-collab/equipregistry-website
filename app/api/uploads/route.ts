@@ -154,6 +154,24 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
     storageBucket
   )}/${encodePathSegments(objectPath)}`;
 
+  console.error("SUPABASE_URL_DEBUG", {
+    supabaseUrlRaw: process.env.SUPABASE_URL ?? null,
+    nextPublicSupabaseUrlRaw: process.env.NEXT_PUBLIC_SUPABASE_URL ?? null,
+    uploadUrl,
+    supabaseUrlTrimmed: (process.env.SUPABASE_URL ?? "").trim(),
+    nextPublicSupabaseUrlTrimmed: (
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
+    ).trim(),
+    supabaseUrlStartsWithHttps: (process.env.SUPABASE_URL ?? "")
+      .trim()
+      .startsWith("https://"),
+    nextPublicSupabaseUrlStartsWithHttps: (
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
+    )
+      .trim()
+      .startsWith("https://"),
+  });
+
   console.log("UPLOAD_TARGET", {
     storageBucket,
     objectPath,
