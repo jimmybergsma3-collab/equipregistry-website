@@ -159,21 +159,64 @@ async function uploadFileToSupabase(file: File, folder: UploadBucket) {
     objectPath,
   });
 
-  const body = new Blob([await file.arrayBuffer()], {
-    type: file.type || "application/octet-stream",
-  });
+  let body: Blob;
 
-  const response = await fetch(uploadUrl, {
-    method: "POST",
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      "Content-Type": file.type || "application/octet-stream",
-      "x-upsert": "false",
-    },
-    body,
-    cache: "no-store",
-  });
+  try {
+    body = new Blob([await file.arrayBuffer()], {
+      type: file.type || "application/octet-stream",
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("UPLOAD_ARRAYBUFFER_FAILED", {
+      message,
+      fileName: file.name,
+      mimeType: file.type,
+      size: file.size,
+    });
+    return NextResponse.json(
+      {
+        error: "Upload arrayBuffer failed",
+        message,
+        fileName: file.name,
+        mimeType: file.type,
+        size: file.size,
+      },
+      { status: 502 }
+    );
+  }
+
+  let response: Response;
+
+  try {
+    response = await fetch(uploadUrl, {
+      method: "POST",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": file.type || "application/octet-stream",
+        "x-upsert": "false",
+      },
+      body,
+      cache: "no-store",
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("UPLOAD_FETCH_FAILED", {
+      message,
+      uploadUrl,
+      storageBucket,
+      objectPath,
+    });
+    return NextResponse.json(
+      {
+        error: "Upload fetch failed",
+        message,
+        storageBucket,
+        objectPath,
+      },
+      { status: 502 }
+    );
+  }
 
   if (!response.ok) {
     const body = await response.text().catch(() => "");
