@@ -33,18 +33,11 @@ function findStoredUpload(documents: unknown, fileId: string): StoredUpload | nu
         : [];
 
     for (const file of files) {
-      if (
-        file &&
-        typeof file === "object" &&
-        "id" in file &&
-        file.id === fileId &&
-        "originalName" in file &&
-        "storedName" in file &&
-        "relativePath" in file &&
-        "mimeType" in file &&
-        "size" in file &&
-        "uploadedAt" in file
-      ) {
+      if (!file || typeof file !== "object" || !("id" in file)) {
+        continue;
+      }
+
+      if (String(file.id) === fileId) {
         return file as StoredUpload;
       }
     }
@@ -279,6 +272,7 @@ export async function GET(request: Request) {
           relativePath: debugData.relativePath ?? null,
           signedUrlCreated: debugData.signedUrlCreated ?? false,
           signedUrlHost: debugData.signedUrlHost ?? null,
+          upload: debugData.upload ?? null,
           error,
         },
         null,
@@ -382,17 +376,78 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "File not found." }, { status: 404 });
   }
 
+  const storageBucket =
+    typeof upload.storageBucket === "string" &&
+    upload.storageBucket.trim().length > 0
+      ? upload.storageBucket.trim()
+      : null;
+  const relativePath =
+    typeof upload.relativePath === "string" &&
+    upload.relativePath.trim().length > 0
+      ? upload.relativePath.trim().replace(/^\/+/, "")
+      : null;
+
   Object.assign(debugData, {
-    storageBucket: upload.storageBucket ?? null,
-    relativePath: upload.relativePath,
+    storageBucket,
+    relativePath,
+    upload,
   });
 
+  if (!storageBucket || !relativePath) {
+    step = "upload-missing-data";
+
+    if (debug) {
+      return debugResponse("Upload metadata missing for signed URL.");
+    }
+
+    return NextResponse.json(
+      { error: "Upload metadata missing for signed URL." },
+      { status: 422 }
+    );
+  }
+
+  const uploadForAccess: StoredUpload = {
+    ...upload,
+    storageBucket,
+    relativePath,
+  };
+
   step = "before-signed-url";
-  const externalUrl = await getSupabaseAccessUrl(upload, { download });
+  let externalUrl: string | null = null;
+  try {
+    externalUrl = await getSupabaseAccessUrl(uploadForAccess, { download });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    step = "signed-url-error";
+    Object.assign(debugData, { error: message });
+    console.error("UPLOAD_SIGNED_URL_ERROR", {
+      message,
+      storageBucket,
+      relativePath,
+    });
+
+    if (debug) {
+      return debugResponse(message);
+    }
+
+    return NextResponse.json(
+      { error: "Unable to create signed upload URL." },
+      { status: 502 }
+    );
+  }
+
   step = "after-signed-url";
   Object.assign(debugData, {
     signedUrlCreated: Boolean(externalUrl),
-    signedUrlHost: externalUrl ? new URL(externalUrl).host : null,
+    signedUrlHost: externalUrl
+      ? (() => {
+          try {
+            return new URL(externalUrl).host;
+          } catch {
+            return null;
+          }
+        })()
+      : null,
   });
 
   if (externalUrl) {
