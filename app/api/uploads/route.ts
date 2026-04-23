@@ -18,33 +18,93 @@ import {
 } from "@/lib/registry/upload-types";
 import type { UploadBucket } from "@/lib/registry/uploads";
 
-function findStoredUpload(documents: unknown, fileId: string): StoredUpload | null {
-  if (!documents || typeof documents !== "object" || Array.isArray(documents)) {
-    return null;
+type UploadSearchResult = {
+  upload: StoredUpload | null;
+  matchedLocation: string | null;
+  searchScopes: string[];
+  uploadsFound: number;
+};
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function collectUploadsFromValue(
+  value: unknown,
+  location: string,
+  entries: Array<{ upload: StoredUpload; location: string }>
+) {
+  if (Array.isArray(value)) {
+    for (const [index, entry] of value.entries()) {
+      collectUploadsFromValue(entry, `${location}[${index}]`, entries);
+    }
+    return;
   }
 
-  for (const value of Object.values(documents as Record<string, unknown>)) {
-    if (!value || typeof value !== "object" || Array.isArray(value)) {
+  if (!isObjectRecord(value)) {
+    return;
+  }
+
+  const hasUploadLikeFields =
+    typeof value.id !== "undefined" &&
+    (typeof value.relativePath === "string" ||
+      typeof value.storedName === "string" ||
+      typeof value.originalName === "string");
+
+  if (hasUploadLikeFields) {
+    entries.push({ upload: value as StoredUpload, location });
+  }
+
+  if (Array.isArray(value.files)) {
+    for (const [index, fileEntry] of value.files.entries()) {
+      if (isObjectRecord(fileEntry) && typeof fileEntry.id !== "undefined") {
+        entries.push({
+          upload: fileEntry as StoredUpload,
+          location: `${location}.files[${index}]`,
+        });
+      }
+      collectUploadsFromValue(fileEntry, `${location}.files[${index}]`, entries);
+    }
+  }
+
+  for (const [key, nested] of Object.entries(value)) {
+    if (key === "files") {
       continue;
     }
+    collectUploadsFromValue(nested, `${location}.${key}`, entries);
+  }
+}
 
-    const files =
-      "files" in value && Array.isArray(value.files)
-        ? value.files
-        : [];
+function findStoredUploadInRegistration(
+  registration: {
+    documents?: unknown;
+    dynamicFields?: unknown;
+    uploads?: unknown;
+  },
+  fileId: string
+): UploadSearchResult {
+  const scopes: Array<{ name: string; value: unknown }> = [
+    { name: "registration.documents", value: registration.documents },
+    { name: "registration.uploads", value: registration.uploads },
+    { name: "registration.dynamicFields", value: registration.dynamicFields },
+  ];
 
-    for (const file of files) {
-      if (!file || typeof file !== "object" || !("id" in file)) {
-        continue;
-      }
+  const entries: Array<{ upload: StoredUpload; location: string }> = [];
+  const searchScopes: string[] = [];
 
-      if (String(file.id) === fileId) {
-        return file as StoredUpload;
-      }
-    }
+  for (const scope of scopes) {
+    searchScopes.push(scope.name);
+    collectUploadsFromValue(scope.value, scope.name, entries);
   }
 
-  return null;
+  const match = entries.find((entry) => String(entry.upload.id) === fileId) ?? null;
+
+  return {
+    upload: match?.upload ?? null,
+    matchedLocation: match?.location ?? null,
+    searchScopes,
+    uploadsFound: entries.length,
+  };
 }
 
 class UploadStorageError extends Error {
@@ -268,6 +328,12 @@ export async function GET(request: Request) {
           requestId: debugData.requestId ?? null,
           fileId: debugData.fileId ?? null,
           download: debugData.download ?? null,
+          registrationId: debugData.registrationId ?? null,
+          registrationKeys: debugData.registrationKeys ?? null,
+          searchScopes: debugData.searchScopes ?? null,
+          uploadsFound: debugData.uploadsFound ?? null,
+          uploadMatchedLocation: debugData.uploadMatchedLocation ?? null,
+          registration: debugData.registration ?? null,
           step,
           storageBucket: debugData.storageBucket ?? null,
           relativePath: debugData.originalRelativePath ?? null,
@@ -339,10 +405,6 @@ export async function GET(request: Request) {
 
   const registrationRequest = await prisma.registrationRequest.findUnique({
     where: { id: requestId },
-    select: {
-      userId: true,
-      documents: true,
-    },
   });
   step = "after-db-lookup";
 
@@ -353,6 +415,13 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ error: "Registration not found." }, { status: 404 });
   }
+
+  Object.assign(debugData, {
+    registrationId: registrationRequest.id,
+    registrationKeys: Object.keys(
+      registrationRequest as Record<string, unknown>
+    ),
+  });
 
   const isAdmin = authUser.role === "admin";
   const registrationOwnerId = registrationRequest.userId?.trim() || "";
@@ -370,10 +439,27 @@ export async function GET(request: Request) {
     }
   }
 
-  const upload = findStoredUpload(registrationRequest.documents, fileId);
-  step = "after-upload-found";
+  step = "before-upload-search";
+  const uploadSearchResult = findStoredUploadInRegistration(
+    registrationRequest as unknown as {
+      documents?: unknown;
+      dynamicFields?: unknown;
+      uploads?: unknown;
+    },
+    fileId
+  );
+  const upload = uploadSearchResult.upload;
+  step = "after-upload-search";
+  Object.assign(debugData, {
+    searchScopes: uploadSearchResult.searchScopes,
+    uploadsFound: uploadSearchResult.uploadsFound,
+    uploadMatchedLocation: uploadSearchResult.matchedLocation,
+  });
 
   if (!upload) {
+    Object.assign(debugData, {
+      registration: registrationRequest,
+    });
     if (debug) {
       return debugResponse("File not found.");
     }
