@@ -13,8 +13,6 @@ type UploadAccessOptions = {
   download?: boolean;
 };
 
-const DEFAULT_SUPABASE_UPLOAD_BUCKET = "equipregistry-uploads";
-
 export type UploadBucket =
   | "proof_of_ownership"
   | "applicant_id"
@@ -330,50 +328,37 @@ function normalizeSupabaseObjectPath(objectPath: string, bucket: string) {
   return segments.join("/");
 }
 
-function getConfiguredSupabaseUploadBucket() {
-  return (
-    process.env.SUPABASE_UPLOAD_BUCKET?.trim() ||
-    process.env.SUPABASE_STORAGE_BUCKET?.trim() ||
-    DEFAULT_SUPABASE_UPLOAD_BUCKET
-  );
-}
+export function resolveSupabaseSigningTarget(upload: StoredUpload) {
+  const storageBucket = upload.storageBucket?.trim() || "";
+  const relativePath = upload.relativePath?.trim() || "";
 
-function getSupabaseObjectLocation(upload: StoredUpload) {
-  const metadataBucket = upload.storageBucket?.trim() || "";
-  const configuredBucket = getConfiguredSupabaseUploadBucket();
-  const storedBucket = upload.bucket?.trim() || "";
+  if (!storageBucket || !relativePath) {
+    return null;
+  }
 
-  if (upload.relativePath.startsWith("supabase://")) {
-    const remainder = upload.relativePath.slice("supabase://".length);
+  let normalizedRelativePath = relativePath.replace(/^\/+/, "");
+
+  if (normalizedRelativePath.startsWith("supabase://")) {
+    const remainder = normalizedRelativePath.slice("supabase://".length);
     const [pathBucket, ...rest] = remainder.split("/").filter(Boolean);
-    const bucket = metadataBucket || pathBucket || configuredBucket || storedBucket;
-    const objectPath = normalizeSupabaseObjectPath(rest.join("/"), bucket);
-
-    if (!bucket || !objectPath) {
-      return null;
+    if (pathBucket === storageBucket) {
+      normalizedRelativePath = rest.join("/");
     }
-
-    return {
-      bucket,
-      objectPath,
-    };
   }
 
-  if (upload.storage === "supabase" && upload.relativePath) {
-    const bucket = metadataBucket || configuredBucket || storedBucket;
-    const objectPath = normalizeSupabaseObjectPath(upload.relativePath, bucket);
+  const finalPathPassedToSigning = normalizeSupabaseObjectPath(
+    normalizedRelativePath,
+    storageBucket
+  );
 
-    if (!bucket || !objectPath) {
-      return null;
-    }
-
-    return {
-      bucket,
-      objectPath,
-    };
+  if (!finalPathPassedToSigning) {
+    return null;
   }
 
-  return null;
+  return {
+    storageBucket,
+    finalPathPassedToSigning,
+  };
 }
 
 export function buildStoredUploadAccessUrl({
@@ -397,16 +382,16 @@ export async function getSupabaseAccessUrl(
   upload: StoredUpload,
   options?: { download?: boolean }
 ) {
-  const location = getSupabaseObjectLocation(upload);
+  const location = resolveSupabaseSigningTarget(upload);
   const baseUrl = getSupabaseBaseUrl();
 
   if (!location || !baseUrl) {
     return null;
   }
 
-  const { bucket, objectPath } = location;
-  const encodedBucket = encodeURIComponent(bucket);
-  const encodedObjectPath = encodePathSegments(objectPath);
+  const { storageBucket, finalPathPassedToSigning } = location;
+  const encodedBucket = encodeURIComponent(storageBucket);
+  const encodedObjectPath = encodePathSegments(finalPathPassedToSigning);
 
   const serviceRoleKey = getSupabaseServiceRoleKey();
 
@@ -415,8 +400,8 @@ export async function getSupabaseAccessUrl(
   }
 
   console.error("UPLOAD_SIGNED_URL_TARGET", {
-    storageBucket: bucket,
-    relativePath: objectPath,
+    storageBucket,
+    relativePath: finalPathPassedToSigning,
   });
 
   const signUrl = `${baseUrl}/storage/v1/object/sign/${encodedBucket}/${encodedObjectPath}`;

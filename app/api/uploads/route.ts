@@ -9,6 +9,7 @@ import {
   bucketSupportsMultipleFiles,
   getSupabaseAccessUrl,
   normalizeUploadBucket,
+  resolveSupabaseSigningTarget,
   validateUploadFile,
 } from "@/lib/registry/uploads";
 import {
@@ -260,7 +261,7 @@ export async function GET(request: Request) {
   let step = "start";
   const debugData: Record<string, unknown> = {};
 
-  const debugResponse = (error: string | null = null) =>
+  const debugResponse = (error: string | null = null, status = 200) =>
     new Response(
       JSON.stringify(
         {
@@ -272,6 +273,8 @@ export async function GET(request: Request) {
           relativePath: debugData.originalRelativePath ?? null,
           resolvedDocumentFolder: debugData.resolvedDocumentFolder ?? null,
           normalizedRelativePath: debugData.finalNormalizedRelativePath ?? null,
+          finalPathPassedToSigning:
+            debugData.finalPathPassedToSigning ?? null,
           signedUrlCreated: debugData.signedUrlCreated ?? false,
           signedUrlHost: debugData.signedUrlHost ?? null,
           upload: debugData.upload ?? null,
@@ -281,7 +284,7 @@ export async function GET(request: Request) {
         2
       ),
       {
-        status: 200,
+        status,
         headers: {
           "content-type": "application/json; charset=utf-8",
         },
@@ -412,7 +415,7 @@ export async function GET(request: Request) {
     step = "upload-missing-data";
 
     if (debug) {
-      return debugResponse("Upload metadata missing for signed URL.");
+      return debugResponse("Upload metadata missing for signed URL.", 422);
     }
 
     return NextResponse.json(
@@ -426,7 +429,8 @@ export async function GET(request: Request) {
 
     if (debug) {
       return debugResponse(
-        "Upload folder/type missing for filename-only relativePath."
+        "Upload folder/type missing for filename-only relativePath.",
+        422
       );
     }
 
@@ -440,7 +444,7 @@ export async function GET(request: Request) {
     step = "upload-missing-data";
 
     if (debug) {
-      return debugResponse("Upload path could not be resolved for signed URL.");
+      return debugResponse("Upload path could not be resolved for signed URL.", 422);
     }
 
     return NextResponse.json(
@@ -462,6 +466,31 @@ export async function GET(request: Request) {
     relativePath: finalNormalizedRelativePath,
     originalName: originalFilename,
   };
+
+  const signingTarget = resolveSupabaseSigningTarget(uploadForAccess);
+  Object.assign(debugData, {
+    finalPathPassedToSigning: signingTarget?.finalPathPassedToSigning ?? null,
+  });
+
+  console.log("UPLOAD_SIGNED_FINAL_PATH", {
+    storageBucket,
+    relativePathFromDb: originalRelativePath || null,
+    normalizedRelativePath: finalNormalizedRelativePath || null,
+    finalPathPassedToSigning: signingTarget?.finalPathPassedToSigning ?? null,
+  });
+
+  if (!signingTarget) {
+    step = "upload-missing-signing-path";
+
+    if (debug) {
+      return debugResponse("Upload signing path could not be resolved.", 422);
+    }
+
+    return NextResponse.json(
+      { error: "Upload signing path could not be resolved." },
+      { status: 422 }
+    );
+  }
 
   step = "before-signed-url";
   let externalUrl: string | null = null;
