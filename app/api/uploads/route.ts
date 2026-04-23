@@ -269,7 +269,9 @@ export async function GET(request: Request) {
           download: debugData.download ?? null,
           step,
           storageBucket: debugData.storageBucket ?? null,
-          relativePath: debugData.relativePath ?? null,
+          relativePath: debugData.originalRelativePath ?? null,
+          resolvedDocumentFolder: debugData.resolvedDocumentFolder ?? null,
+          normalizedRelativePath: debugData.finalNormalizedRelativePath ?? null,
           signedUrlCreated: debugData.signedUrlCreated ?? false,
           signedUrlHost: debugData.signedUrlHost ?? null,
           upload: debugData.upload ?? null,
@@ -380,11 +382,19 @@ export async function GET(request: Request) {
     typeof upload.storageBucket === "string"
       ? upload.storageBucket.trim()
       : "";
-  const rawRelativePath =
+  const originalRelativePath =
     typeof upload.relativePath === "string"
       ? upload.relativePath.trim()
       : "";
-  const relativePath = rawRelativePath.replace(/^\/+/, "");
+  const normalizedRelativePath = originalRelativePath.replace(/^\/+/, "");
+  const resolvedDocumentFolder =
+    typeof upload.bucket === "string" ? upload.bucket.trim().replace(/^\/+|\/+$/g, "") : "";
+  const finalNormalizedRelativePath =
+    normalizedRelativePath.includes("/")
+      ? normalizedRelativePath
+      : normalizedRelativePath && resolvedDocumentFolder
+        ? `${resolvedDocumentFolder}/${normalizedRelativePath}`
+        : "";
   const originalFilename =
     typeof upload.originalName === "string" && upload.originalName.trim().length > 0
       ? upload.originalName
@@ -392,11 +402,13 @@ export async function GET(request: Request) {
 
   Object.assign(debugData, {
     storageBucket: storageBucket || null,
-    relativePath: relativePath || null,
+    originalRelativePath: originalRelativePath || null,
+    resolvedDocumentFolder: resolvedDocumentFolder || null,
+    finalNormalizedRelativePath: finalNormalizedRelativePath || null,
     upload,
   });
 
-  if (!storageBucket || !relativePath) {
+  if (!storageBucket || !normalizedRelativePath) {
     step = "upload-missing-data";
 
     if (debug) {
@@ -409,10 +421,45 @@ export async function GET(request: Request) {
     );
   }
 
+  if (!normalizedRelativePath.includes("/") && !resolvedDocumentFolder) {
+    step = "upload-missing-folder";
+
+    if (debug) {
+      return debugResponse(
+        "Upload folder/type missing for filename-only relativePath."
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Upload folder/type missing for filename-only relativePath." },
+      { status: 422 }
+    );
+  }
+
+  if (!finalNormalizedRelativePath) {
+    step = "upload-missing-data";
+
+    if (debug) {
+      return debugResponse("Upload path could not be resolved for signed URL.");
+    }
+
+    return NextResponse.json(
+      { error: "Upload path could not be resolved for signed URL." },
+      { status: 422 }
+    );
+  }
+
+  console.log("UPLOAD_SIGNED_PATH_RESOLUTION", {
+    storageBucket,
+    originalRelativePath,
+    resolvedDocumentFolder: resolvedDocumentFolder || null,
+    finalNormalizedRelativePath,
+  });
+
   const uploadForAccess: StoredUpload = {
     ...upload,
     storageBucket,
-    relativePath,
+    relativePath: finalNormalizedRelativePath,
     originalName: originalFilename,
   };
 
@@ -427,7 +474,7 @@ export async function GET(request: Request) {
     console.error("UPLOAD_SIGNED_URL_ERROR", {
       message,
       storageBucket,
-      relativePath,
+      relativePath: finalNormalizedRelativePath,
     });
 
     if (debug) {
