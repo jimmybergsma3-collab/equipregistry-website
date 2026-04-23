@@ -322,6 +322,22 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
+  const authUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      id: true,
+      role: true,
+    },
+  });
+
+  if (!authUser) {
+    if (debug) {
+      return debugResponse("Not authenticated.");
+    }
+
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
   const registrationRequest = await prisma.registrationRequest.findUnique({
     where: { id: requestId },
     select: {
@@ -339,15 +355,20 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Registration not found." }, { status: 404 });
   }
 
-  const isAdmin = session.user.role === "admin";
-  const isOwner = registrationRequest.userId === session.user.id;
+  const isAdmin = authUser.role === "admin";
+  const registrationOwnerId = registrationRequest.userId?.trim() || "";
 
-  if (!isAdmin && !isOwner) {
-    if (debug) {
-      return debugResponse("Forbidden.");
+  if (!isAdmin) {
+    const isOwner =
+      registrationOwnerId.length > 0 && registrationOwnerId === authUser.id;
+
+    if (!isOwner) {
+      if (debug) {
+        return debugResponse("Forbidden.");
+      }
+
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     }
-
-    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
   }
 
   const upload = findStoredUpload(registrationRequest.documents, fileId);
