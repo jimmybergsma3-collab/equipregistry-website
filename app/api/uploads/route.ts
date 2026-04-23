@@ -17,8 +17,6 @@ import {
 } from "@/lib/registry/upload-types";
 import type { UploadBucket } from "@/lib/registry/uploads";
 
-const DEFAULT_SUPABASE_UPLOAD_BUCKET = "equipregistry-uploads";
-
 function findStoredUpload(documents: unknown, fileId: string): StoredUpload | null {
   if (!documents || typeof documents !== "object" || Array.isArray(documents)) {
     return null;
@@ -46,154 +44,6 @@ function findStoredUpload(documents: unknown, fileId: string): StoredUpload | nu
   }
 
   return null;
-}
-
-function toNonEmptyString(value: unknown) {
-  if (typeof value !== "string") {
-    return null;
-  }
-
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-function parseSupabaseStoragePath(value: string) {
-  const raw = value.trim();
-  if (!raw) {
-    return null;
-  }
-
-  const normalizedRaw = raw.startsWith("supabase://")
-    ? `https://supabase.local/storage/v1/object/${raw.slice("supabase://".length)}`
-    : raw;
-
-  let pathname = "";
-  try {
-    pathname = new URL(normalizedRaw, "https://supabase.local").pathname;
-  } catch {
-    pathname = normalizedRaw;
-  }
-
-  const segments = pathname.split("/").filter(Boolean);
-  const objectMarker = segments.findIndex(
-    (segment, index) =>
-      segment === "storage" &&
-      segments[index + 1] === "v1" &&
-      segments[index + 2] === "object"
-  );
-
-  if (objectMarker < 0) {
-    return null;
-  }
-
-  const mode = segments[objectMarker + 3];
-  const modeOffset =
-    mode === "public" || mode === "sign" || mode === "authenticated" ? 1 : 0;
-  const bucket = toNonEmptyString(segments[objectMarker + 3 + modeOffset]);
-  const objectPathSegments = segments
-    .slice(objectMarker + 4 + modeOffset)
-    .map((segment) => decodeURIComponent(segment));
-  const objectPath = toNonEmptyString(objectPathSegments.join("/"));
-
-  if (!bucket || !objectPath) {
-    return null;
-  }
-
-  return {
-    storageBucket: bucket,
-    relativePath: objectPath,
-  };
-}
-
-function normalizeRelativePathForSigning(
-  rawPath: string | null,
-  storageBucket: string
-) {
-  if (!rawPath) {
-    return null;
-  }
-
-  let normalized = rawPath.replace(/^\/+/, "");
-
-  const parsedFromStorageUrl = parseSupabaseStoragePath(normalized);
-  if (parsedFromStorageUrl) {
-    normalized = parsedFromStorageUrl.relativePath;
-  }
-
-  if (normalized.startsWith(`${storageBucket}/`)) {
-    normalized = normalized.slice(storageBucket.length + 1);
-  }
-
-  normalized = normalized.replace(/^\/+/, "").trim();
-  return normalized.length > 0 ? normalized : null;
-}
-
-function getConfiguredSupabaseUploadBucket() {
-  return (
-    toNonEmptyString(process.env.SUPABASE_UPLOAD_BUCKET) ||
-    toNonEmptyString(process.env.SUPABASE_STORAGE_BUCKET) ||
-    DEFAULT_SUPABASE_UPLOAD_BUCKET
-  );
-}
-
-function resolveUploadLocation(upload: StoredUpload) {
-  const source = upload as StoredUpload & Record<string, unknown>;
-  const sourceUrl = toNonEmptyString(source.url);
-  const parsedFromRelativePath = toNonEmptyString(upload.relativePath)
-    ? parseSupabaseStoragePath(upload.relativePath)
-    : null;
-  const parsedFromUrl = sourceUrl
-    ? parseSupabaseStoragePath(sourceUrl)
-    : null;
-
-  const storageBucket =
-    toNonEmptyString(upload.storageBucket) ||
-    parsedFromRelativePath?.storageBucket ||
-    parsedFromUrl?.storageBucket ||
-    getConfiguredSupabaseUploadBucket();
-
-  const rawRelativePath =
-    toNonEmptyString(upload.relativePath) ||
-    toNonEmptyString(source.relativePath) ||
-    toNonEmptyString(source.objectPath) ||
-    toNonEmptyString(source.path) ||
-    toNonEmptyString(source.key) ||
-    parsedFromRelativePath?.relativePath ||
-    parsedFromUrl?.relativePath ||
-    null;
-
-  const fallbackFolder = toNonEmptyString(upload.bucket);
-  const fallbackStoredName = toNonEmptyString(upload.storedName);
-  const fallbackRelativePath =
-    rawRelativePath ||
-    (fallbackStoredName
-      ? fallbackFolder && fallbackFolder !== storageBucket
-        ? `${fallbackFolder}/${fallbackStoredName}`
-        : fallbackStoredName
-      : null);
-
-  const normalizedRelativePath = normalizeRelativePathForSigning(
-    fallbackRelativePath,
-    storageBucket
-  );
-
-  const originalFilename =
-    toNonEmptyString(upload.originalName) ||
-    toNonEmptyString(source.fileName) ||
-    toNonEmptyString(source.name) ||
-    toNonEmptyString(upload.storedName) ||
-    "document";
-
-  if (!storageBucket || !normalizedRelativePath) {
-    return null;
-  }
-
-  return {
-    storageBucket,
-    relativePath: fallbackRelativePath,
-    normalizedRelativePath,
-    originalFilename,
-  };
 }
 
 class UploadStorageError extends Error {
@@ -420,8 +270,6 @@ export async function GET(request: Request) {
           step,
           storageBucket: debugData.storageBucket ?? null,
           relativePath: debugData.relativePath ?? null,
-          normalizedRelativePath: debugData.normalizedRelativePath ?? null,
-          originalFilename: debugData.originalFilename ?? null,
           signedUrlCreated: debugData.signedUrlCreated ?? false,
           signedUrlHost: debugData.signedUrlHost ?? null,
           upload: debugData.upload ?? null,
@@ -528,17 +376,27 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "File not found." }, { status: 404 });
   }
 
-  const resolvedUpload = resolveUploadLocation(upload);
+  const storageBucket =
+    typeof upload.storageBucket === "string"
+      ? upload.storageBucket.trim()
+      : "";
+  const rawRelativePath =
+    typeof upload.relativePath === "string"
+      ? upload.relativePath.trim()
+      : "";
+  const relativePath = rawRelativePath.replace(/^\/+/, "");
+  const originalFilename =
+    typeof upload.originalName === "string" && upload.originalName.trim().length > 0
+      ? upload.originalName
+      : "document";
 
   Object.assign(debugData, {
-    storageBucket: resolvedUpload?.storageBucket ?? null,
-    relativePath: resolvedUpload?.relativePath ?? null,
-    normalizedRelativePath: resolvedUpload?.normalizedRelativePath ?? null,
-    originalFilename: resolvedUpload?.originalFilename ?? null,
+    storageBucket: storageBucket || null,
+    relativePath: relativePath || null,
     upload,
   });
 
-  if (!resolvedUpload) {
+  if (!storageBucket || !relativePath) {
     step = "upload-missing-data";
 
     if (debug) {
@@ -553,9 +411,9 @@ export async function GET(request: Request) {
 
   const uploadForAccess: StoredUpload = {
     ...upload,
-    storageBucket: resolvedUpload.storageBucket,
-    relativePath: resolvedUpload.normalizedRelativePath,
-    originalName: resolvedUpload.originalFilename,
+    storageBucket,
+    relativePath,
+    originalName: originalFilename,
   };
 
   step = "before-signed-url";
@@ -568,8 +426,8 @@ export async function GET(request: Request) {
     Object.assign(debugData, { error: message });
     console.error("UPLOAD_SIGNED_URL_ERROR", {
       message,
-      storageBucket: resolvedUpload.storageBucket,
-      relativePath: resolvedUpload.normalizedRelativePath,
+      storageBucket,
+      relativePath,
     });
 
     if (debug) {
