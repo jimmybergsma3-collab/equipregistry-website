@@ -680,7 +680,33 @@ export async function GET(request: Request) {
       return debugResponse(null);
     }
 
-    return NextResponse.redirect(redirectUrl);
+    try {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: redirectUrl,
+          "cache-control": "no-store",
+        },
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      step = "redirect-error";
+      Object.assign(debugData, { error: message });
+      console.error("UPLOAD_REDIRECT_FAILED", {
+        message,
+        rawSignedUrl,
+        redirectUrl,
+      });
+
+      if (debug) {
+        return debugResponse(message, 502);
+      }
+
+      return NextResponse.json(
+        { error: "Unable to redirect to signed upload URL." },
+        { status: 502 }
+      );
+    }
   }
 
   console.error("UPLOAD_SIGNED_URL_MISSING", {

@@ -426,16 +426,28 @@ export async function getSupabaseAccessUrl(
     signedURL?: string;
     signedUrl?: string;
   };
-  const signedPath = payload.signedURL || payload.signedUrl;
+  const signedPathRaw = payload.signedURL || payload.signedUrl;
+  const signedPath =
+    typeof signedPathRaw === "string" ? signedPathRaw.trim() : "";
 
   if (!signedPath) {
     return null;
   }
 
+  const redirectUrl = /^https?:\/\//i.test(signedPath)
+    ? signedPath
+    : signedPath.startsWith("/object/sign/")
+      ? `${baseUrl}/storage/v1${signedPath}`
+      : signedPath.startsWith("/storage/v1/object/sign/")
+        ? `${baseUrl}${signedPath}`
+        : signedPath.startsWith("object/sign/")
+          ? `${baseUrl}/storage/v1/${signedPath}`
+          : signedPath;
+
   void upload;
   void options;
   return {
     rawSignedUrl: signedPath,
-    redirectUrl: signedPath,
+    redirectUrl,
   };
 }
