@@ -328,6 +328,9 @@ export async function GET(request: Request) {
           requestId: debugData.requestId ?? null,
           fileId: debugData.fileId ?? null,
           download: debugData.download ?? null,
+          fallbackUsed: debugData.fallbackUsed ?? false,
+          fallbackCandidateCount: debugData.fallbackCandidateCount ?? 0,
+          foundRegistrationId: debugData.foundRegistrationId ?? null,
           registrationId: debugData.registrationId ?? null,
           registrationKeys: debugData.registrationKeys ?? null,
           searchScopes: debugData.searchScopes ?? null,
@@ -368,7 +371,7 @@ export async function GET(request: Request) {
     download,
   });
 
-  if (!requestId || !fileId) {
+  if (!fileId) {
     if (debug) {
       return debugResponse("Missing file reference.");
     }
@@ -403,27 +406,97 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
-  const registrationRequest = await prisma.registrationRequest.findUnique({
-    where: { id: requestId },
-  });
-  step = "after-db-lookup";
+  const isAdmin = authUser.role === "admin";
+  let fallbackUsed = false;
+  let registrationRequest: {
+    id: string;
+    userId: string;
+    documents: unknown;
+    dynamicFields: unknown;
+  } | null = null;
+  let uploadSearchResult: UploadSearchResult | null = null;
+  let fallbackCandidateCount = 0;
 
-  if (!registrationRequest) {
-    if (debug) {
-      return debugResponse("Registration not found.");
+  if (requestId) {
+    registrationRequest = await prisma.registrationRequest.findUnique({
+      where: { id: requestId },
+      select: {
+        id: true,
+        userId: true,
+        documents: true,
+        dynamicFields: true,
+      },
+    });
+    step = "after-db-lookup";
+
+    if (registrationRequest) {
+      uploadSearchResult = findStoredUploadInRegistration(registrationRequest, fileId);
+      if (!uploadSearchResult.upload) {
+        fallbackUsed = true;
+        step = "requestid-mismatch-fallback";
+      }
+    } else {
+      fallbackUsed = true;
+      step = "requestid-not-found-fallback";
     }
+  } else {
+    fallbackUsed = true;
+    step = "no-requestid-fallback";
+  }
 
-    return NextResponse.json({ error: "Registration not found." }, { status: 404 });
+  if (fallbackUsed) {
+    const fallbackCandidates = await prisma.registrationRequest.findMany({
+      where: isAdmin
+        ? { deletedAt: null }
+        : { deletedAt: null, userId: authUser.id },
+      select: {
+        id: true,
+        userId: true,
+        documents: true,
+        dynamicFields: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    step = "fallback-search";
+    fallbackCandidateCount = fallbackCandidates.length;
+
+    registrationRequest = null;
+    uploadSearchResult = null;
+    for (const candidate of fallbackCandidates) {
+      const candidateResult = findStoredUploadInRegistration(candidate, fileId);
+      if (candidateResult.upload) {
+        registrationRequest = candidate;
+        uploadSearchResult = candidateResult;
+        break;
+      }
+    }
+    step = "after-fallback-search";
   }
 
   Object.assign(debugData, {
-    registrationId: registrationRequest.id,
-    registrationKeys: Object.keys(
-      registrationRequest as Record<string, unknown>
-    ),
+    fallbackUsed,
+    fallbackCandidateCount,
+    foundRegistrationId: registrationRequest?.id ?? null,
+    registrationId: registrationRequest?.id ?? null,
+    registrationKeys: registrationRequest
+      ? Object.keys(registrationRequest as Record<string, unknown>)
+      : null,
+    searchScopes: uploadSearchResult?.searchScopes ?? null,
+    uploadsFound: uploadSearchResult?.uploadsFound ?? 0,
+    uploadMatchedLocation: uploadSearchResult?.matchedLocation ?? null,
+    registration: registrationRequest,
   });
 
-  const isAdmin = authUser.role === "admin";
+  if (!registrationRequest || !uploadSearchResult?.upload) {
+    if (debug) {
+      return debugResponse("File not found.");
+    }
+
+    return NextResponse.json({ error: "File not found." }, { status: 404 });
+  }
+
   const registrationOwnerId = registrationRequest.userId?.trim() || "";
 
   if (!isAdmin) {
@@ -439,33 +512,8 @@ export async function GET(request: Request) {
     }
   }
 
-  step = "before-upload-search";
-  const uploadSearchResult = findStoredUploadInRegistration(
-    registrationRequest as unknown as {
-      documents?: unknown;
-      dynamicFields?: unknown;
-      uploads?: unknown;
-    },
-    fileId
-  );
   const upload = uploadSearchResult.upload;
   step = "after-upload-search";
-  Object.assign(debugData, {
-    searchScopes: uploadSearchResult.searchScopes,
-    uploadsFound: uploadSearchResult.uploadsFound,
-    uploadMatchedLocation: uploadSearchResult.matchedLocation,
-  });
-
-  if (!upload) {
-    Object.assign(debugData, {
-      registration: registrationRequest,
-    });
-    if (debug) {
-      return debugResponse("File not found.");
-    }
-
-    return NextResponse.json({ error: "File not found." }, { status: 404 });
-  }
 
   const storageBucket =
     typeof upload.storageBucket === "string"
