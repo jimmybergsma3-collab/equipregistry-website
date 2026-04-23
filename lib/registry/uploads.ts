@@ -432,15 +432,10 @@ export async function getSupabaseAccessUrl(
     return null;
   }
 
-  const signedUrl = /^https?:\/\//i.test(signedPath)
-    ? signedPath
-    : `${baseUrl}${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
-
-  if (!options?.download) {
-    return signedUrl;
-  }
-
-  const downloadUrl = new URL(signedUrl);
-  downloadUrl.searchParams.set("download", upload.originalName || "document");
-  return downloadUrl.toString();
+  void upload;
+  void options;
+  return {
+    rawSignedUrl: signedPath,
+    redirectUrl: signedPath,
+  };
 }

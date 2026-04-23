@@ -345,6 +345,8 @@ export async function GET(request: Request) {
           finalPathPassedToSigning:
             debugData.finalPathPassedToSigning ?? null,
           signedUrlCreated: debugData.signedUrlCreated ?? false,
+          rawSignedUrl: debugData.rawSignedUrl ?? null,
+          redirectUrl: debugData.redirectUrl ?? null,
           signedUrlHost: debugData.signedUrlHost ?? null,
           upload: debugData.upload ?? null,
           error,
@@ -627,9 +629,14 @@ export async function GET(request: Request) {
   }
 
   step = "before-signed-url";
-  let externalUrl: string | null = null;
+  let signedUrlResult:
+    | {
+        rawSignedUrl: string;
+        redirectUrl: string;
+      }
+    | null = null;
   try {
-    externalUrl = await getSupabaseAccessUrl(uploadForAccess, { download });
+    signedUrlResult = await getSupabaseAccessUrl(uploadForAccess, { download });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     step = "signed-url-error";
@@ -651,12 +658,16 @@ export async function GET(request: Request) {
   }
 
   step = "after-signed-url";
+  const redirectUrl = signedUrlResult?.redirectUrl ?? null;
+  const rawSignedUrl = signedUrlResult?.rawSignedUrl ?? null;
   Object.assign(debugData, {
-    signedUrlCreated: Boolean(externalUrl),
-    signedUrlHost: externalUrl
+    signedUrlCreated: Boolean(rawSignedUrl),
+    rawSignedUrl,
+    redirectUrl,
+    signedUrlHost: redirectUrl
       ? (() => {
           try {
-            return new URL(externalUrl).host;
+            return new URL(redirectUrl).host;
           } catch {
             return null;
           }
@@ -664,12 +675,12 @@ export async function GET(request: Request) {
       : null,
   });
 
-  if (externalUrl) {
+  if (redirectUrl) {
     if (debug) {
       return debugResponse(null);
     }
 
-    return NextResponse.redirect(externalUrl);
+    return NextResponse.redirect(redirectUrl);
   }
 
   console.error("UPLOAD_SIGNED_URL_MISSING", {
