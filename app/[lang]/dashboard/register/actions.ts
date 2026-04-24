@@ -81,6 +81,36 @@ function buildDraftFromFormData(formData: FormData): RegistrationDraft {
   };
 }
 
+async function getAuthenticatedOwnerIdentity(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      name: true,
+      email: true,
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return {
+    ownerName: user.name.trim(),
+    ownerEmail: user.email.trim(),
+  };
+}
+
+function applyOwnerIdentityToDraft(
+  draft: RegistrationDraft,
+  ownerIdentity: { ownerName: string; ownerEmail: string }
+): RegistrationDraft {
+  return {
+    ...draft,
+    ownerName: ownerIdentity.ownerName,
+    ownerEmail: ownerIdentity.ownerEmail,
+  };
+}
+
 async function persistUserVatNumber(userId: string, draft: RegistrationDraft) {
   if (draft.applicantType !== "sme") {
     return;
@@ -185,7 +215,19 @@ export async function saveRegistrationDraft(
     };
   }
 
-  const draft = buildDraftFromFormData(formData);
+  const ownerIdentity = await getAuthenticatedOwnerIdentity(session.user.id);
+
+  if (!ownerIdentity) {
+    return {
+      success: false,
+      message: "Unable to load account owner details.",
+    };
+  }
+
+  const draft = applyOwnerIdentityToDraft(
+    buildDraftFromFormData(formData),
+    ownerIdentity
+  );
   const langValue = normalizeString(formData.get("lang")).toLowerCase();
   const lang = isValidLang(langValue) ? langValue : "en";
   const completeness = evaluateRegistrationCompleteness(draft);
@@ -276,7 +318,19 @@ export async function submitRegistrationRequest(
     };
   }
 
-  const draft = buildDraftFromFormData(formData);
+  const ownerIdentity = await getAuthenticatedOwnerIdentity(session.user.id);
+
+  if (!ownerIdentity) {
+    return {
+      success: false,
+      message: "Unable to load account owner details.",
+    };
+  }
+
+  const draft = applyOwnerIdentityToDraft(
+    buildDraftFromFormData(formData),
+    ownerIdentity
+  );
   const langValue = normalizeString(formData.get("lang")).toLowerCase();
   const lang = isValidLang(langValue) ? langValue : "en";
   const completeness = evaluateRegistrationCompleteness(draft);

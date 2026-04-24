@@ -19,6 +19,9 @@ type RegisterText = {
   name: string;
   email: string;
   password: string;
+  confirmPassword?: string;
+  showPassword?: string;
+  hidePassword?: string;
   company: string;
   vat: string;
   newsletter: string;
@@ -29,6 +32,7 @@ type RegisterText = {
   loginLink: string;
   requiredFields: string;
   passwordShort: string;
+  passwordMismatch?: string;
   emailExists: string;
   termsRequired: string;
   serverError: string;
@@ -45,6 +49,9 @@ const TEXT: Record<Lang, RegisterText> = {
     name: "Full name",
     email: "Email",
     password: "Password",
+    confirmPassword: "Confirm password",
+    showPassword: "Show",
+    hidePassword: "Hide",
     company: "Company name (optional)",
     vat: "VAT number (optional)",
     newsletter: "Receive registry updates by email",
@@ -55,6 +62,7 @@ const TEXT: Record<Lang, RegisterText> = {
     loginLink: "Login",
     requiredFields: "Complete the required fields.",
     passwordShort: "Use a password with at least 6 characters.",
+    passwordMismatch: "Passwords do not match.",
     emailExists: "An account with this email already exists.",
     termsRequired: "You must accept the terms to continue.",
     serverError: "Server error. Please try again.",
@@ -165,6 +173,9 @@ const TEXT: Record<Lang, RegisterText> = {
     name: "Volledige naam",
     email: "E-mail",
     password: "Wachtwoord",
+    confirmPassword: "Herhaal wachtwoord",
+    showPassword: "Toon",
+    hidePassword: "Verberg",
     company: "Bedrijfsnaam (optioneel)",
     vat: "BTW-nummer (optioneel)",
     newsletter: "Ontvang registry-updates per e-mail",
@@ -175,6 +186,7 @@ const TEXT: Record<Lang, RegisterText> = {
     loginLink: "Inloggen",
     requiredFields: "Vul de verplichte velden in.",
     passwordShort: "Gebruik een wachtwoord van minimaal 6 tekens.",
+    passwordMismatch: "Wachtwoorden komen niet overeen.",
     emailExists: "Er bestaat al een account met dit e-mailadres.",
     termsRequired: "Je moet de voorwaarden accepteren om verder te gaan.",
     serverError: "Serverfout. Probeer het opnieuw.",
@@ -418,11 +430,19 @@ function getErrorMessage(lang: Lang, code?: string) {
 export default function PublicRegisterPage({ lang }: Props) {
   const currentLang = lang;
   const t = TEXT[currentLang] ?? TEXT.en;
+  const confirmPasswordLabel = t.confirmPassword ?? TEXT.en.confirmPassword ?? "Confirm password";
+  const showPasswordLabel = t.showPassword ?? TEXT.en.showPassword ?? "Show";
+  const hidePasswordLabel = t.hidePassword ?? TEXT.en.hidePassword ?? "Hide";
+  const passwordMismatchText =
+    t.passwordMismatch ?? TEXT.en.passwordMismatch ?? "Passwords do not match.";
   const router = useRouter();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [vatNumber, setVatNumber] = useState("");
   const [newsletterOptIn, setNewsletterOptIn] = useState(false);
@@ -433,6 +453,12 @@ export default function PublicRegisterPage({ lang }: Props) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+
+    if (password !== confirmPassword) {
+      setError(passwordMismatchText);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -504,6 +530,8 @@ export default function PublicRegisterPage({ lang }: Props) {
                       </label>
                       <input
                         type="text"
+                        name="name"
+                        autoComplete="name"
                         value={name}
                         onChange={(event) => setName(event.target.value)}
                         className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-4 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
@@ -517,6 +545,8 @@ export default function PublicRegisterPage({ lang }: Props) {
                       </label>
                       <input
                         type="email"
+                        name="email"
+                        autoComplete="email"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-4 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
@@ -528,13 +558,52 @@ export default function PublicRegisterPage({ lang }: Props) {
                       <label className="mb-2 block text-sm font-medium text-zinc-900">
                         {t.password}
                       </label>
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-4 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
-                        required
-                      />
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          autoComplete="new-password"
+                          value={password}
+                          onChange={(event) => setPassword(event.target.value)}
+                          className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-4 pr-10 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((current) => !current)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-base leading-none text-zinc-700 hover:text-zinc-900"
+                          aria-label={showPassword ? hidePasswordLabel : showPasswordLabel}
+                        >
+                          <span aria-hidden="true">{showPassword ? "🙈" : "👁"}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="mb-2 block text-sm font-medium text-zinc-900">
+                        {confirmPasswordLabel}
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          name="confirmPassword"
+                          autoComplete="new-password"
+                          value={confirmPassword}
+                          onChange={(event) => setConfirmPassword(event.target.value)}
+                          className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-4 pr-10 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword((current) => !current)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-base leading-none text-zinc-700 hover:text-zinc-900"
+                          aria-label={showConfirmPassword ? hidePasswordLabel : showPasswordLabel}
+                        >
+                          <span aria-hidden="true">
+                            {showConfirmPassword ? "🙈" : "👁"}
+                          </span>
+                        </button>
+                      </div>
                     </div>
 
                     <div>

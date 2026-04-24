@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site-footer";
 import CustomerDashboardNav from "@/components/dashboard/customer-dashboard-nav";
 import RegistrationFormStep1 from "@/components/registry/registration-form-step1";
 import { getSession } from "@/lib/auth/getSession";
+import { prisma } from "@/lib/db";
 import { isValidLang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 
@@ -30,6 +31,18 @@ export default async function RegisterPage({ params }: Props) {
     redirect(`/${lang}/admin`);
   }
 
+  const account = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      name: true,
+      email: true,
+    },
+  });
+
+  if (!account) {
+    redirect(`/${lang}/login?next=/${lang}/dashboard/register`);
+  }
+
   const dict = getDictionary(lang);
 
   return (
@@ -52,7 +65,13 @@ export default async function RegisterPage({ params }: Props) {
 
           <CustomerDashboardNav lang={lang} active="dashboard" />
 
-          <RegistrationFormStep1 lang={lang} />
+          <RegistrationFormStep1
+            lang={lang}
+            ownerIdentity={{
+              name: account.name,
+              email: account.email,
+            }}
+          />
         </div>
       </main>
 

@@ -38,6 +38,10 @@ import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 type Props = {
   lang: Lang;
   initialApplicantType?: ApplicantType;
+  ownerIdentity?: {
+    name: string;
+    email: string;
+  } | null;
 };
 
 type StandardApplicantTypeOption = "private" | "sme_business";
@@ -1463,12 +1467,20 @@ function UploadFieldCard({
 export default function RegistrationFormStep1({
   lang,
   initialApplicantType = "private",
+  ownerIdentity = null,
 }: Props) {
   const normalizedInitialApplicantType =
     normalizeStandardApplicantType(initialApplicantType);
-  const [draft, setDraft] = useState<RegistrationDraft>(
-    createEmptyRegistrationDraft(normalizedInitialApplicantType)
-  );
+  const [draft, setDraft] = useState<RegistrationDraft>(() => {
+    const initialDraft = createEmptyRegistrationDraft(normalizedInitialApplicantType);
+
+    if (ownerIdentity) {
+      initialDraft.ownerName = ownerIdentity.name ?? "";
+      initialDraft.ownerEmail = ownerIdentity.email ?? "";
+    }
+
+    return initialDraft;
+  });
   const [proofDocuments, setProofDocuments] = useState<
     Partial<Record<ProofDocumentKey, RegistrationDocumentState>>
   >({});
@@ -1662,6 +1674,7 @@ export default function RegistrationFormStep1({
   const applicantTypeOption = getApplicantTypeOption(draft.applicantType);
   const showProofOfApplicant =
     draft.applicantType === "private" || draft.applicantType === "sme";
+  const ownerIdentityLocked = Boolean(ownerIdentity);
 
   return (
     <div className="space-y-8">
@@ -1849,39 +1862,43 @@ export default function RegistrationFormStep1({
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="ownerName"
-                className="mb-2 block text-sm font-medium text-zinc-900"
-              >
-                {text.ownerName}
-              </label>
-              <input
-                id="ownerName"
-                type="text"
-                value={draft.ownerName}
-                onChange={(e) => updateField("ownerName", e.target.value)}
-                placeholder={text.ownerNamePlaceholder}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
-              />
-            </div>
+            {!ownerIdentityLocked ? (
+              <>
+                <div>
+                  <label
+                    htmlFor="ownerName"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {text.ownerName}
+                  </label>
+                  <input
+                    id="ownerName"
+                    type="text"
+                    value={draft.ownerName}
+                    onChange={(e) => updateField("ownerName", e.target.value)}
+                    placeholder={text.ownerNamePlaceholder}
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="ownerEmail"
-                className="mb-2 block text-sm font-medium text-zinc-900"
-              >
-                {text.ownerEmail}
-              </label>
-              <input
-                id="ownerEmail"
-                type="email"
-                value={draft.ownerEmail}
-                onChange={(e) => updateField("ownerEmail", e.target.value)}
-                placeholder={text.ownerEmailPlaceholder}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
-              />
-            </div>
+                <div>
+                  <label
+                    htmlFor="ownerEmail"
+                    className="mb-2 block text-sm font-medium text-zinc-900"
+                  >
+                    {text.ownerEmail}
+                  </label>
+                  <input
+                    id="ownerEmail"
+                    type="email"
+                    value={draft.ownerEmail}
+                    onChange={(e) => updateField("ownerEmail", e.target.value)}
+                    placeholder={text.ownerEmailPlaceholder}
+                    className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-900"
+                  />
+                </div>
+              </>
+            ) : null}
 
             {draft.applicantType === "sme" ? (
               <div className="sm:col-span-2">
