@@ -420,7 +420,7 @@ errorMessage: "Something went wrong while sending your message.",
     },
   },
   hero: {
-    title: "Verify provenance and risk of vehicles and equipment worldwide",
+    title: "Verify origin and risk of vehicles and equipment worldwide",
     subtitle:
       "Use VINs, serial numbers and registry IDs to check legal origin, theft alerts and registry status before purchase, financing, insurance, rental or cross-border transfer.",
     placeholder: "Enter VIN, serial number or registry ID",
@@ -743,7 +743,7 @@ errorMessage: "Se ha producido un error al enviar su mensaje.",
     },
   },
   hero: {
-    title: "Verifique cualquier vehÃ­culo o equipo en todo el mundo",
+    title: "Verifica el origen y el riesgo de vehículos y equipos en todo el mundo",
     subtitle:
       "Compruebe titularidad, historial y nivel de riesgo usando VIN, nÃºmero de serie o ID de registro.",
     placeholder: "Introduzca VIN, nÃºmero de serie o ID de registro",
@@ -1068,7 +1068,7 @@ errorMessage: "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten.",
     },
   },
   hero: {
-    title: "Jedes Fahrzeug oder GerÃ¤t weltweit prÃ¼fen",
+    title: "Verifiziere Herkunft und Risiko von Fahrzeugen und Equipment weltweit",
     subtitle:
       "PrÃ¼fen Sie Eigentum, Historie und Risikostatus anhand von VIN, Seriennummer oder Register-ID.",
     placeholder: "VIN, Seriennummer oder Register-ID eingeben",
@@ -1392,7 +1392,7 @@ errorMessage: "Une erreur sâ€™est produite lors de lâ€™envoi de votre 
     },
   },
   hero: {
-    title: "VÃ©rifiez tout vÃ©hicule ou Ã©quipement dans le monde entier",
+    title: "Vérifiez l’origine et les risques des véhicules et équipements dans le monde entier",
     subtitle:
       "VÃ©rifiez la propriÃ©tÃ©, lâ€™historique et le niveau de risque Ã  lâ€™aide du VIN, du numÃ©ro de sÃ©rie ou de lâ€™identifiant de registre.",
     placeholder: "Entrez le VIN, le numÃ©ro de sÃ©rie ou lâ€™identifiant de registre",
@@ -1717,7 +1717,7 @@ errorMessage: "Si Ã¨ verificato un errore durante lâ€™invio del messaggio
     },
   },
   hero: {
-    title: "Verifica qualsiasi veicolo o attrezzatura in tutto il mondo",
+    title: "Verifica origine e rischio di veicoli e attrezzature in tutto il mondo",
     subtitle:
       "Controlla proprietÃ , cronologia e livello di rischio usando VIN, numero di serie o ID di registro.",
     placeholder: "Inserisci VIN, numero di serie o ID di registro",
@@ -2366,7 +2366,7 @@ errorMessage: "Ocorreu um erro ao enviar a sua mensagem.",
     },
   },
   hero: {
-    title: "Verifique qualquer veÃ­culo ou equipamento em todo o mundo",
+    title: "Verifique a origem e o risco de veículos e equipamentos em todo o mundo",
     subtitle:
       "Verifique propriedade, histÃ³rico e nÃ­vel de risco usando VIN, nÃºmero de sÃ©rie ou ID de registo.",
     placeholder: "Introduza VIN, nÃºmero de sÃ©rie ou ID de registo",
@@ -2691,7 +2691,7 @@ const ru: Dictionary = {
     },
   },
   hero: {
-    title: "ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐ¹Ñ‚Ðµ Ð»ÑŽÐ±Ñ‹Ðµ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð½Ñ‹Ðµ ÑÑ€ÐµÐ´ÑÑ‚Ð²Ð° Ð¸ Ð¾Ð±Ð¾Ñ€ÑƒÐ´Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¿Ð¾ Ð²ÑÐµÐ¼Ñƒ Ð¼Ð¸Ñ€Ñƒ",
+    title: "Проверьте происхождение и риски транспортных средств и оборудования по всему миру",
     subtitle:
       "ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐ¹Ñ‚Ðµ Ð¿Ñ€Ð°Ð²Ð¾ ÑÐ¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸, Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ Ð¸ ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ Ñ€Ð¸ÑÐºÐ° Ð¿Ð¾ VIN, ÑÐµÑ€Ð¸Ð¹Ð½Ð¾Ð¼Ñƒ Ð½Ð¾Ð¼ÐµÑ€Ñƒ Ð¸Ð»Ð¸ ID Ñ€ÐµÐµÑÑ‚Ñ€Ð°.",
     placeholder: "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ VIN, ÑÐµÑ€Ð¸Ð¹Ð½Ñ‹Ð¹ Ð½Ð¾Ð¼ÐµÑ€ Ð¸Ð»Ð¸ ID Ñ€ÐµÐµÑÑ‚Ñ€Ð°",
@@ -3015,7 +3015,7 @@ const zh: Dictionary = {
     },
   },
   hero: {
-    title: "åœ¨å…¨çƒèŒƒå›´éªŒè¯ä»»ä½•è½¦è¾†æˆ–è®¾å¤‡",
+    title: "在全球范围内核验车辆和设备的来源与风险",
     subtitle:
       "é€šè¿‡ VINã€åºåˆ—å·æˆ–æ³¨å†Œ ID æ£€æŸ¥æ‰€æœ‰æƒã€åŽ†å²è®°å½•å’Œé£Žé™©çŠ¶æ€ã€‚",
     placeholder: "è¾“å…¥ VINã€åºåˆ—å·æˆ–æ³¨å†Œ ID",
@@ -3338,7 +3338,7 @@ const hi: Dictionary = {
     },
   },
   hero: {
-    title: "à¤¦à¥à¤¨à¤¿à¤¯à¤¾ à¤­à¤° à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¥€ à¤­à¥€ à¤µà¤¾à¤¹à¤¨ à¤¯à¤¾ à¤‰à¤ªà¤•à¤°à¤£ à¤•à¥‹ à¤¸à¤¤à¥à¤¯à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‡à¤‚",
+    title: "दुनियाभर में वाहनों और उपकरणों की उत्पत्ति और जोखिम सत्यापित करें",
     subtitle:
       "VIN, à¤¸à¥€à¤°à¤¿à¤¯à¤² à¤¨à¤‚à¤¬à¤° à¤¯à¤¾ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¥à¤°à¥€ à¤†à¤ˆà¤¡à¥€ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤•à¥‡ à¤¸à¥à¤µà¤¾à¤®à¤¿à¤¤à¥à¤µ, à¤‡à¤¤à¤¿à¤¹à¤¾à¤¸ à¤”à¤° à¤œà¥‹à¤–à¤¿à¤® à¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤œà¤¾à¤à¤šà¥‡à¤‚à¥¤",
     placeholder: "VIN, à¤¸à¥€à¤°à¤¿à¤¯à¤² à¤¨à¤‚à¤¬à¤° à¤¯à¤¾ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¥à¤°à¥€ à¤†à¤ˆà¤¡à¥€ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚",
@@ -3662,7 +3662,7 @@ const ar: Dictionary = {
     },
   },
   hero: {
-    title: "ØªØ­Ù‚Ù‚ Ù…Ù† Ø£ÙŠ Ù…Ø±ÙƒØ¨Ø© Ø£Ùˆ Ù…Ø¹Ø¯Ø§Øª ÙÙŠ Ø¬Ù…ÙŠØ¹ Ø£Ù†Ø­Ø§Ø¡ Ø§Ù„Ø¹Ø§Ù„Ù…",
+    title: "تحقق من مصدر المركبات والمعدات ومخاطرها حول العالم",
     subtitle:
       "ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù…Ù„ÙƒÙŠØ© ÙˆØ§Ù„Ø³Ø¬Ù„ ÙˆØ­Ø§Ù„Ø© Ø§Ù„Ù…Ø®Ø§Ø·Ø± Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø±Ù‚Ù… VIN Ø£Ùˆ Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ³Ù„Ø³Ù„ÙŠ Ø£Ùˆ Ù…Ø¹Ø±Ù Ø§Ù„Ø³Ø¬Ù„.",
     placeholder: "Ø£Ø¯Ø®Ù„ Ø±Ù‚Ù… VIN Ø£Ùˆ Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ³Ù„Ø³Ù„ÙŠ Ø£Ùˆ Ù…Ø¹Ø±Ù Ø§Ù„Ø³Ø¬Ù„",
