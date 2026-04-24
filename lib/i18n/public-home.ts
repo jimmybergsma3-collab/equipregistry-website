@@ -404,11 +404,11 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   nl: {
     hero: {
-      title: "Controleer eigendom en frauderisico op voertuigen en equipment wereldwijd",
+      title: "Verifieer herkomst en risico van voertuigen en materieel wereldwijd",
       subtitle:
-        "Gebruik VIN's, serienummers en registry-ID's om juridische herkomst, diefstalalerts en registrystatus te controleren voor aankoop, financiering, verzekering, verhuur of grensoverschrijdende overdracht.",
+        "Controleer direct de herkomst, status en risico van elk asset wereldwijd.",
       placeholder: "Vul VIN, serienummer of registry-ID in",
-      search: "Asset verifieren",
+      search: "Verifieer asset",
       demoSerials: "Demo-serials:",
       loggedInMessage:
         "Je bent ingelogd. Je kunt de zoekfunctie normaal gebruiken en nog steeds private paspoorten openen.",
@@ -428,7 +428,7 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
       step2Title: "2. Verifieren",
       step2Text: "Bekijk registrysignalen, eigendomscontext en paspoortzichtbaarheid wanneer beschikbaar.",
       step3Title: "3. Registreren",
-      step3Text: "Registreer voertuigen, equipment of andere assets en voeg ondersteunende documenten toe.",
+      step3Text: "Registreer voertuigen, materieel of andere assets en voeg ondersteunende documenten toe.",
       step4Title: "4. Gebruiken",
       step4Text: "Gebruik het registrypassport in verzekering, verhuur, doorverkoop, recovery en compliance.",
     },
