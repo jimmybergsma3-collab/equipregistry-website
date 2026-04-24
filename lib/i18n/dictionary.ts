@@ -420,7 +420,7 @@ errorMessage: "Something went wrong while sending your message.",
     },
   },
   hero: {
-    title: "Verify ownership and fraud risk on vehicles and equipment worldwide",
+    title: "Verify provenance and risk of vehicles and equipment worldwide",
     subtitle:
       "Use VINs, serial numbers and registry IDs to check legal origin, theft alerts and registry status before purchase, financing, insurance, rental or cross-border transfer.",
     placeholder: "Enter VIN, serial number or registry ID",
@@ -2042,7 +2042,7 @@ errorMessage: "Er ging iets mis bij het verzenden van je bericht.",
     },
   },
   hero: {
-    title: "Verifieer elk voertuig of stuk equipment wereldwijd",
+    title: "Verifieer herkomst en risico van voertuigen en equipment wereldwijd",
     subtitle:
       "Controleer eigendom, historie en risicostatus met VIN, serienummer of registry-ID.",
     placeholder: "Voer VIN, serienummer of registry-ID in",
