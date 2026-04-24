@@ -357,6 +357,24 @@ const TEXT: Record<
     },
   },};
 
+const OPTIONAL_NOT_ADDED_LABEL: Record<Lang, string> = {
+  en: "Not added",
+  es: "No anadido",
+  de: "Nicht hinzugefugt",
+  fr: "Non ajoute",
+  it: "Non aggiunto",
+  nl: "Niet toegevoegd",
+  pt: "Nao adicionado",
+  ru: "Ne dobavleno",
+  zh: "Wei tianjia",
+  hi: "Abhi nahin joda gaya",
+  ar: "Lam yudaf",
+  pl: "Nie dodano",
+  sv: "Inte tillagt",
+  da: "Ikke tilfojet",
+  no: "Ikke lagt til",
+};
+
 function getStatusClasses(status: RegistrationFileStatus) {
   switch (status) {
     case "accepted":
@@ -447,9 +465,7 @@ export default function DocumentRequirementsPanel({
             ? "border border-zinc-200 bg-white text-zinc-600"
             : getStatusClasses(current.status);
           const statusLabel = optionalMissing
-            ? lang === "nl"
-              ? "Niet toegevoegd"
-              : text.optional
+            ? OPTIONAL_NOT_ADDED_LABEL[lang]
             : text.statuses[current.status];
           const inputId = `document-upload-${doc.key}`;
           const multiple = documentSupportsMultipleFiles(doc.key);

@@ -110,7 +110,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Complete all required data before the request can move to payment or submission.",
     applicantType: "Applicant Type",
-    assetName: "Asset Name",
+    assetName: "Asset name (for example bike, vehicle, or equipment)",
     assetNamePlaceholder: "e.g. Opel Corsa / Komatsu WA380",
     brand: "Brand",
     brandPlaceholder: "e.g. Opel",
@@ -152,7 +152,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Complete todos los datos obligatorios antes de que la solicitud pueda pasar al pago o al envío.",
     applicantType: "Tipo de solicitante",
-    assetName: "Nombre del activo",
+    assetName: "Nombre del activo (por ejemplo bicicleta, vehiculo o equipo)",
     assetNamePlaceholder: "p. ej. Opel Corsa / Komatsu WA380",
     brand: "Marca",
     brandPlaceholder: "p. ej. Opel",
@@ -195,7 +195,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Vervollständigen Sie alle Pflichtdaten, bevor die Anfrage zur Zahlung oder Einreichung übergehen kann.",
     applicantType: "Antragstellertyp",
-    assetName: "Asset-Name",
+    assetName: "Name des Assets (z. B. Fahrrad, Fahrzeug oder Geraet)",
     assetNamePlaceholder: "z. B. Opel Corsa / Komatsu WA380",
     brand: "Marke",
     brandPlaceholder: "z. B. Opel",
@@ -238,7 +238,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Complétez toutes les données requises avant que la demande puisse passer au paiement ou à l’envoi.",
     applicantType: "Type de demandeur",
-    assetName: "Nom de l’actif",
+    assetName: "Nom de l’actif (par exemple velo, vehicule ou equipement)",
     assetNamePlaceholder: "ex. Opel Corsa / Komatsu WA380",
     brand: "Marque",
     brandPlaceholder: "ex. Opel",
@@ -281,7 +281,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Completa tutti i dati obbligatori prima che la richiesta possa passare al pagamento o all’invio.",
     applicantType: "Tipo di richiedente",
-    assetName: "Nome dell’asset",
+    assetName: "Nome dell’asset (ad esempio bici, veicolo o attrezzatura)",
     assetNamePlaceholder: "es. Opel Corsa / Komatsu WA380",
     brand: "Marca",
     brandPlaceholder: "es. Opel",
@@ -368,7 +368,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Complete todos os dados obrigatórios antes de o pedido poder avançar para pagamento ou submissão.",
     applicantType: "Tipo de requerente",
-    assetName: "Nome do ativo",
+    assetName: "Nome do ativo (por exemplo bicicleta, veiculo ou equipamento)",
     assetNamePlaceholder: "ex. Opel Corsa / Komatsu WA380",
     brand: "Marca",
     brandPlaceholder: "ex. Opel",
@@ -412,7 +412,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Заполните все обязательные данные, прежде чем запрос сможет перейти к оплате или отправке.",
     applicantType: "Тип заявителя",
-    assetName: "Название актива",
+    assetName: "Название актива (например, велосипед, транспорт или оборудование)",
     assetNamePlaceholder: "например, Opel Corsa / Komatsu WA380",
     brand: "Марка",
     brandPlaceholder: "например, Opel",
@@ -455,7 +455,7 @@ const FORM_TEXT: Record<
     foundationText:
       "在请求进入付款或提交之前，请完成所有必填数据。",
     applicantType: "申请人类型",
-    assetName: "资产名称",
+    assetName: "资产名称（例如自行车、车辆或设备）",
     assetNamePlaceholder: "例如 Opel Corsa / Komatsu WA380",
     brand: "品牌",
     brandPlaceholder: "例如 Opel",
@@ -497,7 +497,7 @@ const FORM_TEXT: Record<
     foundationText:
       "अनुरोध को भुगतान या सबमिशन तक ले जाने से पहले सभी आवश्यक डेटा पूरा करें।",
     applicantType: "आवेदक प्रकार",
-    assetName: "एसेट नाम",
+    assetName: "एसेट नाम (उदाहरण: साइकिल, वाहन या उपकरण)",
     assetNamePlaceholder: "जैसे Opel Corsa / Komatsu WA380",
     brand: "ब्रांड",
     brandPlaceholder: "जैसे Opel",
@@ -540,7 +540,7 @@ const FORM_TEXT: Record<
     foundationText:
       "أكمل جميع البيانات المطلوبة قبل أن ينتقل الطلب إلى الدفع أو الإرسال.",
     applicantType: "نوع مقدم الطلب",
-    assetName: "اسم الأصل",
+    assetName: "اسم الأصل (مثال: دراجة أو مركبة أو معدات)",
     assetNamePlaceholder: "مثال: Opel Corsa / Komatsu WA380",
     brand: "العلامة التجارية",
     brandPlaceholder: "مثال: Opel",
@@ -584,7 +584,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Uzupelnij wszystkie wymagane dane, zanim zgloszenie przejdzie do platnosci lub wyslania.",
     applicantType: "Typ wnioskodawcy",
-    assetName: "Nazwa assetu",
+    assetName: "Nazwa assetu (np. rower, pojazd lub sprzet)",
     assetNamePlaceholder: "np. Opel Corsa / Komatsu WA380",
     brand: "Marka",
     brandPlaceholder: "np. Opel",
@@ -626,7 +626,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Fyll i all obligatorisk data innan arendet kan ga vidare till betalning eller inlamning.",
     applicantType: "Sokandetyp",
-    assetName: "Assetnamn",
+    assetName: "Assetnamn (t.ex. cykel, fordon eller utrustning)",
     assetNamePlaceholder: "t.ex. Opel Corsa / Komatsu WA380",
     brand: "Marke",
     brandPlaceholder: "t.ex. Opel",
@@ -668,7 +668,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Udfyld alle obligatoriske data, for anmodningen kan ga videre til betaling eller indsendelse.",
     applicantType: "Ansogertype",
-    assetName: "Assetnavn",
+    assetName: "Assetnavn (f.eks. cykel, koretoj eller udstyr)",
     assetNamePlaceholder: "f.eks. Opel Corsa / Komatsu WA380",
     brand: "Maerke",
     brandPlaceholder: "f.eks. Opel",
@@ -710,7 +710,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Fyll ut alle obligatoriske data for foresporselen kan ga videre til betaling eller innsending.",
     applicantType: "Sokertype",
-    assetName: "Assetnavn",
+    assetName: "Assetnavn (f.eks. sykkel, kjoretoy eller utstyr)",
     assetNamePlaceholder: "f.eks. Opel Corsa / Komatsu WA380",
     brand: "Merke",
     brandPlaceholder: "f.eks. Opel",
@@ -785,10 +785,10 @@ const EXTRA_FORM_TEXT: Record<
       "If useful, add proof for the authorized contact or business address.",
     redactionHint:
       "Please mask or redact unnecessary sensitive fields before upload.",
-    stolenTitle: "Stolen asset intake",
+    stolenTitle: "WARNING: check this only if this asset is already stolen",
     stolenSubtitle:
-      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
-    stolenToggle: "This registration concerns an already stolen asset",
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    stolenToggle: "This asset has already been reported stolen",
     policeReportNumber: "Police report number",
     incidentDate: "Incident date",
     incidentCountry: "Incident country",
@@ -814,10 +814,11 @@ const EXTRA_FORM_TEXT: Record<
       "Si ayuda, anada prueba del contacto autorizado o de la direccion comercial.",
     redactionHint:
       "Enmascare o tache los campos sensibles no necesarios antes de subirlos.",
-    stolenTitle: "Declaracion de activo robado",
+    stolenTitle:
+      "ATENCION: marque esto solo si este activo ya fue reportado como robado",
     stolenSubtitle:
-      "Si este activo ya fue denunciado como robado, anada aqui los primeros datos del caso. El administrador podra completar el caso despues.",
-    stolenToggle: "Este registro corresponde a un activo ya robado",
+      "Use esto solo cuando registre un activo que ya haya sido reportado como robado. Para un registro normal, dejelo sin marcar.",
+    stolenToggle: "Este activo ya fue reportado como robado",
     policeReportNumber: "Numero de denuncia policial",
     incidentDate: "Fecha del incidente",
     incidentCountry: "Pais del incidente",
@@ -843,10 +844,11 @@ const EXTRA_FORM_TEXT: Record<
       "Falls hilfreich, fugen Sie Nachweise fur den bevollmachtigten Kontakt oder die Geschaftsadresse hinzu.",
     redactionHint:
       "Schwarzen Sie unnotige sensible Felder vor dem Upload ab.",
-    stolenTitle: "Erfassung gestohlenes Asset",
+    stolenTitle:
+      "ACHTUNG: nur ankreuzen, wenn dieses Asset bereits als gestohlen gemeldet ist",
     stolenSubtitle:
-      "Wenn dieses Asset bereits als gestohlen gemeldet wurde, erfassen Sie hier die ersten Falldetails. Das Admin-Team kann den Fall spater vervollstandigen.",
-    stolenToggle: "Diese Registrierung betrifft ein bereits gestohlenes Asset",
+      "Nur verwenden, wenn Sie ein Asset registrieren, das bereits als gestohlen gemeldet wurde. Fur eine normale Registrierung nicht ankreuzen.",
+    stolenToggle: "Dieses Asset wurde bereits als gestohlen gemeldet",
     policeReportNumber: "Polizeiberichtsnummer",
     incidentDate: "Vorfallsdatum",
     incidentCountry: "Land des Vorfalls",
@@ -872,10 +874,11 @@ const EXTRA_FORM_TEXT: Record<
       "Si utile, ajoutez une preuve du contact autorise ou de l'adresse professionnelle.",
     redactionHint:
       "Masquez les champs sensibles non necessaires avant le televersement.",
-    stolenTitle: "Declaration d'actif vole",
+    stolenTitle:
+      "ATTENTION : cochez uniquement si cet actif est deja signale comme vole",
     stolenSubtitle:
-      "Si cet actif est deja signale comme vole, ajoutez ici les premiers details du dossier. L'administration pourra completer le dossier ensuite.",
-    stolenToggle: "Cet enregistrement concerne un actif deja vole",
+      "Utilisez ceci uniquement lorsque vous enregistrez un actif deja signale comme vole. Pour un enregistrement normal, laissez cette case decochee.",
+    stolenToggle: "Cet actif a deja ete signale comme vole",
     policeReportNumber: "Numero de rapport de police",
     incidentDate: "Date de l'incident",
     incidentCountry: "Pays de l'incident",
@@ -901,10 +904,11 @@ const EXTRA_FORM_TEXT: Record<
       "Se utile, aggiungi prova del contatto autorizzato o dell'indirizzo aziendale.",
     redactionHint:
       "Oscura i campi sensibili non necessari prima del caricamento.",
-    stolenTitle: "Segnalazione bene rubato",
+    stolenTitle:
+      "ATTENZIONE: seleziona solo se questo asset risulta gia rubato",
     stolenSubtitle:
-      "Se questo bene e gia stato denunciato come rubato, inserisci qui i primi dettagli del caso. L'amministrazione potra completarlo dopo.",
-    stolenToggle: "Questa registrazione riguarda un bene gia rubato",
+      "Usa questa opzione solo quando registri un asset gia segnalato come rubato. Per una registrazione normale, lascia deselezionato.",
+    stolenToggle: "Questo asset e gia stato segnalato come rubato",
     policeReportNumber: "Numero del rapporto di polizia",
     incidentDate: "Data dell'incidente",
     incidentCountry: "Paese dell'incidente",
@@ -959,10 +963,11 @@ const EXTRA_FORM_TEXT: Record<
       "Se ajudar, adicione prova do contacto autorizado ou da morada comercial.",
     redactionHint:
       "Mascare campos sensiveis desnecessarios antes do carregamento.",
-    stolenTitle: "Declaracao de ativo roubado",
+    stolenTitle:
+      "ATENCAO: marque apenas se este ativo ja foi reportado como roubado",
     stolenSubtitle:
-      "Se este ativo ja foi comunicado como roubado, adicione aqui os primeiros detalhes do caso. A administracao pode completar o caso depois.",
-    stolenToggle: "Este registo diz respeito a um ativo ja roubado",
+      "Use isto apenas quando estiver a registar um ativo ja reportado como roubado. Para um registo normal, deixe desmarcado.",
+    stolenToggle: "Este ativo ja foi reportado como roubado",
     policeReportNumber: "Numero do relatorio policial",
     incidentDate: "Data do incidente",
     incidentCountry: "Pais do incidente",
@@ -988,10 +993,11 @@ const EXTRA_FORM_TEXT: Record<
       "Pri neobkhodimosti dobavte dokazatelstvo dlya upolnomochennogo kontakta ili adresa biznesa.",
     redactionHint:
       "Skroyte lishniye chuvstvitelnyye polya pered zagruzkoy.",
-    stolenTitle: "Zayavleniye o pokhishchennom aktive",
+    stolenTitle:
+      "Vnimaniye: otmette tolko esli etot aktiv uzhe zayavlen kak pokhishchennyy",
     stolenSubtitle:
-      "Esli etot aktiv uzhe zayavlen kak pokhishchennyy, dobavte zdes pervyye dannyye po delu. Admin mozhet dopolnit delo pozhe.",
-    stolenToggle: "Eta registratsiya otnositsya k uzhe pokhishchennomu aktivu",
+      "Ispolzuyte eto tolko pri registratsii aktiva, kotoryy uzhe zayavlen kak pokhishchennyy. Dlya obychnoy registratsii ostavte bez otmetki.",
+    stolenToggle: "Etot aktiv uzhe zayavlen kak pokhishchennyy",
     policeReportNumber: "Nomer politseskogo otcheta",
     incidentDate: "Data intsidenta",
     incidentCountry: "Strana intsidenta",
@@ -1017,10 +1023,10 @@ const EXTRA_FORM_TEXT: Record<
       "Ruguo you bangzhu, keyi buchong shouquan lianxiren huo gongsi dizhi zhengming.",
     redactionHint:
       "Shangchuan qian qing zhedang bu bixu de mingan ziduan.",
-    stolenTitle: "Bei dao zican dengji",
+    stolenTitle: "注意：仅当该资产已被报告为被盗时才勾选",
     stolenSubtitle:
-      "Ruguo gai zican yi bao bei dao, qing zai zheli tianxie chubu anjian xinxi. Houxu keyi you admin buchong wanzheng anjian.",
-    stolenToggle: "Ci ci zhuce sheji yige yi bei dao de zican",
+      "仅在登记已被报告为被盗的资产时使用。普通登记请保持未勾选。",
+    stolenToggle: "该资产已被报告为被盗",
     policeReportNumber: "Baoan bianhao",
     incidentDate: "Shijian riqi",
     incidentCountry: "Shijian guojia",
@@ -1046,10 +1052,11 @@ const EXTRA_FORM_TEXT: Record<
       "Zarurat ho to adhikrit sampark ya vyavsayik pate ka praman bhi joden.",
     redactionHint:
       "Upload se pehle gair-zaruri samvedanshil fields ko chhupa den.",
-    stolenTitle: "Chori hui sampatti jankari",
+    stolenTitle:
+      "ध्यान दें: केवल तभी चुनें जब यह एसेट पहले से चोरी रिपोर्ट हो",
     stolenSubtitle:
-      "Agar yeh sampatti pehle se chori report ho chuki hai, to yahan prarambhik case details joden. Admin baad mein poora case complete kar sakta hai.",
-    stolenToggle: "Yeh registration ek pehle se chori hui sampatti ke liye hai",
+      "इसे केवल तब उपयोग करें जब आप ऐसा एसेट पंजीकृत कर रहे हों जिसे पहले से चोरी रिपोर्ट किया गया हो। सामान्य पंजीकरण के लिए इसे अनचेक छोड़ें।",
+    stolenToggle: "यह एसेट पहले से चोरी रिपोर्ट किया जा चुका है",
     policeReportNumber: "Police report sankhya",
     incidentDate: "Ghatna ki tarikh",
     incidentCountry: "Ghatna ka desh",
@@ -1105,10 +1112,10 @@ const EXTRA_FORM_TEXT: Record<
       "If useful, add proof for the authorized contact or business address.",
     redactionHint:
       "Please mask or redact unnecessary sensitive fields before upload.",
-    stolenTitle: "Stolen asset intake",
+    stolenTitle: "WARNING: check this only if this asset is already stolen",
     stolenSubtitle:
-      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
-    stolenToggle: "This registration concerns an already stolen asset",
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    stolenToggle: "This asset has already been reported stolen",
     policeReportNumber: "Police report number",
     incidentDate: "Incident date",
     incidentCountry: "Incident country",
@@ -1134,10 +1141,10 @@ const EXTRA_FORM_TEXT: Record<
       "If useful, add proof for the authorized contact or business address.",
     redactionHint:
       "Please mask or redact unnecessary sensitive fields before upload.",
-    stolenTitle: "Stolen asset intake",
+    stolenTitle: "WARNING: check this only if this asset is already stolen",
     stolenSubtitle:
-      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
-    stolenToggle: "This registration concerns an already stolen asset",
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    stolenToggle: "This asset has already been reported stolen",
     policeReportNumber: "Police report number",
     incidentDate: "Incident date",
     incidentCountry: "Incident country",
@@ -1163,10 +1170,10 @@ const EXTRA_FORM_TEXT: Record<
       "If useful, add proof for the authorized contact or business address.",
     redactionHint:
       "Please mask or redact unnecessary sensitive fields before upload.",
-    stolenTitle: "Stolen asset intake",
+    stolenTitle: "WARNING: check this only if this asset is already stolen",
     stolenSubtitle:
-      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
-    stolenToggle: "This registration concerns an already stolen asset",
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    stolenToggle: "This asset has already been reported stolen",
     policeReportNumber: "Police report number",
     incidentDate: "Incident date",
     incidentCountry: "Incident country",
@@ -1192,10 +1199,10 @@ const EXTRA_FORM_TEXT: Record<
       "If useful, add proof for the authorized contact or business address.",
     redactionHint:
       "Please mask or redact unnecessary sensitive fields before upload.",
-    stolenTitle: "Stolen asset intake",
+    stolenTitle: "WARNING: check this only if this asset is already stolen",
     stolenSubtitle:
-      "If this asset is already reported stolen, add the first case details here. Admin can complete the full stolen case later.",
-    stolenToggle: "This registration concerns an already stolen asset",
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    stolenToggle: "This asset has already been reported stolen",
     policeReportNumber: "Police report number",
     incidentDate: "Incident date",
     incidentCountry: "Incident country",
@@ -1248,24 +1255,394 @@ const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
   no: "Current dashboard status:",
 };
 
-const NL_REGISTRATION_GUIDANCE = {
-  title: "Wat heb je nodig?",
-  checklist: [
-    "Serienummer, VIN of ander uniek identificatienummer",
-    "Foto van het asset, bijvoorbeeld fiets, voertuig of materieel (optioneel)",
-    "Factuur of aankoopbewijs (verplicht indien beschikbaar)",
-    "Bewijs van eigendom of overdracht, indien van toepassing",
-  ],
-  note:
-    "Zorg dat je deze gegevens bij de hand hebt voordat je begint. Dit voorkomt dat je later opnieuw moet zoeken of documenten moet uploaden.",
-  categoryHint:
-    "Selecteer wat je wilt registreren, bijvoorbeeld fiets, auto, trailer, machine of materieel.",
-  documentHelp:
-    "Een factuur of aankoopbewijs kan ook dienen als bewijs van eigendom.",
-  documentHelpInvoice:
-    "Factuur / aankoopbewijs: verplicht indien beschikbaar.",
-  documentHelpOwnership:
-    "Extra bewijs van eigendom of overdracht: optioneel, alleen indien je dit apart hebt.",
+type RegistrationUxGuidanceText = {
+  title: string;
+  checklist: [string, string, string, string];
+  note: string;
+  categoryHint: string;
+  documentHelp: string;
+  documentHelpInvoice: string;
+  documentHelpOwnership: string;
+};
+
+type StolenWarningText = {
+  title: string;
+  subtitle: string;
+  toggle: string;
+};
+
+const REGISTRATION_UX_GUIDANCE_TEXT: Record<Lang, RegistrationUxGuidanceText> = {
+  en: {
+    title: "What do you need?",
+    checklist: [
+      "Serial number, VIN, or another unique identifier",
+      "Photo of the asset, for example bike, vehicle, or equipment (optional)",
+      "Invoice or proof of purchase (required if available)",
+      "Proof of ownership or transfer, where applicable",
+    ],
+    note:
+      "Keep these details ready before you start. This prevents having to search again or upload documents later.",
+    categoryHint:
+      "Select what you want to register, for example bike, car, trailer, machine, or equipment.",
+    documentHelp:
+      "An invoice or proof of purchase can also serve as proof of ownership.",
+    documentHelpInvoice: "Invoice / proof of purchase: required if available.",
+    documentHelpOwnership:
+      "Extra proof of ownership or transfer: optional, only if you have this separately.",
+  },
+  es: {
+    title: "¿Qué necesitas?",
+    checklist: [
+      "Numero de serie, VIN u otro identificador unico",
+      "Foto del activo, por ejemplo bicicleta, vehiculo o equipo (opcional)",
+      "Factura o comprobante de compra (obligatorio si esta disponible)",
+      "Prueba de propiedad o de transferencia, cuando corresponda",
+    ],
+    note:
+      "Ten estos datos a mano antes de empezar. Asi evitaras tener que volver a buscar o subir documentos mas tarde.",
+    categoryHint:
+      "Selecciona lo que quieres registrar, por ejemplo bicicleta, coche, remolque, maquina o equipo.",
+    documentHelp:
+      "Una factura o comprobante de compra tambien puede servir como prueba de propiedad.",
+    documentHelpInvoice:
+      "Factura / comprobante de compra: obligatorio si esta disponible.",
+    documentHelpOwnership:
+      "Prueba adicional de propiedad o transferencia: opcional, solo si la tienes por separado.",
+  },
+  de: {
+    title: "Was benötigen Sie?",
+    checklist: [
+      "Seriennummer, VIN oder eine andere eindeutige Identifikationsnummer",
+      "Foto des Assets, zum Beispiel Fahrrad, Fahrzeug oder Geraet (optional)",
+      "Rechnung oder Kaufnachweis (verpflichtend, sofern vorhanden)",
+      "Eigentums- oder Uebertragungsnachweis, falls zutreffend",
+    ],
+    note:
+      "Halten Sie diese Angaben bereit, bevor Sie starten. So vermeiden Sie, spaeter erneut suchen oder Dokumente hochladen zu muessen.",
+    categoryHint:
+      "Waehlen Sie aus, was Sie registrieren moechten, z. B. Fahrrad, Auto, Anhaenger, Maschine oder Geraet.",
+    documentHelp:
+      "Eine Rechnung oder ein Kaufnachweis kann auch als Eigentumsnachweis dienen.",
+    documentHelpInvoice:
+      "Rechnung / Kaufnachweis: verpflichtend, sofern vorhanden.",
+    documentHelpOwnership:
+      "Zusaetzlicher Eigentums- oder Uebertragungsnachweis: optional, nur wenn separat vorhanden.",
+  },
+  fr: {
+    title: "De quoi avez-vous besoin ?",
+    checklist: [
+      "Numero de serie, VIN ou autre identifiant unique",
+      "Photo de l’actif, par exemple velo, vehicule ou equipement (optionnel)",
+      "Facture ou preuve d’achat (obligatoire si disponible)",
+      "Preuve de propriete ou de transfert, le cas echeant",
+    ],
+    note:
+      "Gardez ces informations a portee de main avant de commencer. Cela evite de devoir rechercher a nouveau ou televerser des documents plus tard.",
+    categoryHint:
+      "Selectionnez ce que vous souhaitez enregistrer, par exemple velo, voiture, remorque, machine ou equipement.",
+    documentHelp:
+      "Une facture ou une preuve d’achat peut aussi servir de preuve de propriete.",
+    documentHelpInvoice: "Facture / preuve d’achat : obligatoire si disponible.",
+    documentHelpOwnership:
+      "Preuve supplementaire de propriete ou de transfert : optionnelle, uniquement si vous l’avez separement.",
+  },
+  it: {
+    title: "Di cosa hai bisogno?",
+    checklist: [
+      "Numero di serie, VIN o altro identificativo univoco",
+      "Foto dell’asset, ad esempio bici, veicolo o attrezzatura (opzionale)",
+      "Fattura o prova d’acquisto (obbligatoria se disponibile)",
+      "Prova di proprieta o di trasferimento, se applicabile",
+    ],
+    note:
+      "Tieni questi dati a portata di mano prima di iniziare. Cosi eviti di dover cercare di nuovo o caricare documenti piu tardi.",
+    categoryHint:
+      "Seleziona cosa vuoi registrare, ad esempio bici, auto, rimorchio, macchina o attrezzatura.",
+    documentHelp:
+      "Una fattura o prova d’acquisto puo anche valere come prova di proprieta.",
+    documentHelpInvoice:
+      "Fattura / prova d’acquisto: obbligatoria se disponibile.",
+    documentHelpOwnership:
+      "Prova aggiuntiva di proprieta o trasferimento: opzionale, solo se la possiedi separatamente.",
+  },
+  nl: {
+    title: "Wat heb je nodig?",
+    checklist: [
+      "Serienummer, VIN of ander uniek identificatienummer",
+      "Foto van het asset, bijvoorbeeld fiets, voertuig of materieel (optioneel)",
+      "Factuur of aankoopbewijs (verplicht indien beschikbaar)",
+      "Bewijs van eigendom of overdracht, indien van toepassing",
+    ],
+    note:
+      "Zorg dat je deze gegevens bij de hand hebt voordat je begint. Dit voorkomt dat je later opnieuw moet zoeken of documenten moet uploaden.",
+    categoryHint:
+      "Selecteer wat je wilt registreren, bijvoorbeeld fiets, auto, trailer, machine of materieel.",
+    documentHelp:
+      "Een factuur of aankoopbewijs kan ook dienen als bewijs van eigendom.",
+    documentHelpInvoice:
+      "Factuur / aankoopbewijs: verplicht indien beschikbaar.",
+    documentHelpOwnership:
+      "Extra bewijs van eigendom of overdracht: optioneel, alleen indien je dit apart hebt.",
+  },
+  pt: {
+    title: "Do que precisa?",
+    checklist: [
+      "Numero de serie, VIN ou outro identificador unico",
+      "Foto do ativo, por exemplo bicicleta, veiculo ou equipamento (opcional)",
+      "Fatura ou comprovativo de compra (obrigatorio se disponivel)",
+      "Comprovativo de propriedade ou transferencia, quando aplicavel",
+    ],
+    note:
+      "Tenha estes dados a mao antes de comecar. Assim evita ter de procurar novamente ou carregar documentos mais tarde.",
+    categoryHint:
+      "Selecione o que pretende registar, por exemplo bicicleta, carro, reboque, maquina ou equipamento.",
+    documentHelp:
+      "Uma fatura ou comprovativo de compra tambem pode servir como comprovativo de propriedade.",
+    documentHelpInvoice:
+      "Fatura / comprovativo de compra: obrigatorio se disponivel.",
+    documentHelpOwnership:
+      "Comprovativo adicional de propriedade ou transferencia: opcional, apenas se o tiver em separado.",
+  },
+  ru: {
+    title: "Chto vam nuzhno?",
+    checklist: [
+      "Seriynyy nomer, VIN ili drugoy unikalnyy identifikator",
+      "Foto aktiva, naprimer velosiped, transport ili oborudovaniye (neobyazatelno)",
+      "Schet ili podtverzhdeniye pokupki (obyazatelno, esli est)",
+      "Podtverzhdeniye prava sobstvennosti ili peredachi, esli primenimo",
+    ],
+    note:
+      "Derzhite eti dannyye pod rukoy pered nachalom. Eto pomozhet ne iskat ikh zanovo i ne zagruzhat dokumenty pozhe.",
+    categoryHint:
+      "Vyberite, chto vy khotite zaregistrirovat, naprimer velosiped, avtomobil, pritsep, mashinu ili oborudovaniye.",
+    documentHelp:
+      "Schet ili podtverzhdeniye pokupki takzhe mozhet sluzhit podtverzhdeniyem prava sobstvennosti.",
+    documentHelpInvoice:
+      "Schet / podtverzhdeniye pokupki: obyazatelno, esli est.",
+    documentHelpOwnership:
+      "Dopolnitelnoye podtverzhdeniye prava sobstvennosti ili peredachi: neobyazatelno, tolko esli yest otdelno.",
+  },
+  zh: {
+    title: "您需要什么？",
+    checklist: [
+      "序列号、VIN 或其他唯一识别号",
+      "资产照片，例如自行车、车辆或设备（可选）",
+      "发票或购买凭证（如有则必填）",
+      "所有权或转让证明（如适用）",
+    ],
+    note:
+      "开始前请准备好这些信息。这样可以避免后续再次查找或重新上传文件。",
+    categoryHint: "请选择要登记的类型，例如自行车、汽车、拖车、机器或设备。",
+    documentHelp: "发票或购买凭证也可作为所有权证明。",
+    documentHelpInvoice: "发票 / 购买凭证：如有则必填。",
+    documentHelpOwnership:
+      "额外的所有权或转让证明：可选，仅在您单独持有时提供。",
+  },
+  hi: {
+    title: "आपको क्या चाहिए?",
+    checklist: [
+      "सीरियल नंबर, VIN या कोई अन्य यूनिक पहचान नंबर",
+      "एसेट की फोटो, जैसे साइकिल, वाहन या उपकरण (वैकल्पिक)",
+      "इनवॉइस या खरीद प्रमाण (उपलब्ध हो तो अनिवार्य)",
+      "मालिकाना या ट्रांसफर का प्रमाण, यदि लागू हो",
+    ],
+    note:
+      "शुरू करने से पहले ये विवरण अपने पास रखें। इससे बाद में फिर से खोजने या दस्तावेज़ दोबारा अपलोड करने की जरूरत नहीं पड़ेगी।",
+    categoryHint:
+      "आप क्या रजिस्टर करना चाहते हैं चुनें, जैसे साइकिल, कार, ट्रेलर, मशीन या उपकरण।",
+    documentHelp:
+      "इनवॉइस या खरीद प्रमाण मालिकाना प्रमाण के रूप में भी काम कर सकता है।",
+    documentHelpInvoice:
+      "इनवॉइस / खरीद प्रमाण: उपलब्ध हो तो अनिवार्य।",
+    documentHelpOwnership:
+      "अतिरिक्त मालिकाना या ट्रांसफर प्रमाण: वैकल्पिक, केवल यदि यह अलग से उपलब्ध हो।",
+  },
+  ar: {
+    title: "ما الذي تحتاجه؟",
+    checklist: [
+      "الرقم التسلسلي أو VIN أو أي مُعرّف فريد آخر",
+      "صورة للأصل، مثل دراجة أو مركبة أو معدات (اختياري)",
+      "فاتورة أو إثبات شراء (مطلوب إذا كان متاحًا)",
+      "إثبات ملكية أو نقل، عند الاقتضاء",
+    ],
+    note:
+      "جهّز هذه البيانات قبل البدء. هذا يمنع الحاجة للبحث مرة أخرى أو رفع المستندات لاحقًا.",
+    categoryHint:
+      "اختر ما تريد تسجيله، مثل دراجة أو سيارة أو مقطورة أو آلة أو معدات.",
+    documentHelp:
+      "يمكن أن تعمل الفاتورة أو إثبات الشراء أيضًا كإثبات ملكية.",
+    documentHelpInvoice:
+      "فاتورة / إثبات شراء: مطلوب إذا كان متاحًا.",
+    documentHelpOwnership:
+      "إثبات إضافي للملكية أو النقل: اختياري، فقط إذا كان متوفرًا لديك بشكل منفصل.",
+  },
+  pl: {
+    title: "What do you need?",
+    checklist: [
+      "Serial number, VIN, or another unique identifier",
+      "Photo of the asset, for example bike, vehicle, or equipment (optional)",
+      "Invoice or proof of purchase (required if available)",
+      "Proof of ownership or transfer, where applicable",
+    ],
+    note:
+      "Keep these details ready before you start. This prevents having to search again or upload documents later.",
+    categoryHint:
+      "Select what you want to register, for example bike, car, trailer, machine, or equipment.",
+    documentHelp:
+      "An invoice or proof of purchase can also serve as proof of ownership.",
+    documentHelpInvoice: "Invoice / proof of purchase: required if available.",
+    documentHelpOwnership:
+      "Extra proof of ownership or transfer: optional, only if you have this separately.",
+  },
+  sv: {
+    title: "What do you need?",
+    checklist: [
+      "Serial number, VIN, or another unique identifier",
+      "Photo of the asset, for example bike, vehicle, or equipment (optional)",
+      "Invoice or proof of purchase (required if available)",
+      "Proof of ownership or transfer, where applicable",
+    ],
+    note:
+      "Keep these details ready before you start. This prevents having to search again or upload documents later.",
+    categoryHint:
+      "Select what you want to register, for example bike, car, trailer, machine, or equipment.",
+    documentHelp:
+      "An invoice or proof of purchase can also serve as proof of ownership.",
+    documentHelpInvoice: "Invoice / proof of purchase: required if available.",
+    documentHelpOwnership:
+      "Extra proof of ownership or transfer: optional, only if you have this separately.",
+  },
+  da: {
+    title: "What do you need?",
+    checklist: [
+      "Serial number, VIN, or another unique identifier",
+      "Photo of the asset, for example bike, vehicle, or equipment (optional)",
+      "Invoice or proof of purchase (required if available)",
+      "Proof of ownership or transfer, where applicable",
+    ],
+    note:
+      "Keep these details ready before you start. This prevents having to search again or upload documents later.",
+    categoryHint:
+      "Select what you want to register, for example bike, car, trailer, machine, or equipment.",
+    documentHelp:
+      "An invoice or proof of purchase can also serve as proof of ownership.",
+    documentHelpInvoice: "Invoice / proof of purchase: required if available.",
+    documentHelpOwnership:
+      "Extra proof of ownership or transfer: optional, only if you have this separately.",
+  },
+  no: {
+    title: "What do you need?",
+    checklist: [
+      "Serial number, VIN, or another unique identifier",
+      "Photo of the asset, for example bike, vehicle, or equipment (optional)",
+      "Invoice or proof of purchase (required if available)",
+      "Proof of ownership or transfer, where applicable",
+    ],
+    note:
+      "Keep these details ready before you start. This prevents having to search again or upload documents later.",
+    categoryHint:
+      "Select what you want to register, for example bike, car, trailer, machine, or equipment.",
+    documentHelp:
+      "An invoice or proof of purchase can also serve as proof of ownership.",
+    documentHelpInvoice: "Invoice / proof of purchase: required if available.",
+    documentHelpOwnership:
+      "Extra proof of ownership or transfer: optional, only if you have this separately.",
+  },
+};
+
+const STOLEN_WARNING_TEXT: Record<Lang, StolenWarningText> = {
+  en: {
+    title: "WARNING: check this only if this asset is already stolen",
+    subtitle:
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    toggle: "This asset has already been reported stolen",
+  },
+  es: {
+    title: "ATENCION: marque esto solo si este activo ya fue reportado como robado",
+    subtitle:
+      "Use esto solo cuando registre un activo que ya haya sido reportado como robado. Para un registro normal, dejelo sin marcar.",
+    toggle: "Este activo ya fue reportado como robado",
+  },
+  de: {
+    title:
+      "ACHTUNG: nur ankreuzen, wenn dieses Asset bereits als gestohlen gemeldet ist",
+    subtitle:
+      "Nur verwenden, wenn Sie ein Asset registrieren, das bereits als gestohlen gemeldet wurde. Fur eine normale Registrierung nicht ankreuzen.",
+    toggle: "Dieses Asset wurde bereits als gestohlen gemeldet",
+  },
+  fr: {
+    title: "ATTENTION : cochez uniquement si cet actif est deja signale comme vole",
+    subtitle:
+      "Utilisez ceci uniquement lorsque vous enregistrez un actif deja signale comme vole. Pour un enregistrement normal, laissez cette case decochee.",
+    toggle: "Cet actif a deja ete signale comme vole",
+  },
+  it: {
+    title: "ATTENZIONE: seleziona solo se questo asset risulta gia rubato",
+    subtitle:
+      "Usa questa opzione solo quando registri un asset gia segnalato come rubato. Per una registrazione normale, lascia deselezionato.",
+    toggle: "Questo asset e gia stato segnalato come rubato",
+  },
+  nl: {
+    title: "LET OP: alleen aanvinken als dit asset al gestolen is",
+    subtitle:
+      "Gebruik dit alleen wanneer je een asset registreert dat al als gestolen is gemeld. Voor een normale registratie laat je dit uitgevinkt.",
+    toggle: "Dit asset is al als gestolen gemeld",
+  },
+  pt: {
+    title: "ATENCAO: marque apenas se este ativo ja foi reportado como roubado",
+    subtitle:
+      "Use isto apenas quando estiver a registar um ativo ja reportado como roubado. Para um registo normal, deixe desmarcado.",
+    toggle: "Este ativo ja foi reportado como roubado",
+  },
+  ru: {
+    title:
+      "Vnimaniye: otmette tolko esli etot aktiv uzhe zayavlen kak pokhishchennyy",
+    subtitle:
+      "Ispolzuyte eto tolko pri registratsii aktiva, kotoryy uzhe zayavlen kak pokhishchennyy. Dlya obychnoy registratsii ostavte bez otmetki.",
+    toggle: "Etot aktiv uzhe zayavlen kak pokhishchennyy",
+  },
+  zh: {
+    title: "注意：仅当该资产已被报告为被盗时才勾选",
+    subtitle: "仅在登记已被报告为被盗的资产时使用。普通登记请保持未勾选。",
+    toggle: "该资产已被报告为被盗",
+  },
+  hi: {
+    title: "ध्यान दें: केवल तभी चुनें जब यह एसेट पहले से चोरी रिपोर्ट हो",
+    subtitle:
+      "इसे केवल तब उपयोग करें जब आप ऐसा एसेट पंजीकृत कर रहे हों जिसे पहले से चोरी रिपोर्ट किया गया हो। सामान्य पंजीकरण के लिए इसे अनचेक छोड़ें।",
+    toggle: "यह एसेट पहले से चोरी रिपोर्ट किया जा चुका है",
+  },
+  ar: {
+    title:
+      "تنبيه: فعّل هذا الخيار فقط إذا كان هذا الأصل مُبلّغًا عنه كمسروق بالفعل",
+    subtitle:
+      "استخدم هذا فقط عند تسجيل أصل تم الإبلاغ عنه مسبقًا كمسروق. للتسجيل العادي اتركه بدون تحديد.",
+    toggle: "تم الإبلاغ عن هذا الأصل كمسروق بالفعل",
+  },
+  pl: {
+    title: "WARNING: check this only if this asset is already stolen",
+    subtitle:
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    toggle: "This asset has already been reported stolen",
+  },
+  sv: {
+    title: "WARNING: check this only if this asset is already stolen",
+    subtitle:
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    toggle: "This asset has already been reported stolen",
+  },
+  da: {
+    title: "WARNING: check this only if this asset is already stolen",
+    subtitle:
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    toggle: "This asset has already been reported stolen",
+  },
+  no: {
+    title: "WARNING: check this only if this asset is already stolen",
+    subtitle:
+      "Use this only when registering an asset that has already been reported stolen. For a normal registration, leave this unchecked.",
+    toggle: "This asset has already been reported stolen",
+  },
 };
 
 function normalizeStandardApplicantType(
@@ -1582,6 +1959,8 @@ export default function RegistrationFormStep1({
 
   const text = repairMojibakeDeep(FORM_TEXT[lang]);
   const extraText = repairMojibakeDeep(EXTRA_FORM_TEXT[lang]);
+  const uxGuidanceText = repairMojibakeDeep(REGISTRATION_UX_GUIDANCE_TEXT[lang]);
+  const stolenWarningText = repairMojibakeDeep(STOLEN_WARNING_TEXT[lang]);
   const uploadText = repairMojibakeDeep(getRegistryUploadText(lang));
   const applicantIdText = repairMojibakeDeep(
     getDocumentText(lang, "applicant_id")
@@ -1733,21 +2112,17 @@ export default function RegistrationFormStep1({
           value={JSON.stringify(safeSubmissionDocuments)}
         />
 
-        {lang === "nl" ? (
-          <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-            <h2 className="text-lg font-semibold text-zinc-900">
-              {NL_REGISTRATION_GUIDANCE.title}
-            </h2>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
-              {NL_REGISTRATION_GUIDANCE.checklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            <p className="mt-4 text-sm text-zinc-600">
-              {NL_REGISTRATION_GUIDANCE.note}
-            </p>
-          </section>
-        ) : null}
+        <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+          <h2 className="text-lg font-semibold text-zinc-900">
+            {uxGuidanceText.title}
+          </h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
+            {uxGuidanceText.checklist.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p className="mt-4 text-sm text-zinc-600">{uxGuidanceText.note}</p>
+        </section>
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
           <div className="mb-5">
@@ -1811,11 +2186,9 @@ export default function RegistrationFormStep1({
               onCategoryChange={handleCategoryChange}
               onSubcategoryChange={handleSubcategoryChange}
             />
-            {lang === "nl" ? (
-              <p className="mt-2 text-sm text-zinc-600">
-                {NL_REGISTRATION_GUIDANCE.categoryHint}
-              </p>
-            ) : null}
+            <p className="mt-2 text-sm text-zinc-600">
+              {uxGuidanceText.categoryHint}
+            </p>
           </div>
 
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -1966,10 +2339,10 @@ export default function RegistrationFormStep1({
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
           <div className="mb-5">
             <h3 className="text-lg font-semibold text-zinc-900">
-              {extraText.stolenTitle}
+              {stolenWarningText.title}
             </h3>
             <p className="mt-1 text-sm text-zinc-600">
-              {extraText.stolenSubtitle}
+              {stolenWarningText.subtitle}
             </p>
             <p className="mt-2 text-xs text-zinc-500">{uploadText.privacyNote}</p>
           </div>
@@ -1983,7 +2356,9 @@ export default function RegistrationFormStep1({
               }
               className="mt-1 h-4 w-4 rounded border-zinc-300"
             />
-            <span className="text-sm text-zinc-700">{extraText.stolenToggle}</span>
+            <span className="text-sm text-zinc-700">
+              {stolenWarningText.toggle}
+            </span>
           </label>
 
           {stolenAssetIntake.enabled ? (
@@ -2171,17 +2546,13 @@ export default function RegistrationFormStep1({
           hiddenKeys={["asset_overview_photo"]}
         />
 
-        {lang === "nl" ? (
-          <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-            <p className="text-sm text-zinc-700">
-              {NL_REGISTRATION_GUIDANCE.documentHelp}
-            </p>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
-              <li>{NL_REGISTRATION_GUIDANCE.documentHelpInvoice}</li>
-              <li>{NL_REGISTRATION_GUIDANCE.documentHelpOwnership}</li>
-            </ul>
-          </section>
-        ) : null}
+        <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+          <p className="text-sm text-zinc-700">{uxGuidanceText.documentHelp}</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
+            <li>{uxGuidanceText.documentHelpInvoice}</li>
+            <li>{uxGuidanceText.documentHelpOwnership}</li>
+          </ul>
+        </section>
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
           <label className="flex items-start gap-3">
