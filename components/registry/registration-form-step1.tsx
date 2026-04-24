@@ -324,7 +324,7 @@ const FORM_TEXT: Record<
     foundationText:
       "Vul alle verplichte gegevens in voordat de aanvraag naar betaling of indiening kan doorgaan.",
     applicantType: "Type aanvrager",
-    assetName: "Naam van het asset",
+    assetName: "Naam van het asset (bijvoorbeeld fiets, voertuig of materieel)",
     assetNamePlaceholder: "bijv. Opel Corsa / Komatsu WA380",
     brand: "Merk",
     brandPlaceholder: "bijv. Opel",
@@ -930,10 +930,10 @@ const EXTRA_FORM_TEXT: Record<
       "Voeg indien nuttig bewijs toe van de bevoegde contactpersoon of het bedrijfsadres.",
     redactionHint:
       "Maskeer onnodige gevoelige velden voor het uploaden.",
-    stolenTitle: "Melding gestolen asset",
+    stolenTitle: "LET OP: alleen aanvinken als dit asset al gestolen is",
     stolenSubtitle:
-      "Als dit asset al als gestolen is gemeld, voeg hier de eerste zaakgegevens toe. Admin kan de volledige zaak later aanvullen.",
-    stolenToggle: "Deze registratie gaat over een al gestolen asset",
+      "Gebruik dit alleen wanneer je een asset registreert dat al als gestolen is gemeld. Voor een normale registratie laat je dit uitgevinkt.",
+    stolenToggle: "Dit asset is al als gestolen gemeld",
     policeReportNumber: "Politierapportnummer",
     incidentDate: "Datum van incident",
     incidentCountry: "Land van incident",
@@ -1248,6 +1248,26 @@ const WORKFLOW_STATUS_TEXT: Record<Lang, string> = {
   no: "Current dashboard status:",
 };
 
+const NL_REGISTRATION_GUIDANCE = {
+  title: "Wat heb je nodig?",
+  checklist: [
+    "Serienummer, VIN of ander uniek identificatienummer",
+    "Foto van het asset, bijvoorbeeld fiets, voertuig of materieel (optioneel)",
+    "Factuur of aankoopbewijs (verplicht indien beschikbaar)",
+    "Bewijs van eigendom of overdracht, indien van toepassing",
+  ],
+  note:
+    "Zorg dat je deze gegevens bij de hand hebt voordat je begint. Dit voorkomt dat je later opnieuw moet zoeken of documenten moet uploaden.",
+  categoryHint:
+    "Selecteer wat je wilt registreren, bijvoorbeeld fiets, auto, trailer, machine of materieel.",
+  documentHelp:
+    "Een factuur of aankoopbewijs kan ook dienen als bewijs van eigendom.",
+  documentHelpInvoice:
+    "Factuur / aankoopbewijs: verplicht indien beschikbaar.",
+  documentHelpOwnership:
+    "Extra bewijs van eigendom of overdracht: optioneel, alleen indien je dit apart hebt.",
+};
+
 function normalizeStandardApplicantType(
   value: ApplicantType
 ): Extract<ApplicantType, "private" | "sme"> {
@@ -1412,17 +1432,18 @@ function UploadFieldCard({
                 : uploadText.chooseFile}
             </label>
 
-            <input
-              id={inputId}
-              type="file"
-              multiple={multiple}
-              accept={ALLOWED_UPLOAD_ACCEPT}
-              className="hidden"
-              onChange={(event) => {
-                void handleUpload(event.target.files);
-                event.currentTarget.value = "";
-              }}
-            />
+              <input
+                id={inputId}
+                type="file"
+                multiple={multiple}
+                accept={ALLOWED_UPLOAD_ACCEPT}
+                className="hidden"
+                onChange={(event) => {
+                  // TODO: investigate reported issue where upload/re-render may clear entered form data.
+                  void handleUpload(event.target.files);
+                  event.currentTarget.value = "";
+                }}
+              />
 
             {files.length > 0 ? (
               <button
@@ -1712,6 +1733,22 @@ export default function RegistrationFormStep1({
           value={JSON.stringify(safeSubmissionDocuments)}
         />
 
+        {lang === "nl" ? (
+          <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+            <h2 className="text-lg font-semibold text-zinc-900">
+              {NL_REGISTRATION_GUIDANCE.title}
+            </h2>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
+              {NL_REGISTRATION_GUIDANCE.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm text-zinc-600">
+              {NL_REGISTRATION_GUIDANCE.note}
+            </p>
+          </section>
+        ) : null}
+
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
           <div className="mb-5">
             <h2 className="text-lg font-semibold text-zinc-900">
@@ -1774,6 +1811,11 @@ export default function RegistrationFormStep1({
               onCategoryChange={handleCategoryChange}
               onSubcategoryChange={handleSubcategoryChange}
             />
+            {lang === "nl" ? (
+              <p className="mt-2 text-sm text-zinc-600">
+                {NL_REGISTRATION_GUIDANCE.categoryHint}
+              </p>
+            ) : null}
           </div>
 
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -2128,6 +2170,18 @@ export default function RegistrationFormStep1({
           onChange={updateDocumentField}
           hiddenKeys={["asset_overview_photo"]}
         />
+
+        {lang === "nl" ? (
+          <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+            <p className="text-sm text-zinc-700">
+              {NL_REGISTRATION_GUIDANCE.documentHelp}
+            </p>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-700">
+              <li>{NL_REGISTRATION_GUIDANCE.documentHelpInvoice}</li>
+              <li>{NL_REGISTRATION_GUIDANCE.documentHelpOwnership}</li>
+            </ul>
+          </section>
+        ) : null}
 
         <section className="rounded-2xl border border-zinc-200 bg-white p-6">
           <label className="flex items-start gap-3">

@@ -442,7 +442,15 @@ export default function DocumentRequirementsPanel({
             status: "missing" as const,
             files: [],
           };
-          const badgeClass = getStatusClasses(current.status);
+          const optionalMissing = !doc.required && current.status === "missing";
+          const badgeClass = optionalMissing
+            ? "border border-zinc-200 bg-white text-zinc-600"
+            : getStatusClasses(current.status);
+          const statusLabel = optionalMissing
+            ? lang === "nl"
+              ? "Niet toegevoegd"
+              : text.optional
+            : text.statuses[current.status];
           const inputId = `document-upload-${doc.key}`;
           const multiple = documentSupportsMultipleFiles(doc.key);
 
@@ -465,7 +473,7 @@ export default function DocumentRequirementsPanel({
                     <span
                       className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeClass}`}
                     >
-                      {text.statuses[current.status]}
+                      {statusLabel}
                     </span>
                   </div>
 
