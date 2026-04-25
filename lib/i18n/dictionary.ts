@@ -420,9 +420,9 @@ errorMessage: "Something went wrong while sending your message.",
     },
   },
   hero: {
-    title: "Verify origin and risk of vehicles and equipment worldwide",
+    title: "Verify origin, status and risk of vehicles and equipment worldwide",
     subtitle:
-      "Use VINs, serial numbers and registry IDs to check legal origin, theft alerts and registry status before purchase, financing, insurance, rental or cross-border transfer.",
+      "Use VINs, serial numbers and registry IDs to verify origin, current status and risk signals before purchase, financing, insurance, rental or transfer.",
     placeholder: "Enter VIN, serial number or registry ID",
     search: "Verify asset",
     demoSerials: "Demo serials:",
@@ -743,9 +743,9 @@ errorMessage: "Se ha producido un error al enviar su mensaje.",
     },
   },
   hero: {
-    title: "Verifica el origen y el riesgo de vehículos y equipos en todo el mundo",
+    title: "Verifica el origen, el estado y los riesgos de vehículos y equipos en todo el mundo",
     subtitle:
-      "Compruebe titularidad, historial y nivel de riesgo usando VIN, nÃºmero de serie o ID de registro.",
+      "Use VIN, números de serie e IDs de registro para verificar origen, estado actual y señales de riesgo antes de comprar, financiar, asegurar, alquilar o transferir un activo.",
     placeholder: "Introduzca VIN, nÃºmero de serie o ID de registro",
     search: "Buscar",
     demoSerials: "Series demo:",
@@ -1068,9 +1068,9 @@ errorMessage: "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten.",
     },
   },
   hero: {
-    title: "Verifiziere Herkunft und Risiko von Fahrzeugen und Equipment weltweit",
+    title: "Verifizieren Sie Herkunft, Status und Risiken von Fahrzeugen und Geräten weltweit",
     subtitle:
-      "PrÃ¼fen Sie Eigentum, Historie und Risikostatus anhand von VIN, Seriennummer oder Register-ID.",
+      "Nutzen Sie VINs, Seriennummern und Register-IDs, um Herkunft, aktuellen Status und Risikosignale vor Kauf, Finanzierung, Versicherung, Vermietung oder Übertragung zu prüfen.",
     placeholder: "VIN, Seriennummer oder Register-ID eingeben",
     search: "Suchen",
     demoSerials: "Demo-Seriennummern:",
@@ -1392,9 +1392,9 @@ errorMessage: "Une erreur sâ€™est produite lors de lâ€™envoi de votre 
     },
   },
   hero: {
-    title: "Vérifiez l’origine et les risques des véhicules et équipements dans le monde entier",
+    title: "Vérifiez l’origine, le statut et les risques des véhicules et équipements dans le monde entier",
     subtitle:
-      "VÃ©rifiez la propriÃ©tÃ©, lâ€™historique et le niveau de risque Ã  lâ€™aide du VIN, du numÃ©ro de sÃ©rie ou de lâ€™identifiant de registre.",
+      "Utilisez les VIN, numéros de série et identifiants de registre pour vérifier l’origine, le statut actuel et les signaux de risque avant achat, financement, assurance, location ou transfert.",
     placeholder: "Entrez le VIN, le numÃ©ro de sÃ©rie ou lâ€™identifiant de registre",
     search: "Rechercher",
     demoSerials: "NumÃ©ros de dÃ©monstration :",
@@ -1717,9 +1717,9 @@ errorMessage: "Si Ã¨ verificato un errore durante lâ€™invio del messaggio
     },
   },
   hero: {
-    title: "Verifica origine e rischio di veicoli e attrezzature in tutto il mondo",
+    title: "Verifica origine, stato e rischi di veicoli e attrezzature in tutto il mondo",
     subtitle:
-      "Controlla proprietÃ , cronologia e livello di rischio usando VIN, numero di serie o ID di registro.",
+      "Usa VIN, numeri di serie e ID di registro per verificare origine, stato attuale e segnali di rischio prima di acquisto, finanziamento, assicurazione, noleggio o trasferimento.",
     placeholder: "Inserisci VIN, numero di serie o ID di registro",
     search: "Cerca",
     demoSerials: "Seriali demo:",
@@ -2042,9 +2042,9 @@ errorMessage: "Er ging iets mis bij het verzenden van je bericht.",
     },
   },
   hero: {
-    title: "Verifieer herkomst en risico van voertuigen en equipment wereldwijd",
+    title: "Verifieer herkomst en risico van voertuigen en materieel wereldwijd",
     subtitle:
-      "Controleer eigendom, historie en risicostatus met VIN, serienummer of registry-ID.",
+      "Controleer direct de herkomst, status en risico van elk asset wereldwijd.",
     placeholder: "Voer VIN, serienummer of registry-ID in",
     search: "Zoeken",
     demoSerials: "Demo serienummers:",
@@ -2368,7 +2368,7 @@ errorMessage: "Ocorreu um erro ao enviar a sua mensagem.",
   hero: {
     title: "Verifique a origem e o risco de veículos e equipamentos em todo o mundo",
     subtitle:
-      "Verifique propriedade, histÃ³rico e nÃ­vel de risco usando VIN, nÃºmero de sÃ©rie ou ID de registo.",
+      "Use VIN, números de série e IDs de registo para verificar origem, estado atual e sinais de risco antes de compra, financiamento, seguro, aluguer ou transferência.",
     placeholder: "Introduza VIN, nÃºmero de sÃ©rie ou ID de registo",
     search: "Pesquisar",
     demoSerials: "NÃºmeros demo:",
@@ -2691,9 +2691,9 @@ const ru: Dictionary = {
     },
   },
   hero: {
-    title: "Проверьте происхождение и риски транспортных средств и оборудования по всему миру",
+    title: "Проверьте происхождение, статус и риски транспортных средств и оборудования по всему миру",
     subtitle:
-      "ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐ¹Ñ‚Ðµ Ð¿Ñ€Ð°Ð²Ð¾ ÑÐ¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸, Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ Ð¸ ÑƒÑ€Ð¾Ð²ÐµÐ½ÑŒ Ñ€Ð¸ÑÐºÐ° Ð¿Ð¾ VIN, ÑÐµÑ€Ð¸Ð¹Ð½Ð¾Ð¼Ñƒ Ð½Ð¾Ð¼ÐµÑ€Ñƒ Ð¸Ð»Ð¸ ID Ñ€ÐµÐµÑÑ‚Ñ€Ð°.",
+      "Используйте VIN, серийные номера и идентификаторы реестра, чтобы проверять происхождение, текущий статус и сигналы риска до покупки, финансирования, страхования, аренды или передачи.",
     placeholder: "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ VIN, ÑÐµÑ€Ð¸Ð¹Ð½Ñ‹Ð¹ Ð½Ð¾Ð¼ÐµÑ€ Ð¸Ð»Ð¸ ID Ñ€ÐµÐµÑÑ‚Ñ€Ð°",
     search: "ÐŸÐ¾Ð¸ÑÐº",
     demoSerials: "Ð”ÐµÐ¼Ð¾-ÑÐµÑ€Ð¸Ð¹Ð½Ñ‹Ðµ Ð½Ð¾Ð¼ÐµÑ€Ð°:",
@@ -3015,9 +3015,9 @@ const zh: Dictionary = {
     },
   },
   hero: {
-    title: "在全球范围内核验车辆和设备的来源与风险",
+    title: "在全球范围内核验车辆和设备的来源、状态与风险",
     subtitle:
-      "é€šè¿‡ VINã€åºåˆ—å·æˆ–æ³¨å†Œ ID æ£€æŸ¥æ‰€æœ‰æƒã€åŽ†å²è®°å½•å’Œé£Žé™©çŠ¶æ€ã€‚",
+      "使用 VIN、序列号和登记编号，在购买、融资、保险、租赁或转移前核验来源、当前状态和风险信号。",
     placeholder: "è¾“å…¥ VINã€åºåˆ—å·æˆ–æ³¨å†Œ ID",
     search: "æœç´¢",
     demoSerials: "æ¼”ç¤ºåºåˆ—å·ï¼š",
@@ -3338,9 +3338,9 @@ const hi: Dictionary = {
     },
   },
   hero: {
-    title: "दुनियाभर में वाहनों और उपकरणों की उत्पत्ति और जोखिम सत्यापित करें",
+    title: "दुनियाभर में वाहनों और उपकरणों की उत्पत्ति, स्थिति और जोखिम सत्यापित करें",
     subtitle:
-      "VIN, à¤¸à¥€à¤°à¤¿à¤¯à¤² à¤¨à¤‚à¤¬à¤° à¤¯à¤¾ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¥à¤°à¥€ à¤†à¤ˆà¤¡à¥€ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤•à¥‡ à¤¸à¥à¤µà¤¾à¤®à¤¿à¤¤à¥à¤µ, à¤‡à¤¤à¤¿à¤¹à¤¾à¤¸ à¤”à¤° à¤œà¥‹à¤–à¤¿à¤® à¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤œà¤¾à¤à¤šà¥‡à¤‚à¥¤",
+      "VIN, सीरियल नंबर और रजिस्ट्री आईडी का उपयोग करके खरीद, वित्तपोषण, बीमा, किराये या हस्तांतरण से पहले उत्पत्ति, वर्तमान स्थिति और जोखिम संकेतों की जांच करें।",
     placeholder: "VIN, à¤¸à¥€à¤°à¤¿à¤¯à¤² à¤¨à¤‚à¤¬à¤° à¤¯à¤¾ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¥à¤°à¥€ à¤†à¤ˆà¤¡à¥€ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚",
     search: "à¤–à¥‹à¤œà¥‡à¤‚",
     demoSerials: "à¤¡à¥‡à¤®à¥‹ à¤¸à¥€à¤°à¤¿à¤¯à¤² à¤¨à¤‚à¤¬à¤°:",
@@ -3662,9 +3662,9 @@ const ar: Dictionary = {
     },
   },
   hero: {
-    title: "تحقق من مصدر المركبات والمعدات ومخاطرها حول العالم",
+    title: "تحقق من مصدر المركبات والمعدات وحالتها ومخاطرها حول العالم",
     subtitle:
-      "ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù…Ù„ÙƒÙŠØ© ÙˆØ§Ù„Ø³Ø¬Ù„ ÙˆØ­Ø§Ù„Ø© Ø§Ù„Ù…Ø®Ø§Ø·Ø± Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø±Ù‚Ù… VIN Ø£Ùˆ Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ³Ù„Ø³Ù„ÙŠ Ø£Ùˆ Ù…Ø¹Ø±Ù Ø§Ù„Ø³Ø¬Ù„.",
+      "استخدم VIN والأرقام التسلسلية ومعرّفات السجل للتحقق من المصدر والحالة الحالية وإشارات المخاطر قبل الشراء أو التمويل أو التأمين أو التأجير أو النقل.",
     placeholder: "Ø£Ø¯Ø®Ù„ Ø±Ù‚Ù… VIN Ø£Ùˆ Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ³Ù„Ø³Ù„ÙŠ Ø£Ùˆ Ù…Ø¹Ø±Ù Ø§Ù„Ø³Ø¬Ù„",
     search: "Ø¨Ø­Ø«",
     demoSerials: "Ø£Ø±Ù‚Ø§Ù… ØªØ³Ù„Ø³Ù„ÙŠØ© ØªØ¬Ø±ÙŠØ¨ÙŠØ©:",

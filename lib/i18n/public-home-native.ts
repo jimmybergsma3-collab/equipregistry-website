@@ -7,9 +7,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   fr: {
     hero: {
       title:
-        "Vérifiez la propriété et le risque de fraude des véhicules et équipements dans le monde entier",
+        "Vérifiez l’origine, le statut et les risques des véhicules et équipements dans le monde entier",
       subtitle:
-        "Utilisez les VIN, numéros de série et identifiants de registre pour vérifier l’origine légale, les alertes de vol et le statut du registre avant achat, financement, assurance, location ou transfert.",
+        "Utilisez les VIN, numéros de série et identifiants de registre pour vérifier l’origine, le statut actuel et les signaux de risque avant achat, financement, assurance, location ou transfert.",
       placeholder: "Saisissez un VIN, un numéro de série ou un identifiant de registre",
       search: "Vérifier l’actif",
       demoSerials: "Séries démo :",
@@ -116,9 +116,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   it: {
     hero: {
       title:
-        "Verifica proprietà e rischio di frode su veicoli e attrezzature in tutto il mondo",
+        "Verifica origine, stato e rischi di veicoli e attrezzature in tutto il mondo",
       subtitle:
-        "Usa VIN, numeri di serie e ID di registro per verificare origine legale, alert furto e stato del registro prima di acquisto, finanziamento, assicurazione, noleggio o trasferimento.",
+        "Usa VIN, numeri di serie e ID di registro per verificare origine, stato attuale e segnali di rischio prima di acquisto, finanziamento, assicurazione, noleggio o trasferimento.",
       placeholder: "Inserisci VIN, numero di serie o ID di registro",
       search: "Verifica asset",
       demoSerials: "Serial demo:",
@@ -661,9 +661,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   ru: {
     hero: {
       title:
-        "Проверьте право собственности и риск мошенничества для техники и транспорта по всему миру",
+        "Проверьте происхождение, статус и риски транспортных средств и оборудования по всему миру",
       subtitle:
-        "Используйте VIN, серийные номера и идентификаторы реестра, чтобы проверить законное происхождение, сигналы о краже и статус до покупки, финансирования, страхования, аренды или передачи.",
+        "Используйте VIN, серийные номера и идентификаторы реестра, чтобы проверять происхождение, текущий статус и сигналы риска до покупки, финансирования, страхования, аренды или передачи.",
       placeholder: "Введите VIN, серийный номер или ID реестра",
       search: "Проверить актив",
       demoSerials: "Демо-серии:",
@@ -769,9 +769,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   },
   zh: {
     hero: {
-      title: "在全球范围内核验车辆与设备的所有权和欺诈风险",
+      title: "在全球范围内核验车辆和设备的来源、状态与风险",
       subtitle:
-        "使用 VIN、序列号和登记编号，在购买、融资、保险、租赁或转移之前核验合法来源、失窃警报和登记状态。",
+        "使用 VIN、序列号和登记编号，在购买、融资、保险、租赁或转移前核验来源、当前状态和风险信号。",
       placeholder: "输入 VIN、序列号或登记编号",
       search: "核验资产",
       demoSerials: "演示编号：",
@@ -873,9 +873,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   hi: {
     hero: {
       title:
-        "दुनियाभर में वाहनों और उपकरणों के स्वामित्व व धोखाधड़ी जोखिम की जांच करें",
+        "दुनियाभर में वाहनों और उपकरणों की उत्पत्ति, स्थिति और जोखिम सत्यापित करें",
       subtitle:
-        "खरीद, वित्तपोषण, बीमा, किराये या हस्तांतरण से पहले कानूनी मूल, चोरी अलर्ट और रजिस्ट्री स्थिति जांचने के लिए VIN, सीरियल नंबर और रजिस्ट्री आईडी का उपयोग करें।",
+        "VIN, सीरियल नंबर और रजिस्ट्री आईडी का उपयोग करके खरीद, वित्तपोषण, बीमा, किराये या हस्तांतरण से पहले उत्पत्ति, वर्तमान स्थिति और जोखिम संकेतों की जांच करें।",
       placeholder: "VIN, सीरियल नंबर या रजिस्ट्री आईडी दर्ज करें",
       search: "एसेट सत्यापित करें",
       demoSerials: "डेमो सीरियल:",
@@ -982,9 +982,9 @@ export const PUBLIC_HOME_NATIVE_OVERRIDES: Partial<
   ar: {
     hero: {
       title:
-        "تحقق من الملكية ومخاطر الاحتيال للمركبات والمعدات على مستوى عالمي",
+        "تحقق من مصدر المركبات والمعدات وحالتها ومخاطرها حول العالم",
       subtitle:
-        "استخدم VIN والأرقام التسلسلية ومعرّفات السجل للتحقق من المصدر القانوني وتنبيهات السرقة وحالة السجل قبل الشراء أو التمويل أو التأمين أو التأجير أو النقل.",
+        "استخدم VIN والأرقام التسلسلية ومعرّفات السجل للتحقق من المصدر والحالة الحالية وإشارات المخاطر قبل الشراء أو التمويل أو التأمين أو التأجير أو النقل.",
       placeholder: "أدخل VIN أو الرقم التسلسلي أو معرّف السجل",
       search: "تحقق من الأصل",
       demoSerials: "أرقام تجريبية:",

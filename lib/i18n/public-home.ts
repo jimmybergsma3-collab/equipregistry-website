@@ -103,9 +103,9 @@ export type PublicHomeText = {
 const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   en: {
     hero: {
-      title: "Verify ownership and fraud risk on vehicles and equipment worldwide",
+      title: "Verify origin, status and risk of vehicles and equipment worldwide",
       subtitle:
-        "Use VINs, serial numbers and registry IDs to check legal origin, theft alerts and registry status before purchase, financing, insurance, rental or cross-border transfer.",
+        "Use VINs, serial numbers and registry IDs to verify origin, current status and risk signals before purchase, financing, insurance, rental or transfer.",
       placeholder: "Enter VIN, serial number or registry ID",
       search: "Verify asset",
       demoSerials: "Demo serials:",
@@ -204,9 +204,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   es: {
     hero: {
-      title: "Verifique propiedad y riesgo de fraude en vehiculos y equipos en todo el mundo",
+      title: "Verifica el origen, el estado y los riesgos de vehículos y equipos en todo el mundo",
       subtitle:
-        "Use VIN, numeros de serie e IDs de registro para comprobar origen legal, alertas de robo y estado registral antes de comprar, financiar, asegurar, alquilar o transferir un activo.",
+        "Use VIN, números de serie e IDs de registro para verificar origen, estado actual y señales de riesgo antes de comprar, financiar, asegurar, alquilar o transferir un activo.",
       placeholder: "Introduzca VIN, numero de serie o ID de registro",
       search: "Verificar activo",
       demoSerials: "Series demo:",
@@ -304,9 +304,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   de: {
     hero: {
-      title: "Eigentum und Betrugsrisiko bei Fahrzeugen und Geraeten weltweit pruefen",
+      title: "Verifizieren Sie Herkunft, Status und Risiken von Fahrzeugen und Geräten weltweit",
       subtitle:
-        "Nutzen Sie VINs, Seriennummern und Register-IDs, um rechtliche Herkunft, Diebstahlwarnungen und Registerstatus vor Kauf, Finanzierung, Versicherung, Vermietung oder Uebertragung zu pruefen.",
+        "Nutzen Sie VINs, Seriennummern und Register-IDs, um Herkunft, aktuellen Status und Risikosignale vor Kauf, Finanzierung, Versicherung, Vermietung oder Übertragung zu prüfen.",
       placeholder: "VIN, Seriennummer oder Register-ID eingeben",
       search: "Asset pruefen",
       demoSerials: "Demo-Serien:",
@@ -504,9 +504,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   pt: {
     hero: {
-      title: "Verifique propriedade e risco de fraude em veiculos e equipamentos a nivel global",
+      title: "Verifique a origem, o estado e os riscos de veículos e equipamentos em todo o mundo",
       subtitle:
-        "Use VIN, numeros de serie e IDs de registo para verificar origem legal, alertas de roubo e estado do registo antes de compra, financiamento, seguro, aluguer ou transferencia.",
+        "Use VIN, números de série e IDs de registo para verificar origem, estado atual e sinais de risco antes de compra, financiamento, seguro, aluguer ou transferência.",
       placeholder: "Introduza VIN, numero de serie ou ID de registo",
       search: "Verificar ativo",
       demoSerials: "Seriais demo:",
@@ -604,9 +604,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   ru: {
     hero: {
-      title: "Проверьте право собственности и риск мошенничества для техники и транспорта по всему миру",
+      title: "Проверьте происхождение, статус и риски транспортных средств и оборудования по всему миру",
       subtitle:
-        "Используйте VIN, серийные номера и идентификаторы реестра, чтобы проверить законное происхождение, сигналы о краже и статус до покупки, финансирования, страхования, аренды или передачи.",
+        "Используйте VIN, серийные номера и идентификаторы реестра, чтобы проверить происхождение, текущий статус и сигналы риска до покупки, финансирования, страхования, аренды или передачи.",
       placeholder: "Введите VIN, серийный номер или ID реестра",
       search: "Проверить актив",
       demoSerials: "Демо-серии:",
@@ -704,9 +704,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   zh: {
     hero: {
-      title: "在全球范围内核验车辆与设备的所有权和欺诈风险",
+      title: "在全球范围内核验车辆和设备的来源、状态与风险",
       subtitle:
-        "使用 VIN、序列号和登记编号，在购买、融资、保险、租赁或转移之前核验合法来源、失窃警报和登记状态。",
+        "使用 VIN、序列号和登记编号，在购买、融资、保险、租赁或转移前核验来源、当前状态和风险信号。",
       placeholder: "输入 VIN、序列号或登记编号",
       search: "核验资产",
       demoSerials: "演示编号：",
@@ -804,9 +804,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   hi: {
     hero: {
-      title: "वाहनों और उपकरणों के स्वामित्व तथा धोखाधड़ी जोखिम को वैश्विक स्तर पर सत्यापित करें",
+      title: "दुनियाभर में वाहनों और उपकरणों की उत्पत्ति, स्थिति और जोखिम सत्यापित करें",
       subtitle:
-        "खरीद, वित्तपोषण, बीमा, किराये या हस्तांतरण से पहले कानूनी मूल, चोरी अलर्ट और रजिस्ट्री स्थिति जांचने के लिए VIN, सीरियल नंबर और रजिस्ट्री आईडी का उपयोग करें।",
+        "VIN, सीरियल नंबर और रजिस्ट्री आईडी का उपयोग करके खरीद, वित्तपोषण, बीमा, किराये या हस्तांतरण से पहले उत्पत्ति, वर्तमान स्थिति और जोखिम संकेतों की जांच करें।",
       placeholder: "VIN, सीरियल नंबर या रजिस्ट्री आईडी दर्ज करें",
       search: "एसेट सत्यापित करें",
       demoSerials: "डेमो सीरियल:",
@@ -904,9 +904,9 @@ const TEXT: Partial<Record<Lang, PublicHomeText>> = {
   },
   ar: {
     hero: {
-      title: "تحقق من الملكية ومخاطر الاحتيال للمركبات والمعدات على مستوى عالمي",
+      title: "تحقق من مصدر المركبات والمعدات وحالتها ومخاطرها حول العالم",
       subtitle:
-        "استخدم VIN والأرقام التسلسلية ومعرّفات السجل للتحقق من المصدر القانوني وتنبيهات السرقة وحالة السجل قبل الشراء أو التمويل أو التأمين أو التأجير أو النقل.",
+        "استخدم VIN والأرقام التسلسلية ومعرّفات السجل للتحقق من المصدر والحالة الحالية وإشارات المخاطر قبل الشراء أو التمويل أو التأمين أو التأجير أو النقل.",
       placeholder: "أدخل VIN أو الرقم التسلسلي أو معرّف السجل",
       search: "تحقق من الأصل",
       demoSerials: "أرقام تجريبية:",
