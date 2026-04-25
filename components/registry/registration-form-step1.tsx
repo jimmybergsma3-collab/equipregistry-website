@@ -1962,9 +1962,6 @@ export default function RegistrationFormStep1({
   const uxGuidanceText = repairMojibakeDeep(REGISTRATION_UX_GUIDANCE_TEXT[lang]);
   const stolenWarningText = repairMojibakeDeep(STOLEN_WARNING_TEXT[lang]);
   const uploadText = repairMojibakeDeep(getRegistryUploadText(lang));
-  const applicantIdText = repairMojibakeDeep(
-    getDocumentText(lang, "applicant_id")
-  );
   const proofOfAddressText = repairMojibakeDeep(
     getDocumentText(lang, "proof_of_address")
   );
@@ -2072,8 +2069,7 @@ export default function RegistrationFormStep1({
   }
 
   const applicantTypeOption = getApplicantTypeOption(draft.applicantType);
-  const showProofOfApplicant =
-    draft.applicantType === "private" || draft.applicantType === "sme";
+  const showProofOfApplicant = draft.applicantType === "sme";
   const ownerIdentityLocked = Boolean(ownerIdentity);
 
   return (
@@ -2511,28 +2507,15 @@ export default function RegistrationFormStep1({
             <div className="space-y-4">
               <UploadFieldCard
                 lang={lang}
-                inputId="applicant-proof-upload"
-                label={applicantIdText.label}
-                description={`${extraText.proofPrivateHint} ${applicantIdText.description ?? ""}`.trim()}
-                bucket="applicant_id"
-                multiple
-                files={proofDocuments.applicant_id?.files ?? []}
-                onChange={(files) => updateProofDocumentField("applicant_id", files)}
+                inputId="business-proof-upload"
+                label={proofOfAddressText.label}
+                description={`${extraText.proofBusinessHint} ${proofOfAddressText.description ?? ""}`.trim()}
+                bucket="proof_of_address"
+                files={proofDocuments.proof_of_address?.files ?? []}
+                onChange={(files) =>
+                  updateProofDocumentField("proof_of_address", files)
+                }
               />
-
-              {draft.applicantType === "sme" ? (
-                <UploadFieldCard
-                  lang={lang}
-                  inputId="business-proof-upload"
-                  label={proofOfAddressText.label}
-                  description={`${extraText.proofBusinessHint} ${proofOfAddressText.description ?? ""}`.trim()}
-                  bucket="proof_of_address"
-                  files={proofDocuments.proof_of_address?.files ?? []}
-                  onChange={(files) =>
-                    updateProofDocumentField("proof_of_address", files)
-                  }
-                />
-              ) : null}
             </div>
           </section>
         ) : null}
