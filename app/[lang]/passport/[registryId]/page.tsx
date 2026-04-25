@@ -14,6 +14,7 @@ import {
 } from "@/lib/i18n/config";
 import { getPassportPageContent } from "@/lib/i18n/passport-page";
 import {
+  getRegistrationStatusDisplay,
   getRegistryAssetStatus,
   getStolenCaseRecord,
 } from "@/lib/registry/request-meta";
@@ -28,6 +29,7 @@ import {
 } from "@/lib/registry/stolen-case";
 import { getPublicPassportUrl } from "@/lib/passport/public-url";
 import { getOfficialPassportNumber } from "@/lib/registry/reference";
+import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
 type Props = {
   params: Promise<{
@@ -142,9 +144,12 @@ export default async function PassportPage({ params }: Props) {
   }
 
   const stolenCase = getStolenCaseRecord(request.dynamicFields);
-  const isPubliclyStolen = Boolean(
-    stolenCase?.isStolen && stolenCase.status === "open"
+  const statusDisplay = getRegistrationStatusDisplay(
+    request.dynamicFields,
+    "passport_issued"
   );
+  const isPendingReview = statusDisplay === "stolen_pending_review";
+  const isPubliclyStolen = statusDisplay === "stolen_confirmed";
 
   const localizedCategory =
     getCategoryByValue(request.category, safeLang)?.label ??
@@ -244,7 +249,9 @@ export default async function PassportPage({ params }: Props) {
     ? dictionary.statuses.historyUnknown.why
     : dictionary.statuses.registeredVerified.why;
   const statusValue = isPubliclyStolen
-    ? dictionary.statuses.stolen.label
+    ? getLocalizedRequestStatusLabel("stolen_confirmed", safeLang)
+    : isPendingReview
+    ? getLocalizedRequestStatusLabel("stolen_pending_review", safeLang)
     : request.publicStatus
     ? verificationSummaryTitle
     : dictionary.dashboard.requestStatuses.passportIssued;
@@ -299,7 +306,13 @@ export default async function PassportPage({ params }: Props) {
             passportNumber={officialPassportNumber}
             statusLabel={content.statusLabel}
             statusValue={statusValue}
-            statusTone={isPubliclyStolen ? "danger" : "default"}
+            statusTone={
+              isPubliclyStolen
+                ? "danger"
+                : isPendingReview
+                ? "warning"
+                : "default"
+            }
             verificationSummaryTitle={verificationSummaryTitle}
             verificationSummaryMessage={verificationSummaryMessage}
             verificationSummaryWhy={verificationSummaryWhy}

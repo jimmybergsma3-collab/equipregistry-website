@@ -1,4 +1,8 @@
 import type { StoredUpload } from "@/lib/registry/upload-types";
+import type {
+  RegistrationRequestStatus,
+  RegistrationStatusDisplay,
+} from "@/lib/registry/workflow";
 
 export type RegistryAssetStatus =
   | "history_unknown"
@@ -115,6 +119,25 @@ export function getRegistryAssetStatus(
   }
 
   return "history_unknown";
+}
+
+export function getRegistrationStatusDisplay(
+  dynamicFields: unknown,
+  requestStatus: RegistrationRequestStatus
+): RegistrationStatusDisplay {
+  const caseRecord = getStolenCaseRecord(dynamicFields);
+
+  if (requestStatus === "passport_issued" && caseRecord?.isStolen) {
+    if (caseRecord.status === "pending_review") {
+      return "stolen_pending_review";
+    }
+
+    if (caseRecord.status === "open") {
+      return "stolen_confirmed";
+    }
+  }
+
+  return requestStatus;
 }
 
 export function setRegistryAssetStatus(

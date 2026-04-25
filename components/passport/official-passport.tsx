@@ -18,7 +18,7 @@ type Props = {
   passportNumber: string;
   statusLabel: string;
   statusValue: string;
-  statusTone?: "default" | "danger";
+  statusTone?: "default" | "warning" | "danger";
   verificationSummaryTitle: string;
   verificationSummaryMessage: string;
   verificationSummaryWhy: string;
@@ -85,6 +85,8 @@ export default function OfficialPassport({
   const statusClassName =
     statusTone === "danger"
       ? "border-red-200 bg-red-50 text-red-700"
+      : statusTone === "warning"
+      ? "border-orange-200 bg-orange-50 text-orange-700"
       : "border-emerald-200 bg-emerald-50 text-emerald-700";
 
   return (

@@ -642,6 +642,7 @@ export default function DashboardRequestTable({
 
           <tbody className="divide-y divide-zinc-200 bg-white">
             {visibleRequests.map((item) => {
+              const displayStatus = item.displayStatus ?? item.requestStatus;
               const officialPassportNumber = getOfficialPassportNumber(
                 item.reference,
                 item.category,
@@ -681,7 +682,7 @@ export default function DashboardRequestTable({
                   </td>
 
                   <td className="px-6 py-4 text-sm text-zinc-700">
-                    <RequestStatusBadge status={item.requestStatus} lang={lang} />
+                    <RequestStatusBadge status={displayStatus} lang={lang} />
                   </td>
 
                   <td className="px-6 py-4 text-sm text-zinc-700">

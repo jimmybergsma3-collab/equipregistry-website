@@ -10,6 +10,7 @@ import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 import { normalizeRequestStatus } from "@/lib/registry/workflow";
+import { getRegistrationStatusDisplay } from "@/lib/registry/request-meta";
 
 type Props = {
   params: Promise<{
@@ -104,26 +105,34 @@ export default async function RegistrationsPage({ params }: Props) {
     },
   });
 
-  const mappedRequests = requests.map((item) => ({
-    id: item.id,
-    reference: item.reference,
-    assetName: item.assetName,
-    category: item.category,
-    subcategory: item.subcategory,
-    applicantType: item.applicantType,
-    requestStatus: normalizeRequestStatus(item.requestStatus),
-    passportStatus: null,
-    createdAt: item.createdAt.toISOString(),
-    updatedAt: item.updatedAt.toISOString(),
-    paymentCompleted: item.paymentCompleted,
-    completeness: {
-      isComplete: item.completenessScore === 100,
-      missingFields: [],
-      missingDocuments: [],
-      missingDynamicFields: [],
-      score: item.completenessScore,
-    },
-  }));
+  const mappedRequests = requests.map((item) => {
+    const requestStatus = normalizeRequestStatus(item.requestStatus);
+
+    return {
+      id: item.id,
+      reference: item.reference,
+      assetName: item.assetName,
+      category: item.category,
+      subcategory: item.subcategory,
+      applicantType: item.applicantType,
+      requestStatus,
+      displayStatus: getRegistrationStatusDisplay(
+        item.dynamicFields,
+        requestStatus
+      ),
+      passportStatus: null,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+      paymentCompleted: item.paymentCompleted,
+      completeness: {
+        isComplete: item.completenessScore === 100,
+        missingFields: [],
+        missingDocuments: [],
+        missingDynamicFields: [],
+        score: item.completenessScore,
+      },
+    };
+  });
 
   return (
     <>

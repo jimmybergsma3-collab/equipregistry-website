@@ -397,8 +397,15 @@ export default function AdminRequestTable({ lang, requests }: Props) {
           </thead>
 
           <tbody className="divide-y divide-zinc-200 bg-white">
-            {requests.map((item) => (
-              <tr key={item.id} className="align-top hover:bg-zinc-50/60">
+            {requests.map((item) => {
+              const displayStatus = item.displayStatus ?? item.requestStatus;
+              const rowClassName =
+                displayStatus === "stolen_pending_review"
+                  ? "align-top bg-amber-50/60 hover:bg-amber-100/50"
+                  : "align-top hover:bg-zinc-50/60";
+
+              return (
+              <tr key={item.id} className={rowClassName}>
                 <td className="px-2.5 py-2 text-sm text-zinc-700">
                   <div className="whitespace-nowrap font-mono text-[13px] font-semibold tracking-tight text-zinc-950">
                     {item.reference}
@@ -436,7 +443,7 @@ export default function AdminRequestTable({ lang, requests }: Props) {
                 <td className="px-2.5 py-2 text-sm text-zinc-700">
                   <div className="whitespace-nowrap">
                     <RequestStatusBadge
-                      status={item.requestStatus}
+                      status={displayStatus}
                       lang={lang}
                       compact
                     />
@@ -459,7 +466,8 @@ export default function AdminRequestTable({ lang, requests }: Props) {
                   />
                 </td>
               </tr>
-            ))}
+            );
+            })}
           </tbody>
         </table>
       </div>

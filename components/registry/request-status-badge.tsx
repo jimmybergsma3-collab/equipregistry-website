@@ -1,12 +1,12 @@
 import {
-  RegistrationRequestStatus,
+  RegistrationStatusDisplay,
   getRequestStatusClasses,
 } from "@/lib/registry/workflow";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
 type Props = {
-  status: RegistrationRequestStatus;
+  status: RegistrationStatusDisplay;
   lang: string;
   compact?: boolean;
 };

@@ -26,6 +26,11 @@ export type RegistrationRequestStatus =
   | "rejected"
   | "passport_issued";
 
+export type RegistrationStatusDisplay =
+  | RegistrationRequestStatus
+  | "stolen_pending_review"
+  | "stolen_confirmed";
+
 export type PassportClassificationStatus =
   | "registered_verified"
   | "history_unknown"
@@ -74,6 +79,7 @@ export type RegistrationRequestSummary = {
   subcategory: string;
   applicantType: ApplicantType;
   requestStatus: RegistrationRequestStatus;
+  displayStatus?: RegistrationStatusDisplay;
   passportStatus?: PassportClassificationStatus | null;
   createdAt: string;
   updatedAt: string;
@@ -337,7 +343,7 @@ export function getRequestStatusKey(
 }
 
 export function getRequestStatusLabel(
-  status: RegistrationRequestStatus
+  status: RegistrationStatusDisplay
 ): string {
   switch (status) {
     case "draft":
@@ -360,13 +366,17 @@ export function getRequestStatusLabel(
       return "Rejected";
     case "passport_issued":
       return "Passport issued";
+    case "stolen_pending_review":
+      return "Under investigation";
+    case "stolen_confirmed":
+      return "Stolen / Red Flag";
     default:
       return "Unknown";
   }
 }
 
 export function getRequestStatusClasses(
-  status: RegistrationRequestStatus
+  status: RegistrationStatusDisplay
 ): string {
   switch (status) {
     case "draft":
@@ -389,6 +399,10 @@ export function getRequestStatusClasses(
       return "border border-zinc-300 bg-zinc-100 text-zinc-700";
     case "passport_issued":
       return "border border-emerald-200 bg-emerald-50 text-emerald-700";
+    case "stolen_pending_review":
+      return "border border-orange-200 bg-orange-50 text-orange-700";
+    case "stolen_confirmed":
+      return "border border-red-200 bg-red-50 text-red-700";
     default:
       return "border border-zinc-200 bg-zinc-100 text-zinc-700";
   }

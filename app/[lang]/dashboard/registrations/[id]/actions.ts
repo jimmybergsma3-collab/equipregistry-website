@@ -5,6 +5,8 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { assertAdminAction } from "@/lib/auth/assert-admin-action";
 import { getSession } from "@/lib/auth/getSession";
+import { MAILBOXES } from "@/lib/email/addresses";
+import { sendEmail } from "@/lib/email/mailer";
 import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getStolenCaseText } from "@/lib/i18n/stolen-case";
 import { getStolenReviewText } from "@/lib/i18n/stolen-review";
@@ -891,6 +893,41 @@ export async function submitOwnerStolenReport(
       },
     });
   });
+
+  try {
+    const reporterName =
+      request.ownerName?.trim() ||
+      session.user.email.trim();
+    const reporterEmail = session.user.email.trim();
+    const assetName = request.assetName.trim() || "Unknown asset";
+    const subject = `Stolen report submitted - review required (${request.reference})`;
+    const textBody = [
+      "Stolen report submitted - review required",
+      "",
+      `registryId: ${request.reference}`,
+      `assetName: ${assetName}`,
+      `user: ${reporterName} <${reporterEmail}>`,
+    ].join("\n");
+    const htmlBody = `
+      <p><strong>Stolen report submitted - review required</strong></p>
+      <p><strong>registryId:</strong> ${request.reference}</p>
+      <p><strong>assetName:</strong> ${assetName}</p>
+      <p><strong>user:</strong> ${reporterName} &lt;${reporterEmail}&gt;</p>
+    `;
+
+    await sendEmail({
+      to: MAILBOXES.support,
+      subject,
+      text: textBody,
+      html: htmlBody,
+    });
+  } catch (error) {
+    console.error("STOLEN_REPORT_SUPPORT_EMAIL_FAILED", {
+      registrationId: request.id,
+      reference: request.reference,
+      message: error instanceof Error ? error.message : String(error),
+    });
+  }
 
   revalidateRegistrationPaths(
     lang,

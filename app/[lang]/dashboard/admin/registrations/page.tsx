@@ -9,6 +9,7 @@ import { RegistrationRequestStatus } from "@/lib/registry/workflow";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
+import { getRegistrationStatusDisplay } from "@/lib/registry/request-meta";
 
 type Props = {
   params: Promise<{
@@ -234,28 +235,47 @@ export default async function AdminRegistrationsPage({
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
   });
 
-  const mappedRequests = requests.map((item) => ({
-    id: item.id,
-    reference: item.reference,
-    assetName: item.assetName,
-    category: item.category,
-    subcategory: item.subcategory,
-    applicantType: item.applicantType,
-    requestStatus: item.requestStatus,
-    passportStatus: null,
-    paymentCompleted: item.paymentCompleted,
-    ownerName: item.ownerName,
-    ownerEmail: item.ownerEmail,
-    createdAt: item.createdAt.toISOString(),
-    updatedAt: item.updatedAt.toISOString(),
-    completeness: {
-      isComplete: item.completenessScore === 100,
-      missingFields: [],
-      missingDocuments: [],
-      missingDynamicFields: [],
-      score: item.completenessScore,
-    },
-  }));
+  const mappedRequests = requests
+    .map((item) => ({
+      id: item.id,
+      reference: item.reference,
+      assetName: item.assetName,
+      category: item.category,
+      subcategory: item.subcategory,
+      applicantType: item.applicantType,
+      requestStatus: item.requestStatus,
+      displayStatus: getRegistrationStatusDisplay(
+        item.dynamicFields,
+        item.requestStatus
+      ),
+      passportStatus: null,
+      paymentCompleted: item.paymentCompleted,
+      ownerName: item.ownerName,
+      ownerEmail: item.ownerEmail,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+      completeness: {
+        isComplete: item.completenessScore === 100,
+        missingFields: [],
+        missingDocuments: [],
+        missingDynamicFields: [],
+        score: item.completenessScore,
+      },
+    }))
+    .sort((left, right) => {
+      const leftPriority =
+        left.displayStatus === "stolen_pending_review" ? 0 : 1;
+      const rightPriority =
+        right.displayStatus === "stolen_pending_review" ? 0 : 1;
+
+      if (leftPriority !== rightPriority) {
+        return leftPriority - rightPriority;
+      }
+
+      return (
+        new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime()
+      );
+    });
 
   return (
     <>

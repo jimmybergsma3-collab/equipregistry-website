@@ -1,6 +1,7 @@
 import type {
   ApplicantType,
   RegistrationRequestStatus,
+  RegistrationStatusDisplay,
 } from "@/lib/registry/workflow";
 import type { Lang } from "./config";
 import { getDictionary } from "./dictionary";
@@ -249,6 +250,25 @@ const PAYMENT_REQUIRED_LABEL_OVERRIDES: Record<Lang, string> = {
   no: "Klar for betaling",
 };
 
+const STOLEN_STATUS_LABELS: Partial<
+  Record<
+    Lang,
+    {
+      stolen_pending_review: string;
+      stolen_confirmed: string;
+    }
+  >
+> = {
+  en: {
+    stolen_pending_review: "Under investigation",
+    stolen_confirmed: "Stolen / Red Flag",
+  },
+  nl: {
+    stolen_pending_review: "Onder onderzoek",
+    stolen_confirmed: "Gestolen / Red Flag",
+  },
+};
+
 export function formatDateForLang(value: Date | string, lang: Lang) {
   const date = value instanceof Date ? value : new Date(value);
 
@@ -271,11 +291,12 @@ export function getLocalizedApplicantTypeLabel(
 }
 
 export function getLocalizedRequestStatusLabel(
-  status: RegistrationRequestStatus,
+  status: RegistrationStatusDisplay,
   lang: Lang
 ) {
   const dict = getDictionary(lang);
   const extra = EXTRA_STATUS_LABELS[lang] ?? EXTRA_STATUS_LABELS.en;
+  const stolenLabels = STOLEN_STATUS_LABELS[lang] ?? STOLEN_STATUS_LABELS.en!;
 
   switch (status) {
     case "draft":
@@ -298,6 +319,10 @@ export function getLocalizedRequestStatusLabel(
       return dict.dashboard.requestStatuses.rejected;
     case "passport_issued":
       return dict.dashboard.requestStatuses.passportIssued;
+    case "stolen_pending_review":
+      return stolenLabels.stolen_pending_review;
+    case "stolen_confirmed":
+      return stolenLabels.stolen_confirmed;
     default:
       return extra.unknown;
   }

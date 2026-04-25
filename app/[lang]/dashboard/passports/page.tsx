@@ -9,7 +9,10 @@ import { prisma } from "@/lib/db";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
-import { getStolenCaseRecord } from "@/lib/registry/request-meta";
+import {
+  getRegistrationStatusDisplay,
+  getStolenCaseRecord,
+} from "@/lib/registry/request-meta";
 import { getCategoryByValue, getSubcategoriesByCategory } from "@/lib/registry/categories";
 import { formatDateForLang } from "@/lib/i18n/registry-display";
 
@@ -81,6 +84,10 @@ export default async function DashboardPassportsPage({ params }: Props) {
             <div className="grid gap-5">
               {passports.map((passport) => {
                 const stolenCase = getStolenCaseRecord(passport.dynamicFields);
+                const displayStatus = getRegistrationStatusDisplay(
+                  passport.dynamicFields,
+                  passport.requestStatus
+                );
                 const ownerReportPending = stolenCase?.status === "pending_review";
                 const isReportedStolen =
                   stolenCase?.isStolen && stolenCase.status === "open";
@@ -114,7 +121,7 @@ export default async function DashboardPassportsPage({ params }: Props) {
                       </div>
 
                       <div className="flex flex-wrap gap-3">
-                        <RequestStatusBadge status="passport_issued" lang={lang} />
+                        <RequestStatusBadge status={displayStatus} lang={lang} />
 
                         {ownerReportPending ? (
                           <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">

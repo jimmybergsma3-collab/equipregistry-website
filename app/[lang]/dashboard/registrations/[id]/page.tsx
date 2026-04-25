@@ -13,7 +13,10 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { MAILBOXES } from "@/lib/email/addresses";
 import { getPricing, getPricingCategory } from "@/lib/registry/pricing";
-import { getStolenCaseRecord } from "@/lib/registry/request-meta";
+import {
+  getRegistrationStatusDisplay,
+  getStolenCaseRecord,
+} from "@/lib/registry/request-meta";
 import { canManageStolenCase } from "@/lib/registry/stolen-case";
 import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -694,6 +697,10 @@ export default async function RegistrationRequestDetailPage({
       request.requestStatus === "under_review" ||
       request.requestStatus === "approved";
     const stolenCase = getStolenCaseRecord(request.dynamicFields);
+    const requestDisplayStatus = getRegistrationStatusDisplay(
+      request.dynamicFields,
+      request.requestStatus
+    );
     const showStolenCasePanel = canManageStolenCase(
       request.requestStatus,
       Boolean(stolenCase)
@@ -716,12 +723,12 @@ export default async function RegistrationRequestDetailPage({
                 {texts.backToAdminRegistrations}
               </Link>
 
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900">
-                {request.reference}
-              </h1>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900">
+              {request.reference}
+            </h1>
 
             <div className="mt-4">
-              <RequestStatusBadge status={request.requestStatus} lang={lang} />
+              <RequestStatusBadge status={requestDisplayStatus} lang={lang} />
             </div>
 
             {request.requestStatus === "passport_issued" ? (
@@ -802,6 +809,10 @@ export default async function RegistrationRequestDetailPage({
     countryCode: getVisitorCountryCodeFromHeaders(headerList),
   });
   const ownStolenCase = getStolenCaseRecord(ownRequest.dynamicFields);
+  const ownDisplayStatus = getRegistrationStatusDisplay(
+    ownRequest.dynamicFields,
+    ownRequest.requestStatus
+  );
   const ownerReportPending = ownStolenCase?.status === "pending_review";
   const ownerReportedStolen =
     ownStolenCase?.isStolen && ownStolenCase.status === "open";
@@ -835,20 +846,8 @@ export default async function RegistrationRequestDetailPage({
               {ownRequest.reference}
             </h1>
 
-            <div className="mt-4 flex flex-wrap gap-3">
-              <RequestStatusBadge status={ownRequest.requestStatus} lang={lang} />
-
-              {ownerReportPending ? (
-                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
-                  {customerStolenReportText.pendingBadge}
-                </span>
-              ) : null}
-
-              {ownerReportedStolen ? (
-                <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
-                  {customerStolenReportText.activeBadge}
-                </span>
-              ) : null}
+            <div className="mt-4">
+              <RequestStatusBadge status={ownDisplayStatus} lang={lang} />
             </div>
 
             {ownRequest.requestStatus === "passport_issued" ? (

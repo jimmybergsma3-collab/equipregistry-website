@@ -7,6 +7,7 @@ import AdminLogoutButton from "@/components/auth/admin-logout-button";
 import AdminRequestTable from "@/components/registry/admin-request-table";
 import { prisma } from "@/lib/db";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
+import { getRegistrationStatusDisplay } from "@/lib/registry/request-meta";
 
 type Props = {
   params: Promise<{
@@ -234,7 +235,7 @@ export default async function AdminPage({ params }: Props) {
     orderBy: {
       updatedAt: "desc",
     },
-    take: 25,
+    take: 200,
   });
 
   const totalCount = await prisma.registrationRequest.count({
@@ -273,28 +274,47 @@ export default async function AdminPage({ params }: Props) {
     },
   });
 
-  const mappedRequests = requests.map((item) => ({
-    id: item.id,
-    reference: item.reference,
-    assetName: item.assetName,
-    category: item.category,
-    subcategory: item.subcategory,
-    applicantType: item.applicantType,
-    requestStatus: item.requestStatus,
-    passportStatus: null,
-    createdAt: item.createdAt.toISOString(),
-    updatedAt: item.updatedAt.toISOString(),
-    paymentCompleted: item.paymentCompleted,
-    ownerName: item.ownerName,
-    ownerEmail: item.ownerEmail,
-    completeness: {
-      isComplete: item.completenessScore === 100,
-      missingFields: [],
-      missingDocuments: [],
-      missingDynamicFields: [],
-      score: item.completenessScore,
-    },
-  }));
+  const mappedRequests = requests
+    .map((item) => ({
+      id: item.id,
+      reference: item.reference,
+      assetName: item.assetName,
+      category: item.category,
+      subcategory: item.subcategory,
+      applicantType: item.applicantType,
+      requestStatus: item.requestStatus,
+      displayStatus: getRegistrationStatusDisplay(
+        item.dynamicFields,
+        item.requestStatus
+      ),
+      passportStatus: null,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+      paymentCompleted: item.paymentCompleted,
+      ownerName: item.ownerName,
+      ownerEmail: item.ownerEmail,
+      completeness: {
+        isComplete: item.completenessScore === 100,
+        missingFields: [],
+        missingDocuments: [],
+        missingDynamicFields: [],
+        score: item.completenessScore,
+      },
+    }))
+    .sort((left, right) => {
+      const leftPriority =
+        left.displayStatus === "stolen_pending_review" ? 0 : 1;
+      const rightPriority =
+        right.displayStatus === "stolen_pending_review" ? 0 : 1;
+
+      if (leftPriority !== rightPriority) {
+        return leftPriority - rightPriority;
+      }
+
+      return (
+        new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime()
+      );
+    });
 
   return (
     <main className="min-h-screen bg-neutral-50">
