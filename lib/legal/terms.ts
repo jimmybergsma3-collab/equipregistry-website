@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n/config";
+import { COMPANY_LEGAL_LINES } from "@/lib/company-details";
 
 export type TermsSection = {
   title: string;
@@ -14,15 +15,7 @@ export type TermsContent = {
   lastUpdated: string;
 };
 
-const companyLines = [
-  "EquipRegistry",
-  "Jimmy Bergsma",
-  "Calle Murcia 111",
-  "03420 Castalla, Alicante",
-  "Spain",
-  "ID / NIE: Y8875740P",
-  "Email: info@equipregistry.com",
-];
+const companyLines = COMPANY_LEGAL_LINES;
 
 export const TERMS_CONTENT: Record<Lang, TermsContent> = {
   en: {

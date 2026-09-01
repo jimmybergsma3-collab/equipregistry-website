@@ -5,6 +5,7 @@ import SiteFooter from "@/components/site-footer";
 import { getLangDir, isValidLang } from "@/lib/i18n/config";
 import { getLegalUiText } from "@/lib/i18n/legal-ui";
 import { disclaimerContent } from "@/lib/legal/disclaimer";
+import { COMPANY_DETAILS } from "@/lib/company-details";
 
 type PageProps = {
   params: Promise<{
@@ -13,12 +14,15 @@ type PageProps = {
 };
 
 const CONTACT = {
-  owner: "Jimmy Bergsma",
-  addressLine1: "Calle Murcia 111",
-  addressLine2: "03420 Castalla",
-  addressLine3: "Alicante, Spain",
-  taxId: "Y8875740P",
-  email: "info@equipregistry.com",
+  company: COMPANY_DETAILS.company,
+  owner: COMPANY_DETAILS.owner,
+  addressLine1: COMPANY_DETAILS.addressLine1,
+  addressLine2: COMPANY_DETAILS.addressLine2,
+  addressLine3: COMPANY_DETAILS.addressLine3,
+  taxId: COMPANY_DETAILS.taxId,
+  email: COMPANY_DETAILS.email,
+  phone: COMPANY_DETAILS.phone,
+  whatsapp: COMPANY_DETAILS.whatsapp,
 };
 
 function Section({
@@ -78,11 +82,14 @@ export default async function DisclaimerPage({ params }: PageProps) {
             <p className="font-semibold text-[#111827]">
               {content.operatorTitle}
             </p>
+            <p>{CONTACT.company}</p>
             <p>{CONTACT.owner}</p>
             <p>{CONTACT.addressLine1}</p>
             <p>{CONTACT.addressLine2}</p>
             <p>{CONTACT.addressLine3}</p>
             <p>{CONTACT.taxId}</p>
+            <p>{CONTACT.phone}</p>
+            <p>WhatsApp: {CONTACT.whatsapp}</p>
             <p>{CONTACT.email}</p>
           </div>
         </div>
@@ -144,6 +151,7 @@ export default async function DisclaimerPage({ params }: PageProps) {
                 <p className="font-semibold text-[#111827]">
                   {legalUi.responsiblePerson}
                 </p>
+                <p>{CONTACT.company}</p>
                 <p>{CONTACT.owner}</p>
               </div>
 
@@ -159,6 +167,8 @@ export default async function DisclaimerPage({ params }: PageProps) {
                 <p>{CONTACT.addressLine1}</p>
                 <p>{CONTACT.addressLine2}</p>
                 <p>{CONTACT.addressLine3}</p>
+                <p>{CONTACT.phone}</p>
+                <p>WhatsApp: {CONTACT.whatsapp}</p>
               </div>
 
               <div>

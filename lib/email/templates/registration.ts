@@ -1,4 +1,5 @@
 // lib/email/templates/registration.ts
+import { COMPANY_EMAIL_FOOTER_TEXT } from "@/lib/company-details";
 
 type BaseTemplateParams = {
   ownerName: string;
@@ -40,7 +41,8 @@ function wrapEmailHtml(content: string) {
         </div>
 
         <div style="padding:20px 28px; border-top:1px solid #e4e4e7; font-size:12px; color:#71717a;">
-          This is an automated EquipRegistry notification.
+          This is an automated EquipRegistry notification.<br />
+          &copy; ${new Date().getFullYear()} ${COMPANY_EMAIL_FOOTER_TEXT}
         </div>
       </div>
     </div>

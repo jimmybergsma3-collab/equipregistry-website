@@ -79,11 +79,14 @@ export default async function PrivacyPage({ params }: PageProps) {
             <p>{t.whoWeAre.intro}</p>
             <p className="font-medium">{t.whoWeAre.controller}</p>
             <div className="rounded-2xl bg-[#f8fafc] p-4">
+              <p className="font-medium">{PRIVACY_CONTACT.company}</p>
               <p className="font-medium">{PRIVACY_CONTACT.owner}</p>
               <p>{PRIVACY_CONTACT.addressLine1}</p>
               <p>{PRIVACY_CONTACT.addressLine2}</p>
               <p>{PRIVACY_CONTACT.addressLine3}</p>
               <p>{PRIVACY_CONTACT.taxId}</p>
+              <p>{PRIVACY_CONTACT.phone}</p>
+              <p>WhatsApp: {PRIVACY_CONTACT.whatsapp}</p>
               <p>{PRIVACY_CONTACT.email}</p>
             </div>
           </Section>
@@ -216,6 +219,7 @@ export default async function PrivacyPage({ params }: PageProps) {
                 <p className="font-semibold text-[#111827]">
                   {t.contact.ownerLabel}
                 </p>
+                <p>{PRIVACY_CONTACT.company}</p>
                 <p>{PRIVACY_CONTACT.owner}</p>
               </div>
 
@@ -233,6 +237,8 @@ export default async function PrivacyPage({ params }: PageProps) {
                 <p>{PRIVACY_CONTACT.addressLine1}</p>
                 <p>{PRIVACY_CONTACT.addressLine2}</p>
                 <p>{PRIVACY_CONTACT.addressLine3}</p>
+                <p>{PRIVACY_CONTACT.phone}</p>
+                <p>WhatsApp: {PRIVACY_CONTACT.whatsapp}</p>
               </div>
 
               <div>

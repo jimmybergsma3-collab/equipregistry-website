@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import PageHero from "@/components/page-hero";
+import { COMPANY_DETAILS } from "@/lib/company-details";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 
@@ -148,6 +149,28 @@ export default function ContactPage({ params }: Props) {
                   support@equipregistry.com
                 </a>
               </p>
+            </div>
+          </div>
+
+          <div className="mb-12 rounded-2xl border border-slate-300 bg-slate-50 p-6">
+            <h2 className="mb-3 text-xl font-semibold text-slate-900">
+              Company details
+            </h2>
+            <div className="grid gap-3 text-sm leading-7 text-slate-700 sm:grid-cols-2">
+              <div>
+                <p className="font-semibold text-slate-900">
+                  {COMPANY_DETAILS.brand}
+                </p>
+                <p>Part of {COMPANY_DETAILS.company}</p>
+                <p>Owner: {COMPANY_DETAILS.owner}</p>
+                <p>ID / NIE: {COMPANY_DETAILS.taxId}</p>
+              </div>
+              <div>
+                <p>{COMPANY_DETAILS.addressLine1}</p>
+                <p>{COMPANY_DETAILS.addressLine2}</p>
+                <p>{COMPANY_DETAILS.addressLine3}</p>
+                <p>Phone / WhatsApp: {COMPANY_DETAILS.phone}</p>
+              </div>
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n/config";
+import { COMPANY_DETAILS } from "@/lib/company-details";
 
 export type PrivacyText = {
   backToHome: string;
@@ -116,12 +117,15 @@ export type PrivacyText = {
 };
 
 export const PRIVACY_CONTACT = {
-  owner: "Jimmy Bergsma",
-  addressLine1: "Calle Murcia 111",
-  addressLine2: "03420 Castalla",
-  addressLine3: "Alicante, Spain",
-  taxId: "Y8875740P",
-  email: "info@equipregistry.com",
+  company: COMPANY_DETAILS.company,
+  owner: COMPANY_DETAILS.owner,
+  addressLine1: COMPANY_DETAILS.addressLine1,
+  addressLine2: COMPANY_DETAILS.addressLine2,
+  addressLine3: COMPANY_DETAILS.addressLine3,
+  taxId: COMPANY_DETAILS.taxId,
+  email: COMPANY_DETAILS.email,
+  phone: COMPANY_DETAILS.phone,
+  whatsapp: COMPANY_DETAILS.whatsapp,
 };
 
 const BASE_EN: PrivacyText = {
