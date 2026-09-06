@@ -326,7 +326,7 @@ export default async function PassportPage({ params }: Props) {
             verificationPanelTitle={content.verificationPanelTitle}
             verificationPanelText={content.verificationPanelText}
             verificationUrlLabel={content.verificationUrlLabel}
-            verificationUrl={publicPassportUrl}
+            verificationUrl={publicPassportScanUrl}
             qrTitle={content.qrTitle}
             qrText={content.qrText}
             qrAlt={content.qrAlt}
