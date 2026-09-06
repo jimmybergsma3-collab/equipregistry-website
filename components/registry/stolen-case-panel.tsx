@@ -118,8 +118,37 @@ export default function StolenCasePanel({
   function handleActivate() {
     setMessage("");
 
+    if (
+      !window.confirm(
+        safeLang === "nl"
+          ? "Ja, dit object als gestolen markeren en de publieke waarschuwing activeren?"
+          : reviewText.activateDescription
+      )
+    ) {
+      return;
+    }
+
     startTransition(async () => {
       const result = await activateStolenCase(registrationId, lang);
+      applyResult(result);
+    });
+  }
+
+  function handleReject() {
+    setMessage("");
+
+    if (
+      !window.confirm(
+        safeLang === "nl"
+          ? "Nee, deze melding niet als gestolen markeren? De publieke waarschuwing blijft uit."
+          : "Do not mark this asset as stolen? The public warning will remain inactive."
+      )
+    ) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await resolveStolenCase(registrationId, lang);
       applyResult(result);
     });
   }
@@ -206,7 +235,125 @@ export default function StolenCasePanel({
           </div>
         ) : null}
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        {existingCase?.status === "pending_review" ? (
+          <details className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+            <summary className="cursor-pointer text-sm font-medium text-zinc-800">
+              {safeLang === "nl"
+                ? "Gegevens aanpassen (optioneel)"
+                : "Adjust details (optional)"}
+            </summary>
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
+              <label className="block">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.policeReportNumber}
+                </span>
+                <input
+                  type="text"
+                  name="policeReportNumber"
+                  defaultValue={existingCase?.policeReportNumber ?? ""}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.policeReportDate}
+                </span>
+                <input
+                  type="date"
+                  name="policeReportDate"
+                  defaultValue={existingCase?.policeReportDate ?? ""}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.country}
+                </span>
+                <SearchableCountrySelect
+                  id="stolen-case-country"
+                  name="country"
+                  lang={safeLang}
+                  value={country}
+                  onChange={setCountry}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.cityRegion}
+                </span>
+                <input
+                  type="text"
+                  name="cityRegion"
+                  defaultValue={existingCase?.cityRegion ?? ""}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.incidentDate}
+                </span>
+                <input
+                  type="date"
+                  name="incidentDate"
+                  defaultValue={existingCase?.incidentDate ?? ""}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.incidentDescription}
+                </span>
+                <textarea
+                  name="incidentDescription"
+                  defaultValue={existingCase?.incidentDescription ?? ""}
+                  rows={4}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.supportingDocumentReferences}
+                </span>
+                <textarea
+                  name="supportingDocumentReferences"
+                  defaultValue={formatSupportingDocumentReferences(
+                    existingCase?.supportingDocumentReferences ?? []
+                  )}
+                  rows={4}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="text-sm font-medium text-zinc-700">
+                  {text.admin.fields.caseNotes}
+                </span>
+                <textarea
+                  name="caseNotes"
+                  defaultValue={existingCase?.caseNotes ?? ""}
+                  rows={4}
+                  className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
+                />
+              </label>
+            </div>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="mt-5 inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isPending ? text.admin.processing : text.admin.update}
+            </button>
+          </details>
+        ) : null}
+
+        {existingCase?.status !== "pending_review" ? <div className="grid gap-5 sm:grid-cols-2">
           <label className="block">
             <span className="text-sm font-medium text-zinc-700">
               {text.admin.fields.policeReportNumber}
@@ -308,30 +455,46 @@ export default function StolenCasePanel({
               className="mt-2 w-full rounded-xl border border-zinc-300 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
             />
           </label>
-        </div>
+        </div> : null}
 
         <div className="flex flex-wrap gap-3">
-          <button
-            type="submit"
-            disabled={isPending}
-            className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isPending
-              ? text.admin.processing
-              : existingCase
-              ? text.admin.update
-              : text.admin.save}
-          </button>
+          {existingCase?.status !== "pending_review" ? (
+            <button
+              type="submit"
+              disabled={isPending}
+              className="inline-flex items-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isPending
+                ? text.admin.processing
+                : existingCase
+                ? text.admin.update
+                : text.admin.save}
+            </button>
+          ) : null}
 
           {existingCase?.status === "pending_review" ? (
-            <button
-              type="button"
-              disabled={isPending}
-              onClick={handleActivate}
-              className="inline-flex items-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isPending ? reviewText.activating : reviewText.activate}
-            </button>
+            <>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={handleActivate}
+                className="inline-flex items-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isPending
+                  ? reviewText.activating
+                  : safeLang === "nl"
+                  ? "Ja, als gestolen markeren"
+                  : reviewText.activate}
+              </button>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={handleReject}
+                className="inline-flex items-center rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isPending ? text.admin.processing : safeLang === "nl" ? "Nee" : text.admin.resolve}
+              </button>
+            </>
           ) : null}
 
           {existingCase?.status === "open" ? (
