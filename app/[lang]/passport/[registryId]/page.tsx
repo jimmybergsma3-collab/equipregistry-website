@@ -29,7 +29,6 @@ import {
 } from "@/lib/registry/stolen-case";
 import {
   getPublicPassportScanUrl,
-  getPublicPassportUrl,
 } from "@/lib/passport/public-url";
 import { getOfficialPassportNumber } from "@/lib/registry/reference";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
@@ -167,11 +166,6 @@ export default async function PassportPage({ params }: Props) {
     request.reference,
     request.category,
     request.subcategory
-  );
-  const publicPassportUrl = getPublicPassportUrl(
-    headerList,
-    safeLang,
-    request.reference
   );
   const publicPassportScanUrl = getPublicPassportScanUrl(
     headerList,
