@@ -233,7 +233,7 @@ export function evaluateRegistrationCompleteness(
 
 export function deriveRequestStatus(
   draft: RegistrationDraft,
-  paymentCompleted = isPartnerApplicantType(draft.applicantType)
+  paymentCompleted = true
 ): RegistrationRequestStatus {
   const completeness = evaluateRegistrationCompleteness(draft);
 
@@ -256,7 +256,7 @@ export function canSubmitRegistration(draft: RegistrationDraft): boolean {
 export function getNextSubmitAction(
   applicantTypeOrIsComplete: ApplicantType | boolean,
   isCompleteArg?: boolean,
-  paymentCompleted = false
+  paymentCompleted = true
 ): "complete_required" | "go_to_payment" | "submit_registration" {
   const isComplete =
     typeof applicantTypeOrIsComplete === "boolean"
@@ -267,11 +267,7 @@ export function getNextSubmitAction(
     return "complete_required";
   }
 
-  if (
-    typeof applicantTypeOrIsComplete !== "boolean" &&
-    !isPartnerApplicantType(applicantTypeOrIsComplete) &&
-    !paymentCompleted
-  ) {
+  if (!paymentCompleted) {
     return "go_to_payment";
   }
 

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
@@ -8,11 +7,9 @@ import OwnerStolenReportPanel from "@/components/registry/owner-stolen-report-pa
 import RequestStatusBadge from "@/components/registry/request-status-badge";
 import ReviewFlowActions from "@/components/registry/review-flow-actions";
 import StolenCasePanel from "@/components/registry/stolen-case-panel";
-import StripeCheckoutButton from "@/components/registry/stripe-checkout-button";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth/getSession";
 import { MAILBOXES } from "@/lib/email/addresses";
-import { getPricing, getPricingCategory } from "@/lib/registry/pricing";
 import {
   getRegistrationStatusDisplay,
   getStolenCaseRecord,
@@ -22,9 +19,7 @@ import { ApplicantType } from "@/lib/registry/workflow";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getCustomerStolenReportText } from "@/lib/i18n/customer-stolen-report";
 import { getCustomerDashboardText } from "@/lib/i18n/customer-dashboard";
-import { getPricingCategoryContent } from "@/lib/i18n/pricing-categories";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
-import { getStripePaymentText } from "@/lib/i18n/stripe-payment";
 import { getStolenCustomerActionsText } from "@/lib/i18n/stolen-customer-actions";
 import {
   getCategoryByValue,
@@ -40,11 +35,6 @@ import {
   getLocalizedApplicantTypeLabel,
 } from "@/lib/i18n/registry-display";
 import { getOfficialPassportNumber } from "@/lib/registry/reference";
-import {
-  formatLocalizedPricingAmount,
-  getLocalizedPricingDisplay,
-  getVisitorCountryCodeFromHeaders,
-} from "@/lib/registry/display-pricing";
 import { buildStoredUploadAccessUrl } from "@/lib/registry/uploads";
 import { repairMojibakeDeep } from "@/lib/i18n/repair-mojibake";
 
@@ -53,9 +43,7 @@ type Props = {
     lang: string;
     id: string;
   }>;
-  searchParams?: Promise<{
-    payment?: string | string[] | undefined;
-  }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 type DynamicFields = Partial<{
@@ -134,18 +122,17 @@ type DetailDictionary = {
 };
 
 const PAYMENT_PENDING_TEXT: Partial<Record<Lang, string>> = {
-  en: "Not completed",
-  es: "No completado",
-  de: "Nicht abgeschlossen",
-  fr: "Non finalise",
-  it: "Non completato",
-  nl: "Niet voltooid",
-  pt: "Nao concluido",
-
-  pl: "Nie zakonczono",
-  sv: "Inte slutford",
-  da: "Ikke afsluttet",
-  no: "Ikke fullfort",
+  en: "No checkout required",
+  es: "Checkout no requerido",
+  de: "Kein Checkout erforderlich",
+  fr: "Checkout non requis",
+  it: "Checkout non richiesto",
+  nl: "Geen checkout vereist",
+  pt: "Checkout nao necessario",
+  pl: "Checkout niewymagany",
+  sv: "Ingen checkout kravs",
+  da: "Checkout ikke paakraevet",
+  no: "Checkout ikke paakrevd",
 };
 
 const DOCUMENTS_TITLE_TEXT: Record<Lang, string> = {
@@ -644,10 +631,8 @@ function RegistrationDetailsCard({
 
 export default async function RegistrationRequestDetailPage({
   params,
-  searchParams,
 }: Props) {
   const { lang, id } = await params;
-  const query = (await searchParams) ?? {};
 
   if (!isValidLang(lang)) {
     notFound();
@@ -664,11 +649,6 @@ export default async function RegistrationRequestDetailPage({
     getStolenCustomerActionsText(lang as Lang)
   );
   const texts = getDetailTexts(lang as Lang, dictionary);
-  const stripeText = repairMojibakeDeep(getStripePaymentText(lang as Lang));
-  const headerList = await headers();
-  const paymentReturnState = Array.isArray(query.payment)
-    ? query.payment[0]
-    : query.payment;
 
   const session = await getSession();
 
@@ -795,19 +775,6 @@ export default async function RegistrationRequestDetailPage({
     notFound();
   }
 
-  const pricingCategory = getPricingCategory(
-    ownRequest.category,
-    ownRequest.subcategory
-  );
-  const pricingCategoryContent = repairMojibakeDeep(
-    getPricingCategoryContent(lang as Lang, pricingCategory)
-  );
-  const pricing = getPricing(ownRequest.category, ownRequest.subcategory);
-  const pricingDisplay = await getLocalizedPricingDisplay({
-    lang: lang as Lang,
-    acceptLanguage: headerList.get("accept-language"),
-    countryCode: getVisitorCountryCodeFromHeaders(headerList),
-  });
   const ownStolenCase = getStolenCaseRecord(ownRequest.dynamicFields);
   const ownDisplayStatus = getRegistrationStatusDisplay(
     ownRequest.dynamicFields,
@@ -816,12 +783,6 @@ export default async function RegistrationRequestDetailPage({
   const ownerReportPending = ownStolenCase?.status === "pending_review";
   const ownerReportedStolen =
     ownStolenCase?.isStolen && ownStolenCase.status === "open";
-  const paymentBannerTone =
-    paymentReturnState === "stripe_success"
-      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-      : paymentReturnState === "stripe_cancel"
-      ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "";
 
   return (
     <>
@@ -861,71 +822,6 @@ export default async function RegistrationRequestDetailPage({
               </div>
             ) : null}
           </div>
-
-          {paymentReturnState === "stripe_success" ||
-          paymentReturnState === "stripe_cancel" ? (
-            <div className={`mb-6 rounded-2xl border px-5 py-4 text-sm ${paymentBannerTone}`}>
-              <p className="font-semibold">
-                {paymentReturnState === "stripe_success"
-                  ? stripeText.returnSuccessTitle
-                  : stripeText.returnCancelTitle}
-              </p>
-              <p className="mt-1">
-                {paymentReturnState === "stripe_success"
-                  ? stripeText.returnSuccessText
-                  : stripeText.returnCancelText}
-              </p>
-            </div>
-          ) : null}
-
-          {ownRequest.requestStatus === "payment_required" &&
-          !ownRequest.paymentCompleted ? (
-            <section className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
-              <div className="mb-5">
-                <h2 className="text-lg font-semibold text-zinc-900">
-                  {stripeText.checkoutTitle}
-                </h2>
-                <p className="mt-1 text-sm text-zinc-600">
-                  {stripeText.checkoutDescription}
-                </p>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">
-                    {stripeText.amountLabel}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {formatLocalizedPricingAmount(
-                      pricing.registration,
-                      pricingDisplay
-                    )}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-                  <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">
-                    {texts.labels.category}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {pricingCategoryContent.name}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:col-span-2">
-                  <p className="text-sm leading-6 text-zinc-700">
-                    {pricingCategoryContent.description}
-                  </p>
-                </div>
-              </div>
-
-              <p className="mt-4 text-sm text-zinc-600">{stripeText.webhookNote}</p>
-
-              <div className="mt-5">
-                <StripeCheckoutButton registrationId={ownRequest.id} lang={lang} />
-              </div>
-            </section>
-          ) : null}
 
           <RegistrationDetailsCard
             request={ownRequest}

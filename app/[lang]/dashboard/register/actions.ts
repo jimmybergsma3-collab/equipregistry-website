@@ -13,12 +13,10 @@ import {
   RegistrationRequestStatus,
   deriveRequestStatus,
   evaluateRegistrationCompleteness,
-  isPartnerApplicantType,
 } from "@/lib/registry/workflow";
 import {
   sendDraftSavedEmail,
   sendPartnerSubmittedEmail,
-  sendPaymentRequiredEmail,
   sendRegistrationRequestNotificationEmail,
 } from "@/lib/email/send-registration-email";
 import { stripHeavyUploadPayloads } from "@/lib/registry/upload-types";
@@ -343,8 +341,7 @@ export async function submitRegistrationRequest(
     };
   }
 
-  const partner = isPartnerApplicantType(draft.applicantType);
-  const paymentCompleted = partner ? true : false;
+  const paymentCompleted = true;
   const existingRequest = await findRecentDuplicateSubmittedRequest(
     session.user.id,
     draft
@@ -354,8 +351,10 @@ export async function submitRegistrationRequest(
     redirect(`/${lang}/dashboard/registrations/${existingRequest.id}`);
   }
 
-  const derivedStatus = deriveRequestStatus(draft, paymentCompleted);
-  const finalStatus: RegistrationRequestStatus = partner ? "submitted" : derivedStatus;
+  const finalStatus: RegistrationRequestStatus = deriveRequestStatus(
+    draft,
+    paymentCompleted
+  );
 
   const { passportNumber } = await reserveNextPassportNumber(
     draft.category,
@@ -392,63 +391,42 @@ export async function submitRegistrationRequest(
 
   const to = getEmailRecipient(draft);
   if (to) {
-    if (partner) {
-      await logEmailAttempt(
-        "REGISTRATION_SUBMITTED_EMAIL_SKIPPED",
-        {
-          passportNumber,
-          requestId: request.id,
-        },
-        () =>
-          sendPartnerSubmittedEmail({
-            to,
-            ownerName: draft.ownerName || "Customer",
-            passportNumber,
-            assetName: draft.assetName || "Unnamed asset",
-          })
-      );
-    } else {
-      await logEmailAttempt(
-        "REGISTRATION_CHECKOUT_EMAIL_SKIPPED",
-        {
-          passportNumber,
-          requestId: request.id,
-        },
-        () =>
-          sendPaymentRequiredEmail({
-            to,
-            ownerName: draft.ownerName || "Customer",
-            passportNumber,
-            assetName: draft.assetName || "Unnamed asset",
-            category: draft.category,
-            subcategory: draft.subcategory,
-          })
-      );
-    }
-  }
-
-  if (partner) {
     await logEmailAttempt(
-      "INTERNAL_REQUEST_NOTIFICATION_SKIPPED",
+      "REGISTRATION_SUBMITTED_EMAIL_SKIPPED",
       {
         passportNumber,
         requestId: request.id,
-        destination: "request@equipregistry.com",
       },
       () =>
-        sendRegistrationRequestNotificationEmail({
-          reference: passportNumber,
-          assetName: draft.assetName || "Unnamed asset",
+        sendPartnerSubmittedEmail({
+          to,
           ownerName: draft.ownerName || "Customer",
-          ownerEmail: draft.ownerEmail || "",
-          category: draft.category,
-          subcategory: draft.subcategory || undefined,
-          applicantType: draft.applicantType,
-          source: "dashboard_submit",
-          lang,
+          passportNumber,
+          assetName: draft.assetName || "Unnamed asset",
         })
     );
   }
+
+  await logEmailAttempt(
+    "INTERNAL_REQUEST_NOTIFICATION_SKIPPED",
+    {
+      passportNumber,
+      requestId: request.id,
+      destination: "request@equipregistry.com",
+    },
+    () =>
+      sendRegistrationRequestNotificationEmail({
+        reference: passportNumber,
+        assetName: draft.assetName || "Unnamed asset",
+        ownerName: draft.ownerName || "Customer",
+        ownerEmail: draft.ownerEmail || "",
+        category: draft.category,
+        subcategory: draft.subcategory || undefined,
+        applicantType: draft.applicantType,
+        source: "dashboard_submit",
+        lang,
+      })
+  );
 
   revalidatePath("/");
   revalidatePath(`/${lang}/admin`);
@@ -456,10 +434,6 @@ export async function submitRegistrationRequest(
   revalidatePath("/dashboard/registrations");
   revalidatePath(`/${lang}/dashboard/registrations`);
   revalidatePath(`/${lang}/dashboard/register`);
-
-  if (partner) {
-    revalidatePath(`/${lang}/dashboard/admin/registrations`);
-  }
 
   redirect(`/${lang}/dashboard/registrations/${request.id}`);
 }
