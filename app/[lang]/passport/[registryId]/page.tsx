@@ -27,7 +27,10 @@ import {
   getPublicDateValue,
   getPublicIncidentLocation,
 } from "@/lib/registry/stolen-case";
-import { getPublicPassportUrl } from "@/lib/passport/public-url";
+import {
+  getPublicPassportScanUrl,
+  getPublicPassportUrl,
+} from "@/lib/passport/public-url";
 import { getOfficialPassportNumber } from "@/lib/registry/reference";
 import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
 
@@ -170,8 +173,12 @@ export default async function PassportPage({ params }: Props) {
     safeLang,
     request.reference
   );
+  const publicPassportScanUrl = getPublicPassportScanUrl(
+    headerList,
+    request.reference
+  );
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?format=svg&size=320x320&margin=0&data=${encodeURIComponent(
-    publicPassportUrl
+    publicPassportScanUrl
   )}`;
   const passportFields = [
     {

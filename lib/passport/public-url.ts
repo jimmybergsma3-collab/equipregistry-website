@@ -44,12 +44,11 @@ export function buildPublicPassportPath(lang: Lang, registryId: string) {
   return `/${lang}/passport/${encodeURIComponent(registryId)}`;
 }
 
-export function getPublicPassportUrl(
-  headerList: Headers,
-  lang: Lang,
-  registryId: string
-) {
-  const path = buildPublicPassportPath(lang, registryId);
+export function buildPublicPassportScanPath(registryId: string) {
+  return `/passport/${encodeURIComponent(registryId)}`;
+}
+
+function getPublicUrl(headerList: Headers, path: string) {
   const configuredOrigin = normalizeOrigin(process.env.NEXT_PUBLIC_APP_URL);
   const forwardedHost = getFirstHeaderValue(headerList.get("x-forwarded-host"));
   const host = forwardedHost || getFirstHeaderValue(headerList.get("host"));
@@ -74,4 +73,21 @@ export function getPublicPassportUrl(
   }
 
   return configuredOrigin ? `${configuredOrigin}${path}` : path;
+}
+
+export function getPublicPassportUrl(
+  headerList: Headers,
+  lang: Lang,
+  registryId: string
+) {
+  const path = buildPublicPassportPath(lang, registryId);
+  return getPublicUrl(headerList, path);
+}
+
+export function getPublicPassportScanUrl(
+  headerList: Headers,
+  registryId: string
+) {
+  const path = buildPublicPassportScanPath(registryId);
+  return getPublicUrl(headerList, path);
 }
