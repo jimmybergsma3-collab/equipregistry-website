@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth/getSession";
 import { isValidLang, type Lang } from "@/lib/i18n/config";
 import { getPricingCategoryContent } from "@/lib/i18n/pricing-categories";
 import { getStripePaymentText } from "@/lib/i18n/stripe-payment";
+import { COMPANY_DETAILS } from "@/lib/company-details";
 import {
   getPricing,
   getPricingCategory,
@@ -23,6 +24,9 @@ type CheckoutPayload = {
   registrationId?: string;
   lang?: string;
 };
+
+const CHECKOUT_BRAND_NOTE =
+  `EquipRegistry.com and Verivista.es are part of nancys.es / ${COMPANY_DETAILS.company}.`;
 
 export async function POST(request: Request) {
   let payload: CheckoutPayload = {};
@@ -152,8 +156,8 @@ export async function POST(request: Request) {
           currency: checkoutCurrency,
           unit_amount: checkoutAmount,
           product_data: {
-            name: categoryContent.name,
-            description: categoryContent.description,
+            name: `EquipRegistry registration - ${categoryContent.name}`,
+            description: `${categoryContent.description} ${CHECKOUT_BRAND_NOTE}`,
           },
         },
       },

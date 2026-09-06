@@ -364,6 +364,29 @@ const STRIPE_PAYMENT_TEXT: Record<Lang, StripePaymentText> = {
   },
 };
 
+function removeProviderBranding(text: StripePaymentText): StripePaymentText {
+  const normalize = (value: string) =>
+    value
+      .replace(/Stripe Checkout/g, "EquipRegistry Checkout")
+      .replace(/Stripe checkout/g, "EquipRegistry checkout")
+      .replace(/Stripe-webhook/g, "checkout-bevestiging")
+      .replace(/Stripe webhook/g, "checkout confirmation")
+      .replace(/\bStripe\b/g, "the payment provider");
+
+  return {
+    ...text,
+    checkoutDescription: normalize(text.checkoutDescription),
+    webhookNote: normalize(text.webhookNote),
+    payButtonNote: "EquipRegistry.com / Verivista.es - NANCY'S CASTALLA",
+    genericError: normalize(text.genericError),
+    returnSuccessTitle: normalize(text.returnSuccessTitle),
+    returnSuccessText: normalize(text.returnSuccessText),
+    returnCancelTitle: normalize(text.returnCancelTitle),
+    returnCancelText: normalize(text.returnCancelText),
+    sessionUnavailable: normalize(text.sessionUnavailable),
+  };
+}
+
 export function getStripePaymentText(lang: Lang) {
-  return STRIPE_PAYMENT_TEXT[lang] ?? STRIPE_PAYMENT_TEXT.en;
+  return removeProviderBranding(STRIPE_PAYMENT_TEXT[lang] ?? STRIPE_PAYMENT_TEXT.en);
 }
