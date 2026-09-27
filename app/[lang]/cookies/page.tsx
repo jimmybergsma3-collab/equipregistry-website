@@ -653,9 +653,9 @@ export default async function CookiesPage({ params }: PageProps) {
                 </p>
                 <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-700">
                   <p className="font-semibold text-slate-900">
-                    {COMPANY_DETAILS.brand} - part of {COMPANY_DETAILS.company}
+                    {COMPANY_DETAILS.brand}
                   </p>
-                  <p>Owner: {COMPANY_DETAILS.owner}</p>
+                  <p>{COMPANY_DETAILS.owner}</p>
                   <p>ID / NIE: {COMPANY_DETAILS.taxId}</p>
                   <p>
                     {COMPANY_DETAILS.addressLine1},{" "}

@@ -117,7 +117,7 @@ export type PrivacyText = {
 };
 
 export const PRIVACY_CONTACT = {
-  company: COMPANY_DETAILS.company,
+  company: COMPANY_DETAILS.brand,
   owner: COMPANY_DETAILS.owner,
   addressLine1: COMPANY_DETAILS.addressLine1,
   addressLine2: COMPANY_DETAILS.addressLine2,

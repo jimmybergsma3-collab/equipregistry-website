@@ -1,6 +1,7 @@
 export const COMPANY_DETAILS = {
   brand: "EquipRegistry",
-  company: "NANCY'S CASTALLA",
+  company: "Jimmy Bergsma",
+  operatorDescription: "Operated by Jimmy Bergsma",
   owner: "Jimmy Bergsma",
   taxId: "Y8875740P",
   addressLine1: "Calle Murcia 111",
@@ -12,15 +13,14 @@ export const COMPANY_DETAILS = {
 };
 
 export const COMPANY_FOOTER_TEXT =
-  "EquipRegistry - a NANCY'S CASTALLA company";
+  "EquipRegistry";
 
 export const COMPANY_EMAIL_FOOTER_TEXT =
-  "EquipRegistry - a NANCY'S CASTALLA company";
+  `${COMPANY_DETAILS.brand} - ${COMPANY_DETAILS.operatorDescription}`;
 
 export const COMPANY_LEGAL_LINES = [
   "EquipRegistry",
-  "Part of NANCY'S CASTALLA",
-  "Owner: Jimmy Bergsma",
+  COMPANY_DETAILS.owner,
   "Address: Calle Murcia 111, 03420 Castalla, Alicante, Spain",
   "ID / NIE: Y8875740P",
   "Phone / WhatsApp: 0034 644 05 97 69",

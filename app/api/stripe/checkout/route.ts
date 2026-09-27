@@ -26,7 +26,7 @@ type CheckoutPayload = {
 };
 
 const CHECKOUT_BRAND_NOTE =
-  `EquipRegistry.com and Verivista.es are part of nancys.es / ${COMPANY_DETAILS.company}.`;
+  `${COMPANY_DETAILS.brand} - ${COMPANY_DETAILS.operatorDescription}`;
 
 export async function POST(request: Request) {
   let payload: CheckoutPayload = {};

@@ -161,8 +161,7 @@ export default function ContactPage({ params }: Props) {
                 <p className="font-semibold text-slate-900">
                   {COMPANY_DETAILS.brand}
                 </p>
-                <p>Part of {COMPANY_DETAILS.company}</p>
-                <p>Owner: {COMPANY_DETAILS.owner}</p>
+                <p>{COMPANY_DETAILS.operatorDescription}</p>
                 <p>ID / NIE: {COMPANY_DETAILS.taxId}</p>
               </div>
               <div>

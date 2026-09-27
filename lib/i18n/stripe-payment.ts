@@ -377,7 +377,7 @@ function removeProviderBranding(text: StripePaymentText): StripePaymentText {
     ...text,
     checkoutDescription: normalize(text.checkoutDescription),
     webhookNote: normalize(text.webhookNote),
-    payButtonNote: "EquipRegistry.com / Verivista.es - NANCY'S CASTALLA",
+    payButtonNote: "EquipRegistry - Operated by Jimmy Bergsma",
     genericError: normalize(text.genericError),
     returnSuccessTitle: normalize(text.returnSuccessTitle),
     returnSuccessText: normalize(text.returnSuccessText),
