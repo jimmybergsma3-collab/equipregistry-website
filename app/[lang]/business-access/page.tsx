@@ -1,0 +1,8 @@
+import {notFound} from 'next/navigation';
+import SiteHeader from '@/components/site-header';
+import SiteFooter from '@/components/site-footer';
+import {isValidLang} from '@/lib/i18n/config';
+import {getLocalizedCountryOptions} from '@/lib/i18n/countries';
+import PartnerForm from '@/components/business/partner-form';
+export const metadata={title:'Zakelijke toegang aanvragen | EquipRegistry'};
+export default async function Page({params}:{params:Promise<{lang:string}>}){const {lang}=await params;if(!isValidLang(lang))notFound();return <><SiteHeader lang={lang}/><main className="mx-auto max-w-4xl px-6 py-14"><h1 className="text-3xl font-semibold text-blue-950">Zakelijke toegang aanvragen</h1><p className="my-5">Voor verhuurbedrijven, verzekeraars, banken, financiers, leasemaatschappijen en OEM’s. Iedere aanvraag wordt handmatig beoordeeld. Een aanvraag geeft geen toegang en maakt geen geverifieerde paspoorten aan.</p><div className="mb-8 rounded-lg bg-slate-50 p-5 text-sm"><p>Contact: <a className="underline" href="mailto:business@equipregistry.com">business@equipregistry.com</a></p><p className="mt-2">Upload hier geen identiteitsdocumenten of vertrouwelijk bewijs. EquipRegistry stemt de veilige aanlevering met u af. Na beoordeling volgt de bestaande accountverificatie en persoonlijke uitnodiging. U ontvangt nooit een wachtwoord per e-mail.</p><p className="mt-2">Verhuurders beheren uitsluitend eigen assets. Banken en verzekeraars krijgen alleen toegang tot expliciet geautoriseerde dossiers. Imports blijven privé en gelden niet als officieel geverifieerde paspoorten.</p></div><PartnerForm countries={getLocalizedCountryOptions('nl')}/></main><SiteFooter lang={lang}/></>;}

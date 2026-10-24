@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ApplicantType {
+  private
+  sme
+  insurer_partner
+  bank_partner
+  dealer_partner
+  rental_partner
+}
+
+enum RegistrationRequestStatus {
+  draft
+  incomplete
+  ready_for_submission
+  payment_required
+  submitted
+  under_review
+  approved
+  rejected
+  more_info_required
+  passport_issued
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+model User {
+  organizationMemberships OrganizationMembership[] @relation("OrgMember")
+  organizationGrants OrganizationMembership[] @relation("OrgGrantor")
+  organizationReviews OrganizationMandateReview[] @relation("OrgReviewer")
+  organizationFirstAdministrations OrganizationMandateReview[] @relation("OrgFirstAdmin")
+  privateImportedAssets PrivateImportedAsset[] @relation("OrgAssetCreator")
+  organizationEvents OrganizationEvent[] @relation("OrgEventActor")
+  id              String    @id @default(cuid())
+  email           String    @unique
+  passwordHash    String
+  name            String
+  companyName     String?
+  vatNumber       String?
+  role            UserRole  @default(user)
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  machines                Machine[]
+  registrationRequests    RegistrationRequest[]
+  emailVerificationTokens EmailVerificationToken[]
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Machine {
+  id           String  @id @default(cuid())
+  registryId   String  @unique
+  serialNumber String
+  brand        String?
+  model        String?
+  year         String?
+  category     String?
+  status       String?
+  ownerId      String
+  owner        User    @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RegistrationRequest {
+  photoPublications AssetPhotoPublication[]
+  id        String @id @default(cuid())
+  reference String @unique
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  assetName    String
+  category     String
+  subcategory  String
+  brand        String
+  model        String
+  serialNumber String
+  year         String?
+  country      String?
+
+  ownerName  String
+  ownerEmail String
+
+  applicantType    ApplicantType
+  requestStatus    RegistrationRequestStatus
+  paymentCompleted Boolean                   @default(false)
+
+  declarationAccepted Boolean
+
+  dynamicFields     Json
+  documents         Json
+  completenessScore Int  @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model RegistrySequence {
+  id        String   @id @default("registry-sequence")
+  nextValue Int      @default(1)
+  updatedAt DateTime @updatedAt
+}
+
+enum PhotoLabel {
+  overview
+  front
+  rear
+  left
+  right
+  interior
+  serial_plate
+  vin_chassis
+  hull_id
+  engine_serial
+  detail
+  damage
+  attachment
+  other
+}
+
+enum PhotoPublicationStatus {
+  private
+  pending_review
+  published
+  rejected
+  revoked
+}
+
+enum PhotoPrivacyResult {
+  pending
+  passed
+  failed
+}
+
+model AssetPhotoPublication {
+  id String @id
+  registrationRequestId String
+  registrationRequest RegistrationRequest @relation(fields: [registrationRequestId], references: [id], onDelete: Restrict)
+  sourceFileId String
+  sourceDocumentKey String
+  sourceLocator String
+  sourceSha256 String
+  sourceMetadataSha256 String
+  sourceOwnerId String
+  sourceProvenance String
+  revision Int
+  labelCode PhotoLabel
+  publicationStatus PhotoPublicationStatus @default(private)
+  consentActorId String
+  consentRecordedBy String
+  consentRecordedAt DateTime
+  consentEvidenceRef String
+  consentPolicyVersion String
+  variantObjectKey String
+  variantSha256 String
+  variantMimeType String
+  variantWidth Int
+  variantHeight Int
+  privacyReviewResult PhotoPrivacyResult @default(pending)
+  reviewedBy String?
+  reviewedAt DateTime?
+  reviewPolicyVersion String?
+  publishedAt DateTime?
+  revokedAt DateTime?
+  revokedBy String?
+  revocationReasonCode String?
+  createdAt DateTime @default(now())
+
+  @@unique([registrationRequestId, sourceFileId, revision])
+  @@index([registrationRequestId, publicationStatus, labelCode, publishedAt, id], map: "Photo_public_listing_idx")
+}
+
+// 4B: private administration context, never a legal ownership or verification claim.
+model Organization {
+  id String @id @default(uuid()) @db.Uuid
+  displayName String @db.VarChar(200)
+  countryCode String? @db.VarChar(2)
+  status String @default("PENDING_REVIEW") @db.VarChar(24)
+  version Int @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  activatedAt DateTime? @db.Timestamptz(6)
+  memberships OrganizationMembership[]
+  mandateReview OrganizationMandateReview?
+  assets PrivateImportedAsset[]
+  events OrganizationEvent[]
+}
+
+model OrganizationMembership {
+  organizationId String @db.Uuid
+  userId String
+  role String @db.VarChar(24)
+  status String @default("ACTIVE") @db.VarChar(16)
+  version Int @default(0)
+  startsAt DateTime @default(now()) @db.Timestamptz(6)
+  endsAt DateTime? @db.Timestamptz(6)
+  grantedBy String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  user User @relation("OrgMember", fields: [userId], references: [id], onDelete: Restrict)
+  grantor User @relation("OrgGrantor", fields: [grantedBy], references: [id], onDelete: Restrict)
+  @@id([organizationId, userId])
+  @@index([userId, status])
+}
+
+model OrganizationMandateReview {
+  organizationId String @id @db.Uuid
+  reviewerId String
+  firstAdministratorId String
+  privateReviewReference String @db.VarChar(200)
+  reviewedAt DateTime @default(now()) @db.Timestamptz(6)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  reviewer User @relation("OrgReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+  firstAdministrator User @relation("OrgFirstAdmin", fields: [firstAdministratorId], references: [id], onDelete: Restrict)
+}
+
+model PrivateImportedAsset {
+  id String @id @default(uuid()) @db.Uuid
+  organizationId String @db.Uuid
+  assetName String @db.VarChar(200)
+  category String @db.VarChar(40)
+  subcategory String @db.VarChar(80)
+  brand String? @db.VarChar(200)
+  model String? @db.VarChar(200)
+  serialNumber String? @db.VarChar(200)
+  identifierType String? @db.VarChar(16)
+  sourceSystem String? @db.VarChar(80)
+  externalAssetKey String? @db.VarChar(200)
+  identityRevision Int @default(0)
+  identityState String @db.VarChar(24)
+  evidenceState String @default("EVIDENCE_REQUIRED") @db.VarChar(24)
+  lifecycleState String @default("IMPORTED_PRIVATE") @db.VarChar(24)
+  version Int @default(0)
+  createdBy String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  creator User @relation("OrgAssetCreator", fields: [createdBy], references: [id], onDelete: Restrict)
+  @@unique([organizationId, sourceSystem, externalAssetKey])
+  @@unique([organizationId, id], map: "private_asset_tenant_identity")
+  @@index([organizationId, identifierType, serialNumber])
+  @@index([organizationId, id])
+}
+
+model OrganizationEvent {
+  id String @id @default(uuid()) @db.Uuid
+  organizationId String @db.Uuid
+  actorId String
+  action String @db.VarChar(40)
+  subjectId String @db.VarChar(200)
+  subjectVersion Int
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  actor User @relation("OrgEventActor", fields: [actorId], references: [id], onDelete: Restrict)
+  @@index([organizationId, createdAt])
+}

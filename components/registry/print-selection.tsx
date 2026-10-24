@@ -1,0 +1,2 @@
+ 'use client';
+export default function PrintSelection({count}:{count:number}){return <div className="sticky top-0 z-50 flex items-center gap-5 border-b bg-white p-4 print:hidden"><strong>{count} paspoort{count===1?'':'en'} geselecteerd</strong><button className="rounded bg-blue-950 px-5 py-2 text-sm text-white" onClick={()=>window.print()}>Afdrukken / opslaan als PDF</button><p className="text-xs text-slate-500">Kies Opslaan als PDF in het afdrukvenster voor één gecombineerd bestand.</p></div>;}

@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* ===== BASE VARIABLES ===== */
+
+:root {
+  --background: 255 255 255;
+  --foreground: 23 23 23;
+
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  color-scheme: light;
+}
+
+/* ===== BASE LAYOUT ===== */
+
+html {
+  height: 100%;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  overscroll-behavior: none;
+}
+
+body {
+  min-height: 100svh;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+#__next,
+#root {
+  min-height: 100%;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
+
+/* ===== MEDIA ===== */
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ===== FORM ELEMENTS (FIXED) ===== */
+
+input,
+textarea,
+select {
+  color: rgb(var(--foreground));
+  font: inherit;
+}
+
+/* BELANGRIJK: GEEN color: inherit op button */
+button {
+  font: inherit;
+}
+
+/* ===== DEFAULT INPUT STYLING ===== */
+
+input,
+textarea,
+select {
+  border: 1px solid #d1d5db; /* slate-300 */
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: white;
+}
+
+/* ===== BUTTON RESET ===== */
+
+button {
+  cursor: pointer;
+}
+
+/* ===== OPTIONAL: FIX PLACEHOLDER ===== */
+
+::placeholder {
+  color: #9ca3af; /* slate-400 */
+}
+
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  html,
+  body {
+    min-height: auto;
+    background: white !important;
+    color: rgb(var(--foreground));
+    overflow: visible;
+  }
+}

@@ -1,0 +1,91 @@
+EQUIPREGISTRY §71 — lokale connection routing, 13 oktober 2026
+GO geteste lokale bronintegratie; NO-GO productie. STOP na §71.
+
+DATABASE
+Vijf afzonderlijke Prisma-pools en synthetische SCRAM-logins, elk met één bestaande
+NOBYPASSRLS-capability en een verschillend wachtwoord. Geen DATABASE_URL/DIRECT_URL-
+fallback, SET ROLE-routing, gedeelde global.prisma of afgeleide logincredentials.
+De dertien migraties, package/lock en nummercode blijven ongewijzigd.
+Nieuwe operationele application-runtime-profile.sql volgt uitsluitend op de vier
+bestaande registration/import/platform/business-profielen; niet automatisch toegepast.
+Minimale uitbreiding: signup/tokenkolommen (restrictieve INSERT-policy: alleen user,
+emailVerifiedAt NULL), foto-overgangskolommen, incident/evidence/audit-insert en sequence,
+governance blocker-read/archiefkolom, platformmandaatuitgifte/gebruik en synthetische
+business subject-insert. Geen DELETE/TRUNCATE, User.role UPDATE, Founder/provider INSERT.
+Open: bestaande gecontroleerde productieadoptie en nummerhistorie onder gesloten writers.
+
+SECURITY
+ROUTES PASS hieronder betekent bewezen lokale/synthetische werking; geen livegoedkeuring.
+registration_app — PASS: login/signup/verificatietokens/sessies, individuele registratie,
+permanente nummerclaim, publieke/klantpaspoorten, bestaande registratie-admin, uploads-
+autorisatie, incidenten en foto's. Foto-publicatie blijft zonder synthetische Storage-
+adapter BLOCKED voor echt gebruik. Geen nieuwe Storage-uploadroute.
+import_app — PASS: /api/private-imports inspect/stage/read/commit en interne preview;
+CSV én XLSX; actor/organisatiecontext is transactioneel en lekt niet naar de pool.
+organization_app — PASS: businessportal/leden, gewone organisatie- en governanceacties,
+consent/revoke/leave, archivering/herstel. Activering/propose/apply/closure/retention
+gebruiken platform_app na de bestaande autorisatiechecks.
+business_reader — PASS: zakelijke readers, A–D57.1 lifecycle/transfer/finance/grants,
+synthetische subject-provisioning. Bestaande exact-lokale/synthetische gates blijven;
+echte A–D-bronbevoegdheid blijft BLOCKED, geen officiële import→registratiebridge.
+platform_app — PASS: wereldwijde verificatie, uitnodigen/accepteren/intrekken, beheer,
+Founder-autorisatie en bestaande administratieve governance. Bootstrap/providerkeys
+blijven buiten applicatierechten. Geen echte Founder of echte bron goedgekeurd.
+
+Server-only lib/db-capabilities.ts controleert vaste login, transitieve memberships,
+superuser/BYPASSRLS/ownership/schema-create, bootstrap- en destructieve rechten en RLS.
+Ontbrekende, verkeerde of gedeelde credentials weigeren betrokken DB-gebruik; een
+malformed andere configuratie blokkeert een gezonde capability niet. Rotatie vraagt
+procesherstart. Callbacktransacties controleren binnen dezelfde transactie; Prisma-
+arraytransacties behouden atomaire account/tokenrollback. Geen privilege-escalatie-
+fallback. Alle vijf credentials zitten in dezelfde vertrouwde server: dit is geen
+procesisolatie tegen willekeurige code-uitvoering. Bestaande service-autorisatie
+blijft noodzakelijk; alleen import heeft de al bewezen context-RLS. Geen nieuwe
+claim van volledige tenant-RLS of bescherming tegen een gecompromitteerde backend.
+
+Vaste serverconfiguratie, waarden nergens in bronbestanden:
+ER_REGISTRATION_DATABASE_URL → registration_app → er_registration_runtime
+ER_IMPORT_DATABASE_URL → import_app → er_import_runtime
+ER_ORGANIZATION_DATABASE_URL → organization_app → er_organization_runtime
+ER_BUSINESS_DATABASE_URL → business_reader → er_business_runtime
+ER_PLATFORM_DATABASE_URL → platform_app → er_platform_runtime
+Alle verbindingen moeten de bedoelde gedeelde applicatiedataset gebruiken. Legacy
+DATABASE_URL/DIRECT_URL mogen alleen migratie-/offline tooling dienen. Geen env gewijzigd.
+route-role-map.mjs levert conservatieve statische dependencybereikbaarheid, inclusief
+authenticatie; bovenstaande commandmapping is specifieker dan die statische superset.
+
+Bewijs: vijf login-/preflights; credential- en rolmisconfiguratie/cross-role-negatieven;
+40 parallelle reserveringen en 10 claims/1 winnaar; 4 organisatie-, 15 governance-,
+7 importquota/RLS-, 11 A–D-, 19 platform-, 15 incident- en 4 fotogroepen; 3 aanvullende
+provisioning/XLSX-groepen; echte registratieactie. Gebouwde HTTP: 5 groepen met echte
+wachtwoordlogin/signup/token/sessie/paspoort en business/platform, gedeelde DATABASE_URL
+bewust onbruikbaar. Lokale Storagebytes uitsluitend synthetisch; incident-signingstub
+toetst autorisatie/TTL, geen providerintrekkingsbewijs. Geen mail/Stripe/netwerkproviders.
+Open: gedeployde credentialmapping, oude/shared writers en drain, echte Storage/F05/
+revocation, OS-/replicaworkers; bestaande vijf high linttoolchainmeldingen niet heraudit.
+Scanner, Field Evidence/PDF-inname en registratiebridge blijven gesloten.
+
+ACCOUNTS
+Lokale auth/token- en Founder/scoperegressies PASS; geen admin→Founderafleiding.
+Echte Founderbinding/recovery, goedgekeurde landenbronnen en reviewerkwalificaties
+blijven vereist. Live inlogfout en Vercel-env blijven voor integrale releasecontrole.
+
+BACK-UP
+Centrale inventaris, HEAD, index, envhashes en oude init-deletie vooraf vastgelegd.
+Afzonderlijke kandidaat met eigen dependencies. Integratie uitsluitend na volledige
+hercontrole en per-bestand voorhash; vervangen bronbytes apart bewaard. Exacte delta,
+voor-/nahashes, oorspronkelijke freeze en testbewijzen in het lokale §71-bewijspakket.
+Bestaande ontwikkel-/productieback-ups niet gewijzigd. Externe kopie, actuele complete
+DB/Storage/rollen/keyrestore blijven bestaande releasegates; geen nieuwe restoreclaim.
+
+LIVEGANG
+TypeScript PASS; geïsoleerde productiebuild 24/24 PASS; lint 0 fouten/2 historische
+paspoortwaarschuwingen; nieuwe code/checker/tests 0/0. Security/upload/resource plus
+nieuwe routingtests 42 assertions/groepen PASS; businessregressies 11/11 PASS.
+Oorspronkelijke freeze 210/210, baseline SHA256
+b28bc4edfa3f7cfc72680c067817cc5d0edd7a98791945ff029d143eacd26415.
+Geen baselineversoepeling. Geen productie/Vercel/env/WAF/DNS, echte DB/Storagewrites,
+mail/Stripe/outreach, commit/push/deployment. Oude deletie en overige geïnventariseerde
+centrale bytes behouden; centrale runtime/dependencies/client niet vervangen.
+Enige volgende stap: integrale releasecontrole, beginnend met read-only mapping van
+gedeployde credentials naar de vijf rollen. Geen automatische vervolgronde.

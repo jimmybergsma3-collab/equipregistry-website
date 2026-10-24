@@ -1,0 +1,189 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { RegistrationRequestStatus } from "@/lib/registry/workflow";
+import { isValidLang, type Lang } from "@/lib/i18n/config";
+import { getLocalizedRequestStatusLabel } from "@/lib/i18n/registry-display";
+
+type Props = {
+  lang: string;
+  currentStatus: string;
+  currentReview: string;
+};
+
+const FILTER_VALUES: RegistrationRequestStatus[] = [
+  "payment_required",
+  "submitted",
+  "under_review",
+  "approved",
+  "passport_issued",
+  "rejected",
+  "more_info_required",
+  "draft",
+  "incomplete",
+];
+
+const REVIEW_TEXT = {
+  en: {
+    status: "Filter by status",
+    review: "Review state",
+    all: "All",
+    reviewed: "Reviewed",
+    notReviewed: "Not reviewed",
+  },
+  es: {
+    status: "Filtrar por estado",
+    review: "Estado de revision",
+    all: "Todos",
+    reviewed: "Revisados",
+    notReviewed: "Sin revisar",
+  },
+  de: {
+    status: "Nach Status filtern",
+    review: "Pruefstatus",
+    all: "Alle",
+    reviewed: "Geprueft",
+    notReviewed: "Nicht geprueft",
+  },
+  fr: {
+    status: "Filtrer par statut",
+    review: "Etat de revue",
+    all: "Tous",
+    reviewed: "Revus",
+    notReviewed: "Non revus",
+  },
+  it: {
+    status: "Filtra per stato",
+    review: "Stato revisione",
+    all: "Tutti",
+    reviewed: "Revisionati",
+    notReviewed: "Non revisionati",
+  },
+  nl: {
+    status: "Filter op status",
+    review: "Reviewstatus",
+    all: "Alle",
+    reviewed: "Beoordeeld",
+    notReviewed: "Niet beoordeeld",
+  },
+  pt: {
+    status: "Filtrar por estado",
+    review: "Estado de revisao",
+    all: "Todos",
+    reviewed: "Revistos",
+    notReviewed: "Nao revistos",
+  },
+  ru: {
+    status: "Фильтр по статусу",
+    review: "Статус проверки",
+    all: "Все",
+    reviewed: "Проверенные",
+    notReviewed: "Не проверенные",
+  },
+  zh: {
+    status: "按状态筛选",
+    review: "审核状态",
+    all: "全部",
+    reviewed: "已审核",
+    notReviewed: "未审核",
+  },
+  hi: {
+    status: "स्थिति के अनुसार फ़िल्टर करें",
+    review: "समीक्षा स्थिति",
+    all: "सभी",
+    reviewed: "समीक्षित",
+    notReviewed: "असमीक्षित",
+  },
+  ar: {
+    status: "تصفية حسب الحالة",
+    review: "حالة المراجعة",
+    all: "الكل",
+    reviewed: "تمت المراجعة",
+    notReviewed: "غير مراجع",
+  },
+} as const;
+
+export default function RequestStatusFilter({
+  lang,
+  currentStatus,
+  currentReview,
+}: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const safeLang = isValidLang(lang) ? (lang as Lang) : "en";
+  const text =
+    REVIEW_TEXT[safeLang as keyof typeof REVIEW_TEXT] ?? REVIEW_TEXT.en;
+
+  function handleChange(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value === "all") {
+      params.delete("status");
+    } else {
+      params.set("status", value);
+    }
+
+    const query = params.toString();
+    router.push(query ? `?${query}` : "?");
+  }
+
+  function handleReviewChange(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value === "all") {
+      params.delete("review");
+    } else {
+      params.set("review", value);
+    }
+
+    const query = params.toString();
+    router.push(query ? `?${query}` : "?");
+  }
+
+  return (
+    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="statusFilter"
+          className="text-xs font-medium text-zinc-700"
+        >
+          {text.status}
+        </label>
+
+        <select
+          id="statusFilter"
+          value={currentStatus || "all"}
+          onChange={(e) => handleChange(e.target.value)}
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[200px]"
+        >
+          <option value="all">{text.all}</option>
+          {FILTER_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {getLocalizedRequestStatusLabel(value, safeLang)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="reviewFilter"
+          className="text-xs font-medium text-zinc-700"
+        >
+          {text.review}
+        </label>
+
+        <select
+          id="reviewFilter"
+          value={currentReview || "all"}
+          onChange={(e) => handleReviewChange(e.target.value)}
+          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 sm:w-[180px]"
+        >
+          <option value="all">{text.all}</option>
+          <option value="reviewed">{text.reviewed}</option>
+          <option value="not_reviewed">{text.notReviewed}</option>
+        </select>
+      </div>
+    </div>
+  );
+}

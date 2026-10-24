@@ -1,0 +1,589 @@
+{
+  "rls": [
+    {
+      "relname": "EmailVerificationToken",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "Machine",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "RegistrationRequest",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "RegistrySequence",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "User",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    }
+  ],
+  "enums": [
+    {
+      "labels": [
+        "private",
+        "sme",
+        "insurer_partner",
+        "bank_partner",
+        "dealer_partner",
+        "rental_partner"
+      ],
+      "typname": "ApplicantType"
+    },
+    {
+      "labels": [
+        "draft",
+        "incomplete",
+        "ready_for_submission",
+        "payment_required",
+        "submitted",
+        "under_review",
+        "approved",
+        "rejected",
+        "more_info_required",
+        "passport_issued"
+      ],
+      "typname": "RegistrationRequestStatus"
+    },
+    {
+      "labels": [
+        "user",
+        "admin"
+      ],
+      "typname": "UserRole"
+    }
+  ],
+  "columns": [
+    {
+      "type": "text",
+      "ordinal": 1,
+      "required": true,
+      "table_name": "EmailVerificationToken",
+      "column_name": "id",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 2,
+      "required": true,
+      "table_name": "EmailVerificationToken",
+      "column_name": "userId",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 3,
+      "required": true,
+      "table_name": "EmailVerificationToken",
+      "column_name": "tokenHash",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 4,
+      "required": true,
+      "table_name": "EmailVerificationToken",
+      "column_name": "expiresAt",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 5,
+      "required": false,
+      "table_name": "EmailVerificationToken",
+      "column_name": "usedAt",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 6,
+      "required": true,
+      "table_name": "EmailVerificationToken",
+      "column_name": "createdAt",
+      "default_value": "CURRENT_TIMESTAMP"
+    },
+    {
+      "type": "text",
+      "ordinal": 1,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "id",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 2,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "registryId",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 3,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "serialNumber",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 4,
+      "required": false,
+      "table_name": "Machine",
+      "column_name": "brand",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 5,
+      "required": false,
+      "table_name": "Machine",
+      "column_name": "model",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 6,
+      "required": false,
+      "table_name": "Machine",
+      "column_name": "year",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 7,
+      "required": false,
+      "table_name": "Machine",
+      "column_name": "category",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 8,
+      "required": false,
+      "table_name": "Machine",
+      "column_name": "status",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 9,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "ownerId",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 10,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "createdAt",
+      "default_value": "CURRENT_TIMESTAMP"
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 11,
+      "required": true,
+      "table_name": "Machine",
+      "column_name": "updatedAt",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 1,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "id",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 2,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "reference",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 3,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "userId",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 4,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "assetName",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 5,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "category",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 6,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "subcategory",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 7,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "brand",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 8,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "model",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 9,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "serialNumber",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 10,
+      "required": false,
+      "table_name": "RegistrationRequest",
+      "column_name": "year",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 11,
+      "required": false,
+      "table_name": "RegistrationRequest",
+      "column_name": "country",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 12,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "ownerName",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 13,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "ownerEmail",
+      "default_value": null
+    },
+    {
+      "type": "\"ApplicantType\"",
+      "ordinal": 14,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "applicantType",
+      "default_value": null
+    },
+    {
+      "type": "\"RegistrationRequestStatus\"",
+      "ordinal": 15,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "requestStatus",
+      "default_value": null
+    },
+    {
+      "type": "boolean",
+      "ordinal": 16,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "paymentCompleted",
+      "default_value": "false"
+    },
+    {
+      "type": "boolean",
+      "ordinal": 17,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "declarationAccepted",
+      "default_value": null
+    },
+    {
+      "type": "jsonb",
+      "ordinal": 18,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "dynamicFields",
+      "default_value": null
+    },
+    {
+      "type": "jsonb",
+      "ordinal": 19,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "documents",
+      "default_value": null
+    },
+    {
+      "type": "integer",
+      "ordinal": 20,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "completenessScore",
+      "default_value": "0"
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 21,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "createdAt",
+      "default_value": "CURRENT_TIMESTAMP"
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 22,
+      "required": true,
+      "table_name": "RegistrationRequest",
+      "column_name": "updatedAt",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 23,
+      "required": false,
+      "table_name": "RegistrationRequest",
+      "column_name": "deletedAt",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 1,
+      "required": true,
+      "table_name": "RegistrySequence",
+      "column_name": "id",
+      "default_value": "'registry-sequence'::text"
+    },
+    {
+      "type": "integer",
+      "ordinal": 2,
+      "required": true,
+      "table_name": "RegistrySequence",
+      "column_name": "nextValue",
+      "default_value": "1"
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 3,
+      "required": true,
+      "table_name": "RegistrySequence",
+      "column_name": "updatedAt",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 1,
+      "required": true,
+      "table_name": "User",
+      "column_name": "id",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 2,
+      "required": true,
+      "table_name": "User",
+      "column_name": "email",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 3,
+      "required": true,
+      "table_name": "User",
+      "column_name": "passwordHash",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 4,
+      "required": true,
+      "table_name": "User",
+      "column_name": "name",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 5,
+      "required": false,
+      "table_name": "User",
+      "column_name": "companyName",
+      "default_value": null
+    },
+    {
+      "type": "text",
+      "ordinal": 6,
+      "required": false,
+      "table_name": "User",
+      "column_name": "vatNumber",
+      "default_value": null
+    },
+    {
+      "type": "\"UserRole\"",
+      "ordinal": 7,
+      "required": true,
+      "table_name": "User",
+      "column_name": "role",
+      "default_value": "'user'::\"UserRole\""
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 8,
+      "required": false,
+      "table_name": "User",
+      "column_name": "emailVerifiedAt",
+      "default_value": null
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 9,
+      "required": true,
+      "table_name": "User",
+      "column_name": "createdAt",
+      "default_value": "CURRENT_TIMESTAMP"
+    },
+    {
+      "type": "timestamp(3) without time zone",
+      "ordinal": 10,
+      "required": true,
+      "table_name": "User",
+      "column_name": "updatedAt",
+      "default_value": null
+    }
+  ],
+  "indexes": [
+    {
+      "indexdef": "CREATE INDEX \"EmailVerificationToken_expiresAt_idx\" ON public.\"EmailVerificationToken\" USING btree (\"expiresAt\")",
+      "indexname": "EmailVerificationToken_expiresAt_idx",
+      "tablename": "EmailVerificationToken"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"EmailVerificationToken_pkey\" ON public.\"EmailVerificationToken\" USING btree (id)",
+      "indexname": "EmailVerificationToken_pkey",
+      "tablename": "EmailVerificationToken"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"EmailVerificationToken_tokenHash_key\" ON public.\"EmailVerificationToken\" USING btree (\"tokenHash\")",
+      "indexname": "EmailVerificationToken_tokenHash_key",
+      "tablename": "EmailVerificationToken"
+    },
+    {
+      "indexdef": "CREATE INDEX \"EmailVerificationToken_userId_idx\" ON public.\"EmailVerificationToken\" USING btree (\"userId\")",
+      "indexname": "EmailVerificationToken_userId_idx",
+      "tablename": "EmailVerificationToken"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"Machine_pkey\" ON public.\"Machine\" USING btree (id)",
+      "indexname": "Machine_pkey",
+      "tablename": "Machine"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"Machine_registryId_key\" ON public.\"Machine\" USING btree (\"registryId\")",
+      "indexname": "Machine_registryId_key",
+      "tablename": "Machine"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"RegistrationRequest_pkey\" ON public.\"RegistrationRequest\" USING btree (id)",
+      "indexname": "RegistrationRequest_pkey",
+      "tablename": "RegistrationRequest"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"RegistrationRequest_reference_key\" ON public.\"RegistrationRequest\" USING btree (reference)",
+      "indexname": "RegistrationRequest_reference_key",
+      "tablename": "RegistrationRequest"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"RegistrySequence_pkey\" ON public.\"RegistrySequence\" USING btree (id)",
+      "indexname": "RegistrySequence_pkey",
+      "tablename": "RegistrySequence"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"User_email_key\" ON public.\"User\" USING btree (email)",
+      "indexname": "User_email_key",
+      "tablename": "User"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX \"User_pkey\" ON public.\"User\" USING btree (id)",
+      "indexname": "User_pkey",
+      "tablename": "User"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "EmailVerificationToken_pkey",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "EmailVerificationToken"
+    },
+    {
+      "name": "EmailVerificationToken_userId_fkey",
+      "definition": "FOREIGN KEY (\"userId\") REFERENCES \"User\"(id) ON UPDATE CASCADE ON DELETE CASCADE",
+      "table_name": "EmailVerificationToken"
+    },
+    {
+      "name": "Machine_ownerId_fkey",
+      "definition": "FOREIGN KEY (\"ownerId\") REFERENCES \"User\"(id) ON UPDATE CASCADE ON DELETE RESTRICT",
+      "table_name": "Machine"
+    },
+    {
+      "name": "Machine_pkey",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "Machine"
+    },
+    {
+      "name": "RegistrationRequest_pkey",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "RegistrationRequest"
+    },
+    {
+      "name": "RegistrationRequest_userId_fkey",
+      "definition": "FOREIGN KEY (\"userId\") REFERENCES \"User\"(id) ON UPDATE CASCADE ON DELETE CASCADE",
+      "table_name": "RegistrationRequest"
+    },
+    {
+      "name": "RegistrySequence_pkey",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "RegistrySequence"
+    },
+    {
+      "name": "User_pkey",
+      "definition": "PRIMARY KEY (id)",
+      "table_name": "User"
+    }
+  ]
+}

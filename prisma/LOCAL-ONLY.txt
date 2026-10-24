@@ -1,0 +1,1 @@
+This chain is for an EMPTY synthetic database only. The legacy init is archived byte-for-byte. Production baseline adoption is NOT authorized or performed. Never run this baseline against existing production.

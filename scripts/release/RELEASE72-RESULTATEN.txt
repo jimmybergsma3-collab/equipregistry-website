@@ -1,0 +1,135 @@
+1. DATABASE — AFGEROND PASS / PRODUCTIE GEBLOKKEERD
+§72, 13 oktober 2026. Doel: equipregistry / qpwoevvxrajtirlkazxm, PostgreSQL17.6.
+Actuele inspecties uitsluitend REPEATABLE READ READ ONLY met timeout en ROLLBACK.
+Catalogus exact gelijk aan de gecontroleerde baseline: 5 tabellen,53 kolommen,
+8 constraints,11 indexen,3 enums; uitsluitend bekende fysieke User-kolomvolgorde.
+Geen Prisma-ledger, private applicatieschema's, applicatietriggers of -functies.
+Alle13 migratiechecksums gelijk aan §68/71. Geen productiemigratie uitgevoerd.
+
+Nieuwe netwerkloze schemaclone: echte productiecatalogus exact vergeleken, bestaande
+baseline niet opnieuw uitgevoerd,12 vervolgmigraties en alle5 actuele profielen
+toegepast;5 rolpreflights PASS. Eerdere echte Prisma baseline-resolve/deploy met13
+ledgerchecksums hergebruikt en bytegebonden; geen tweede Prisma-proef geclaimd.
+Tweede representatieve clone bevat26/17 nummerhistoriefixtures met uitsluitend
+synthetische identiteiten/inhoud. Na adoptie alle aanvraag-/Machinerijen exact
+behouden, alle opgeslagen/afgeleide nummers uitgesloten en tellers nooit verlaagd.
+Actueel:26 aanvragen,23 soft-deleted,3 actief;17 Machine-referenties,0 afwijkende
+eigenaar/serienummerkoppelingen. Alle referenties gelijk aan §67 en back-updigest.
+Tellers algemeen3/BK6/HA14/SV5; opgeslagen maxima2/BK5/HA13/SV4. LM ontbreekt.
+Twee historische afgeleide weergavebotsingen blijven behouden, geen testherkomst
+aangenomen. Onbekende hard-deletes vóór back-up blijven UNPROVEN.
+GEBLOKKEERD: productieadoptie en definitieve hoogwateropname onder gesloten writers.
+
+2. SECURITY — AFGEROND PASS / PROVIDERGATES GEBLOKKEERD
+Read-only inventaris:7 EquipRegistry-Vercelprojecten,199 deploymentrecords en23
+aliases; geen verdere paginacursor teruggegeven. Zes projecten hebben DATABASE_URL
+en DIRECT_URL naar postgres.qpwoevvxrajtirlkazxm op de Supabase-pooler, poorten6543
+en5432, database postgres. Zevende project heeft geen actuele project-envs; dat
+bewijst niet dat oude deployments geen secrets bevatten. Alleen veilige URLdelen
+vastgelegd; geen secretwaarden of credentialhashes in pakket. Actuele project-env
+is GEEN attestatie van de immutable configuratie van elk deployment.
+Geen van de vijf ER_*_DATABASE_URL-variabelen in deze actuele projectmetadata;
+geen van de vijf login-/er_*-rollen in productie. Supabase Edge Functions leeg en
+cron.job ontbreekt. Vercel cron-/workerconfig wordt niet door de beschikbare
+project/deploymentrespons getoond; externe queues/workers en historische secrets
+blijven UNKNOWN. Lege applicatiesessiemomentopname bewijst geen drain.
+
+Native barrière opnieuw op eigen netwerkloze clone bewezen: actieve oude write
+afgebroken/teruggerold, reconnect geweigerd, ook kolomgrant ingetrokken; nieuwe
+registratierol blijft bereikbaar; gedeelde postgres terecht geweigerd. Vijf SCRAM-
+logins/routing/claimraces uit §71 hergebruikt, applicatieruntime bytegelijk.
+Storage:private bucket66 objecten;66 owner_id leeg;3 PUBLIC INSERT WITH CHECK(true)
+policies nog aanwezig. Metadata/hashnaam/grootte gelijk aan bestaande back-up.
+Anonieme HEAD op bestaand privéobject via public/authenticated route geeft400,
+no-cache: geen bewezen uitlek, evenmin complete geauthenticeerde RLS/revokeproef.
+Lokale restrictieve Storage-policy opnieuw PASS tegen vergeten permissieve policy.
+F05-herkomst, echte servicekeyintrekking, reeds uitgegeven signed URLs/cache en
+providerherstel blijven BLOCKED. Geen signing/upload/delete/rotatie uitgevoerd.
+Workercontainer-/OOM-bewijs §70 hergebruikt; productieadapter/replicaqueue blijft
+BLOCKED. Vijf bekende high linttoolchainbevindingen blijven open; geen nieuwe audit.
+Scanner/Field Evidence/PDF fail-closed; PrivateImportedAsset-bridge blijft ontwerp.
+
+3. ACCOUNTS — CONFIGURATIEDIAGNOSE AFGEROND / LIVE BLOCKED
+Live deployment dpl_9om2MDBd73rydSsTrGKtRWZ8KsQT blijft op broncommit
+b8282fa3471b3eb6512026435196f4ec8b315fb1. Loginpagina200, sessie-GET200/loggedIn:false
+en registratiepagina redirect naar login. GEEN geslaagde wachtwoordlogin geclaimd.
+Alle3 bestaande paspoortpagina's plus taalredirectdoel geven500. Gecorreleerde
+Vercel-runtimefouten: PrismaClientInitializationError, databaseauthenticatie voor
+postgres afgewezen. Dit is aantoonbare live DB-authenticatiefout; de geldigheid van
+de latere project-envcredential is daarmee niet vastgesteld. Live deployment is
+ouder dan de huidige metadata voor DATABASE_URL/DIRECT_URL en sessie/uploadkeys.
+Envwijzigingen gelden uitsluitend voor nieuwe deployments:
+https://vercel.com/docs/environment-variables
+
+Exacte lokale fix: scripts/release/configuration-preflight.mjs plus gerichte tests.
+Deze offline controle weigert ontbrekende5 URLs, verkeerde login/doelhost/database,
+gedeelde wachtwoorden, onbekende/dubbele URLopties, productie zonder expliciete TLS,
+korte/ontbrekende of gedeelde sessie-/uploadkeys. Geen fallback naar DATABASE_URL,
+geen waarden/parserfouten in output. PASS certificeert nooit authenticatie, actieve
+deploymentmapping, sleutelbewaring of productieautorisatie. Bestaande runtime is
+niet gewijzigd. Lokale env read-only:5 URLs en uploadbindingkey ontbreken; intact
+gelaten. Productie heeft alleen keymetadata, geen bewijs van keylengte/runtimegebruik.
+Gebruik later offline met procesgebonden secrets en een expliciet beoordeeld doel:
+node scripts/release/configuration-preflight.mjs production <host> <database>
+De5 huidige runtime-URLs vereisen vaste login zonder pooler-projectsuffix; kies
+compatibele directe verbindingen of beoordeel eerst afzonderlijk poolerondersteuning.
+Geen configreparatie op basis van metadata alleen.
+
+Accounttotalen17/8 geverifieerd/1admin; geen Founderafleiding. Echte accountbinding,
+identiteit/mandaatdigest, herstelbevoegden/keybewaring en per land goedgekeurde
+register-/tekenbevoegdheidsbron, trustkey/reviewer/intrekking ontbreken. Geen echte
+Founder geactiveerd. Bestaande lokale signup/token/sessie/Founderbewijzen hergebruikt.
+
+4. BACK-UP — BESTAANDE DEKKING PASS / COMPLEET HERSTEL BLOCKED
+§69-handleiding en integriteitsbewijs gelezen; ontwikkel-ZIP opnieuw gehasht:
+8dd48e28d74d53efc166cf32bd2c175a6bb162dd31a36ef7a8ab7790e861ea2e.
+Productie-ZIP behouden, hash opnieuw gelijk:
+d6836a4405e09eecd50fbf5c626fc539560d8c9905edb7648584b01694bcfc00.
+Echte eerdere DB-restore85/85 en Storage66/66 hergebruikt; geen klantrestore herhaald.
+Actuele66 objectnamen/groottes gelijk; geen actuele live-inhoudshashes geclaimd.
+26/17 referenties en4 tellers gelijk aan opgeslagen back-up; geen waargenomen latere
+nummeruitgifte. Dat sluit onzichtbare harde verwijderingen niet uit. Eerder27 niet
+gedekte historische documentpaden blijven benoemd; alle actieve paden waren gedekt.
+§69 bevat bron t/m68/Git, geen env;§71 en huidige centrale delta blijven afzonderlijk
+behouden. Geen bestaande back-up vervangen en geen nieuwe volledige back-up gemaakt.
+
+Volledig herstel vereist nog providerrollen/wachtwoorden, signing-/MACkeys met
+bewaring en toegang, StorageAPI/objectherstel en compatibele services. De eerdere
+dumprestore sloeg owners/ACL over; §70-rollenrestore was binnen dezelfde cluster.
+Geen bewijs van fresh-cluster key-/rolherstel of onafhankelijke fysieke kopie.
+Herstelpad blijft: geïsoleerd doel uit bestaande bron/lock; schema en gecontroleerde
+profielen; DB+Storage+keys consistent herstellen; alle uitgifte sinds snapshot inclusief
+gaten/tombstones reconciliëren; tellers uitsluitend verhogen; writers dicht totdat
+recovery-release en inhoudelijke bewijscontrole slagen. Geen terugzetting over productie.
+
+5. LIVEGANG — LOKALE KANDIDAAT AFGEROND / BINDEND PRODUCTIE NO-GO
+Exacte centrale kandidaat in BRONMANIFEST.json, verschillen in CENTRALE-INTEGRATIE.json;
+releasepacket bindt ieder bewijs aan doel en manifestdigest. Originele freeze210/210.
+Package-lock SHA256:
+f163a626a15ae48ce31f380069315c1d77770e121b81e55c0fd236573655bf0f.
+Applicatieruntime, schema,13 migraties, package/lock exact §71. Daarom bestaande
+TS/build24/24,lint0/2historisch en routing/security/businessbewijzen bytegebonden
+hergebruikt; geen nieuwe algemene build/audit. Nieuw:6 gerichte configuratie/adoptie/
+herstel/stagingtestgroepen PASS zonder skips; nieuwe bestanden lint0errors/0warnings
+(alleen toolingmelding over Reactdetectie in dependencyvrije kandidaat). Clone- en
+historie-/Storage/barrièreproeven PASS. Geen releasegates groen gemaakt met uitsluitend
+synthetisch of ontbrekend providerbewijs; staged-preflight blijft NO-GO.
+
+Staging/rollback blijven het bestaande §70-plan met §71-routing en dit actuele bewijs:
+exact manifest/lock, beoordeelde5 credentials, gesloten writers vóór adoptie; geen
+aliasaanwijzing tot login/Storage/paspoort/QR/nummer/incident/geo integraal bewezen.
+Broncommit b8282fa en huidige deployment behouden als terugvalREFERENTIE. De bestaande
+deployment faalt DB-authenticatie en oude nummercode is geen veilig schrijvend
+rollbackdoel na adoptie. Bij drift/auth-/nummer-/privacyfout writers gesloten houden;
+forward-fix of geïsoleerd herstel met latere nummerreconciliatie, geen downmigration.
+Persoonlijke controle pas na veilige volledige livegang. Outreach uitsluitend na
+afzonderlijke expliciete toestemming. Nieuwe functies blijven gesloten waar bewijs mist.
+
+VOLGENDE PRODUCTIEACTIE (niet uitgevoerd): één gecontroleerd venster voor afsluiting
+van oude writers en herstel/vervanging van gedeelde DB-credentials. Dit mag pas met
+volledige writer-/herstelbewijzen én afzonderlijke expliciete gebruikerstoestemming;
+deze NO-GO en het packet verlenen die toestemming niet. Geen deployment nu vrijgegeven.
+Geen commit/push/merge/deploy,productie-DB/Storagewrites,env/WAF/DNS/aliaswijziging,
+credentialrotatie,mail/Stripe/outreach. Centrale HEAD/index/env/oude deletie en alle
+overige geïnventariseerde bytes behouden; alleen deze geteste lokale delta geïntegreerd.
+STOP na §72. Geen automatische vervolgronde.

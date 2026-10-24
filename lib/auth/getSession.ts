@@ -1,0 +1,60 @@
+import { verifySessionToken } from "@/lib/auth/session-token";
+import { cookies } from "next/headers";
+import { canUseAuthenticatedApp } from "@/lib/auth/email-verification";
+import { prisma } from "@/lib/db";
+
+export type Session =
+  | { isAuthenticated: false; user: null }
+  | {
+      isAuthenticated: true;
+      user: {
+        id: string;
+        email: string;
+        role: "user" | "admin";
+        emailVerifiedAt: Date | null;
+      };
+    };
+
+export async function getSession(): Promise<Session> {
+  try {
+    const jar = await cookies();
+    const raw = jar.get("er_session")?.value;
+
+    const userId = verifySessionToken(raw);
+
+    if (!userId) {
+      return { isAuthenticated: false, user: null };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        emailVerifiedAt: true,
+      },
+    });
+
+    if (!user) {
+      return { isAuthenticated: false, user: null };
+    }
+
+    if (!canUseAuthenticatedApp(user)) {
+      return { isAuthenticated: false, user: null };
+    }
+
+    return {
+      isAuthenticated: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        emailVerifiedAt: user.emailVerifiedAt,
+      },
+    };
+  } catch (error) {
+    console.error("getSession failed:", error);
+    return { isAuthenticated: false, user: null };
+  }
+}

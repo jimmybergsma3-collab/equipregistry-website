@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EquipRegistry · Import preview</title><link rel="stylesheet" href="/wizard.css"><script src="/wizard.js" defer></script></head>
+<body><header><b>EquipRegistry</b><span>FLEET / LOCAL DEMONSTRATION</span></header><main>
+<p class="eyebrow">SYNTHETIC FLEET · IMPORTER</p><h1>Prepare your fleet import</h1><p>Check a machine list before creating private assets. This demonstration uses synthetic data only.</p>
+<aside>Local preview only. No assets, ER numbers, passports or ownership claims will be created. All preparation stays in memory.</aside>
+<ol id="steps"><li>Upload</li><li>Map columns</li><li>Review issues</li><li>Confirm</li><li>Summary</li></ol>
+<p id="error" role="alert"></p><p id="busy" role="status"></p>
+<section id="upload"><h2 tabindex="-1">1. Upload a synthetic list</h2><p>CSV or plain XLSX · maximum 2 MiB · 1,000 rows · 64 columns. For XLSX, enter the exact visible sheet name; unsupported Excel features are rejected.</p>
+<div class="actions"><button id="sampleCsv">Download demo CSV</button><button id="sampleXlsx">Download demo XLSX</button></div>
+<label>File<input id="file" type="file" accept=".csv,.xlsx"></label>
+<div class="grid"><label>CSV delimiter<select id="delimiter"><option value="">Choose explicitly</option><option value=",">Comma</option><option value=";">Semicolon</option><option value="tab">Tab</option></select></label>
+<label>CSV encoding<select id="encoding"><option value="">Choose explicitly</option><option>utf-8</option><option>utf-16le</option><option>utf-16be</option><option>windows-1252</option></select></label>
+<label>XLSX visible sheet<input id="sheet" maxlength="128" placeholder="Demo XLSX: Assets"></label></div>
+<label class="check"><input id="synthetic" type="checkbox">I confirm that this file contains synthetic data only.</label><button id="inspect" class="primary">Read columns</button></section>
+<section id="map" hidden><h2 tabindex="-1">2. Map every column</h2><p>Choose a target or explicitly ignore each column. Column positions distinguish duplicate headers. Values are never inferred from a header.</p><div id="mapping"></div>
+<h3>Confirm the file profile</h3><div class="grid">
+<label>Identifier type<select id="identifier"><option value="">Provided per row / unresolved</option><option>SERIAL</option><option>VIN</option><option>FRAME</option><option>HIN</option></select></label>
+<label>Decimal separator<select id="decimal"><option value="">Choose explicitly</option><option value=".">Point</option><option value=",">Comma</option></select></label>
+<label>Maximum year<input id="year" type="number" min="1900" max="9998" value="2026"></label><label>Source system<input id="sourceSystem" maxlength="80" placeholder="Required for fleet keys"></label>
+<label>Country format<select id="country"><option value="">Unconfirmed / no country column</option><option value="ISO_ALPHA2">ISO alpha-2, e.g. PT</option><option value="custom">Explicit value-to-code mapping</option></select></label>
+<label>Country mapping (one source=ISO code per line)<textarea id="countries" placeholder="Portugal=PT"></textarea></label>
+<label>Operating hours unit<select id="hours"><option value="">Unconfirmed</option><option>h</option></select></label>
+<label>Power unit<select id="power"><option value="">Unconfirmed</option><option>W</option><option>kW</option><option>MW</option><option>hp</option><option>PS</option></select></label>
+<label>Capacity unit<select id="capacity"><option value="">Unconfirmed</option><option>Wh</option><option>kWh</option><option>MWh</option><option>Ah</option><option>mAh</option></select></label>
+<label>List separator<select id="list"><option value="">Unconfirmed</option><option value="|">Pipe |</option></select></label></div><button id="review" class="primary">Review issues</button></section>
+<section id="issues" hidden><h2 tabindex="-1">3. Review issues</h2><p id="counts"></p><p>INVALID and REVIEW rows block confirmation. No rows are silently dropped. Correct the synthetic file or mapping, then run the preview again.</p><p>Own synthetic fleet checked, including archived assets. Legacy registry is not checked; other organizations are not queried.</p>
+<div class="table"><table><thead><tr><th>Row</th><th>Asset</th><th>Identifier</th><th>State</th><th>Issues</th></tr></thead><tbody id="rows"></tbody></table></div><button id="edit">Edit mapping</button><button id="next" class="primary">Continue to confirm</button></section>
+<section id="confirm" hidden><h2 tabindex="-1">4. Confirm preparation</h2><p id="confirmCount"></p><p>This confirms a local dry run only. Persistence belongs to Step 4C-3 and is unavailable here. Preparation does not verify evidence, identity or ownership.</p><label class="check"><input id="ack" type="checkbox">I understand that no assets will be imported.</label><button id="finish" class="primary" disabled>Confirm dry run</button></section>
+<section id="summary" hidden><h2 tabindex="-1">5. Preparation complete</h2><p id="summaryText"></p><p><strong>Imported assets: 0 · ER numbers: 0 · Writes: 0</strong></p><p>Preview only. A future import must freshly validate permissions, file contents and conflicts.</p></section>
+<footer><button id="restart">Clear file and restart</button><span>Closing or reloading this page discards its preview.</span></footer></main></body></html>

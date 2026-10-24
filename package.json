@@ -1,0 +1,50 @@
+{
+  "name": "equipregistry-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "set NODE_OPTIONS=--max-old-space-size=6144 && next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && next build",
+    "test:security": "node --test tests/security-now.test.mjs tests/upload-binding.test.mjs tests/release-resources.test.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "bcryptjs": "^3.0.3",
+    "csv-parse": "7.0.3",
+    "next": "16.4.0",
+    "nodemailer": "10.1.0",
+    "prisma": "^6.19.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "resend": "^6.10.0",
+    "sax": "1.6.1",
+    "sharp": "0.35.5",
+    "stripe": "^22.0.1",
+    "yauzl": "3.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.57.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/sax": "1.2.7",
+    "@types/yauzl": "3.4.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.0"
+    }
+  }
+}
