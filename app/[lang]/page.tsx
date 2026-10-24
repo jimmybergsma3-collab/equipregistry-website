@@ -3,6 +3,10 @@ import { incidentPresentation, incidentWords } from "@/lib/i18n/incident-status"
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { getLandingText } from "@/lib/i18n/landing";
+import styles from "./landing.module.css";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
@@ -48,12 +52,6 @@ type Status = {
   actions?: StatusAction[];
 };
 
-const DEMO_SERIALS = [
-  "ER-REG-001",
-  "ER-HIS-404",
-  "ER-NOT-999",
-  "ER-STOL-777",
-] as const;
 
 function normalizeLookupSerial(serial: string) {
   return serial.trim().toUpperCase();
@@ -399,81 +397,49 @@ export default async function Home({ params, searchParams }: Props) {
   const status = normalizedSerial
     ? await getStatus(serial, safeLang)
     : null;
-  const isLoggedIn = false;
+  const l = getLandingText(safeLang);
+  const passportFields = ['Caterpillar', '980 Wheel Loader', '2021'];
+  const demoHref = `/${lang}/passport/ER-REG-001`;
 
   return (
     <>
-      <SiteHeader lang={lang} serial={normalizedSerial} />
-
-      <main dir={dir}>
-        <section className="py-12 md:py-16">
-          <div className="mx-auto max-w-3xl px-6 text-center">
-            <h1 className="mx-auto mb-4 text-balance text-2xl font-bold leading-[1.3] sm:text-[1.75rem] md:text-[2rem]">
-              {t.hero.title.split(/(?<=[.।])\s+/u).map((sentence) => (
-                <span key={sentence} className="block">{sentence}</span>
-              ))}
-            </h1>
-
-            <p className="mx-auto mb-3 max-w-[68ch] text-balance text-base leading-relaxed text-slate-600">{t.hero.subtitle}</p>
-            <p className="mx-auto mb-8 max-w-[76ch] text-balance text-sm leading-relaxed text-slate-600 sm:text-base">
-              {t.hero.supportingText}
-            </p>
-
-            {isLoggedIn && (
-              <div className="mb-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 sm:flex-row">
-                <div>{t.hero.loggedInMessage}</div>
-                <div className="flex gap-2">
-                  <Link
-                    href={`/${lang}/dashboard`}
-                    className="rounded-lg bg-blue-700 px-3 py-2 font-semibold text-white"
-                  >
-                    {t.hero.goToDashboard}
-                  </Link>
-                </div>
+      <div className={styles.header}><SiteHeader lang={lang} serial={normalizedSerial} /></div>
+      <main dir={dir} className={styles.landing}>
+        <section className={styles.hero} aria-labelledby="landing-title">
+          <Image src="/landing/hero.png" alt="" fill priority sizes="100vw" className={styles.heroImage} />
+          <div className={`${styles.wrap} ${styles.heroInner}`}>
+            <div className={styles.copy}>
+              <h1 id="landing-title">{(safeLang === 'nl' ? 'Elk bezit heeft een eigen identiteit. De geschiedenis ervan verdient dat ook.' : t.hero.title).split(/(?<=[.।])\s+/u).map(sentence => <span key={sentence}>{sentence}</span>)}</h1>
+              <p>{t.hero.subtitle}</p>
+              <p>{t.hero.supportingText}</p>
+              <div className={styles.actions}>
+                <Link className={styles.primary} href={`/${lang}/register`}>{l.register}<span aria-hidden="true">→</span></Link>
+                <a className={styles.secondary} href="#demo">{l.example}</a>
               </div>
-            )}
-
-            <form
-              method="GET"
-              action={`/${lang}`}
-              className="flex flex-col gap-3 sm:flex-row"
-            >
-              <input
-                name="serial"
-                dir="auto"
-                defaultValue={normalizedSerial}
-                placeholder={t.hero.placeholder}
-                className="flex-1 rounded-xl border border-slate-300 px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-              <button className="rounded-xl bg-blue-700 px-8 py-4 font-semibold text-white transition hover:bg-blue-800">
-                {t.hero.search}
-              </button>
-            </form>
-
-            <div className={`mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 ${textAlignClass}`}>
-              <p className="mb-2 text-sm font-semibold text-slate-800">
-                {t.hero.supportedAssetsTitle}
-              </p>
-              <ul className="list-inside list-disc space-y-1 text-sm text-slate-600">
-                {t.hero.supportedAssetsItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              <p className={styles.price}><span>{l.price}</span><strong>€ 9,95</strong></p>
             </div>
-
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm text-slate-500">
-              <span>{t.hero.demoSerials}</span>
-              {DEMO_SERIALS.map((demoSerial) => (
-                <Link
-                  key={demoSerial}
-                  href={`/${lang}?serial=${demoSerial}`}
-                  className="underline hover:text-blue-700"
-                >
-                  {demoSerial}
-                </Link>
-              ))}
+            <div className={styles.phone}>
+              <Image className={styles.phoneLogo} src="/equipregistry_logo.png" width={150} height={35} alt="EquipRegistry" />
+              <h2>{l.passport}</h2>
+              <span className={styles.badge}>DEMO</span>
+              <div className={styles.document}><strong>ER-REG-001</strong><small>Caterpillar 980 Wheel Loader</small></div>
+              <dl>{l.fields.map((field,i) => <div key={field}><dt>{field}</dt><dd>{passportFields[i]}</dd></div>)}</dl>
+              <p>{l.demoText}</p>
+              <a href="#demo" className={styles.phoneLink}>{l.example} →</a>
             </div>
+          </div>
+        </section>
 
+        <section id="verify" className={styles.lookup} aria-labelledby="verify-title">
+          <div className={styles.wrap}>
+            <div className={styles.lookupRow}>
+              <div><h2 id="verify-title">{l.searchTitle}</h2><p>{t.hero.placeholder}</p></div>
+              <form method="GET" action={`/${lang}`}>
+                <label htmlFor="asset-serial" className="sr-only">{t.hero.placeholder}</label>
+                <input id="asset-serial" name="serial" dir="auto" defaultValue={normalizedSerial} placeholder={t.hero.placeholder} required />
+                <button className={styles.primary} type="submit">{t.hero.search}</button>
+              </form>
+            </div>
             {status && (
               <div
                 id="search-result"
@@ -518,7 +484,6 @@ export default async function Home({ params, searchParams }: Props) {
             )}
           </div>
         </section>
-
         {status && (
           <script
             dangerouslySetInnerHTML={{
@@ -534,79 +499,50 @@ export default async function Home({ params, searchParams }: Props) {
           />
         )}
 
-        <section id="how" className="border-t bg-slate-50 py-20">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="mb-12 text-center text-3xl font-bold">
-              {t.howItWorks.title}
-            </h2>
 
-            <div className={`grid gap-8 md:grid-cols-4 ${textAlignClass}`}>
-              <div className="rounded-2xl border bg-white p-6">
-                <div className="mb-2 text-xl font-bold text-blue-700">
-                  {t.howItWorks.step1Title}
-                </div>
-                <p className="text-sm text-slate-600">{t.howItWorks.step1Text}</p>
-              </div>
-
-              <div className="rounded-2xl border bg-white p-6">
-                <div className="mb-2 text-xl font-bold text-blue-800">
-                  {t.howItWorks.step2Title}
-                </div>
-                <p className="text-sm text-slate-600">{t.howItWorks.step2Text}</p>
-              </div>
-
-              <div className="rounded-2xl border bg-white p-6">
-                <div className="mb-2 text-xl font-bold text-blue-800">
-                  {t.howItWorks.step3Title}
-                </div>
-                <p className="text-sm text-slate-600">{t.howItWorks.step3Text}</p>
-              </div>
-
-              <div className="rounded-2xl border bg-white p-6">
-                <div className="mb-2 text-xl font-bold text-blue-800">
-                  {t.howItWorks.step4Title}
-                </div>
-                <p className="text-sm text-slate-600">{t.howItWorks.step4Text}</p>
-              </div>
+        <section className={styles.section} aria-labelledby="categories-title">
+          <div className={styles.wrap}>
+            <h2 id="categories-title">{l.categoriesTitle}</h2>
+            <p className={styles.intro}>{l.categoriesIntro}</p>
+            <div className={styles.grid}>
+              {l.categories.map((category,i) => <Link href={`/${lang}/register`} className={styles.card} key={category}>
+                <div aria-hidden="true" className={styles.categoryImage} style={{backgroundPosition: `${([51,208,366,523,680,837][i] / 884) * 100}% 48.6014%`}} />
+                <div className={styles.cardBody}><h3>{category}</h3><p>{l.descriptions[i]}</p><span className={styles.arrow} aria-hidden="true">→</span></div>
+              </Link>)}
             </div>
           </div>
         </section>
 
-        <section className="border-t bg-white py-20">
-          <div className="mx-auto max-w-6xl px-6 text-center">
-            <h2 className="mb-6 text-3xl font-bold">{t.trust.title}</h2>
-
-            <p className="mx-auto mb-12 max-w-3xl text-slate-600">
-              {t.trust.subtitle}
-            </p>
-
-            <div className={`grid gap-8 md:grid-cols-3 ${textAlignClass}`}>
-              <div className="rounded-2xl border p-6">
-                <h3 className="mb-2 text-lg font-semibold text-blue-700">
-                  {t.trust.card1Title}
-                </h3>
-                <p className="text-sm text-slate-600">{t.trust.card1Text}</p>
-              </div>
-
-              <div className="rounded-2xl border p-6">
-                <h3 className="mb-2 text-lg font-semibold text-blue-800">
-                  {t.trust.card2Title}
-                </h3>
-                <p className="text-sm text-slate-600">{t.trust.card2Text}</p>
-              </div>
-
-              <div className="rounded-2xl border p-6">
-                <h3 className="mb-2 text-lg font-semibold text-blue-800">
-                  {t.trust.card3Title}
-                </h3>
-                <p className="text-sm text-slate-600">{t.trust.card3Text}</p>
-              </div>
+        <section id="how" className={`${styles.section} ${styles.how}`} aria-labelledby="how-title">
+          <div className={`${styles.wrap} ${styles.howGrid}`}>
+            <div>
+              <h2 id="how-title">{l.how}</h2><p className={styles.intro}>{l.howIntro}</p>
+              <ol className={styles.steps}>{l.steps.map((step,i) => <li className={styles.step} key={step}><span className={styles.number} aria-hidden="true">{i+1}</span><h3>{step}</h3><p>{l.stepText[i]}</p></li>)}</ol>
             </div>
+            <article id="demo" className={styles.demo} aria-labelledby="demo-title">
+              <span className={styles.badge}>DEMO</span><h3 id="demo-title">{l.passport}</h3><strong>ER-REG-001</strong>
+              <dl>{l.fields.map((field,i) => <div key={field}><dt>{field}</dt><dd>{passportFields[i]}</dd></div>)}</dl>
+              <p>{l.demoText}</p>
+              <Link className={styles.secondary} href={demoHref}>{l.open} <span aria-hidden="true">→</span></Link>
+            </article>
           </div>
+        </section>
+        <section className={styles.closing} aria-labelledby="closing-title">
+          <div className={styles.camper} aria-hidden="true" />
+          <div className={`${styles.wrap} ${styles.closingInner}`}><div className={styles.closingCopy}>
+            <h2 id="closing-title">{l.end}</h2><p>{l.endText}</p>
+            <div className={styles.actions}><Link className={styles.primary} href={`/${lang}/register`}>{l.register}<span aria-hidden="true">→</span></Link></div>
+          </div></div>
         </section>
       </main>
-
       <SiteFooter lang={lang} />
     </>
   );
+}
+
+export async function generateMetadata({params}: Props): Promise<Metadata> {
+  const {lang} = await params;
+  if (!isValidLang(lang)) return {};
+  const text = repairMojibakeDeep(getPublicHomeText(lang));
+  return {title: 'EquipRegistry | ' + getLandingText(lang).passport, description: text.hero.subtitle};
 }
